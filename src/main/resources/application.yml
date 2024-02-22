@@ -1,0 +1,51 @@
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  show-actuator: true
+  use-management-port: true
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+
+management:
+  server:
+    port: 9090
+  endpoints:
+    web:
+      exposure:
+        include: openapi, swagger-ui
+
+
+
+
+
+
+
+
+
+spring:
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/banco
+    username: springuser
+    password: ThePassword
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+
+
+
+
+
+
+
+
+
+configuracao:
+  joomla:
+    url: https://www.teste.com.br/api/index.php/v1
+    bearer: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+

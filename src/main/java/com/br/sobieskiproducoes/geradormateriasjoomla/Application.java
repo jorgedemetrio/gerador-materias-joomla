@@ -1,0 +1,21 @@
+package com.br.sobieskiproducoes.geradormateriasjoomla;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+
+import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.JoomlaProperties;
+
+@SpringBootApplication
+@EnableFeignClients
+@EnableAutoConfiguration
+@EnableConfigurationProperties({ JoomlaProperties.class })
+public class Application {
+
+  public static void main(final String[] args) {
+    SpringApplication.run(Application.class, args);
+  }
+
+}
