@@ -78,7 +78,7 @@ class CategoriaServiceTest {
                 1, 1, 1, "language", "description", "languageTitle", "languageImage", "editor", "access_level",
                 "authorName", 1, 1, 1, 1))
 
-    ), new LinkResponse("self", "url/next", "last", "first"), new MetaResponse(0l)));
+    ), new LinkResponse("self", "url/next", "last", "first", "previous"), new MetaResponse(0l)));
 
     when(categoriaJoomlaClient.getCategorias(anyString(), anyString())).thenReturn(new ItemResponse<>(Arrays.asList(
         new CategoriaJoomlaDTO("type", "3",
@@ -90,7 +90,7 @@ class CategoriaServiceTest {
                 1, 1, 1, "language", "description", "languageTitle", "languageImage", "editor", "access_level",
                 "authorName", 1, 1, 1, 1))
 
-    ), new LinkResponse("self", null, "last", "first"), new MetaResponse(0l)));
+    ), new LinkResponse("self", null, "last", "first", "previous"), new MetaResponse(0l)));
 
     when(categoriaRepository.findByIdJoomla(anyLong())).thenReturn(Optional.empty(), Optional.empty(),
         Optional.of(new CategoriaEntity()), Optional.empty());

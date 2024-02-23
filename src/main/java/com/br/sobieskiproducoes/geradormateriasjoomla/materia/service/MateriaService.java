@@ -85,7 +85,9 @@ public class MateriaService {
   public List<PropostaMateriaDTO> sugerirMateria(final SugerirMateriaDTO request) {
 
     final List<MessageChatGPTDTO> itensRetornoGPT = chatgpt
-        .pergunta(chatGPTProperties.getPerguntas().getPedirMateria().formatted(chatGPTProperties.getSite(),
+        .pergunta(chatGPTProperties.getPerguntas().getPedirMateria().formatted(
+            chatGPTProperties.getEspecialista().stream().collect(Collectors.joining(", ")),
+            chatGPTProperties.getSite(),
             chatGPTProperties.getRedesSociais().stream().collect(Collectors.joining(", ")),
             request.getTermos().stream().collect(Collectors.joining(", ")), request.getTema()));
 

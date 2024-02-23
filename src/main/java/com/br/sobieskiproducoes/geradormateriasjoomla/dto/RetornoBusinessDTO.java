@@ -1,7 +1,9 @@
 /**
  *
  */
-package com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response;
+package com.br.sobieskiproducoes.geradormateriasjoomla.dto;
+
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +13,7 @@ import lombok.ToString;
 
 /**
  * @author Jorge Demetrio
- * @since 21 de fev. de 2024 18:59:58
+ * @since 23 de fev. de 2024 01:18:35
  * @version 1.0.0
  */
 @Getter
@@ -19,12 +21,11 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class LinkResponse {
+public class RetornoBusinessDTO<T> {
 
-  private String self;
-  private String next;
-  private String last;
-  private String first;
-  private String previous;
+  private Long total;
 
+  private Integer totalPaginas;
+
+  private List<T> itens;
 }

@@ -7,6 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.CategoriaJoomlaDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.CategoriaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.CategoriaEntity;
 
 /**
@@ -26,5 +27,8 @@ public interface CategoriaConvert {
   @Mapping(target = "apelido", source = "attributes.alias")
   @Mapping(target = "pai.idJoomla", source = "attributes.parentId")
   CategoriaEntity convert(CategoriaJoomlaDTO categoria);
+
+  @Mapping(target = "pai.pai", ignore = true)
+  CategoriaDTO convertCategoriaDTO(CategoriaEntity categoria);
 
 }

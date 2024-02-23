@@ -1,4 +1,5 @@
-
+#server:
+#  port: 8090
 springdoc:
   api-docs:
     path: /api-docs
@@ -34,15 +35,29 @@ management:
       exposure:
         include: openapi, swagger-ui
 
+logging:
+  level:
+    project:
+      user:
+        UserClient: DEBUG
 
 
-
-
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: FULL
 
 
 
 
 spring:
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            loggerLevel: FULL
   jpa:
     show-sql: false
     hibernate:
@@ -76,7 +91,9 @@ configuracao:
     
 chatgpt:
   perguntas:
-    pedir-materia: "Entendento que uma matéria deve seguir os requisitos:
+    pedir-materia: " Tornece um especialista em : Marketing de Conteúdo, Maketing Digital, Marketing Social
+    Com vasto conhonhecimento em: %s 
+    Entendento que uma matéria deve seguir os requisitos:
  - A matéria é para o site: %s .
  - Que tem as redes sociais: %s .
  - Entregue em formato JSON, com layout : { titulos : array(string), primeiro-paragrafo: string, materia: string, url-proposta: string, meta-descricao: string, keywords: string, tags : array, faqs: array{pergunta: string, resposta: string}, roteiro: string, post-instagram: string} 
@@ -88,7 +105,7 @@ chatgpt:
  - No final deve ter um subtitulo de 3 perguntas frequentes sobre o tema e as resposas deles.\n
  - Na conclusão da materia deve ser fazer um call to action. \n
  - Depois da matéria proponha um apelido para página (url-proposta) da máteria suando SEO, tudo em minusculos, em português e separados por - (traço). \n  
- - Deve ter "meta descrição"  (meta-descricao)é um resumo de 160 caracteres pode ter emojis, estremamente chamadivo para exibir nos mecanismos de buscas. \n
+ - Deve ter \"meta descrição\"  (meta-descricao)é um resumo de 160 caracteres pode ter emojis, estremamente chamadivo para exibir nos mecanismos de buscas. \n
  - Deve ter keyowrds, palavras chaves de calda curta de SEO da matéria. \n
  - Deve ter tags, que são uma array de no mínimo 5, que palavras chaves de calda longa usando SEO pensando nas possível buscas que o usuário possa fazer para achar essa matéria. \n
  - Deve ter FAQs, que não no máximos 6 perguntas e minimo de 4 e respostas de no máximo 120 caracteres cada pergunta e resposta. \n

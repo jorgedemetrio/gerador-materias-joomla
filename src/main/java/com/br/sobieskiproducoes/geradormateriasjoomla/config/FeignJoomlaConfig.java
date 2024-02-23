@@ -28,12 +28,12 @@ public class FeignJoomlaConfig {
   private final JoomlaConfigurationProperties priperties;
 
   @Bean
-  Logger.Level feignLoggerLevel() {
+  public Logger.Level feignLoggerLevel() {
     return Logger.Level.FULL;
   }
 
   @Bean
-  public RequestInterceptor requestKeycloakInterceptor() {
+  public RequestInterceptor requestJoomlaInterceptor() {
     log.info("Realizando autenticação token beader com serviços internos para chamada via Feign Client");
 
     return requestTemplate -> {

@@ -3,26 +3,44 @@
  */
 package com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer;
 
-import org.springframework.cloud.openfeign.FeignClient;
+import java.util.Collections;
+
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.request.PromptRequestDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.response.RepostaResponseDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.config.FeignChatGPT4Config;
+import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ChatGPTConfigurationProperties;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import lombok.RequiredArgsConstructor;
 
 /**
  * @author Jorge Demetrio
  * @since 22 de fev. de 2024 13:19:37
  * @version 1.0.0
  */
-@FeignClient(name = "categoriaJoomlaClient", url = "${configuracao.chatgpt.url}", dismiss404 = true, configuration = FeignChatGPT4Config.class)
-public interface ChatGPTConsumerClient {
+@RequiredArgsConstructor
+@Component
+public class ChatGPTConsumerClient {
 
-  @PostMapping(path = "completions", produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = {
-      MediaType.APPLICATION_JSON_VALUE })
-  RepostaResponseDTO conversar(@RequestBody PromptRequestDTO dto);
+  private final RestTemplate restTemplate;
+  private final ChatGPTConfigurationProperties properties;
+
+  public RepostaResponseDTO conversar(final PromptRequestDTO dto) {
+    final HttpHeaders headers = new HttpHeaders();
+    headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+    headers.setBearerAuth(properties.getBearer());
+    final HttpEntity<PromptRequestDTO> httpEntity = new HttpEntity<>(dto, headers);
+
+    final ResponseEntity<RepostaResponseDTO> resposta = restTemplate.exchange(properties.getUrl(), HttpMethod.POST,
+        httpEntity, RepostaResponseDTO.class);
+
+    return resposta.getBody();
+  }
 
 }

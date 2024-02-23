@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.jvnet.hk2.annotations.Service;
+import org.springframework.stereotype.Service;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.ChatGPTConsumerClient;
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.request.MessageChatGPTDTO;

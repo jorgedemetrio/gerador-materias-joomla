@@ -11,12 +11,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.br.sobieskiproducoes.geradormateriasjoomla.config.MateriaConstants;
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.ItemResponse;
+import com.br.sobieskiproducoes.geradormateriasjoomla.dto.RetornoBusinessDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.CategoriaJoomlaClient;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.CategoriaJoomlaDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.CategoriaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.CategoriaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.CategoriaRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.convert.CategoriaConvert;
@@ -115,9 +121,27 @@ public class CategoriaService {
     return total;
   }
 
+  public RetornoBusinessDTO<CategoriaDTO> busca(final String titulo, final Integer pagina) {
+
+    Page<CategoriaEntity> itemPagina = null;
+
+    if (nonNull(titulo) && !titulo.isBlank()) {
+      itemPagina = categoriaRepository.buscaPorTitulo(titulo.trim().toUpperCase(), PageRequest
+          .of(nonNull(pagina) ? pagina : 0, MateriaConstants.MAX_INTENS_PER_PAGE, Sort.by("titulo").ascending()));
+    } else {
+      itemPagina = categoriaRepository.findAll(PageRequest.of(nonNull(pagina) ? pagina : 0,
+          MateriaConstants.MAX_INTENS_PER_PAGE, Sort.by("titulo").ascending()));
+    }
+
+    final List<CategoriaDTO> retorno = itemPagina.get().map(convert::convertCategoriaDTO).collect(Collectors.toList());
+
+    return new RetornoBusinessDTO<>(itemPagina.getTotalElements(), itemPagina.getTotalPages(), retorno);
+
+  }
+
   private boolean jaEstaSalvoCorrigePai(final CategoriaEntity c1) {
     final boolean naoEstaSalvo = !categoriaRepository.findByIdJoomla(c1.getIdJoomla()).isPresent();
-    // Sen ão estiver salvo verifica se o pai já está no banco , sen ão achar deixa
+    // Sen não estiver salvo verifica se o pai já está no banco , sen ão achar deixa
     // null
     if (naoEstaSalvo) {
       if (nonNull(c1.getPai()) && nonNull(c1.getPai().getIdJoomla()) && isNull(c1.getPai().getId())

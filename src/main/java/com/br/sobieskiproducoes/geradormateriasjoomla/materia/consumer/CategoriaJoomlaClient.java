@@ -22,7 +22,7 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.Categ
 @FeignClient(name = "categoriaJoomlaClient", url = "${configuracao.joomla.url}", dismiss404 = true, configuration = FeignJoomlaConfig.class)
 public interface CategoriaJoomlaClient {
 
-  @GetMapping("/content/categories")
+  @GetMapping(path = "/content/categories")
   ItemResponse<List<CategoriaJoomlaDTO>> getCategorias();
 
   @GetMapping("/content/categories?{url}")

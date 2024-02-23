@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.FeignJoomlaConfig;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosArtigoJoomlaDTO;
 
+import feign.Headers;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 /**
@@ -16,7 +17,8 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
  * @since 21 de fev. de 2024 18:25:40
  * @version 1.0.0
  */
-@FeignClient(name = "categoriaJoomlaClient", url = "${configuracao.joomla.url}", dismiss404 = true, configuration = FeignJoomlaConfig.class)
+@FeignClient(name = "materiaJoomlaClient", url = "${configuracao.joomla.url}", dismiss404 = true, configuration = FeignJoomlaConfig.class)
+@Headers({ "Authorization: Bearer ${configuracao.joomla.bearer}" })
 public interface MateriaJoomlaClient {
 
   @PostMapping("/content/articles")

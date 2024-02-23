@@ -7,14 +7,14 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ChatGPTConfigurationProperties;
-import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ChatGPTPerguntasProperties;
+import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ChatGPTProperties;
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.JoomlaConfigurationProperties;
 
 @SpringBootApplication
 @EnableFeignClients
 @EnableAutoConfiguration
 @EnableConfigurationProperties({ JoomlaConfigurationProperties.class, ChatGPTConfigurationProperties.class,
-    ChatGPTPerguntasProperties.class })
+    ChatGPTProperties.class })
 public class Application {
 
   public static void main(final String[] args) {

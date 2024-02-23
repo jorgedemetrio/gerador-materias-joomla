@@ -24,7 +24,7 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.CategoriaS
  * @since 21 de fev. de 2024 20:11:34
  * @version 1.0.0
  */
-@ExtendWith(MockitoExtension.class)
+@ExtendWith({ MockitoExtension.class })
 class CategoriaControllerTest {
 
   @InjectMocks

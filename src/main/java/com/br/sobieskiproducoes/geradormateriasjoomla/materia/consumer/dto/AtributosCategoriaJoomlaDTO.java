@@ -50,12 +50,12 @@ public class AtributosCategoriaJoomlaDTO {
   @JsonProperty("language_title")
   private String languageTitle;
 
-  @JsonProperty("language_Image")
+  @JsonProperty("language_image")
   private String languageImage;
   private String editor;
 
-  @JsonProperty("accessLevel")
-  private String access_level;
+  @JsonProperty("access_level")
+  private String accessLevel;
 
   @JsonProperty("author_name")
   private String authorName;
