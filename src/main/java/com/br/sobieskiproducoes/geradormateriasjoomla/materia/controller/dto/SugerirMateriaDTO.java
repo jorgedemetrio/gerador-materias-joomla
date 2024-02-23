@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -19,7 +20,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public class SugerirMateriaDTO {
 
-  @NotEmpty
+  @NotBlank
   private String tema;
 
   @NotEmpty

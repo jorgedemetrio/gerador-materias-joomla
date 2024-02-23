@@ -33,15 +33,14 @@ import lombok.extern.java.Log;
 @Log
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/materia/categoria")
+@RequestMapping("/categoria")
 public class CategoriaController {
 
   private final CategoriaService service;
 
   @Operation(summary = "Recarrega as categorias no banco de dados tirando do Joomla")
   @ApiResponses({
-      @ApiResponse(responseCode = "200", description = "Processado com sucesso", content = @Content(schema = @Schema(implementation = QuantidadeCategoriasImportadasDTO.class), mediaType = MediaType.APPLICATION_JSON_VALUE)) 
-   })
+      @ApiResponse(responseCode = "200", description = "Processado com sucesso", content = @Content(schema = @Schema(implementation = QuantidadeCategoriasImportadasDTO.class), mediaType = MediaType.APPLICATION_JSON_VALUE)) })
   @PutMapping(path = "recarregar", produces = { MediaType.APPLICATION_JSON_VALUE })
   public ResponseEntity<QuantidadeCategoriasImportadasDTO> atualizar() {
     log.info("Inicio de processamento de recarga de Categoriaso Joomla");
@@ -50,8 +49,7 @@ public class CategoriaController {
 
   @Operation(summary = "Retorna a lista de itens")
   @ApiResponses({
-      @ApiResponse(responseCode = "200", description = "Lista de Categoria", content = @Content(array = @ArraySchema(items = @Schema(implementation = RetornoBusinessDTO.class)), mediaType = MediaType.APPLICATION_JSON_VALUE))
-  })
+      @ApiResponse(responseCode = "200", description = "Lista de Categoria", content = @Content(array = @ArraySchema(items = @Schema(implementation = RetornoBusinessDTO.class)), mediaType = MediaType.APPLICATION_JSON_VALUE)) })
   @GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
   public ResponseEntity<RetornoBusinessDTO<CategoriaDTO>> find(
       @RequestParam(name = "titulo", required = false) final String titulo,
