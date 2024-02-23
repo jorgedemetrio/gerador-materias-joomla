@@ -27,5 +27,5 @@ public class ChoicesDTO {
   private MessageChatGPTDTO message;
   private String logprobs;
   @JsonProperty("finish_reason")
-  private Integer finish_reason;
+  private String finishReason;
 }

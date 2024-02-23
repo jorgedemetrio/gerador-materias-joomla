@@ -3,12 +3,15 @@
  */
 package com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller;
 
+import java.util.Map;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.dto.RetornoBusinessDTO;
@@ -42,15 +45,17 @@ public class CategoriaController {
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "Processado com sucesso", content = @Content(schema = @Schema(implementation = QuantidadeCategoriasImportadasDTO.class), mediaType = MediaType.APPLICATION_JSON_VALUE)) })
   @PutMapping(path = "recarregar", produces = { MediaType.APPLICATION_JSON_VALUE })
-  public ResponseEntity<QuantidadeCategoriasImportadasDTO> atualizar() {
+  @ResponseBody
+  public ResponseEntity<Map<String, Integer>> atualizar() {
     log.info("Inicio de processamento de recarga de Categoriaso Joomla");
-    return ResponseEntity.ok(new QuantidadeCategoriasImportadasDTO(service.atualizarBancoCategoria()));
+    return ResponseEntity.ok(service.atualizarBancoCategoria());
   }
 
   @Operation(summary = "Retorna a lista de itens")
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "Lista de Categoria", content = @Content(array = @ArraySchema(items = @Schema(implementation = RetornoBusinessDTO.class)), mediaType = MediaType.APPLICATION_JSON_VALUE)) })
   @GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
+  @ResponseBody
   public ResponseEntity<RetornoBusinessDTO<CategoriaDTO>> find(
       @RequestParam(name = "titulo", required = false) final String titulo,
       @RequestParam(name = "p", required = false) final Integer pagina) {

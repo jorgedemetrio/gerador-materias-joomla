@@ -7,7 +7,9 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -49,11 +51,11 @@ public class CategoriaService {
    * @return O univero de registros atualizados.
    */
   @Transactional
-  public int atualizarBancoCategoria() {
+  public Map<String, Integer> atualizarBancoCategoria() {
     final List<CategoriaEntity> itens = new ArrayList<>();
     ItemResponse<List<CategoriaJoomlaDTO>> consulta = null;
     int offset = 0;
-
+    final Map<String, Integer> retorno = new HashMap<>();
     // Busca as Categorias
     do {
       if (isNull(consulta)) {
@@ -74,8 +76,7 @@ public class CategoriaService {
 
     } while (nonNull(consulta) && nonNull(consulta.getLinks()) && nonNull(consulta.getLinks().getNext())
         && nonNull(consulta.getData()) && !consulta.getLinks().getNext().isBlank());
-    final int total = itens.size();
-
+    retorno.put("total", itens.size());
     // Ordena pelo Id do Joomla
     itens.sort((o1, o2) -> Integer.valueOf((int) ((o1.getIdJoomla().longValue() - o2.getIdJoomla().longValue()))));
 
@@ -100,10 +101,14 @@ public class CategoriaService {
       itensSalvar.forEach(c -> c.setPai(pai));
 
     }
-    log.info("Gravando lista de %d de categorias.".formatted(total));
+    int processados = 0;
+    log.info("Gravando lista de %d de categorias.".formatted(itens.size()));
+    List<CategoriaEntity> agravar = null;
     while (nonNull(itensSalvar) && !itensSalvar.isEmpty()) {
 
-      itensSalvar.stream().filter(this::jaEstaSalvoCorrigePai).forEach(categoriaRepository::save);
+      agravar = itensSalvar.stream().filter(this::jaEstaSalvoCorrigePai).collect(Collectors.toList());
+      processados += agravar.size();
+      agravar.parallelStream().forEach(categoriaRepository::save);
 
       itens.removeAll(itensSalvar);
 
@@ -117,8 +122,8 @@ public class CategoriaService {
           .collect(Collectors.toList());
 
     }
-
-    return total;
+    retorno.put("processados", processados);
+    return retorno;
   }
 
   public RetornoBusinessDTO<CategoriaDTO> busca(final String titulo, final Integer pagina) {

@@ -46,9 +46,9 @@ public class MateriaService {
 
   private final ChatGPTProperties chatGPTProperties;
 
-  private ObjectMapper objectMapper;
+  private final ObjectMapper objectMapper;
 
-  private MateriaJoomlaClient client;
+  private final MateriaJoomlaClient client;
 
   private final Pattern ENTER = Pattern.compile("\\n");
   private final Pattern ASPAS_DUPLAS = Pattern.compile("\\\"");
@@ -84,11 +84,9 @@ public class MateriaService {
 
   public List<PropostaMateriaDTO> sugerirMateria(final SugerirMateriaDTO request) {
 
-    final List<MessageChatGPTDTO> itensRetornoGPT = chatgpt
-        .pergunta(chatGPTProperties.getPerguntas().getPedirMateria().formatted(
-            chatGPTProperties.getEspecialista().stream().collect(Collectors.joining(", ")),
-            chatGPTProperties.getSite(),
-            chatGPTProperties.getRedesSociais().stream().collect(Collectors.joining(", ")),
+    final List<MessageChatGPTDTO> itensRetornoGPT = chatgpt.pergunta(chatGPTProperties.getPerguntas().getPedirMateria()
+        .formatted(chatGPTProperties.getEspecialista().stream().collect(Collectors.joining(", ")),
+            chatGPTProperties.getSite(), chatGPTProperties.getRedesSociais().stream().collect(Collectors.joining(", ")),
             request.getTermos().stream().collect(Collectors.joining(", ")), request.getTema()));
 
     final List<PropostaMateriaDTO> itens = itensRetornoGPT.stream().map(this::convetToPropostaMateriaDTO)

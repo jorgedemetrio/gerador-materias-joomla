@@ -1,0 +1,163 @@
+{
+	"info": {
+		"_postman_id": "ade069d7-a049-41e0-9c3b-d82993d6624d",
+		"name": "Gerador de matérias com ChatGPT / Joomla",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12162560",
+		"_collection_link": "https://alldreams.postman.co/workspace/Loja-Integrada~029d493b-8ac4-4182-aaf6-5f35f7186ad3/collection/12162560-ade069d7-a049-41e0-9c3b-d82993d6624d?action=share&source=collection_link&creator=12162560"
+	},
+	"item": [
+		{
+			"name": "Matérias",
+			"item": [
+				{
+					"name": "Artigos",
+					"item": [
+						{
+							"name": "Gerar Matéria",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"tema\":\"O que o taro pode nos responder em um consulta normal?\",\r\n    \"termos\": [\"tarot\",\"taro\", \"cartomante\", \"tarologa\", \"tiragem de cartas\", \"ver o futuro\"],\r\n    \"publicar\": \"2024-02-24 11:00:00\",\r\n    \"categoria\": 10\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{endereco}}/materia/sugerir",
+									"host": [
+										"{{endereco}}"
+									],
+									"path": [
+										"materia",
+										"sugerir"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Publicar Matéria",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"data-publicacao\": \"2024-02-24 11:00:00\",\r\n    \"autor\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{endereco}}/materia/{{id_materia}}/publicar",
+									"host": [
+										"{{endereco}}"
+									],
+									"path": [
+										"materia",
+										"{{id_materia}}",
+										"publicar"
+									],
+									"query": [
+										{
+											"key": "id_materia",
+											"value": "1",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Categorias",
+					"item": [
+						{
+							"name": "Recarregar Categoria",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{endereco}}/categoria/recarregar",
+									"host": [
+										"{{endereco}}"
+									],
+									"path": [
+										"categoria",
+										"recarregar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Lsita de Categorias",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{endereco}}/categoria?p=1",
+									"host": [
+										"{{endereco}}"
+									],
+									"path": [
+										"categoria"
+									],
+									"query": [
+										{
+											"key": "titulo",
+											"value": "a",
+											"disabled": true
+										},
+										{
+											"key": "p",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}

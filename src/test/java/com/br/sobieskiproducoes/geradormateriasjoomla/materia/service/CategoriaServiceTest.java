@@ -11,6 +11,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -101,7 +102,7 @@ class CategoriaServiceTest {
     final ArgumentCaptor<CategoriaEntity> categoriaEntityArgumentCaptor = ArgumentCaptor
         .forClass(CategoriaEntity.class);
 
-    final int retorno = service.atualizarBancoCategoria();
+    final Map<String, Integer> retornoItem = service.atualizarBancoCategoria();
 
     verify(categoriaJoomlaClient, times(1)).getCategorias();
     verify(categoriaJoomlaClient, times(1)).getCategorias(url1ArgumentCaptor.capture(), url2ArgumentCaptor.capture());
@@ -111,7 +112,7 @@ class CategoriaServiceTest {
 
     assertEquals("20", url1ArgumentCaptor.getValue());
     assertEquals("20", url2ArgumentCaptor.getValue());
-    assertEquals(4, retorno);
+    assertEquals(4, retornoItem.get("total"));
 
     assertEquals(1L, idJoomlaArgumentCaptor.getAllValues().get(0));
     assertEquals(2L, idJoomlaArgumentCaptor.getAllValues().get(1));
