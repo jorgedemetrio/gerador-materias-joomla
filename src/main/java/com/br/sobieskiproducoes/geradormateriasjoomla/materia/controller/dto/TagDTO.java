@@ -22,7 +22,7 @@ import lombok.ToString;
 public class TagDTO {
 
   private Long id;
-  private Long idMateriaJoomla;
+  private Long idJoomla;
   private String titulo;
   private String apelido;
 

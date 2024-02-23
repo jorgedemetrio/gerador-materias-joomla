@@ -41,10 +41,10 @@ public class MateriaEntity {
   @Column(name = "id")
   private Long id;
 
-  @Column(name = "id_joomla", nullable = false, insertable = true, updatable = false, unique = true)
+  @Column(name = "id_joomla", nullable = true, insertable = true, updatable = false)
   private Long idJoomla;
 
-  @Column(name = "tema_proposto", nullable = false, insertable = true, updatable = false, unique = false, length = 1000)
+  @Column(name = "tema_proposto", nullable = false, insertable = true, updatable = true, unique = false, length = 1000)
   private String tema;
 
   @Column(name = "titulo_selecionado", nullable = false, insertable = true, updatable = true, unique = false)
@@ -62,8 +62,11 @@ public class MateriaEntity {
   @Column(name = "meta_descircao", nullable = false, insertable = true, updatable = true, unique = false, length = 150)
   private String metaDescricao;
 
+  @Column(name = "keywords", nullable = false, insertable = true, updatable = true, unique = false, length = 1000)
+  private String keywords;
+
   @Column(name = "introducao", nullable = false, insertable = true, updatable = true, unique = false, length = 2000)
-  private String introducao;
+  private String primeiroParagrafo;
 
   @Column(name = "materia", nullable = false, insertable = true, updatable = true, unique = false, columnDefinition = "TEXT")
   private String materia;
@@ -71,8 +74,14 @@ public class MateriaEntity {
   @Column(name = "alias", nullable = true, insertable = true, updatable = true, unique = false, length = 100)
   private String apelido;
 
+  @Column(name = "post_instagram", nullable = true, insertable = true, updatable = true, unique = false, length = 2000)
+  private String postInstagram;
+
   @Column(name = "data_publicar", nullable = true, insertable = true, updatable = true, unique = false)
   private LocalDateTime publicar;
+
+  @Column(name = "roteiro", nullable = true, insertable = true, updatable = true, unique = false, length = 2000)
+  private String roteiro;
 
   @ManyToOne
   @JoinColumn(name = "id_categoria")
@@ -81,5 +90,8 @@ public class MateriaEntity {
   @ManyToMany
   @JoinTable(joinColumns = { @JoinColumn(name = "id_categoria", table = "tbl_materia_tag") })
   private List<TagEntity> tags;
+
+  @ManyToOne
+  private List<FAQEntity> faqs;
 
 }

@@ -17,6 +17,10 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.CategoriaEnt
 @Mapper
 public interface CategoriaConvert {
 
+  @Mapping(target = "id", ignore = true)
+  @Mapping(target = "pai.id", ignore = true)
+  @Mapping(target = "pai.titulo", ignore = true)
+  @Mapping(target = "pai.apelido", ignore = true)
   @Mapping(target = "idJoomla", source = "id")
   @Mapping(target = "titulo", source = "attributes.title")
   @Mapping(target = "apelido", source = "attributes.alias")

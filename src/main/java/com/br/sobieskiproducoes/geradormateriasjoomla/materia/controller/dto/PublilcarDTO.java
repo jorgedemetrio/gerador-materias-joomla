@@ -1,34 +1,34 @@
+/**
+ *
+ */
 package com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto;
 
 import java.time.LocalDateTime;
-import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * @author Jorge Demetrio
+ * @since 22 de fev. de 2024 21:30:38
+ * @version 1.0.0
+ */
 @Getter
 @Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class SugerirMateriaDTO {
+public class PublilcarDTO {
 
-  @NotEmpty
-  private String tema;
-
-  @NotEmpty
-  private List<String> termos;
-
-  @NotNull
   @FutureOrPresent
-  private LocalDateTime publicar;
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  private LocalDateTime dataPublicacao;
 
-  private Long categoria;
-
+  private String autor;
 }

@@ -6,12 +6,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
-import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.JoomlaProperties;
+import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ChatGPTConfigurationProperties;
+import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ChatGPTPerguntasProperties;
+import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.JoomlaConfigurationProperties;
 
 @SpringBootApplication
 @EnableFeignClients
 @EnableAutoConfiguration
-@EnableConfigurationProperties({ JoomlaProperties.class })
+@EnableConfigurationProperties({ JoomlaConfigurationProperties.class, ChatGPTConfigurationProperties.class,
+    ChatGPTPerguntasProperties.class })
 public class Application {
 
   public static void main(final String[] args) {

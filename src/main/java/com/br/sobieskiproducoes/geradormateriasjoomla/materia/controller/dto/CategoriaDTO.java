@@ -23,9 +23,11 @@ public class CategoriaDTO {
 
   private Long id;
 
-  private Long idMateriaJoomla;
+  private Long idJoomla;
 
   private String titulo;
+
+  private String apelido;
 
   private CategoriaDTO pai;
 

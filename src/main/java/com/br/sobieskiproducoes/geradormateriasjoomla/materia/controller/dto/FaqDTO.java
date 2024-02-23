@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response;
+package com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import lombok.ToString;
 
 /**
  * @author Jorge Demetrio
- * @since 21 de fev. de 2024 18:57:48
+ * @since 22 de fev. de 2024 19:55:23
  * @version 1.0.0
  */
 @Getter
@@ -19,11 +19,8 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class ItemResponse<T> {
-
-  private T data;
-
-  private LinkResponse links;
-
-  private MetaResponse meta;
+public class FaqDTO {
+  private Long id;
+  private String pergunta;
+  private String resposta;
 }

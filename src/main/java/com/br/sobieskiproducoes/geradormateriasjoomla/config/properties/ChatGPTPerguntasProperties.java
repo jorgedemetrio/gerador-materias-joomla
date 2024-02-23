@@ -3,8 +3,6 @@
  */
 package com.br.sobieskiproducoes.geradormateriasjoomla.config.properties;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,11 +18,6 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ConfigurationProperties("configuracao.joomla")
-public class JoomlaProperties {
-
-  private String url;
-
-  private String bearer;
-
+public class ChatGPTPerguntasProperties {
+  private String pedirMateria;
 }

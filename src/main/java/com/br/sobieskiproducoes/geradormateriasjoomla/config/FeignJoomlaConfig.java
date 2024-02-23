@@ -6,7 +6,7 @@ package com.br.sobieskiproducoes.geradormateriasjoomla.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.JoomlaProperties;
+import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.JoomlaConfigurationProperties;
 
 import feign.Logger;
 import feign.RequestInterceptor;
@@ -21,11 +21,11 @@ import lombok.extern.java.Log;
 @Configuration
 @RequiredArgsConstructor
 @Log
-public class FeignConfig {
+public class FeignJoomlaConfig {
   private static final String AUTHORIZATION = "Authorization";
   private static final String BEARER = "Bearer ";
 
-  private final JoomlaProperties priperties;
+  private final JoomlaConfigurationProperties priperties;
 
   @Bean
   Logger.Level feignLoggerLevel() {
@@ -34,7 +34,7 @@ public class FeignConfig {
 
   @Bean
   public RequestInterceptor requestKeycloakInterceptor() {
-    log.info("Realizando autenticação keycloak com serviços internos para chamada via Feign Client");
+    log.info("Realizando autenticação token beader com serviços internos para chamada via Feign Client");
 
     return requestTemplate -> {
 

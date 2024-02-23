@@ -9,9 +9,27 @@ springdoc:
     operationsSorter: method
 
 management:
+  metrics:
+    use-global-registry: true
+  defaults:
+    metrics:
+      export:
+        enabled: true
+  datadog:
+    metrics:
+      export:
+        enabled: true
   server:
     port: 9090
   endpoints:
+    health:
+      show-details: always
+      show-components: always
+    enabled-by-default: false
+    shutdown:
+      enabled: true
+    info:
+      enabled: true
     web:
       exposure:
         include: openapi, swagger-ui
@@ -48,4 +66,33 @@ configuracao:
   joomla:
     url: https://www.teste.com.br/api/index.php/v1
     bearer: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-
+  chatgpt:
+    url: https://api.openai.com/v1/chat/completions
+    bearer: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    model: gpt-4
+    temperature: 0.7
+    role: system
+    
+    
+chatgpt:
+  perguntas:
+    pedir-materia: "Entendento que uma matéria deve seguir os requisitos:
+ - A matéria é para o site: %s .
+ - Que tem as redes sociais: %s .
+ - Entregue em formato JSON, com layout : { titulos : array(string), primeiro-paragrafo: string, materia: string, url-proposta: string, meta-descricao: string, keywords: string, tags : array, faqs: array{pergunta: string, resposta: string}, roteiro: string, post-instagram: string} 
+ - Formatar com HTML básico com subtitulos (htmls permitidos: <br/>,<p></p>, <h2></h2>, <h3></h3>, <ul></ul>, <li><li>,<lo><lo>, <strong></strong>, <i></i>). \n
+ - Use SEO na máteria para os termos : %s .\n
+ - Devem ter 3 opções de Títulos, usando SEO, gatilhos mentais e emojis\n
+ - Primeiro paragrafo ter no máximo 100 caracateres e deve sere usados estrutura de marketing para chamar atenção da máteria, como: Gatilhos mentais ou sensassionalismo. \n
+ - No minimo 4 subtitulos no mínimo de 2 paragrafos cada. Usar emojis nos subtitulos e pode usar listas para facilidar a leitura. Rvite resumir a matéria sempre opte em expliar pricipalmente termos tecnicos. \n
+ - No final deve ter um subtitulo de 3 perguntas frequentes sobre o tema e as resposas deles.\n
+ - Na conclusão da materia deve ser fazer um call to action. \n
+ - Depois da matéria proponha um apelido para página (url-proposta) da máteria suando SEO, tudo em minusculos, em português e separados por - (traço). \n  
+ - Deve ter "meta descrição"  (meta-descricao)é um resumo de 160 caracteres pode ter emojis, estremamente chamadivo para exibir nos mecanismos de buscas. \n
+ - Deve ter keyowrds, palavras chaves de calda curta de SEO da matéria. \n
+ - Deve ter tags, que são uma array de no mínimo 5, que palavras chaves de calda longa usando SEO pensando nas possível buscas que o usuário possa fazer para achar essa matéria. \n
+ - Deve ter FAQs, que não no máximos 6 perguntas e minimo de 4 e respostas de no máximo 120 caracteres cada pergunta e resposta. \n
+ - Deve ter roteiro, um roteiro de 1:30 minutos nomáximo sobre a matéria para reels do instagram, sómente com falar.
+ - Deve ter post-instagram, que é a descrição do poste no facebook e insatgram com 1500 caracateres mais ou menos usando Marketing Social, emojis e Hashtags.  
+Agora gere uma matéria sobre : %s "
+    

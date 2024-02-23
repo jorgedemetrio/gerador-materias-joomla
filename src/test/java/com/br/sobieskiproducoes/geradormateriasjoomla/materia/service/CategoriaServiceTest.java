@@ -21,7 +21,7 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.JoomlaProperties;
+import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.JoomlaConfigurationProperties;
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.ItemResponse;
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.LinkResponse;
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.MetaResponse;
@@ -51,7 +51,7 @@ class CategoriaServiceTest {
   CategoriaJoomlaClient categoriaJoomlaClient;
 
   @Spy
-  JoomlaProperties properties = new JoomlaProperties("url", "bearer");
+  JoomlaConfigurationProperties properties = new JoomlaConfigurationProperties("url", "bearer");
 
   @Spy
   CategoriaConvert convert = new CategoriaConvertImpl();
@@ -80,7 +80,7 @@ class CategoriaServiceTest {
 
     ), new LinkResponse("self", "url/next", "last", "first"), new MetaResponse(0l)));
 
-    when(categoriaJoomlaClient.getCategorias(anyString())).thenReturn(new ItemResponse<>(Arrays.asList(
+    when(categoriaJoomlaClient.getCategorias(anyString(), anyString())).thenReturn(new ItemResponse<>(Arrays.asList(
         new CategoriaJoomlaDTO("type", "3",
             new AtributosCategoriaJoomlaDTO(3l, "title", "alias", "note", 1, 1, "checkedOut", "checkedOutTime", 1L, 1L,
                 1, 1, 1, "language", "description", "languageTitle", "languageImage", "editor", "access_level",
@@ -95,7 +95,8 @@ class CategoriaServiceTest {
     when(categoriaRepository.findByIdJoomla(anyLong())).thenReturn(Optional.empty(), Optional.empty(),
         Optional.of(new CategoriaEntity()), Optional.empty());
 
-    final ArgumentCaptor<String> urlArgumentCaptor = ArgumentCaptor.forClass(String.class);
+    final ArgumentCaptor<String> url1ArgumentCaptor = ArgumentCaptor.forClass(String.class);
+    final ArgumentCaptor<String> url2ArgumentCaptor = ArgumentCaptor.forClass(String.class);
     final ArgumentCaptor<Long> idJoomlaArgumentCaptor = ArgumentCaptor.forClass(Long.class);
     final ArgumentCaptor<CategoriaEntity> categoriaEntityArgumentCaptor = ArgumentCaptor
         .forClass(CategoriaEntity.class);
@@ -103,22 +104,27 @@ class CategoriaServiceTest {
     final int retorno = service.atualizarBancoCategoria();
 
     verify(categoriaJoomlaClient, times(1)).getCategorias();
-    verify(categoriaJoomlaClient, times(1)).getCategorias(urlArgumentCaptor.capture());
-    verify(categoriaRepository, times(4)).findByIdJoomla(idJoomlaArgumentCaptor.capture());
+    verify(categoriaJoomlaClient, times(1)).getCategorias(url1ArgumentCaptor.capture(), url2ArgumentCaptor.capture());
+    verify(categoriaRepository, times(7)).findByIdJoomla(idJoomlaArgumentCaptor.capture());
 
-    verify(categoriaRepository, times(3)).save(categoriaEntityArgumentCaptor.capture());
+    verify(categoriaRepository, times(4)).save(categoriaEntityArgumentCaptor.capture());
 
-    assertEquals("/next", urlArgumentCaptor.getValue());
+    assertEquals("20", url1ArgumentCaptor.getValue());
+    assertEquals("20", url2ArgumentCaptor.getValue());
     assertEquals(4, retorno);
 
     assertEquals(1L, idJoomlaArgumentCaptor.getAllValues().get(0));
     assertEquals(2L, idJoomlaArgumentCaptor.getAllValues().get(1));
-    assertEquals(3L, idJoomlaArgumentCaptor.getAllValues().get(2));
-    assertEquals(4L, idJoomlaArgumentCaptor.getAllValues().get(3));
+    assertEquals(1L, idJoomlaArgumentCaptor.getAllValues().get(2));
+    assertEquals(3L, idJoomlaArgumentCaptor.getAllValues().get(3));
+    assertEquals(1L, idJoomlaArgumentCaptor.getAllValues().get(4));
+    assertEquals(4L, idJoomlaArgumentCaptor.getAllValues().get(5));
+    assertEquals(1L, idJoomlaArgumentCaptor.getAllValues().get(6));
 
     assertEquals(1L, categoriaEntityArgumentCaptor.getAllValues().get(0).getIdJoomla());
     assertEquals(2L, categoriaEntityArgumentCaptor.getAllValues().get(1).getIdJoomla());
-    assertEquals(4L, categoriaEntityArgumentCaptor.getAllValues().get(2).getIdJoomla());
+    assertEquals(3L, categoriaEntityArgumentCaptor.getAllValues().get(2).getIdJoomla());
+    assertEquals(4L, categoriaEntityArgumentCaptor.getAllValues().get(3).getIdJoomla());
 
   }
 

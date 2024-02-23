@@ -3,14 +3,13 @@
  */
 package com.br.sobieskiproducoes.geradormateriasjoomla.materia.model;
 
-import java.util.List;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,7 +19,7 @@ import lombok.ToString;
 
 /**
  * @author Jorge Demetrio
- * @since 21 de fev. de 2024 17:42:49
+ * @since 21 de fev. de 2024 17:22:54
  * @version 1.0.0
  */
 @Getter
@@ -29,24 +28,22 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "tbl_tag")
-public class TagEntity {
+@Table(name = "tbl_faq")
+public class FAQEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
   private Long id;
 
-  @Column(name = "id_joomla", nullable = true, insertable = true, updatable = true, unique = false)
-  private Long idJoomla;
+  @Column(name = "pergunta", nullable = false, insertable = true, updatable = false, unique = false, length = 1000)
+  private String pergunta;
 
-  @Column(name = "titulo", nullable = false, insertable = true, updatable = false, unique = false, length = 1000)
-  private String titulo;
+  @Column(name = "resposta", nullable = false, insertable = true, updatable = false, unique = false, length = 1000)
+  private String resposta;
 
-  @Column(name = "alias", nullable = false, insertable = true, updatable = false, unique = false, length = 1000)
-  private String apelido;
-
-  @ManyToMany
-  private List<MateriaEntity> materias;
+  @ManyToOne
+  @JoinColumn(name = "id_materia")
+  private MateriaEntity materia;
 
 }

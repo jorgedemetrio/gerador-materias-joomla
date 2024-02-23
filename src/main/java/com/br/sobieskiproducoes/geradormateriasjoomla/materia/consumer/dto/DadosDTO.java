@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response;
+package com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import lombok.ToString;
 
 /**
  * @author Jorge Demetrio
- * @since 21 de fev. de 2024 18:57:48
+ * @since 22 de fev. de 2024 15:31:32
  * @version 1.0.0
  */
 @Getter
@@ -19,11 +19,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class ItemResponse<T> {
-
-  private T data;
-
-  private LinkResponse links;
-
-  private MetaResponse meta;
+public class DadosDTO {
+  private String type;
+  private String id;
 }

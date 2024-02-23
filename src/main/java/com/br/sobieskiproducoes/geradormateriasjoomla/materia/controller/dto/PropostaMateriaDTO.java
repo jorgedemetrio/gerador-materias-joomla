@@ -6,6 +6,8 @@ package com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,22 +24,36 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class MateriaDTO {
+public class PropostaMateriaDTO {
 
   private Long id;
 
-  private Long idMateriaJoomla;
+  private Long idJoomla;
   private String tema;
   private Integer tituloSelecionado;
-  private String titulo1;
-  private String titulo2;
-  private String titulo3;
-  private String metaDescricao;
-  private String introducao;
+  private List<String> titulos;
+
+  @JsonProperty("primeiro-paragrafo")
+  private String primeiroParagrafo;
+
   private String materia;
+
+  @JsonProperty("meta-descricao")
+  private String metaDescricao;
+
+  private String keywords;
+
+  @JsonProperty("url-proposta")
   private String apelido;
+
   private LocalDateTime publicar;
   private CategoriaDTO categoria;
-  private List<TagDTO> tags;
+  private List<String> tags;
+  private List<FaqDTO> faqs;
+
+  private String roteiro;
+
+  @JsonProperty("post-instagram")
+  private String postInstagram;
 
 }
