@@ -41,7 +41,7 @@ public class MateriaController {
   @Operation(summary = "Publica um máteria que está no banco de dados no Joomla")
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "Processado com sucesso", content = @Content(oneOf = @Schema(implementation = String.class), mediaType = MediaType.APPLICATION_JSON_VALUE)) })
-  @PostMapping(path = "{id}/publicar")
+  @PostMapping(path = "{id}/publicar", consumes = { MediaType.APPLICATION_JSON_VALUE })
   @ResponseBody
   public ResponseEntity<String> publicar(@PathVariable("id") final Long id, @RequestBody final PublilcarDTO dto) {
     log.info("Gerando materia sobre %d ".formatted(id));
@@ -51,11 +51,12 @@ public class MateriaController {
   @Operation(summary = "Carregar no banco uma sugestão de matéria baseado em um tema.")
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "Processado com sucesso", content = @Content(oneOf = @Schema(implementation = String.class), mediaType = MediaType.APPLICATION_JSON_VALUE)) })
-  @PostMapping(path = "sugerir")
+  @PostMapping(path = "sugerir", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
+      MediaType.APPLICATION_JSON_VALUE })
   @ResponseBody
   public ResponseEntity<List<PropostaMateriaDTO>> sugerirMateria(@RequestBody final SugerirMateriaDTO request) {
     log.info("Gerando materia sobre %s ".formatted(request.getTema()));
-    return ResponseEntity.status(HttpStatus.CREATED).body(gerarMateriaService.sugerirMateria(request));
+    return ResponseEntity.status(HttpStatus.CREATED).body(gerarMateriaService.gerarSugestaoMateria(request));
   }
 
 }

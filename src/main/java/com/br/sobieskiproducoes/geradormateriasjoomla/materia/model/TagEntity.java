@@ -37,6 +37,9 @@ public class TagEntity {
   @Column(name = "id")
   private Long id;
 
+  @Column(name = "uuid_requisicao", nullable = true, insertable = true, updatable = true, unique = false, length = 1000)
+  private String uuid;
+
   @Column(name = "id_joomla", nullable = true, insertable = true, updatable = true, unique = false)
   private Long idJoomla;
 

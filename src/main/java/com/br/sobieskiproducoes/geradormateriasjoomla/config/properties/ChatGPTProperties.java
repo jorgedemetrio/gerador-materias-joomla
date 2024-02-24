@@ -33,7 +33,10 @@ public class ChatGPTProperties {
 
   @NotNull
   @Valid
-  private ChatGPTPerguntasProperties perguntas;
+  private ChatGPTPerguntasProperties prompts;
+
+  @NotEmpty
+  private List<String> audiencias;
 
   @NotNull
   @NotBlank

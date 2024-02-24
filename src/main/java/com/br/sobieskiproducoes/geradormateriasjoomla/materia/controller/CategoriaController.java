@@ -8,15 +8,14 @@ import java.util.Map;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.dto.RetornoBusinessDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.CategoriaDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.QuantidadeCategoriasImportadasDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.CategoriaService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,7 +34,7 @@ import lombok.extern.java.Log;
  */
 @Log
 @RequiredArgsConstructor
-@RestController
+@RestController()
 @RequestMapping("/categoria")
 public class CategoriaController {
 
@@ -43,8 +42,8 @@ public class CategoriaController {
 
   @Operation(summary = "Recarrega as categorias no banco de dados tirando do Joomla")
   @ApiResponses({
-      @ApiResponse(responseCode = "200", description = "Processado com sucesso", content = @Content(schema = @Schema(implementation = QuantidadeCategoriasImportadasDTO.class), mediaType = MediaType.APPLICATION_JSON_VALUE)) })
-  @PutMapping(path = "recarregar", produces = { MediaType.APPLICATION_JSON_VALUE })
+      @ApiResponse(responseCode = "200", description = "Processado com sucesso") })
+  @RequestMapping(method = RequestMethod.PATCH, path = "recarregar", produces = { MediaType.APPLICATION_JSON_VALUE })
   @ResponseBody
   public ResponseEntity<Map<String, Integer>> atualizar() {
     log.info("Inicio de processamento de recarga de Categoriaso Joomla");
@@ -53,12 +52,12 @@ public class CategoriaController {
 
   @Operation(summary = "Retorna a lista de itens")
   @ApiResponses({
-      @ApiResponse(responseCode = "200", description = "Lista de Categoria", content = @Content(array = @ArraySchema(items = @Schema(implementation = RetornoBusinessDTO.class)), mediaType = MediaType.APPLICATION_JSON_VALUE)) })
+      @ApiResponse(responseCode = "200", description = "Lista de Categoria", content = @Content(array = @ArraySchema(schema = @Schema(implementation = RetornoBusinessDTO.class)), mediaType = MediaType.APPLICATION_JSON_VALUE)) })
   @GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
   @ResponseBody
   public ResponseEntity<RetornoBusinessDTO<CategoriaDTO>> find(
       @RequestParam(name = "titulo", required = false) final String titulo,
-      @RequestParam(name = "p", required = false) final Integer pagina) {
+      @RequestParam(name = "p", required = false, defaultValue = "0") final Integer pagina) {
     return ResponseEntity.ok(service.busca(titulo, pagina));
   }
 

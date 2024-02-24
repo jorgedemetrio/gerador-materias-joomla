@@ -41,4 +41,6 @@ public class SugerirMateriaDTO {
 
   private Long categoria;
 
+  private List<String> audiencias;
+
 }

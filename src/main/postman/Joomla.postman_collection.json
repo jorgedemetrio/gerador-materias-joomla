@@ -25,7 +25,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"tema\":\"O que o taro pode nos responder em um consulta normal?\",\r\n    \"termos\": [\"tarot\",\"taro\", \"cartomante\", \"tarologa\", \"tiragem de cartas\", \"ver o futuro\"],\r\n    \"publicar\": \"2024-02-24 11:00:00\",\r\n    \"categoria\": 10\r\n}",
+									"raw": "{\r\n    \"tema\":\"O que o taro pode nos responder em uma consulta normal?\",\r\n    \"termos\": [\"tarot\",\"taro\", \"cartomante\", \"tarologa\", \"tiragem de cartas\", \"ver o futuro\"],\r\n    \"publicar\": \"2024-02-25 11:00:00\",\r\n    \"categoria\": 10\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -93,7 +93,7 @@
 						{
 							"name": "Recarregar Categoria",
 							"request": {
-								"method": "PUT",
+								"method": "PATCH",
 								"header": [
 									{
 										"key": "accept",
@@ -133,7 +133,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{endereco}}/categoria?p=1",
+									"raw": "{{endereco}}/categoria",
 									"host": [
 										"{{endereco}}"
 									],
@@ -148,8 +148,37 @@
 										},
 										{
 											"key": "p",
-											"value": "1"
+											"value": "1",
+											"disabled": true
 										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Mapa Mental",
+					"item": [
+						{
+							"name": "http://localhost:8080/mapaperguntas/gerar",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{endereco}}/mapaperguntas/gerar",
+									"host": [
+										"{{endereco}}"
+									],
+									"path": [
+										"mapaperguntas",
+										"gerar"
 									]
 								}
 							},

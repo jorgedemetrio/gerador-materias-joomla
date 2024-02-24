@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.br.sobieskiproducoes.geradormateriasjoomla.materia.model;
+package com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,7 +19,7 @@ import lombok.ToString;
 
 /**
  * @author Jorge Demetrio
- * @since 21 de fev. de 2024 17:22:54
+ * @since 24 de fev. de 2024 12:56:12
  * @version 1.0.0
  */
 @Getter
@@ -28,9 +28,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "tbl_faq")
-public class FAQEntity {
-
+@Table(name = "tbl_mapa_subperguntas")
+public class SubMapaPerguntasEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
@@ -39,14 +38,10 @@ public class FAQEntity {
   @Column(name = "uuid_requisicao", nullable = true, insertable = true, updatable = true, unique = false, length = 1000)
   private String uuid;
 
-  @Column(name = "pergunta", nullable = false, insertable = true, updatable = false, unique = false, length = 1000)
+  @Column(name = "pergunta", nullable = false, insertable = true, updatable = false, unique = false, length = 3000)
   private String pergunta;
 
-  @Column(name = "resposta", nullable = false, insertable = true, updatable = false, unique = false, length = 1000)
-  private String resposta;
-
   @ManyToOne
-  @JoinColumn(name = "id_materia")
-  private MateriaEntity materia;
-
+  @JoinColumn(name = "id_mpa_pergunta", nullable = false, insertable = true, updatable = false, unique = false)
+  private MapaPerguntaEntity peguntaPrincipal;
 }

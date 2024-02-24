@@ -32,4 +32,10 @@ public class ChatGPTPerguntasProperties {
   @NotNull
   @NotBlank
   private String pedirDadosMateria;
+
+  @NotNull
+  @NotBlank
+  private String pedirPerguntas;
+
+  private String complementoFormatoPedirMateria;
 }
