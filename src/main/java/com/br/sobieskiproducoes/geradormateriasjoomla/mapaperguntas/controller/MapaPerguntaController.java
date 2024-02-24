@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -36,6 +37,7 @@ import lombok.extern.java.Log;
 @Log
 @RequiredArgsConstructor
 @RestController
+@Tag(name = "Mapa mental de perguntas", description = "Controller Gerenciador de mapas de perguntas  para sugerir matérias")
 @RequestMapping("/mapaperguntas")
 public class MapaPerguntaController {
 

@@ -27,7 +27,7 @@ public interface CategoriaRepository extends JpaRepository<CategoriaEntity, Long
   @Query(name = "CategoriaRepository.findByIdJoomla", value = " SELECT c FROM CategoriaEntity AS c WHERE UPPER(c.titulo) like concat('%', :titulo, '%') ")
   Page<CategoriaEntity> buscaPorTitulo(@Param("titulo") String titulo, Pageable page);
 
-  @Cacheable
+  @Cacheable("categoriasParaPrompt")
   @Query(name = "CategoriaRepository.findByIdJoomla", value = " SELECT c FROM CategoriaEntity AS c WHERE c.usarEmPrompts = true ")
   List<CategoriaEntity> categoriasParaPrompt();
 

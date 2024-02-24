@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
@@ -35,6 +36,7 @@ import lombok.extern.java.Log;
 @Log
 @RequiredArgsConstructor
 @RestController()
+@Tag(name = "Categoria", description = "Controller Gerenciador das Categorias das Matérias ")
 @RequestMapping("/categoria")
 public class CategoriaController {
 

@@ -9,6 +9,7 @@ import org.mapstruct.Mapping;
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.controller.dto.MapaPerguntaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.model.MapaPerguntaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.model.SubMapaPerguntasEntity;
+import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.service.dto.MapaPerguntaRetornoChatGPTDTO;
 
 /**
  * @author Jorge Demetrio
@@ -20,6 +21,9 @@ public interface PerguntasConvert {
 
   @Mapping(target = "perguntasAlternativas", ignore = true)
   MapaPerguntaDTO convert(MapaPerguntaEntity perunta);
+
+  @Mapping(target = "perguntasAlternativas", ignore = true)
+  MapaPerguntaEntity convert(MapaPerguntaRetornoChatGPTDTO perunta);
 
   @Mapping(target = "id", ignore = true)
   @Mapping(target = "uuid", ignore = true)

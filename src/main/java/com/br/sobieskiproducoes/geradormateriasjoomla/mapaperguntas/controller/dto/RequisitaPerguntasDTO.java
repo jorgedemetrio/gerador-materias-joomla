@@ -5,11 +5,11 @@ package com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.controller.
 
 import java.util.List;
 
+import com.br.sobieskiproducoes.geradormateriasjoomla.dto.MesesEnum;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,12 +32,12 @@ public class RequisitaPerguntasDTO {
   @JsonProperty(defaultValue = "15")
   private Integer quantidade = 15;
 
-  @NotNull
-  @NotEmpty
-  private String mes;
+  private MesesEnum mes;
 
   @NotEmpty
   private List<String> termos;
   private List<String> audiencias;
+
+  private List<Long> categorias;
 
 }

@@ -12,6 +12,8 @@ import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -28,6 +30,8 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.model.MapaPe
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.model.SubMapaPerguntasEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.repository.MapaPerguntaRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.service.convert.PerguntasConvert;
+import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.service.dto.MapaPerguntaRetornoChatGPTDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.CategoriaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.CategoriaRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -58,7 +62,7 @@ public class GerarMapaPerguntasService {
   private final MapaPerguntaRepository repository;
 
   private MapaPerguntaDTO convert(final MapaPerguntaEntity item) {
-    if(isNull(item)) {
+    if (isNull(item)) {
       return null;
     }
 
@@ -70,26 +74,54 @@ public class GerarMapaPerguntasService {
     return retirno;
   }
 
-  private List<MapaPerguntaEntity> convetToPropostaMateriaDTO(final ChoicesDTO choice) {
+  private String converterCategoria(final CategoriaEntity categoria) {
+    if (isNull(categoria)) {
+      return null;
+    }
 
+    return String.join("{\"id\":", categoria.getId().toString(), ", \"nome\":\"",
+        categoria.getTitulo().trim().toLowerCase(), "\"}");
+
+  }
+
+  private List<MapaPerguntaEntity> convetToPropostaMateriaDTO(final ChoicesDTO choice, final String uuid) {
+    List<MapaPerguntaEntity> itensRetorno = null;
     try {
       final String content = limparTexto(choice.getMessage().getContent());
-      return objectMapper.readValue(content, new TypeReference<List<MapaPerguntaEntity>>() {
-      });
+      final List<MapaPerguntaRetornoChatGPTDTO> itens = objectMapper.readValue(content,
+          new TypeReference<List<MapaPerguntaRetornoChatGPTDTO>>() {
+          });
+
+      itensRetorno = itens.stream().map(mapaPergunta -> {
+        final MapaPerguntaEntity entity = convert.convert(mapaPergunta);
+        entity.setUuid(uuid);
+
+        final Optional<CategoriaEntity> categoria = categoriaRepository.findById(mapaPergunta.getIdCategoria());
+        if (categoria.isPresent()) {
+          entity.setCategoria(categoria.get());
+        }
+        entity.setPerguntasAlternativas(mapaPergunta.getPerguntasAlternativas().stream()
+            .map(pergunta -> new SubMapaPerguntasEntity(null, uuid, pergunta, entity)).collect(Collectors.toList()));
+        mapaPergunta.getPerguntasAlternativas();
+        return entity;
+      }).collect(Collectors.toList());
+
     } catch (final Exception e) {
       log.log(Level.SEVERE, "Erro ao converter objeto de retorno do ChatGPT: ".concat(e.getMessage())
           .concat(" \nConteúdo: \n\n\n").concat(choice.getMessage().getContent()), e);
-      throw new RuntimeException("Erro ao tentar processar os dados do ChatGPT", e);
+      // throw new RuntimeException("Erro ao tentar processar os dados do ChatGPT",
+      // e);
     }
-
+    return itensRetorno;
   }
 
   public List<MapaPerguntaDTO> gerarMapa(final RequisitaPerguntasDTO request) {
 
+    // Prepara a massa de dados usada nas perguntas.
     final String uuid = UUID.randomUUID().toString();
     final LocalDateTime inicio = LocalDateTime.now();
 
-    final String mes = nonNull(request.getMes()) || !request.getMes().isBlank() ? request.getMes()
+    final String mes = nonNull(request.getMes()) ? request.getMes().toString()
         : LocalDateTime.now().getMonth().getDisplayName(TextStyle.FULL, Locale.forLanguageTag("pt-BR"));
 
     final String conhecimento = chatGPTProperties.getEspecialista().stream().map(n -> n.trim().toLowerCase())
@@ -97,22 +129,28 @@ public class GerarMapaPerguntasService {
     final String termos = request.getTermos().stream().map(n -> n.trim().toLowerCase())
         .collect(Collectors.joining(", "));
 
-    final String categorias = categoriaRepository.categoriasParaPrompt().stream()
-        .map(n -> n.getTitulo().trim().toLowerCase()).collect(Collectors.joining(", "));
+    final List<CategoriaEntity> categorias = (nonNull(request.getCategorias()) && !request.getCategorias().isEmpty()
+        ? categoriaRepository.findAllById(request.getCategorias())
+        : categoriaRepository.categoriasParaPrompt());
+
+    final String categoriasJson = String.join("[",
+        categorias.stream().filter(Objects::nonNull).map(this::converterCategoria).collect(Collectors.joining(", ")),
+        "]");
 
     final String audiencias = nonNull(request.getAudiencias()) && !request.getAudiencias().isEmpty()
         ? request.getAudiencias().stream().map(n -> n.trim().toLowerCase()).collect(Collectors.joining(", "))
         : chatGPTProperties.getAudiencias().stream().map(n -> n.trim().toLowerCase()).collect(Collectors.joining(", "));
 
+    // Prepara a pegunta
     final String perguntaParaGerarPerguntas = chatGPTProperties.getPrompts().getPedirPerguntas().formatted(
-        chatGPTProperties.getSite(), categorias, conhecimento, audiencias, request.getQuantidade(), mes, termos);
+        chatGPTProperties.getSite(), categoriasJson, conhecimento, audiencias, request.getQuantidade(), mes, termos);
 
     final RepostaResponseDTO repostaMapaPerguntas = chatgpt.pergunta(perguntaParaGerarPerguntas, uuid, inicio);
 
     final List<MapaPerguntaEntity> itens = new ArrayList<>();
 
     repostaMapaPerguntas.getChoices().forEach(choice -> {
-      itens.addAll(convetToPropostaMateriaDTO(choice));
+      itens.addAll(convetToPropostaMateriaDTO(choice, uuid));
     });
 
     repository.saveAll(itens);
