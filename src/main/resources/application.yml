@@ -93,25 +93,44 @@ configuracao:
     
 chatgpt:
   perguntas:
-    pedir-materia: " Torne-se um especialista em : Marketing de Conteúdo, Maketing Digital, Marketing Social \n
-    Com vasto conhonhecimento em: %s \n
-    Entendento que uma matéria deve seguir os requisitos: \n
+
+    
+    
+    pedir-dados-materia: "Torne-se um especialista em : Marketing de Conteúdo, Maketing Digital, Marketing Social \n
+Com vasto conhonhecimento em: %s \n
+Entendento que uma matéria deve seguir os requisitos: \n
  - A matéria é para o site: %s .\n
  - Que tem as redes sociais: %s .\n
- - Entregue em formato JSON, com layout : { titulos : array(string), primeiro-paragrafo: string, materia: string, url-proposta: string, meta-descricao: string, keywords: string, tags : array, faqs: array{pergunta: string, resposta: string}, roteiro: string, post-instagram: string} \n 
- - Formatar com HTML básico com subtitulos (htmls permitidos: <br/>,<p></p>, <h2></h2>, <h3></h3>, <ul></ul>, <li><li>,<lo><lo>, <strong></strong>, <i></i>). \n
+ - Entregue em formato JSON, com layout : { titulos : array(string), primeiro-paragrafo: string,  url-proposta: string, meta-descricao: string, keywords: string, tags : array, faqs: array{pergunta: string, resposta: string}, roteiro: string, post-instagram: string} \n 
  - Use SEO na máteria para os termos : %s .\n
  - Devem ter 3 opções de Títulos, usando SEO, gatilhos mentais e emojis\n
  - Primeiro paragrafo ter no máximo 100 caracateres e deve sere usados estrutura de marketing para chamar atenção da máteria, como: Gatilhos mentais ou sensassionalismo. \n
- - No minimo 4 subtitulos no mínimo de 2 paragrafos cada. Usar emojis nos subtitulos e pode usar listas para facilidar a leitura. Rvite resumir a matéria sempre opte em expliar pricipalmente termos tecnicos. \n
- - No final deve ter um subtitulo de 3 perguntas frequentes sobre o tema e as resposas deles.\n
- - Na conclusão da materia deve ser fazer um call to action. \n
- - Depois da matéria proponha um apelido para página (url-proposta) da máteria suando SEO, tudo em minusculos, em português e separados por - (traço). \n  
+ - Proponha um apelido para página (url-proposta) da máteria suando SEO, tudo em minusculos, em português e separados por - (traço). \n  
  - Deve ter Meta Descrição (o campo meta-descricao), que é um resumo de 160 caracteres pode ter emojis, estremamente chamadivo para exibir nos mecanismos de buscas. \n
  - Deve ter keyowrds, palavras chaves de calda curta de SEO da matéria. \n
  - Deve ter tags, que são uma array de no mínimo 5, que palavras chaves de calda longa usando SEO pensando nas possível buscas que o usuário possa fazer para achar essa matéria. \n
  - Deve ter FAQs, que não no máximos 6 perguntas e minimo de 4 e respostas de no máximo 120 caracteres cada pergunta e resposta. \n
- - Deve ter roteiro, um roteiro de 1:30 minutos nomáximo sobre a matéria para reels do instagram, sómente com falar.
- - Deve ter post-instagram, que é a descrição do poste no facebook e insatgram com 1500 caracateres mais ou menos usando Marketing Social, emojis e Hashtags.  
-Agora gere uma matéria sobre : %s "
+ - Deve ter roteiro, um roteiro de 1:30 minutos no máximo sobre a matéria para reels do instagram, sómente com falas, deve ser bem humorado e com foco de ser viral.
+ - Deve ter post-instagram, que é a descrição do poste no facebook e insatgram com 1500 caracateres mais ou menos usando Marketing Social, emojis e Hashtags.
+Agora gere esses dados para uma matéria sobre : %s "
+
+
+    pedir-materia: "Vamos escrevar agora o  texto da matéria um especialista em : Marketing de Conteúdo .\n
+Com ênfase em : %s .\n 
+Entendento que uma matéria deve seguir os requisitos: \n
+ - A matéria é para o site: %s .\n
+ - Que tem as redes sociais: %s .\n
+ - Formatar com HTML básico com subtitulos (htmls permitidos:  <font></font>, <br/>,<p></p>, <h2></h2>, <h3></h3>, <h4></h4>, <ul></ul>, <li><li>,<lo><lo>, <strong></strong>, <i></i>). \n
+ - Tente expemplificar o máximo que puder, se for uma máteria tenica tente colocar exemplos de código fonte, e quando for coloca-los deixe os formatados e entre as tags: <pre style='background-color: #ced4d9; margin: 5px; padding: 10px; border-radius: 10px;'><code></code></pre> . \n
+ - Use SEO na máteria para que ela seja o mais achavel possível em mecanismos de busca para os termos : %s .\n
+ - Trabalhe o melhor possível para que a matéria seja interessante e víral. \n
+ - Pode usar emojis nos subtitulos e listas. \n
+ - No minimo 5 subtitulos e cada um com no mínimo de 2 paragrafos por subtitulo. \n 
+ - Pode usar listas para facilidar a leitura e formatações simples. 
+ - Evite resumir a matéria sempre opite em expliar melhor pricipalmente termos tecnicos, entenda quando mais atratamos assuntos buscados que se relaciona ao tema da materias mais chances ela tem de ser acahr e do usuário achar o que busca nela. \n
+ - No final deve ter um subtitulo de perguntas frequentes sobre o tema e tenha 3 perguntas e as resposas delas.\n
+ - Na conclusão da materia deve ser fazer um call to action para o site cometar abaixo da matéria ou ver as reses sociais. \n
+ - Na matéria não deve ter hashtags.  
+E matéria deve falar sobre : 
+%s  "
     

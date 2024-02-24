@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.PropostaMateriaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.PublilcarDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.SugerirMateriaDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.GerarMateriaService;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.MateriaService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,6 +35,7 @@ import lombok.extern.java.Log;
 @RequestMapping("/materia")
 public class MateriaController {
 
+  private final GerarMateriaService gerarMateriaService;
   private final MateriaService service;
 
   @Operation(summary = "Publica um máteria que está no banco de dados no Joomla")
@@ -53,7 +55,7 @@ public class MateriaController {
   @ResponseBody
   public ResponseEntity<List<PropostaMateriaDTO>> sugerirMateria(@RequestBody final SugerirMateriaDTO request) {
     log.info("Gerando materia sobre %s ".formatted(request.getTema()));
-    return ResponseEntity.status(HttpStatus.CREATED).body(service.sugerirMateria(request));
+    return ResponseEntity.status(HttpStatus.CREATED).body(gerarMateriaService.sugerirMateria(request));
   }
 
 }

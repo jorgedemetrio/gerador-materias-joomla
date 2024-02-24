@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.ChatGPTConsumerClient;
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.request.MessageChatGPTDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.request.PromptRequestDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.response.ChoicesDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.response.RepostaResponseDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ChatGPTConfigurationProperties;
 
@@ -32,7 +31,7 @@ public class ChatGPTService {
   private final ChatGPTConsumerClient client;
   private final ChatGPTConfigurationProperties properties;
 
-  public List<MessageChatGPTDTO> pergunta(final String pergunta) {
+  public RepostaResponseDTO pergunta(final String pergunta) {
 
     final RepostaResponseDTO resposta = client.conversar(new PromptRequestDTO(properties.getModel(),
         Arrays.asList(new MessageChatGPTDTO(properties.getRole(), pergunta)), properties.getTemperature()));
@@ -40,7 +39,20 @@ public class ChatGPTService {
     log.info("Pergunta feita ao chatGPT: ".concat(pergunta).concat(" tokens usados ")
         .concat(resposta.getUsage().getTotalTokens().toString()));
 
-    return resposta.getChoices().stream().map(ChoicesDTO::getMessage).collect(Collectors.toList());
+    return resposta;
+
+  }
+
+
+  public RepostaResponseDTO perguntas(final List<String> perguntas) {
+
+    final RepostaResponseDTO resposta = client.conversar(new PromptRequestDTO(properties.getModel(),
+        perguntas.stream().map(pergunta -> new MessageChatGPTDTO(properties.getRole(), pergunta)).collect(Collectors.toList()), properties.getTemperature()));
+
+    log.info("Pergunta feita ao chatGPT: ".concat(perguntas.toString()).concat(" tokens usados ")
+        .concat(resposta.getUsage().getTotalTokens().toString()));
+
+    return resposta;
 
   }
 

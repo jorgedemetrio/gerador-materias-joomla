@@ -30,6 +30,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public class PropostaMateriaDTO {
 
+
   private Long id;
 
   private Long idJoomla;
@@ -59,6 +60,8 @@ public class PropostaMateriaDTO {
   private List<FaqDTO> faqs;
 
   private String roteiro;
+
+  private String uuid;
 
   @JsonProperty("post-instagram")
   private String postInstagram;

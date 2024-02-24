@@ -49,6 +49,9 @@ public class MateriaEntity {
   @Column(name = "tema_proposto", nullable = true, insertable = true, updatable = true, unique = false, length = 1000)
   private String tema;
 
+  @Column(name = "uuid", nullable = true, insertable = true, updatable = true, unique = false, length = 1000)
+  private String uuid;
+
   @Column(name = "titulo_selecionado", nullable = true, insertable = true, updatable = true, unique = false)
   private Integer tituloSelecionado;
 
