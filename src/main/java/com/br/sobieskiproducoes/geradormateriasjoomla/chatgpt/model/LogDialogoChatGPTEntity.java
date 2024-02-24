@@ -37,7 +37,10 @@ import lombok.ToString;
 @Entity
 @Table(name = "tbl_dialogo_chatgpt")
 public class LogDialogoChatGPTEntity {
-
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  private Long id;
 
   @Column(name = "id_chatgpt", nullable = true, insertable = true, updatable = true, unique = false, length = 200)
   private String idChatGpt;
@@ -53,7 +56,7 @@ public class LogDialogoChatGPTEntity {
 
 
 
-  @Column(name = "index", nullable = true, insertable = true, updatable = true, unique = false)
+  @Column(name = "index_chatgpt", nullable = true, insertable = true, updatable = true, unique = false)
   private Integer index;
 
   @Column(name = "role", nullable = true, insertable = true, updatable = true, unique = false, length = 200)
@@ -80,13 +83,10 @@ public class LogDialogoChatGPTEntity {
   private String systemFingerprint;
 
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private Long id;
+
 
   @NotNull
-  @Column(name = "dt_cracao", nullable = false, insertable = true, updatable = false, unique = false)
+  @Column(name = "dt_criacao", nullable = false, insertable = true, updatable = false, unique = false)
   private LocalDateTime data;
 
   @NotNull
@@ -102,7 +102,7 @@ public class LogDialogoChatGPTEntity {
   private String content;
 
   @NotNull
-  @Column(name = "uuid", nullable = false, insertable = true, updatable = false, unique = true, length = 200)
+  @Column(name = "uuid", nullable = false, insertable = true, updatable = false, unique = false, length = 200)
   private String uuid;
 
   @ManyToOne

@@ -97,7 +97,7 @@ chatgpt:
     
     
     pedir-dados-materia: "Torne-se um especialista em : Marketing de Conteúdo, Maketing Digital, Marketing Social \n
-Com vasto conhonhecimento em: %s \n
+Com vasto conhecimento em: %s \n
 Entendento que uma matéria deve seguir os requisitos: \n
  - A matéria é para o site: %s .\n
  - Que tem as redes sociais: %s .\n

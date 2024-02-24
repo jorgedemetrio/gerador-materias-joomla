@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
+import org.springframework.validation.annotation.Validated;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.response.ChoicesDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.response.RepostaResponseDTO;
@@ -129,8 +130,14 @@ public class GerarMateriaService {
     }
   }
 
+  /**
+   * Gera materia conforme as informações fornecidas.
+   *
+   * @param request Parametrizaçãao das informações.
+   * @return Lista de {@link PropostaMateriaDTO} com propostas de matéria.
+   */
   @Transactional
-  public List<PropostaMateriaDTO> sugerirMateria(final SugerirMateriaDTO request) {
+  public List<PropostaMateriaDTO> sugerirMateria(@Validated final SugerirMateriaDTO request) {
     final String uuid = UUID.randomUUID().toString();
     final LocalDateTime inicio = LocalDateTime.now();
 
@@ -138,11 +145,8 @@ public class GerarMateriaService {
     final String conhecimento = chatGPTProperties.getEspecialista().stream().collect(Collectors.joining(", "));
     final String termos = request.getTermos().stream().collect(Collectors.joining(", "));
 
-    final String perguntaDadosMateria = chatGPTProperties.getPerguntas().getPedirMateria().formatted(
-
-        chatGPTProperties.getEspecialista().stream().collect(Collectors.joining(", ")), chatGPTProperties.getSite(),
-        chatGPTProperties.getRedesSociais().stream().collect(Collectors.joining(", ")),
-        request.getTermos().stream().collect(Collectors.joining(", ")), request.getTema());
+    final String perguntaDadosMateria = chatGPTProperties.getPerguntas().getPedirDadosMateria().formatted(conhecimento,
+        chatGPTProperties.getSite(), redesSociais, termos, request.getTema());
 
     log.info("Perunta para o ChatGPT: \n\n".concat(perguntaDadosMateria));
 
