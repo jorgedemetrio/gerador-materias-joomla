@@ -35,11 +35,6 @@ management:
       exposure:
         include: openapi, swagger-ui
 
-logging:
-  level:
-    project:
-      user:
-        UserClient: DEBUG
 
 
 feign:
@@ -58,7 +53,14 @@ spring:
         config:
           default:
             loggerLevel: FULL
+  flyway:
+    locations: classpath:db/migration
   jpa:
+    properties:
+      javax:
+        persistence:
+          query:
+            timeout: 5000
     show-sql: false
     hibernate:
       ddl-auto: none
@@ -91,12 +93,12 @@ configuracao:
     
 chatgpt:
   perguntas:
-    pedir-materia: " Tornece um especialista em : Marketing de Conteúdo, Maketing Digital, Marketing Social
-    Com vasto conhonhecimento em: %s 
-    Entendento que uma matéria deve seguir os requisitos:
- - A matéria é para o site: %s .
- - Que tem as redes sociais: %s .
- - Entregue em formato JSON, com layout : { titulos : array(string), primeiro-paragrafo: string, materia: string, url-proposta: string, meta-descricao: string, keywords: string, tags : array, faqs: array{pergunta: string, resposta: string}, roteiro: string, post-instagram: string} 
+    pedir-materia: " Torne-se um especialista em : Marketing de Conteúdo, Maketing Digital, Marketing Social \n
+    Com vasto conhonhecimento em: %s \n
+    Entendento que uma matéria deve seguir os requisitos: \n
+ - A matéria é para o site: %s .\n
+ - Que tem as redes sociais: %s .\n
+ - Entregue em formato JSON, com layout : { titulos : array(string), primeiro-paragrafo: string, materia: string, url-proposta: string, meta-descricao: string, keywords: string, tags : array, faqs: array{pergunta: string, resposta: string}, roteiro: string, post-instagram: string} \n 
  - Formatar com HTML básico com subtitulos (htmls permitidos: <br/>,<p></p>, <h2></h2>, <h3></h3>, <ul></ul>, <li><li>,<lo><lo>, <strong></strong>, <i></i>). \n
  - Use SEO na máteria para os termos : %s .\n
  - Devem ter 3 opções de Títulos, usando SEO, gatilhos mentais e emojis\n
@@ -105,7 +107,7 @@ chatgpt:
  - No final deve ter um subtitulo de 3 perguntas frequentes sobre o tema e as resposas deles.\n
  - Na conclusão da materia deve ser fazer um call to action. \n
  - Depois da matéria proponha um apelido para página (url-proposta) da máteria suando SEO, tudo em minusculos, em português e separados por - (traço). \n  
- - Deve ter \"meta descrição\"  (meta-descricao)é um resumo de 160 caracteres pode ter emojis, estremamente chamadivo para exibir nos mecanismos de buscas. \n
+ - Deve ter Meta Descrição (o campo meta-descricao), que é um resumo de 160 caracteres pode ter emojis, estremamente chamadivo para exibir nos mecanismos de buscas. \n
  - Deve ter keyowrds, palavras chaves de calda curta de SEO da matéria. \n
  - Deve ter tags, que são uma array de no mínimo 5, que palavras chaves de calda longa usando SEO pensando nas possível buscas que o usuário possa fazer para achar essa matéria. \n
  - Deve ter FAQs, que não no máximos 6 perguntas e minimo de 4 e respostas de no máximo 120 caracteres cada pergunta e resposta. \n

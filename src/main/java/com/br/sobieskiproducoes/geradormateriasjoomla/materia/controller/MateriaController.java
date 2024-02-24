@@ -43,7 +43,7 @@ public class MateriaController {
   @ResponseBody
   public ResponseEntity<String> publicar(@PathVariable("id") final Long id, @RequestBody final PublilcarDTO dto) {
     log.info("Gerando materia sobre %d ".formatted(id));
-    return ResponseEntity.status(HttpStatus.CREATED).body(service.materiaJoomla(id, dto.getDataPublicacao()));
+    return ResponseEntity.status(HttpStatus.CREATED).body(service.publicarMateriaJoomla(id, dto.getDataPublicacao()));
   }
 
   @Operation(summary = "Carregar no banco uma sugestão de matéria baseado em um tema.")

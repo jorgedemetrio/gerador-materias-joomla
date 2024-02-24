@@ -7,6 +7,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,6 +40,7 @@ public class PropostaMateriaDTO {
   @JsonProperty("primeiro-paragrafo")
   private String primeiroParagrafo;
 
+
   private String materia;
 
   @JsonProperty("meta-descricao")
@@ -46,6 +51,8 @@ public class PropostaMateriaDTO {
   @JsonProperty("url-proposta")
   private String apelido;
 
+  @JsonSerialize(using = LocalDateTimeSerializer.class)
+  @JsonDeserialize(using = LocalDateTimeDeserializer.class)
   private LocalDateTime publicar;
   private CategoriaDTO categoria;
   private List<String> tags;

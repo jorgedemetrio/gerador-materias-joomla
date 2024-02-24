@@ -39,4 +39,6 @@ public class PublilcarDTO {
   private LocalDateTime dataPublicacao;
 
   private String autor;
+
+  private PropostaMateriaDTO alteracoes;
 }

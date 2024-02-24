@@ -6,6 +6,7 @@ package com.br.sobieskiproducoes.geradormateriasjoomla.materia.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -45,28 +46,28 @@ public class MateriaEntity {
   @Column(name = "id_joomla", nullable = true, insertable = true, updatable = false)
   private Long idJoomla;
 
-  @Column(name = "tema_proposto", nullable = false, insertable = true, updatable = true, unique = false, length = 1000)
+  @Column(name = "tema_proposto", nullable = true, insertable = true, updatable = true, unique = false, length = 1000)
   private String tema;
 
-  @Column(name = "titulo_selecionado", nullable = false, insertable = true, updatable = true, unique = false)
+  @Column(name = "titulo_selecionado", nullable = true, insertable = true, updatable = true, unique = false)
   private Integer tituloSelecionado;
 
-  @Column(name = "titulo_1", nullable = false, insertable = true, updatable = true, unique = false, length = 200)
+  @Column(name = "titulo_1", nullable = true, insertable = true, updatable = true, unique = false, length = 200)
   private String titulo1;
 
-  @Column(name = "titulo_2", nullable = false, insertable = true, updatable = true, unique = false, length = 200)
+  @Column(name = "titulo_2", nullable = true, insertable = true, updatable = true, unique = false, length = 200)
   private String titulo2;
 
-  @Column(name = "titulo_3", nullable = false, insertable = true, updatable = true, unique = false, length = 200)
+  @Column(name = "titulo_3", nullable = true, insertable = true, updatable = true, unique = false, length = 200)
   private String titulo3;
 
-  @Column(name = "meta_descircao", nullable = false, insertable = true, updatable = true, unique = false, length = 150)
+  @Column(name = "meta_descircao", nullable = true, insertable = true, updatable = true, unique = false, length = 150)
   private String metaDescricao;
 
-  @Column(name = "keywords", nullable = false, insertable = true, updatable = true, unique = false, length = 1000)
+  @Column(name = "keywords", nullable = true, insertable = true, updatable = true, unique = false, length = 1000)
   private String keywords;
 
-  @Column(name = "introducao", nullable = false, insertable = true, updatable = true, unique = false, length = 2000)
+  @Column(name = "introducao", nullable = true, insertable = true, updatable = true, unique = false, length = 2000)
   private String primeiroParagrafo;
 
   @Column(name = "materia", nullable = false, insertable = true, updatable = true, unique = false, columnDefinition = "TEXT")
@@ -84,15 +85,15 @@ public class MateriaEntity {
   @Column(name = "roteiro", nullable = true, insertable = true, updatable = true, unique = false, length = 2000)
   private String roteiro;
 
-  @ManyToOne
+  @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "id_categoria")
   private CategoriaEntity categoria;
 
-  @ManyToMany
+  @ManyToMany(cascade = CascadeType.ALL)
   @JoinTable(joinColumns = { @JoinColumn(name = "id_categoria", table = "tbl_materia_tag") })
   private List<TagEntity> tags;
 
-  @OneToMany
+  @OneToMany(cascade = CascadeType.ALL)
   private List<FAQEntity> faqs;
 
 }

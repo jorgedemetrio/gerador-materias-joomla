@@ -43,7 +43,7 @@ public class TagEntity {
   @Column(name = "titulo", nullable = false, insertable = true, updatable = false, unique = false, length = 1000)
   private String titulo;
 
-  @Column(name = "alias", nullable = false, insertable = true, updatable = false, unique = false, length = 1000)
+  @Column(name = "alias", nullable = true, insertable = true, updatable = false, unique = false, length = 1000)
   private String apelido;
 
   @ManyToMany

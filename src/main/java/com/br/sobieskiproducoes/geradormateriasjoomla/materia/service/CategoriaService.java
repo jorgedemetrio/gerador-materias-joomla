@@ -78,7 +78,7 @@ public class CategoriaService {
         && nonNull(consulta.getData()) && !consulta.getLinks().getNext().isBlank());
     retorno.put("total", itens.size());
     // Ordena pelo Id do Joomla
-    itens.sort((o1, o2) -> Integer.valueOf((int) ((o1.getIdJoomla().longValue() - o2.getIdJoomla().longValue()))));
+    itens.sort((o1, o2) -> (int) ((o1.getIdJoomla().longValue() - o2.getIdJoomla().longValue())));
 
     // Pega todos as categorias principais.
     List<CategoriaEntity> itensSalvar = itens.stream()
@@ -108,7 +108,7 @@ public class CategoriaService {
 
       agravar = itensSalvar.stream().filter(this::jaEstaSalvoCorrigePai).collect(Collectors.toList());
       processados += agravar.size();
-      agravar.parallelStream().forEach(categoriaRepository::save);
+      agravar.forEach(categoriaRepository::save);
 
       itens.removeAll(itensSalvar);
 
