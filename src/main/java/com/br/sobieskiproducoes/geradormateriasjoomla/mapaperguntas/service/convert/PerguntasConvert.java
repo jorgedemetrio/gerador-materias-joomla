@@ -20,6 +20,7 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.service.dto.
 public interface PerguntasConvert {
 
   @Mapping(target = "perguntasAlternativas", ignore = true)
+  @Mapping(target = "categoria.pai", ignore = true)
   MapaPerguntaDTO convert(MapaPerguntaEntity perunta);
 
   @Mapping(target = "perguntasAlternativas", ignore = true)
