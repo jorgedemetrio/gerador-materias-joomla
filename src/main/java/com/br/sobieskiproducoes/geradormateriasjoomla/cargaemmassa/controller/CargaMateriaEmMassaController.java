@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.controller.dto.RequisicaoCaragMassaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.service.CargaMateriaEmMassaService;
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.controller.dto.MapaPerguntaDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.controller.dto.RequisitaPerguntasDTO;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -48,7 +49,7 @@ public class CargaMateriaEmMassaController {
   @PostMapping(path = "processar", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
       MediaType.APPLICATION_JSON_VALUE })
   @ResponseBody
-  public ResponseEntity<List<MapaPerguntaDTO>> processar(@NotNull @Validated final RequisitaPerguntasDTO request) {
+  public ResponseEntity<List<MapaPerguntaDTO>> processar(@NotNull @Validated final RequisicaoCaragMassaDTO request) {
 
     log.info("Inicio de processamento de em massa com dados: ".concat(request.toString()));
 

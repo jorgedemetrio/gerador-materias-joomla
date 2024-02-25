@@ -21,7 +21,7 @@ import io.swagger.v3.oas.models.annotations.OpenAPI31;
 @EnableCaching
 @EnableDiscoveryClient
 @OpenAPI31
-@OpenAPIDefinition(info = @Info(description = "Gerador de matérias e adminitração do Joomla", version = "${project.version}", title = "Gerador de Conteúdo com AI", termsOfService = "https://www.sobieskiproducoes.com.br/termos", summary = "/", contact = @Contact(name = "Jorge Demetrio", email = "jorge@sobieskiproducoes.com.br", url = "https://www.sobieskiproducoes.com.br")))
+@OpenAPIDefinition(info = @Info(description = "Gerador de matérias e adminitração do Joomla", version = "0.0.1-SNAPSHOT", title = "Gerador de Conteúdo com AI", termsOfService = "https://www.sobieskiproducoes.com.br/termos", summary = "/", contact = @Contact(name = "Jorge Demetrio", email = "jorge@sobieskiproducoes.com.br", url = "https://www.sobieskiproducoes.com.br")))
 @EnableConfigurationProperties({ ChatGPTProperties.class, ConfiguracoesProperties.class })
 public class Application {
 

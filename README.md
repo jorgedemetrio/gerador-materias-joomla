@@ -1,5 +1,5 @@
 # ![Nome do projeto: Conteúdo Inteligente](https://img.shields.io/badge/nome_do_projeto-Conteúdo_Inteligente-blue)
-# ![Versão: 1.0.0](https://img.shields.io/badge/version-1.0.0-blue)
+# ![Versão: 0.0.1-SNAPSHOT](https://img.shields.io/badge/version-0.0.1SNAPSHOT-blue)
 # ![Empresa: Sobieski Produções](https://img.shields.io/badge/empresa-sobieski_produções-blue)
 # gerador-materias-joomla
 :hammer: Projeto em construção :construction:
