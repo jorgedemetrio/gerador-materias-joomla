@@ -72,6 +72,11 @@ public class GerarMateriaService {
 
   }
 
+  @Transactional
+  public List<PropostaMateriaDTO> gerarSugestaoMateria(@Validated final SugerirMateriaDTO request) {
+    return gerarSugestaoMateria(request, UUID.randomUUID().toString());
+  }
+
   /**
    * Gera materia conforme as informações fornecidas.
    *
@@ -79,8 +84,8 @@ public class GerarMateriaService {
    * @return Lista de {@link PropostaMateriaDTO} com propostas de matéria.
    */
   @Transactional
-  public List<PropostaMateriaDTO> gerarSugestaoMateria(@Validated final SugerirMateriaDTO request) {
-    final String uuid = UUID.randomUUID().toString();
+  public List<PropostaMateriaDTO> gerarSugestaoMateria(@Validated final SugerirMateriaDTO request, final String uuid) {
+
     final LocalDateTime inicio = LocalDateTime.now();
 
     final String redesSociais = chatGPTProperties.getRedesSociais().stream().map(n -> n.trim().toLowerCase())

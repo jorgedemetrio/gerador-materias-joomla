@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.MateriaConstants;
-import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.ItemResponse;
+import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoItemJoomlaResponse;
 import com.br.sobieskiproducoes.geradormateriasjoomla.dto.RetornoBusinessDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.CategoriaJoomlaClient;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.CategoriaJoomlaDTO;
@@ -53,7 +53,7 @@ public class CategoriaService {
   @Transactional
   public Map<String, Integer> atualizarBancoCategoria() {
     final List<CategoriaEntity> itens = new ArrayList<>();
-    ItemResponse<List<CategoriaJoomlaDTO>> consulta = null;
+    GenericoItemJoomlaResponse<List<CategoriaJoomlaDTO>> consulta = null;
     int offset = 0;
     final Map<String, Integer> retorno = new HashMap<>();
     // Busca as Categorias

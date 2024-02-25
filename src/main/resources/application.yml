@@ -111,7 +111,28 @@ configuracao:
     model: gpt-4
     temperature: 0.7
     role: system
-    
+  carga-dados-imagens:
+    imagens:
+      pasta-imagem-materias: c:\temp\materias\
+      tamanho-horizontal: 985
+      tamanho-vertical-minimo: 515
+      qualidade: 0.9
+      possui-instagram: true
+      autor: Sobieski Produções
+      cor-texto: 000000
+      cor-fundo-texto: ffffff 
+      posicao-texto: baixo
+      fonte-texto: Helvetica
+      tamanh-fonte-texto: 25
+    logo: 
+      path: c:\temp\logo.png
+      alinhado-horizontal: esquerda
+      alinhado-vertical: baixo
+      distancia-margem-horizontal: 10
+      distancia-margem-vertial: 150
+      transparencia: 0.7
+      tamanho-horizontal: 100
+      qualidade: 0.9 
     
 chatgpt:
   audiencias: 
@@ -176,8 +197,8 @@ Faça uma mapa mental de perguntas para usar como possíveis direcionamentos de 
  - O campo \"ordemRelevancia\", Campo é obrigatório e deve ser a ordem por relevância de buscas no google por exemplo com maior chances de se repetirem.\n
  - O campo \"motivoSugestao\" : Campo é obrigatório e deve ter uma justificativa breve por que sugeriu essa pegunta.\n
  - O campo \"perfilEnquadra\" : Que perfil que identificou que é relevante a essa pergunta, pode ser um fora do que citamos, porém que pertença ao universo pelo menos próximo do que citamos caso tenha identificado uma oportunidade.\n
- - O Campo \"idCategoria\": Dentro das categorias citadas em um JSon acima, qual seria o id da categocia que mais se encaixaria à pergunta?\n
- - O Campo \"dataSugestaoPublicaca\" : Não é obrigatório,se não tiver não necessita declarar, deve ser usado só quando a pergunta ter relação a uma data festiva ou um feriado e ai deve ser sugerir a data com 2 dias de antecedência ao dia do evento.\n
+ - O Campo \"idCategoria\": Dentro das categorias cidade em um JSon cima quais seria o id da categocia que mais se encaixaria a pergunta?\n
+ - O Campo \"dataSugestaoPublicaca\" : Não é obrigatório, se a materia não se trata de um evento como especifico  (como: feriados, eventos de calendários, datas festivas, etc) não necessita enviar, deve ser usado só quando a pergunta ter relação a uma data festiva ou um feriado e ai deve ser sugerir a data com 2 dias de antecedência ao dia do evento.\n
  - Retornar uma array de JSon com a quantidade mínima de perguntas: %d .\n
- - Pode combinar com feriados, ou datas festivas, ou informações relevantes do mês de %s, tendencias do mês.\n
+ - Pode combinar com feriados, ou datas festivas, ou informações relevantes do mês de %s, tendencias o mês.\n
  Usando os termos: %s \n"

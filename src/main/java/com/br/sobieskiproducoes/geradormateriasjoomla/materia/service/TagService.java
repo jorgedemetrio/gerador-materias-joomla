@@ -75,7 +75,7 @@ public class TagService {
       if (tagEntityOpt.isPresent()) {
         tagEntity = tagEntityOpt.get();
         log.info("Fez merge do Tag id: ".concat(tag.getId().toString()));
-        convert.copy(tag, tagEntity);
+        convert.merge(tag, tagEntity);
       }
     }
 

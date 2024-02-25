@@ -8,6 +8,10 @@ import static java.util.Objects.isNull;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.regex.Pattern;
 
 import org.springframework.util.StreamUtils;
@@ -22,6 +26,16 @@ public class SugerirMateriaUtils {
   public static Pattern ENTER = Pattern.compile("\\n");
   public static Pattern ASPAS_DUPLAS = Pattern.compile("\\\"");
   public static final Pattern ASPAS_SIMPLES = Pattern.compile("\\'");
+
+  public static long getDaysBetween(final LocalDate startDate, final LocalDate endDate) {
+    return startDate.until(endDate, java.time.temporal.ChronoUnit.DAYS);
+  }
+
+  public static LocalDateTime getLocalDateTime(final LocalDate date, final String time) {
+    final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+    final LocalTime localTime = LocalTime.parse(time, timeFormatter);
+    return LocalDateTime.of(date, localTime);
+  }
 
   public static String limparTexto(final String in) throws IOException {
     if (isNull(in) || in.isBlank()) {

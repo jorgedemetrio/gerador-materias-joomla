@@ -23,7 +23,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.JoomlaConfigurationProperties;
-import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.ItemResponse;
+import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoItemJoomlaResponse;
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.LinkResponse;
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.MetaResponse;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.CategoriaJoomlaClient;
@@ -65,7 +65,7 @@ class CategoriaServiceTest {
   @Test
   void testAtualizarBancoCategoria() {
 
-    when(categoriaJoomlaClient.getCategorias()).thenReturn(new ItemResponse<>(Arrays.asList(
+    when(categoriaJoomlaClient.getCategorias()).thenReturn(new GenericoItemJoomlaResponse<>(Arrays.asList(
         new CategoriaJoomlaDTO("type", "1",
             new AtributosCategoriaJoomlaDTO(1l, "title", "alias", "note", 1, 1, "checkedOut", "checkedOutTime", 1L,
                 null, 1, 1, 1, "language", "description", "languageTitle", "languageImage", "editor", "access_level",
@@ -81,7 +81,7 @@ class CategoriaServiceTest {
 
     ), new LinkResponse("self", "url/next", "last", "first", "previous"), new MetaResponse(0l)));
 
-    when(categoriaJoomlaClient.getCategorias(anyString(), anyString())).thenReturn(new ItemResponse<>(Arrays.asList(
+    when(categoriaJoomlaClient.getCategorias(anyString(), anyString())).thenReturn(new GenericoItemJoomlaResponse<>(Arrays.asList(
         new CategoriaJoomlaDTO("type", "3",
             new AtributosCategoriaJoomlaDTO(3l, "title", "alias", "note", 1, 1, "checkedOut", "checkedOutTime", 1L, 1L,
                 1, 1, 1, "language", "description", "languageTitle", "languageImage", "editor", "access_level",

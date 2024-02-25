@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.FeignJoomlaConfig;
-import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.ItemResponse;
+import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoItemJoomlaResponse;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.CategoriaJoomlaDTO;
 
 /**
@@ -23,12 +23,12 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.Categ
 public interface CategoriaJoomlaClient {
 
   @GetMapping(path = "/content/categories")
-  ItemResponse<List<CategoriaJoomlaDTO>> getCategorias();
+  GenericoItemJoomlaResponse<List<CategoriaJoomlaDTO>> getCategorias();
 
   @GetMapping("/content/categories?{url}")
-  ItemResponse<List<CategoriaJoomlaDTO>> getCategorias(@PathVariable("url") String url);
+  GenericoItemJoomlaResponse<List<CategoriaJoomlaDTO>> getCategorias(@PathVariable("url") String url);
 
   @GetMapping("/content/categories")
-  ItemResponse<List<CategoriaJoomlaDTO>> getCategorias(@RequestParam("page[offset]") String offset,
+  GenericoItemJoomlaResponse<List<CategoriaJoomlaDTO>> getCategorias(@RequestParam("page[offset]") String offset,
       @RequestParam("page[limit]") String limit);
 }

@@ -33,6 +33,8 @@ public class MateriaService {
   private final MateriaJoomlaClient client;
 
   public String publicarMateriaJoomla(final Long id, final LocalDateTime publicar) {
+    log.info("Inicio de publicação de materia no Joomla ID".concat(id.toString()));
+
     final MateriaEntity entity = materiaRepository.findById(id).get();
     if (nonNull(publicar)) {
       entity.setPublicar(publicar);
