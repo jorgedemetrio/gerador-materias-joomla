@@ -3,7 +3,15 @@
  */
 package com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,17 +42,17 @@ public class AtributosTagJoomlaDTO {
   private Long parentId;
   
   
-  private String lft;
+  private Long lft;
   
-  private String rgt;
+  private Long rgt;
   
-  private String path;
+  private Long path;
   
   private String note;
   
   private String description;
   
-  private String published;
+  private Long published;
   
   @JsonProperty("checked_out")
   private String checkedOut;
@@ -52,41 +60,47 @@ public class AtributosTagJoomlaDTO {
   @JsonProperty("checked_out_time")
   private String checkedOutTime;
   
-  private String access;
+  private Long access;
   
-  private String params;
+  private List<String> params;
   
   private String metadesc;
   
   private String metakey;
   
-  private String metadata;
+  private MetadataDTO metadata;
   
   @JsonProperty("created_user_id")
-  private String createdUserId;
+  private Long createdUserId;
   
+  @JsonSerialize(using = LocalDateTimeSerializer.class)
+  @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   @JsonProperty("created_time")
-  private String createdTime;
+  private LocalDateTime createdTime;
   
   
   @JsonProperty("created_by_alias")
   private String createdByAlias;
   
   @JsonProperty("modified_user_id")
-  private String modifiedUserId;
+  private Long modifiedUserId;
   
+  @JsonSerialize(using = LocalDateTimeSerializer.class)
+  @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   @JsonProperty("modified_time")
-  private String modifiedTime;
+  private LocalDateTime modifiedTime;
   
-  private String images;
+  private List<String> images;
   
-  private String urls;
+  private UrlDTO urls;
   
-  private String hits;
+  private Long hits;
   
   private String language;
   
-  private String version;
+  private Long version;
   
   @JsonProperty("publish_up")
   private String publishUp;
@@ -94,12 +108,14 @@ public class AtributosTagJoomlaDTO {
   @JsonProperty("publish_down")
   private String publishDown;
   
-
-  private String checked_out_time;
+  @JsonSerialize(using = LocalDateTimeSerializer.class)
+  @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  private LocalDateTime checked_out_time;
   
-  private String created_user_id;
+  private Long created_user_id;
 
-  private String parent_id;
+  private Long parent_id;
   
   @JsonProperty("language_title")
   private String languageTitle;

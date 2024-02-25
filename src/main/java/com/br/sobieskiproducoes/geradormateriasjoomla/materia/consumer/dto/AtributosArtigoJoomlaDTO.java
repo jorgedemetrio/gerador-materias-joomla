@@ -116,50 +116,34 @@ public class AtributosArtigoJoomlaDTO {
   @JsonProperty("created_by_alias")
   private String createdBvyAlias;
   
+  @JsonSerialize(using = LocalDateTimeSerializer.class)
+  @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   @JsonProperty("publish_up")
-  private String publish_up;
+  private LocalDateTime publish_up;
   
+  @JsonSerialize(using = LocalDateTimeSerializer.class)
+  @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   @JsonProperty("publish_down")
-  private String publish_down;
+  private LocalDateTime publish_down;
 
-  @JsonProperty("image_intro")
-  private String imageIntro;
   
-  @JsonProperty("image_intro_alt")
-  private String imageIntroAlt;
-  
-  @JsonProperty("float_intro")
-  private String floatIntro;
-  
-  @JsonProperty("image_intro_caption")
-  private String imageIntroCaption;
-  
-  @JsonProperty("image_fulltext")
-  private String imageFulltext;
-  
-  @JsonProperty("image_fulltext_alt")
-  private String imageFulltextAlt;
-  
-  @JsonProperty("float_fulltext")
-  private String floatFulltext;
-  
-  @JsonProperty("image_fulltext_caption")
-  private String imageFulltextCaption;
-
-
-  private String robots;
-  private String author;
-  private String rights;
-  
+  @JsonSerialize(using = LocalDateTimeSerializer.class)
+  @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   @JsonProperty("featured_up")
-  private String featured_up;
+  private LocalDateTime featured_up;
   
+  @JsonSerialize(using = LocalDateTimeSerializer.class)
+  @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   @JsonProperty("featured_down")
-  private String featured_down;
+  private LocalDateTime featured_down;
 
 
   private String category;
-  private String data;
+  private DadosDTO data;
   private String type;
 
 
