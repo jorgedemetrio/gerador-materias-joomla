@@ -118,9 +118,13 @@ public class GerarMapaPerguntasService {
 
   @Transactional
   public List<MapaPerguntaDTO> gerarMapa(final RequisitaPerguntasDTO request) {
+    return gerarMapa(request, UUID.randomUUID().toString());
+  }
+
+  @Transactional
+  public List<MapaPerguntaDTO> gerarMapa(final RequisitaPerguntasDTO request, final String uuid) {
 
     // Prepara a massa de dados usada nas perguntas.
-    final String uuid = UUID.randomUUID().toString();
     final LocalDateTime inicio = LocalDateTime.now();
 
     final String mes = nonNull(request.getMes()) ? request.getMes().toString()

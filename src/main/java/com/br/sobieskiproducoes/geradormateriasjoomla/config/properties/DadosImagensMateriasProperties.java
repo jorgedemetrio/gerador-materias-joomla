@@ -5,6 +5,8 @@ package com.br.sobieskiproducoes.geradormateriasjoomla.config.properties;
 
 import org.springframework.validation.annotation.Validated;
 
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -17,7 +19,8 @@ import lombok.ToString;
 
 /**
  * @author Jorge Demetrio
- *
+ * @since 25 de fev. de 2024 07:46:02
+ * @version 1.0.0
  */
 @Getter
 @Setter
@@ -25,27 +28,27 @@ import lombok.ToString;
 @Validated
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChatGPTConfigurationProperties {
+public class DadosImagensMateriasProperties {
 
-  @NotNull
   @NotBlank
-  private String url;
+  private String pastaImagemMaterias;
 
-  @NotNull
   @NotBlank
-  private String bearer;
+  private String autor;
 
   @NotNull
-  @NotBlank
-  private String model;
+  @Min(300)
+  @Max(1200)
+  private Integer tamanhoHorizontal;
+
+  @Max(1200)
+  private Integer tamanhoVerticalMinimo;
 
   @NotNull
-  @Min(0)
-  @Max(1)
-  private Double temperature;
+  @DecimalMin("0.1")
+  @DecimalMax("1.0")
+  private Double qualidade;
 
   @NotNull
-  @NotBlank
-  private String role;
-
+  private Boolean instagram;
 }

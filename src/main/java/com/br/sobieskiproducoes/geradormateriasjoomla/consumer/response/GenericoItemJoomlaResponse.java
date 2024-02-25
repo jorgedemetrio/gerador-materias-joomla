@@ -19,7 +19,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class ItemResponse<T> {
+public class GenericoItemJoomlaResponse<T> {
 
   private T data;
 

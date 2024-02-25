@@ -42,7 +42,7 @@ public class MateriaController {
 
   @Operation(summary = "Publica um máteria que está no banco de dados no Joomla")
   @ApiResponses({
-      @ApiResponse(responseCode = "200", description = "Processado com sucesso", content = @Content(oneOf = @Schema(implementation = String.class), mediaType = MediaType.APPLICATION_JSON_VALUE)) })
+      @ApiResponse(responseCode = "200", description = "Processado com sucesso", content = @Content(schema = @Schema(implementation = String.class), mediaType = MediaType.APPLICATION_JSON_VALUE)) })
   @PostMapping(path = "{id}/publicar", consumes = { MediaType.APPLICATION_JSON_VALUE })
   @ResponseBody
   public ResponseEntity<String> publicar(@PathVariable("id") final Long id, @RequestBody final PublilcarDTO dto) {
@@ -52,7 +52,7 @@ public class MateriaController {
 
   @Operation(summary = "Carregar no banco uma sugestão de matéria baseado em um tema.")
   @ApiResponses({
-      @ApiResponse(responseCode = "200", description = "Processado com sucesso", content = @Content(oneOf = @Schema(implementation = String.class), mediaType = MediaType.APPLICATION_JSON_VALUE)) })
+      @ApiResponse(responseCode = "200", description = "Processado com sucesso", content = @Content(schema = @Schema(implementation = String.class), mediaType = MediaType.APPLICATION_JSON_VALUE)) })
   @PostMapping(path = "sugerir", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
       MediaType.APPLICATION_JSON_VALUE })
   @ResponseBody
