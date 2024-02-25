@@ -5,6 +5,7 @@ package com.br.sobieskiproducoes.geradormateriasjoomla.materia.model;
 
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -49,7 +50,7 @@ public class TagEntity {
   @Column(name = "alias", nullable = true, insertable = true, updatable = false, unique = false, length = 1000)
   private String apelido;
 
-  @ManyToMany
+  @ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "tags")
   private List<MateriaEntity> materias;
 
 }
