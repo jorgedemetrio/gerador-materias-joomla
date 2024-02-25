@@ -23,8 +23,8 @@ import org.springframework.util.StreamUtils;
  */
 public class SugerirMateriaUtils {
 
-  public static Pattern ENTER = Pattern.compile("\\n");
-  public static Pattern ASPAS_DUPLAS = Pattern.compile("\\\"");
+  public static final Pattern ENTER = Pattern.compile("\\n");
+  public static final Pattern ASPAS_DUPLAS = Pattern.compile("\\\"");
   public static final Pattern ASPAS_SIMPLES = Pattern.compile("\\'");
 
   public static long getDaysBetween(final LocalDate startDate, final LocalDate endDate) {
@@ -49,4 +49,9 @@ public class SugerirMateriaUtils {
         .replaceAll("\n").getBytes()), StandardCharsets.UTF_8);
 
   }
+
+  /**
+   * Não permite a criação de uma instância nova.
+   */
+  private SugerirMateriaUtils() {}
 }
