@@ -5,6 +5,7 @@ package com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.service;
 
 import static java.util.Objects.nonNull;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,12 +18,13 @@ import org.springframework.stereotype.Service;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.controller.dto.RequisicaoCaragMassaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.MateriaConstants;
-import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.CargaDadosImagensProperties;
+import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ConfiguracoesProperties;
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.controller.dto.MapaPerguntaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.service.GerarMapaPerguntasService;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.PropostaMateriaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.SugerirMateriaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.GerarMateriaService;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.MateriaJoomlaService;
 import com.br.sobieskiproducoes.geradormateriasjoomla.utils.SugerirMateriaUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -40,7 +42,8 @@ public class CargaMateriaEmMassaService {
 
   private final GerarMapaPerguntasService gerarMapaPerguntasService;
   private final GerarMateriaService gerarMateriaService;
-  private final CargaDadosImagensProperties properties;
+  private final MateriaJoomlaService materiaJoomlaService;
+  private final ConfiguracoesProperties properties;
 
   public List<MapaPerguntaDTO> processar(final RequisicaoCaragMassaDTO request) {
 
@@ -48,7 +51,7 @@ public class CargaMateriaEmMassaService {
     final String uuid = UUID.randomUUID().toString();
     final List<MapaPerguntaDTO> itens = gerarMapaPerguntasService.gerarMapa(request.getIdeias(), uuid);
 
-    new Thread(new ProcessoLote(properties, gerarMateriaService, uuid, request, itens)).start();
+    new Thread(new ProcessoLote(properties, materiaJoomlaService, gerarMateriaService, uuid, request, itens)).start();
 
     log.info("Concluído processamento dos mapas e vai iniciar os da materias em lote"
         .concat(LocalDateTime.now().toString()));
@@ -60,7 +63,8 @@ public class CargaMateriaEmMassaService {
 @Log
 @RequiredArgsConstructor
 class ProcessoLote implements Runnable {
-  private final CargaDadosImagensProperties properties;
+  private final ConfiguracoesProperties properties;
+  private final MateriaJoomlaService materiaJoomlaService;
   private final GerarMateriaService gerarMateriaService;
   private final String uuid;
   private final RequisicaoCaragMassaDTO request;
@@ -85,6 +89,9 @@ class ProcessoLote implements Runnable {
           .gerarSugestaoMateria(new SugerirMateriaDTO(uuid, getTermos(mapaPerguntaDTO), data,
           mapaPerguntaDTO.getCategoria().getId(), request.getIdeias().getAudiencias()));
 
+      for (final PropostaMateriaDTO propostaMateriaDTO : maerias) {
+        materiaJoomlaService.publicarMateriaJoomla(propostaMateriaDTO.getId(), null);
+      }
 
       dataPublicadas.add(data.format(MateriaConstants.DATETIME_FORMATTER));
       itens.remove(mapaPerguntaDTO);
@@ -93,6 +100,10 @@ class ProcessoLote implements Runnable {
 
   @Override
   public void run() {
+
+    new File(properties.getCargaDadosImagens().getImagens().getPastaImagemMaterias()).mkdirs();
+
+
     LocalDateTime data = null;
     final Set<String> dataPublicadas = new HashSet<>();
     for (final String hora : request.getHoarios()) {

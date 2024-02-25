@@ -5,6 +5,8 @@ package com.br.sobieskiproducoes.geradormateriasjoomla.config.properties;
 
 import org.springframework.validation.annotation.Validated;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Max;
@@ -49,6 +51,6 @@ public class DadosImagensMateriasProperties {
   @DecimalMax("1.0")
   private Double qualidade;
 
-  @NotNull
-  private Boolean instagram;
+  @JsonProperty(value = "instagram", defaultValue = "true", required = false)
+  private Boolean instagram = Boolean.TRUE;
 }

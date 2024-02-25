@@ -19,7 +19,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
  */
 @FeignClient(name = "materiaJoomlaClient", url = "${configuracao.joomla.url}", dismiss404 = true, configuration = FeignJoomlaConfig.class)
 @Headers({ "Authorization: Bearer ${configuracao.joomla.bearer}" })
-public interface MateriaJoomlaClient {
+public interface ArtigoJoomlaClient {
 
   @PostMapping("/content/articles")
   String gravar(@RequestBody AtributosArtigoJoomlaDTO artigo);

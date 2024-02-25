@@ -6,7 +6,7 @@ package com.br.sobieskiproducoes.geradormateriasjoomla.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.JoomlaConfigurationProperties;
+import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ConfiguracoesProperties;
 
 import feign.Logger;
 import feign.RequestInterceptor;
@@ -25,7 +25,7 @@ public class FeignJoomlaConfig {
   private static final String AUTHORIZATION = "Authorization";
   private static final String BEARER = "Bearer ";
 
-  private final JoomlaConfigurationProperties priperties;
+  private final ConfiguracoesProperties priperties;
 
   @Bean
   public Logger.Level feignLoggerLevel() {
@@ -38,7 +38,7 @@ public class FeignJoomlaConfig {
 
     return requestTemplate -> {
 
-      requestTemplate.header(AUTHORIZATION, BEARER.concat(priperties.getBearer()));
+      requestTemplate.header(AUTHORIZATION, BEARER.concat(priperties.getJoomla().getBearer()));
     };
   }
 }
