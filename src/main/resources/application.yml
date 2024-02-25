@@ -136,27 +136,27 @@ configuracao:
     
 chatgpt:
   audiencias: 
-    - Pessoas que buscam conteúdo e informações no Google e outros mecanismos de busca  
+    - Pessoas que buscam conteúdo e informações no Google e outros mecanismos de buscas. 
   prompts:
     pedir-dados-materia: "Torne-se um profissional com muito conhecimento em : Marketing de Conteúdo, Maketing Digital, Marketing Social \n
-Com especista técnico nos assuntos de : %s \n
-Entendento que uma matéria deve seguir os requisitos: \n
+Com especialidade técnica nos assuntos de : %s \n
+Entendento que uma matéria deve seguir os seguintes requisitos: \n
  - A matéria é para o site: %s .\n
  - Que tem as redes sociais: %s .\n
  - O perfil da audiência é : %s .\n 
  - Entregue em formato JSON, com layout : { titulos : array(string), primeiro-paragrafo: string,  url-proposta: string, meta-descricao: string, keywords: string, tags : array, faqs: array{pergunta: string, resposta: string}, roteiro: string, post-instagram: string} \n 
  - Use SEO na máteria para os termos : %s .\n
  - Devem ter 3 opções de Títulos, usando SEO, gatilhos mentais e emojis\n
- - Primeiro paragrafo ter no máximo 100 caracateres e deve sere usados estrutura de marketing para chamar atenção da máteria, como: Gatilhos mentais ou sensacionalismo. \n
- - Proponha um apelido para página (url-proposta) da máteria suando SEO, tudo em minusculos, em português e separados por - (traço). \n  
- - Deve ter Meta Descrição (o campo meta-descricao), que é um resumo de 160 caracteres pode ter emojis, estremamente chamadivo para exibir nos mecanismos de buscas. \n
+ - Primeiro paragrafo ter no máximo 100 caracateres e deve ser usado estrutura de marketing para chamar atenção da máteria, como: Gatilhos mentais ou sensacionalismo. \n
+ - Proponha um apelido para página (url-proposta) da máteria usando SEO, tudo em letras minúsculas, em português e separados por - (traço). \n  
+ - Deve ter Meta Descrição (o campo meta-descricao), que é um resumo de 160 caracteres pode ter emojis, extremamente chamativo para exibir nos mecanismos de buscas. \n
  - Deve ter keyowrds, palavras chaves de calda curta de SEO da matéria. \n
- - Deve ter tags, que são uma array de no mínimo 5, que palavras chaves de calda longa usando SEO pensando nas possível buscas que o usuário possa fazer para achar essa matéria. \n
- - Deve ter FAQs, que não no máximos 6 perguntas e minimo de 4 e respostas de no máximo 120 caracteres cada pergunta e resposta. \n
- - Deve ter roteiro, um roteiro de 1:30 minutos no máximo sobre a matéria para reels do instagram, sómente com falas, deve ser bem humorado e com foco de ser viral.\n
- - Deve ter post-instagram, que é a descrição do poste no facebook e insatgram com 1500 caracateres mais ou menos usando Marketing Social, emojis e Hashtags.\n
+ - Deve ter tags, que são uma array de no mínimo 5 opções, que são palavras chaves de calda longa usando SEO pensando nas possíveis buscas que o usuário possa fazer para achar essa matéria. \n
+ - Deve ter FAQs, que são no máximo 6 perguntas e no minimo de 4, e respostas de no máximo 120 caracteres cada pergunta e resposta. \n
+ - Deve ter roteiro: um roteiro de 1:30 minutos no máximo sobre a matéria para reels do instagram, somente com falas, deve ser bem humorado e com foco de ser viral.\n
+ - Deve ter post-instagram, que é a descrição do poste no facebook e instagram com 1500 caracateres mais ou menos usando Marketing Social, emojis e Hashtags.\n
 Agora gere esses dados para uma matéria sobre : \n%s \n"
-    pedir-materia: "Vamos escrever agora o texto da matéria você é profissional com muito conhecimento em Marketing de Conteúdo use o máximo de conhecimento e estratégias .\n
+    pedir-materia: "Vamos escrever agora o texto da matéria. Você é um profissional com muito conhecimento em Marketing de Conteúdo. Use o máximo de conhecimento e estratégias .\n
 Com especialidade técnica em : %s .\n 
 Entendento que uma matéria deve seguir os requisitos: \n
  - A matéria é para o site: %s .\n
@@ -167,12 +167,12 @@ Entendento que uma matéria deve seguir os requisitos: \n
  - Trabalhe o melhor possível para que a matéria seja interessante e víral. \n
  - Pode usar emojis nos subtitulos e listas. \n
  - No minimo 5 subtitulos e cada um com no mínimo de 2 paragrafos por subtitulo. \n 
- - No caso de citar na matéria : descobertas, experimentos, livros, fatos históricos, etc, também adicione o nome dos envolvidos e datas relacionadas \n
+ - No caso de citar na matéria : descobertas, experimentos, livros, fatos históricos, etc, também adicione o nome dos envolvidos e datas relacionadas com fonte abnt. \n
  - Tente exemplificar o máximo que puder fazendo listas com exemplos se for o caso. \n 
 ${chatgpt.prompts.complemento-formato-pedir-materia}
- - Evite resumir a matéria sempre opite em expliar melhor pricipalmente termos tecnicos, entenda quando mais atratamos assuntos buscados que se relaciona ao tema da materias mais chances ela tem de ser acahr e do usuário achar o que busca nela. \n
+ - Evite resumir a matéria sempre opite em expliar melhor principalmente termos tecnicos, entenda quanto mais atrativos os assuntos buscados que se relaciona ao tema da materia, mais chances ela tem de ser aberta e do usuário achar o que busca nela. \n
  - No final deve ter um subtitulo de perguntas frequentes sobre o tema e tenha 3 perguntas e as resposas delas.\n
- - Na conclusão da materia deve ser fazer um call to action para o site cometar abaixo da matéria ou ver as reses sociais. \n
+ - Na conclusão da materia deve se fazer um call to action para o site, comentar abaixo da matéria ou ver as redes sociais. \n
  - Na matéria não deve ter hashtags.\n
 \n
 E matéria deve falar sobre :\n
@@ -188,16 +188,17 @@ Faça uma mapa mental de perguntas para usar como possíveis direcionamentos de 
 \n
  - Sua especialidade técnica : %s \n
  - Responda em JSon no layout : \"{pergunta : string, perguntasAlternativas : array(string), ordemRelevancia:int, motivoSugestao:string, perfilEnquadra:string, idCategoria: int, dataSugestaoPublicacao: date(formato: yyyy-mm-dd)} \".\n
- - Estude pessoas, suas dores e necessidades dos perfils: %s .\n
- - Pode usar os termos isolados para criar as perguntas ou combina-los com outros termos, datas comemorativas e palavras dentro do grupo de perfis.\n 
+ - Estude pessoas, suas dores e necessidades dos perfis: %s .\n
+ - Não repetir as perguntas. \n
+ - Pode usar os termos isolados para criar as perguntas ou combiná-los com outros termos, datas comemorativas e palavras dentro do grupo de perfis.\n 
  - Tente elaborar perguntas o mais próximo do que seria um dúvida humana .\n
  - O campo \"pergunta\": Campo é obrigatório e se refere a pergunta principal que deve ser estudada para gerar uma matéria atendendo uma necessidade de mercado.\n
- - O campo \"perguntasAlternativas\" Campo é obrigatório e é uma lista de texto com perguntas alternativas, que tem relação com a principal e cobrem outros aspectos da principal complementando a pergunta principal, no mínimo 2 no máximo 6.\n
- - O campo \"ordemRelevancia\", Campo é obrigatório e deve ser a ordem por relevância de buscas no google por exemplo com maior maior chances de se repetirem.\n
+ - O campo \"perguntasAlternativas\" Campo é obrigatório e é uma lista de texto com perguntas alternativas, que tem relação com a principal e cobrem outros aspectos da principal, complementando a pergunta principal, no mínimo 2 no máximo 6.\n
+ - O campo \"ordemRelevancia\", Campo é obrigatório e deve ser a ordem por relevância de buscas no google por exemplo com maior chances de se repetirem.\n
  - O campo \"motivoSugestao\" : Campo é obrigatório e deve ter uma justificativa breve por que sugeriu essa pegunta.\n
- - O campo \"perfilEnquadra\" : Que perfil que identificou que é relevante a essa pergunta, pode ser um fora do que citamos, porem que pertença ao universo pelo menos próximo do que citamos caso tenha identificado uma oportunidade.\n
+ - O campo \"perfilEnquadra\" : Que perfil que identificou que é relevante a essa pergunta, pode ser um fora do que citamos, porém que pertença ao universo pelo menos próximo do que citamos caso tenha identificado uma oportunidade.\n
  - O Campo \"idCategoria\": Dentro das categorias cidade em um JSon cima quais seria o id da categocia que mais se encaixaria a pergunta?\n
- - O Campo \"dataSugestaoPublicaca\" : Não é obrigatório, se a materia não se trata de um evento como especifico  (como: feriados, eventos de calendários, datas festivas, etc) não necessita enviar, deve ser usado só quando o a pergunta ter relação a uma data especifica, e se tover deve ser sugerir a data com 2 dias de antecedência ao dia do evento.\n
- - Retornar uma array de JSon quantidade mínima de de perguntas: %d .\n
+ - O Campo \"dataSugestaoPublicaca\" : Não é obrigatório, se a materia não se trata de um evento como especifico  (como: feriados, eventos de calendários, datas festivas, etc) não necessita enviar, deve ser usado só quando a pergunta ter relação a uma data festiva ou um feriado e ai deve ser sugerir a data com 2 dias de antecedência ao dia do evento.\n
+ - Retornar uma array de JSon com a quantidade mínima de perguntas: %d .\n
  - Pode combinar com feriados, ou datas festivas, ou informações relevantes do mês de %s, tendencias o mês.\n
  Usando os termos: %s \n"

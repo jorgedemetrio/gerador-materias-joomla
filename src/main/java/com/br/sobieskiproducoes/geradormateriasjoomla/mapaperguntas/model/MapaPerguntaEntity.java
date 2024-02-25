@@ -55,10 +55,10 @@ public class MapaPerguntaEntity {
   @Column(name = "ordem_relevancia", nullable = true, insertable = true, updatable = true, unique = false)
   private Integer ordemRelevancia;
 
-  @Column(name = "motivo_sugestao", nullable = true, insertable = true, updatable = true, unique = false)
+  @Column(name = "motivo_sugestao", nullable = true, insertable = true, updatable = true, unique = false, length = 3000)
   private String motivoSugestao;
 
-  @Column(name = "perfil_enquadra", nullable = true, insertable = true, updatable = true, unique = false)
+  @Column(name = "perfil_enquadra", nullable = true, insertable = true, updatable = true, unique = false, length = 3000)
   private String perfilEnquadra;
 
   @ManyToOne(cascade = CascadeType.ALL)
