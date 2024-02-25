@@ -15,7 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.request.PromptRequestDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.response.RepostaResponseDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ChatGPTConfigurationProperties;
+import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ConfiguracoesProperties;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,15 +29,16 @@ import lombok.RequiredArgsConstructor;
 public class ChatGPTConsumerClient {
 
   private final RestTemplate restTemplate;
-  private final ChatGPTConfigurationProperties properties;
+  private final ConfiguracoesProperties properties;
 
   public RepostaResponseDTO conversar(final PromptRequestDTO dto) {
     final HttpHeaders headers = new HttpHeaders();
     headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-    headers.setBearerAuth(properties.getBearer());
+    headers.setBearerAuth(properties.getChatgpt().getBearer());
     final HttpEntity<PromptRequestDTO> httpEntity = new HttpEntity<>(dto, headers);
 
-    final ResponseEntity<RepostaResponseDTO> resposta = restTemplate.exchange(properties.getUrl(), HttpMethod.POST,
+    final ResponseEntity<RepostaResponseDTO> resposta = restTemplate.exchange(properties.getChatgpt().getUrl(),
+        HttpMethod.POST,
         httpEntity, RepostaResponseDTO.class);
 
     return resposta.getBody();

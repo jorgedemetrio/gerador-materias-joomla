@@ -4,6 +4,7 @@
 package com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller;
 
 import java.util.List;
+import java.util.logging.Level;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,8 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.PropostaMateriaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.PublilcarDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.SugerirMateriaDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.exception.ObjectoJaExiteNoBancoBusinessException;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.GerarMateriaService;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.MateriaService;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.MateriaJoomlaService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -38,7 +40,7 @@ import lombok.extern.java.Log;
 public class MateriaController {
 
   private final GerarMateriaService gerarMateriaService;
-  private final MateriaService service;
+  private final MateriaJoomlaService service;
 
   @Operation(summary = "Publica um máteria que está no banco de dados no Joomla")
   @ApiResponses({
@@ -47,7 +49,15 @@ public class MateriaController {
   @ResponseBody
   public ResponseEntity<String> publicar(@PathVariable("id") final Long id, @RequestBody final PublilcarDTO dto) {
     log.info("Gerando materia sobre %d ".formatted(id));
-    return ResponseEntity.status(HttpStatus.CREATED).body(service.publicarMateriaJoomla(id, dto.getDataPublicacao()));
+    try {
+      return ResponseEntity.status(HttpStatus.CREATED).body(service.publicarMateriaJoomla(id, dto.getDataPublicacao()));
+    } catch (final ObjectoJaExiteNoBancoBusinessException e) {
+      log.log(Level.SEVERE, "Objecto que tentou salvar já existe", e);
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Objeto já exite na base do Joomla.");
+    } catch (final Exception e) {
+      log.log(Level.SEVERE, "Erro interno", e);
+    }
+    return ResponseEntity.internalServerError().build();
   }
 
   @Operation(summary = "Carregar no banco uma sugestão de matéria baseado em um tema.")
