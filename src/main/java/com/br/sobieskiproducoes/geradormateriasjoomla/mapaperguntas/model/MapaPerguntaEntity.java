@@ -49,7 +49,7 @@ public class MapaPerguntaEntity {
   @Column(name = "pergunta", nullable = false, insertable = true, updatable = false, unique = false, length = 3000)
   private String pergunta;
 
-  @OneToMany
+  @OneToMany(mappedBy = "peguntaPrincipal")
   private List<SubMapaPerguntasEntity> perguntasAlternativas;
 
   @Column(name = "ordem_relevancia", nullable = true, insertable = true, updatable = true, unique = false)
@@ -65,5 +65,6 @@ public class MapaPerguntaEntity {
   @JoinColumn(name = "id_categoria", nullable = false, insertable = true, updatable = true, unique = false)
   private CategoriaEntity categoria;
 
+  @Column(name = "data_sugestao_publicacao", nullable = true, insertable = true, updatable = true, unique = false)
   private LocalDate dataSugestaoPublicacao;
 }

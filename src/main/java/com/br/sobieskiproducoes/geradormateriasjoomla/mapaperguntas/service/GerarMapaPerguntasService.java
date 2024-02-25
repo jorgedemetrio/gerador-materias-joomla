@@ -36,6 +36,7 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.Categor
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
@@ -85,14 +86,14 @@ public class GerarMapaPerguntasService {
   }
 
   private List<MapaPerguntaEntity> convetToPropostaMateriaDTO(final ChoicesDTO choice, final String uuid) {
-    List<MapaPerguntaEntity> itensRetorno = null;
+    final List<MapaPerguntaEntity> itensRetorno = new ArrayList<>();
     try {
       final String content = limparTexto(choice.getMessage().getContent());
       final List<MapaPerguntaRetornoChatGPTDTO> itens = objectMapper.readValue(content,
           new TypeReference<List<MapaPerguntaRetornoChatGPTDTO>>() {
           });
 
-      itensRetorno = itens.stream().map(mapaPergunta -> {
+      itensRetorno.addAll(itens.stream().map(mapaPergunta -> {
         final MapaPerguntaEntity entity = convert.convert(mapaPergunta);
         entity.setUuid(uuid);
 
@@ -102,9 +103,9 @@ public class GerarMapaPerguntasService {
         }
         entity.setPerguntasAlternativas(mapaPergunta.getPerguntasAlternativas().stream()
             .map(pergunta -> new SubMapaPerguntasEntity(null, uuid, pergunta, entity)).collect(Collectors.toList()));
-        mapaPergunta.getPerguntasAlternativas();
+
         return entity;
-      }).collect(Collectors.toList());
+      }).collect(Collectors.toList()));
 
     } catch (final Exception e) {
       log.log(Level.SEVERE, "Erro ao converter objeto de retorno do ChatGPT: ".concat(e.getMessage())
@@ -115,6 +116,7 @@ public class GerarMapaPerguntasService {
     return itensRetorno;
   }
 
+  @Transactional
   public List<MapaPerguntaDTO> gerarMapa(final RequisitaPerguntasDTO request) {
 
     // Prepara a massa de dados usada nas perguntas.

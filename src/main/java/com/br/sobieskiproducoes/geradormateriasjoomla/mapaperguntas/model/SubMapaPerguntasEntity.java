@@ -3,6 +3,7 @@
  */
 package com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -41,7 +42,7 @@ public class SubMapaPerguntasEntity {
   @Column(name = "pergunta", nullable = false, insertable = true, updatable = false, unique = false, length = 3000)
   private String pergunta;
 
-  @ManyToOne
-  @JoinColumn(name = "id_mpa_pergunta", nullable = false, insertable = true, updatable = false, unique = false)
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "id_mapa_pergunta", nullable = false, insertable = true, updatable = false, unique = false)
   private MapaPerguntaEntity peguntaPrincipal;
 }
