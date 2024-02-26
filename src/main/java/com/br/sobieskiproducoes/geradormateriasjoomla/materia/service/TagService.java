@@ -109,6 +109,9 @@ public class TagService {
           .mensagem("Erro ao tentar acessar ").builder();
     }
 
+    if (nonNull(publicar)) {
+      entity.getMaterias().forEach(n -> n.setPublicar(publicar));
+    }
 
 
 
