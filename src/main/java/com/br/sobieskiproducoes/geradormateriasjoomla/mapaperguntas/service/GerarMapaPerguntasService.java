@@ -50,6 +50,8 @@ import lombok.extern.java.Log;
 @Service
 public class GerarMapaPerguntasService {
 
+  private static final int PROCESSOS_POR_VEZ =15;
+
   private final CategoriaRepository categoriaRepository;
 
   private final ChatGPTService chatgpt;
@@ -124,41 +126,59 @@ public class GerarMapaPerguntasService {
   @Transactional
   public List<MapaPerguntaDTO> gerarMapa(final RequisitaPerguntasDTO request, final String uuid) {
 
-    // Prepara a massa de dados usada nas perguntas.
-    final LocalDateTime inicio = LocalDateTime.now();
-
-    final String mes = nonNull(request.getMes()) ? request.getMes().toString()
-        : LocalDateTime.now().getMonth().getDisplayName(TextStyle.FULL, Locale.forLanguageTag("pt-BR"));
-
-    final String conhecimento = chatGPTProperties.getEspecialista().stream().map(n -> n.trim().toLowerCase())
-        .collect(Collectors.joining(", "));
-    final String termos = request.getTermos().stream().map(n -> n.trim().toLowerCase())
-        .collect(Collectors.joining(", "));
-
-    final List<CategoriaEntity> categorias = (nonNull(request.getCategorias()) && !request.getCategorias().isEmpty()
-        ? categoriaRepository.findAllById(request.getCategorias())
-        : categoriaRepository.categoriasParaPrompt());
-
-    final String categoriasJson = String.join("[",
-        categorias.stream().filter(Objects::nonNull).map(this::converterCategoria).collect(Collectors.joining(", ")),
-        "]");
-
-    final String audiencias = nonNull(request.getAudiencias()) && !request.getAudiencias().isEmpty()
-        ? request.getAudiencias().stream().map(n -> n.trim().toLowerCase()).collect(Collectors.joining(", "))
-        : chatGPTProperties.getAudiencias().stream().map(n -> n.trim().toLowerCase()).collect(Collectors.joining(", "));
-
-    // Prepara a pegunta
-    final String perguntaParaGerarPerguntas = chatGPTProperties.getPrompts().getPedirPerguntas().formatted(
-        chatGPTProperties.getSite(), categoriasJson, conhecimento, audiencias, request.getQuantidade(), mes, termos);
-
-    final RepostaResponseDTO repostaMapaPerguntas = chatgpt.pergunta(perguntaParaGerarPerguntas, uuid, inicio);
-
+    int totalProcessar = request.getQuantidade();
+    int processar = 0;
     final List<MapaPerguntaEntity> itens = new ArrayList<>();
 
-    repostaMapaPerguntas.getChoices().forEach(choice -> {
-      itens.addAll(convetToPropostaMateriaDTO(choice, uuid));
-    });
+    while (totalProcessar > 0) {
+      // Prepara a massa de dados usada nas perguntas.
+      final LocalDateTime inicio = LocalDateTime.now();
 
+      if (totalProcessar > PROCESSOS_POR_VEZ) {
+        totalProcessar -= PROCESSOS_POR_VEZ;
+        processar = PROCESSOS_POR_VEZ;
+        log.info("Quebrou o processamento do mapa restando processar : " + totalProcessar);
+      } else {
+        processar = totalProcessar;
+        totalProcessar = 0;
+        log.info("O total " + processar);
+      }
+
+      final String mes = nonNull(request.getMes()) ? request.getMes().toString()
+          : LocalDateTime.now().getMonth().getDisplayName(TextStyle.FULL, Locale.forLanguageTag("pt-BR"));
+
+      final String conhecimento = chatGPTProperties.getEspecialista().stream().map(n -> n.trim().toLowerCase())
+          .collect(Collectors.joining(", "));
+      final String termos = request.getTermos().stream().map(n -> n.trim().toLowerCase())
+          .collect(Collectors.joining(", "));
+
+      final List<CategoriaEntity> categorias = (nonNull(request.getCategorias()) && !request.getCategorias().isEmpty()
+          ? categoriaRepository.findAllById(request.getCategorias())
+          : categoriaRepository.categoriasParaPrompt());
+
+      final String categoriasJson = String.join("[",
+          categorias.stream().filter(Objects::nonNull).map(this::converterCategoria).collect(Collectors.joining(", ")),
+          "]");
+
+      final String audiencias = nonNull(request.getAudiencias()) && !request.getAudiencias().isEmpty()
+          ? request.getAudiencias().stream().map(n -> n.trim().toLowerCase()).collect(Collectors.joining(", "))
+          : chatGPTProperties.getAudiencias().stream().map(n -> n.trim().toLowerCase())
+              .collect(Collectors.joining(", "));
+
+      // Prepara a pegunta
+      final String perguntaParaGerarPerguntas = chatGPTProperties.getPrompts().getPedirPerguntas().formatted(
+          chatGPTProperties.getSite(), categoriasJson, conhecimento, audiencias, Integer.valueOf(processar), mes,
+          termos);
+
+      final RepostaResponseDTO repostaMapaPerguntas = chatgpt.pergunta(perguntaParaGerarPerguntas, uuid, inicio);
+
+      repostaMapaPerguntas.getChoices().forEach(choice -> {
+        itens.addAll(convetToPropostaMateriaDTO(choice, uuid));
+      });
+
+
+    }
+    log.info("Gravando mapa mental em lote!");
     repository.saveAll(itens);
 
     return itens.stream().map(this::convert).collect(Collectors.toList());
