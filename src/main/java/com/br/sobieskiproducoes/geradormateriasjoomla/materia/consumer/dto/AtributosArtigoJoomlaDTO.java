@@ -66,8 +66,7 @@ public class AtributosArtigoJoomlaDTO {
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime modified;
 
-  @JsonProperty("modified_by")
-  private Long modifiedBy;
+
 
   @JsonSerialize(using = LocalDateTimeSerializer.class)
   @JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -110,8 +109,53 @@ public class AtributosArtigoJoomlaDTO {
 
   private RelationshipDTO relationships;
 
-  private UsuarioDTO created_by;
 
-  private UsuarioDTO modified_by;
+  @JsonProperty("modified_by")
+  private UsuarioDTO modifiedBy;
+  
+  @JsonProperty("created_by_alias")
+  private String createdBvyAlias;
+  
+  @JsonSerialize(using = LocalDateTimeSerializer.class)
+  @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @JsonProperty("publish_up")
+  private LocalDateTime publish_up;
+  
+  @JsonSerialize(using = LocalDateTimeSerializer.class)
+  @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @JsonProperty("publish_down")
+  private LocalDateTime publish_down;
+
+  
+  @JsonSerialize(using = LocalDateTimeSerializer.class)
+  @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @JsonProperty("featured_up")
+  private LocalDateTime featured_up;
+  
+  @JsonSerialize(using = LocalDateTimeSerializer.class)
+  @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @JsonProperty("featured_down")
+  private LocalDateTime featured_down;
+
+
+  private String category;
+  private DadosDTO data;
+  private String type;
+
+
+
+  private String urla;
+  private String urlatext;
+  private String targeta;
+  private String urlb;
+  private String urlbtext;
+  private String targetb;
+  private String urlc;
+  private String urlctext;
+  private String targetc;
 
 }
