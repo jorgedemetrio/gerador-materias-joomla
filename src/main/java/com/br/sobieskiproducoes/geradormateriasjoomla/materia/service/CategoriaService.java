@@ -89,7 +89,7 @@ public class CategoriaService {
     // Se não achar nada que não tenha pai, ele pega o com id menor tira o pai dele
     // e manda para gravação.
     if (itensSalvar.isEmpty() && !itens.isEmpty()) {
-      // Pega o meno Idque seria o primeiro devido a ordenação
+      // Pega o meno Id que seria o primeiro devido a ordenação
       final Long idPai = itens.get(0).getPai().getIdJoomla();
       // procura no banco o pai dele.
       final Optional<CategoriaEntity> itemPai = categoriaRepository.findByIdJoomla(idPai);
