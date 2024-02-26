@@ -6,6 +6,7 @@ package com.br.sobieskiproducoes.geradormateriasjoomla.materia.service;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -15,7 +16,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.MateriaConstants;
+import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoItemJoomlaResponse;
+import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoJoomlaDataDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.TagJoomlaClient;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosTagJoomlaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.TagDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.exception.BusinessException;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.exception.ObjectoJaExiteNoBancoBusinessException;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.TagEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.TagRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.convert.TagConvert;
@@ -37,6 +44,7 @@ public class TagService {
 
   private final TagRepository repository;
   private final TagConvert convert;
+  private final TagJoomlaClient client;
 
   public Boolean apagar(@NotNull final Long id) {
     final Optional<TagEntity> tagEntityOpt = repository.findById(id);
@@ -86,6 +94,28 @@ public class TagService {
     }
 
     return convert.convert(repository.save(tagEntity));
+  }
+
+  public GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosTagJoomlaDTO>> publicarMateriaJoomla(
+      final Long id, final LocalDateTime publicar) throws BusinessException {
+    log.info("Inicio de publicação de materia no Joomla ID".concat(id.toString()));
+
+
+
+    final TagEntity entity = repository.findById(id).get();
+
+    if(nonNull(entity.getIdJoomla())) {
+      throw BusinessException.build().classe(ObjectoJaExiteNoBancoBusinessException.class)
+          .mensagem("Erro ao tentar acessar ").builder();
+    }
+
+
+
+
+    final AtributosTagJoomlaDTO item = convert.convertJoomla(entity);
+
+
+    return client.gravarTag(item);
   }
 
 }

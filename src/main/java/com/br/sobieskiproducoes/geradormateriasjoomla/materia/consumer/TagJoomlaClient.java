@@ -15,8 +15,6 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.config.FeignJoomlaConfig;
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoItemJoomlaResponse;
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoJoomlaDataDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosTagJoomlaDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.CategoriaJoomlaDTO;
-
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 /**
@@ -38,9 +36,11 @@ public interface TagJoomlaClient {
       @PathVariable("url") String url);
 
   @GetMapping("/tags")
-  GenericoItemJoomlaResponse<List<CategoriaJoomlaDTO>> getTags(@RequestParam("page[offset]") String offset,
+  GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosTagJoomlaDTO>> getTags(
+      @RequestParam("page[offset]") String offset,
       @RequestParam("page[limit]") String limit);
 
   @PostMapping("/tags")
-  String gravarTag(@RequestBody AtributosTagJoomlaDTO artigo);
+  GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosTagJoomlaDTO>> gravarTag(
+      @RequestBody AtributosTagJoomlaDTO artigo);
 }

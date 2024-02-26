@@ -9,6 +9,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosTagJoomlaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.TagDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.TagEntity;
 
@@ -25,6 +26,8 @@ public interface TagConvert {
   TagEntity convert(TagDTO tag);
 
   TagDTO convert(TagEntity tag);
+
+  AtributosTagJoomlaDTO convertJoomla(TagEntity tag);
 
   @Mapping(target = "materias", ignore = true)
   @Mapping(target = "id", ignore = true)

@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -84,17 +85,21 @@ class ProcessoLote implements Runnable {
   private void processarMateria(final LocalDateTime data, final Set<String> dataPublicadas,
       final MapaPerguntaDTO mapaPerguntaDTO) {
     if (!dataPublicadas.contains(data.format(MateriaConstants.DATETIME_FORMATTER))) {
+      try {
+        final List<PropostaMateriaDTO> maerias = gerarMateriaService
+            .gerarSugestaoMateria(new SugerirMateriaDTO(uuid, getTermos(mapaPerguntaDTO), data,
+                mapaPerguntaDTO.getCategoria().getId(), request.getIdeias().getAudiencias()));
 
-      final List<PropostaMateriaDTO> maerias = gerarMateriaService
-          .gerarSugestaoMateria(new SugerirMateriaDTO(uuid, getTermos(mapaPerguntaDTO), data,
-          mapaPerguntaDTO.getCategoria().getId(), request.getIdeias().getAudiencias()));
+        for (final PropostaMateriaDTO propostaMateriaDTO : maerias) {
+          materiaJoomlaService.publicarMateriaJoomla(propostaMateriaDTO.getId(), data);
 
-      for (final PropostaMateriaDTO propostaMateriaDTO : maerias) {
-        materiaJoomlaService.publicarMateriaJoomla(propostaMateriaDTO.getId(), null);
+        }
+
+        dataPublicadas.add(data.format(MateriaConstants.DATETIME_FORMATTER));
+        itens.remove(mapaPerguntaDTO);
+      } catch (final Exception ex) {
+        log.log(Level.SEVERE, "Erro o gravar a materia e publicar.", ex);
       }
-
-      dataPublicadas.add(data.format(MateriaConstants.DATETIME_FORMATTER));
-      itens.remove(mapaPerguntaDTO);
     }
   }
 
@@ -102,7 +107,6 @@ class ProcessoLote implements Runnable {
   public void run() {
 
     new File(properties.getCargaDadosImagens().getImagens().getPastaImagemMaterias()).mkdirs();
-
 
     LocalDateTime data = null;
     final Set<String> dataPublicadas = new HashSet<>();
