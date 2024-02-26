@@ -58,7 +58,7 @@ public class AtributosArtigoJoomlaDTO {
   private LocalDateTime created;// ": "2023-02-06 00:27:13",
 
   @JsonProperty("created_by")
-  private Long createdBy;
+  private DadosDTO createdBy;
 
   @JsonProperty("created_by_alias")
   private String createdByAlias;
@@ -115,33 +115,7 @@ public class AtributosArtigoJoomlaDTO {
   @JsonProperty("modified_by")
   private UsuarioDTO modifiedBy;
 
-  @JsonProperty("created_by_alias")
-  private String createdBvyAlias;
 
-  @JsonSerialize(using = LocalDateTimeSerializer.class)
-  @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-  @JsonProperty("publish_up")
-  private LocalDateTime publish_up;
-
-  @JsonSerialize(using = LocalDateTimeSerializer.class)
-  @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-  @JsonProperty("publish_down")
-  private LocalDateTime publish_down;
-
-
-  @JsonSerialize(using = LocalDateTimeSerializer.class)
-  @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-  @JsonProperty("featured_up")
-  private LocalDateTime featured_up;
-
-  @JsonSerialize(using = LocalDateTimeSerializer.class)
-  @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-  @JsonProperty("featured_down")
-  private LocalDateTime featured_down;
 
 
   private String category;
@@ -150,14 +124,5 @@ public class AtributosArtigoJoomlaDTO {
 
 
 
-  private String urla;
-  private String urlatext;
-  private String targeta;
-  private String urlb;
-  private String urlbtext;
-  private String targetb;
-  private String urlc;
-  private String urlctext;
-  private String targetc;
 
 }

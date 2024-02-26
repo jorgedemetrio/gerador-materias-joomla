@@ -57,8 +57,11 @@ public class AtributosTagJoomlaDTO {
   @JsonProperty("checked_out")
   private String checkedOut;
 
+  @JsonSerialize(using = LocalDateTimeSerializer.class)
+  @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   @JsonProperty("checked_out_time")
-  private String checkedOutTime;
+  private LocalDateTime checkedOutTime;
 
   private Long access;
 
@@ -101,9 +104,15 @@ public class AtributosTagJoomlaDTO {
 
   private Long version;
 
+  @JsonSerialize(using = LocalDateTimeSerializer.class)
+  @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   @JsonProperty("publish_up")
-  private String publishUp;
+  private LocalDateTime publishUp;
 
+  @JsonSerialize(using = LocalDateTimeSerializer.class)
+  @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   @JsonProperty("publish_down")
   private String publishDown;
 
