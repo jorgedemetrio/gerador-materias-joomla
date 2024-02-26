@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoItemJoomlaResponse;
+import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoJoomlaDataDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosArtigoJoomlaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.PropostaMateriaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.PublilcarDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.SugerirMateriaDTO;
@@ -44,16 +47,17 @@ public class MateriaController {
 
   @Operation(summary = "Publica um máteria que está no banco de dados no Joomla")
   @ApiResponses({
-      @ApiResponse(responseCode = "200", description = "Processado com sucesso", content = @Content(schema = @Schema(implementation = String.class), mediaType = MediaType.APPLICATION_JSON_VALUE)) })
+      @ApiResponse(responseCode = "200", description = "Processado com sucesso", content = @Content(schema = @Schema(implementation = GenericoItemJoomlaResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE)) })
   @PostMapping(path = "{id}/publicar", consumes = { MediaType.APPLICATION_JSON_VALUE })
   @ResponseBody
-  public ResponseEntity<String> publicar(@PathVariable("id") final Long id, @RequestBody final PublilcarDTO dto) {
+  public ResponseEntity<GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosArtigoJoomlaDTO>>> publicar(
+      @PathVariable("id") final Long id, @RequestBody final PublilcarDTO dto) {
     log.info("Gerando materia sobre %d ".formatted(id));
     try {
       return ResponseEntity.status(HttpStatus.CREATED).body(service.publicarMateriaJoomla(id, dto.getDataPublicacao()));
     } catch (final ObjectoJaExiteNoBancoBusinessException e) {
       log.log(Level.SEVERE, "Objecto que tentou salvar já existe", e);
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Objeto já exite na base do Joomla.");
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     } catch (final Exception e) {
       log.log(Level.SEVERE, "Erro interno", e);
     }

@@ -3,6 +3,8 @@
  */
 package com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +21,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class DadosDTO {
   private String type;
   private String id;

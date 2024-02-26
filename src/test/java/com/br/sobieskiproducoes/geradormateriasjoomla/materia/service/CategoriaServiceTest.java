@@ -24,11 +24,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.JoomlaConfigurationProperties;
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoItemJoomlaResponse;
+import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoJoomlaDataDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.LinkResponse;
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.MetaResponse;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.CategoriaJoomlaClient;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosCategoriaJoomlaDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.CategoriaJoomlaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.CategoriaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.CategoriaRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.convert.CategoriaConvert;
@@ -66,15 +66,15 @@ class CategoriaServiceTest {
   void testAtualizarBancoCategoria() {
 
     when(categoriaJoomlaClient.getCategorias()).thenReturn(new GenericoItemJoomlaResponse<>(Arrays.asList(
-        new CategoriaJoomlaDTO("type", "1",
+        new GenericoJoomlaDataDTO<>("type", "1",
             new AtributosCategoriaJoomlaDTO(1l, "title", "alias", "note", 1, 1, "checkedOut", "checkedOutTime", 1L,
                 null, 1, 1, 1, "language", "description", "languageTitle", "languageImage", "editor", "access_level",
                 "authorName", 1, 1, 1, 1)),
-        new CategoriaJoomlaDTO("type", "2",
+        new GenericoJoomlaDataDTO<>("type", "2",
             new AtributosCategoriaJoomlaDTO(2l, "title", "alias", "note", 1, 1, "checkedOut", "checkedOutTime", 1L, 1L,
                 1, 1, 1, "language", "description", "languageTitle", "languageImage", "editor", "access_level",
                 "authorName", 1, 1, 1, 1)),
-        new CategoriaJoomlaDTO("type", "2",
+        new GenericoJoomlaDataDTO<>("type", "2",
             new AtributosCategoriaJoomlaDTO(5l, "title", "alias", "note", 0, 1, "checkedOut", "checkedOutTime", 1L, 1L,
                 1, 1, 1, "language", "description", "languageTitle", "languageImage", "editor", "access_level",
                 "authorName", 1, 1, 1, 1))
@@ -82,11 +82,11 @@ class CategoriaServiceTest {
     ), new LinkResponse("self", "url/next", "last", "first", "previous"), new MetaResponse(0l)));
 
     when(categoriaJoomlaClient.getCategorias(anyString(), anyString())).thenReturn(new GenericoItemJoomlaResponse<>(Arrays.asList(
-        new CategoriaJoomlaDTO("type", "3",
+        new GenericoJoomlaDataDTO<>("type", "3",
             new AtributosCategoriaJoomlaDTO(3l, "title", "alias", "note", 1, 1, "checkedOut", "checkedOutTime", 1L, 1L,
                 1, 1, 1, "language", "description", "languageTitle", "languageImage", "editor", "access_level",
                 "authorName", 1, 1, 1, 1)),
-        new CategoriaJoomlaDTO("type", "4",
+        new GenericoJoomlaDataDTO<>("type", "4",
             new AtributosCategoriaJoomlaDTO(4l, "title", "alias", "note", 1, 1, "checkedOut", "checkedOutTime", 1L, 1L,
                 1, 1, 1, "language", "description", "languageTitle", "languageImage", "editor", "access_level",
                 "authorName", 1, 1, 1, 1))

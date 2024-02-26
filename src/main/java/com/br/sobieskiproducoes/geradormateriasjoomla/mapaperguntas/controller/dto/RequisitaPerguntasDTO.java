@@ -34,7 +34,7 @@ public class RequisitaPerguntasDTO {
 
   private MesesEnum mes;
 
-  @NotEmpty
+  @NotEmpty(message = "Deve citar pelo menos um termo para criar matéria.")
   private List<String> termos;
   private List<String> audiencias;
 

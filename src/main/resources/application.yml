@@ -198,7 +198,7 @@ Faça uma mapa mental de perguntas para usar como possíveis direcionamentos de 
  - O campo \"motivoSugestao\" : Campo é obrigatório e deve ter uma justificativa breve por que sugeriu essa pegunta.\n
  - O campo \"perfilEnquadra\" : Que perfil que identificou que é relevante a essa pergunta, pode ser um fora do que citamos, porém que pertença ao universo pelo menos próximo do que citamos caso tenha identificado uma oportunidade.\n
  - O Campo \"idCategoria\": Dentro das categorias cidade em um JSon cima quais seria o id da categocia que mais se encaixaria a pergunta?\n
- - O Campo \"dataSugestaoPublicaca\" : Não é obrigatório, se a materia não se trata de um evento como o especifico  (como: feriados, eventos de calendários, datas festivas, etc) não necessita enviar, deve ser usado só quando a pergunta tiver relação à uma data festiva ou um feriado e ai deve ser sugerir a data com 2 dias de antecedência ao dia do evento.\n
+ - O Campo \"dataSugestaoPublicaca\" : Não é obrigatório, se a materia não se trata de um evento como o especifico (como: feriados, eventos de calendários, datas festivas, etc) não necessita enviar, deve ser usado só quando a pergunta tiver relação à uma data festiva ou um feriado e ai deve ser sugerir a data com 2 dias de antecedência ao dia do evento o mês vigente e neste ano.\n
  - Retornar uma array de JSon com a quantidade mínima de perguntas: %d .\n
  - Pode combinar com feriados, ou datas festivas, ou informações relevantes do mês de %s, tendencias o mês.\n
  Usando os termos: %s \n"

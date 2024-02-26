@@ -10,6 +10,8 @@ import java.util.HashMap;
 
 import org.springframework.stereotype.Service;
 
+import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoItemJoomlaResponse;
+import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoJoomlaDataDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.ArtigoJoomlaClient;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosArtigoJoomlaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.exception.BusinessException;
@@ -37,7 +39,8 @@ public class MateriaJoomlaService {
 
   private final ArtigoJoomlaClient clientArtigo;
 
-  public String publicarMateriaJoomla(final Long id, final LocalDateTime publicar) throws BusinessException {
+  public GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosArtigoJoomlaDTO>> publicarMateriaJoomla(
+      final Long id, final LocalDateTime publicar) throws BusinessException {
     log.info("Inicio de publicação de materia no Joomla ID".concat(id.toString()));
 
 
