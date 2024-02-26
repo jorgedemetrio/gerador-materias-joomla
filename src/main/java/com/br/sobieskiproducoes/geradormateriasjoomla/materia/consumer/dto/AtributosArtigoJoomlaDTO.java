@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -31,6 +32,7 @@ import lombok.ToString;
 @EqualsAndHashCode(of = { "id" })
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AtributosArtigoJoomlaDTO {
 
   private Long id;
@@ -112,29 +114,29 @@ public class AtributosArtigoJoomlaDTO {
 
   @JsonProperty("modified_by")
   private UsuarioDTO modifiedBy;
-  
+
   @JsonProperty("created_by_alias")
   private String createdBvyAlias;
-  
+
   @JsonSerialize(using = LocalDateTimeSerializer.class)
   @JsonDeserialize(using = LocalDateTimeDeserializer.class)
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   @JsonProperty("publish_up")
   private LocalDateTime publish_up;
-  
+
   @JsonSerialize(using = LocalDateTimeSerializer.class)
   @JsonDeserialize(using = LocalDateTimeDeserializer.class)
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   @JsonProperty("publish_down")
   private LocalDateTime publish_down;
 
-  
+
   @JsonSerialize(using = LocalDateTimeSerializer.class)
   @JsonDeserialize(using = LocalDateTimeDeserializer.class)
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   @JsonProperty("featured_up")
   private LocalDateTime featured_up;
-  
+
   @JsonSerialize(using = LocalDateTimeSerializer.class)
   @JsonDeserialize(using = LocalDateTimeDeserializer.class)
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
