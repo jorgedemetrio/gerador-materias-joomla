@@ -12,10 +12,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
@@ -39,29 +38,28 @@ import lombok.ToString;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RequisicaoCaragMassaDTO {
 
-  @NotNull
-  @Valid
+  @NotNull(message = "O campo \"ideias\" não deveria vir vazio.")
   private RequisitaPerguntasDTO ideias;
 
-  @NotNull
-  @FutureOrPresent
-  @JsonSerialize(using = LocalDateTimeSerializer.class)
-  @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-  @JsonProperty("data-publicacao")
+  @NotNull(message = "O campo \"data-inicio-publicacao\" não deve ser vazio e deve ser igual ou maior que agora. ")
+  @FutureOrPresent(message = "O csampo \"data-inicio-publicacao\" deve ser igual ou maior que agora.")
+  @JsonSerialize(using = LocalDateSerializer.class)
+  @JsonDeserialize(using = LocalDateDeserializer.class)
+  @JsonProperty("data-inicio-publicacao")
   @JsonFormat(pattern = "yyyy-MM-dd")
   private LocalDate dataInicioPublicacao;
 
-  @Future
-  @JsonSerialize(using = LocalDateTimeSerializer.class)
-  @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-  @JsonProperty("data-publicacao")
+  @Future(message = "O csampo \"data-fim-publicacao\" deve ser  que agora.")
+  @JsonSerialize(using = LocalDateSerializer.class)
+  @JsonDeserialize(using = LocalDateDeserializer.class)
+  @JsonProperty("data-fim-publicacao")
   @JsonFormat(pattern = "yyyy-MM-dd")
   private LocalDate dataFimPublicacao;
 
-  @Size(min = 1, max = 3)
-  private List<String> hoarios;
 
-  @NotNull
+  @Size(min = 1, max = 3, message = "Horas devem pelo menos um.")
+  private List<HorarioRequisiscaoDTO> hoarios;
+
   @JsonProperty(defaultValue = "true")
   private Boolean publicar = Boolean.TRUE;
 

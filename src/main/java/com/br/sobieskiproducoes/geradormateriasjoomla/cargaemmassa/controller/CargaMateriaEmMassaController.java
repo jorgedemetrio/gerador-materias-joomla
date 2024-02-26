@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,7 +38,7 @@ import lombok.extern.java.Log;
 @Log
 @RequiredArgsConstructor
 @RestController
-@Tag(name = "Carga em Massa de Materias", description = "Esses serviços disponiveis servem para fazer carga de matérias automáticas sobre o Joomla")
+@Tag(name = "Carga em Massa de Matérias", description = "Esses serviços disponiveis servem para fazer carga de matérias automáticas sobre o Joomla")
 @RequestMapping("/carga-materia-massa")
 public class CargaMateriaEmMassaController {
 
@@ -49,7 +50,8 @@ public class CargaMateriaEmMassaController {
   @PostMapping(path = "processar", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
       MediaType.APPLICATION_JSON_VALUE })
   @ResponseBody
-  public ResponseEntity<List<MapaPerguntaDTO>> processar(@NotNull @Validated final RequisicaoCaragMassaDTO request) {
+  public ResponseEntity<List<MapaPerguntaDTO>> processar(
+      @NotNull @Validated @RequestBody final RequisicaoCaragMassaDTO request) {
 
     log.info("Inicio de processamento de em massa com dados: ".concat(request.toString()));
 

@@ -27,14 +27,22 @@ public class SugerirMateriaUtils {
   public static final Pattern ASPAS_DUPLAS = Pattern.compile("\\\"");
   public static final Pattern ASPAS_SIMPLES = Pattern.compile("\\'");
 
+  public static final Pattern HORA_SIMPLES = Pattern.compile("[0-9]{2}:[0-9]{2}");
+  public static final Pattern HORA_COM_SEGUNDO = Pattern.compile("[0-9]{2}:[0-9]{2}::[0-9]{2}");
+
   public static long getDaysBetween(final LocalDate startDate, final LocalDate endDate) {
     return startDate.until(endDate, java.time.temporal.ChronoUnit.DAYS);
   }
 
   public static LocalDateTime getLocalDateTime(final LocalDate date, final String time) {
     final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-    final LocalTime localTime = LocalTime.parse(time, timeFormatter);
+    final LocalTime localTime = LocalTime.parse(HORA_COM_SEGUNDO.matcher(time).find() ? time : time.concat(":00"),
+        timeFormatter);
     return LocalDateTime.of(date, localTime);
+  }
+
+  public static LocalDateTime getLocalDateTime(final LocalDate date, final String time, final long dias) {
+    return getLocalDateTime(date.plusDays(dias), time);
   }
 
   public static String limparTexto(final String in) throws IOException {

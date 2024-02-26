@@ -173,7 +173,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"quantidade\": 15,\r\n    \"mes\": \"março\",\r\n    \"termos\": [\r\n        \"meditação\",\r\n        \"reiki\",\r\n        \"tarot\",\r\n        \"astrologia\",\r\n        \"autoconhecimento\",\r\n        \"mapa astrológico\",\r\n        \"cura energética\",\r\n        \"chakras\",\r\n        \"leitura de oráculos\",\r\n        \"magia\",\r\n        \"hipnose\",\r\n        \"aura\",\r\n        \"cristaloterapia\",\r\n        \"numerologia\",\r\n        \"limpeza energética\",\r\n        \"vidência\",\r\n        \"pêndulo\",\r\n        \"rituais de proteção\",\r\n        \"feng shui\",\r\n        \"incensos\",\r\n        \"amuletos de proteção\",\r\n        \"guias espirituais\",\r\n        \"karma\",\r\n        \"clarividência\",\r\n        \"yoga\",\r\n        \"apometria\",\r\n        \"massagens terapêuticas\",\r\n        \"sonhos lúcidos\",\r\n        \"viagem astral\",\r\n        \"lei da atração\",\r\n        \"sincronicidade\",\r\n        \"banhos de limpeza\",\r\n        \"ervas mágicas\",\r\n        \"óleos essenciais\",\r\n        \"anjos e arcanjos\",\r\n        \"totens animais\",\r\n        \"plano astral\",\r\n        \"registros akáshicos\",\r\n        \"desenvolvimento psíquico\",\r\n        \"telepatia\",\r\n        \"radiestesia\",\r\n        \"elementais da natureza\",\r\n        \"sabedoria ancestral\",\r\n        \"círculos de poder\",\r\n        \"altar sagrado\",\r\n        \"magia natural\",\r\n        \"alinhamento de chakras\",\r\n        \"purificação de ambientes\",\r\n        \"mantras\",\r\n        \"coach espiritual\",\r\n        \"terapeuta holístico\",\r\n        \"instrutor de meditação\",\r\n        \"especialista em feng shui\",\r\n        \"consultor de numerologia\",\r\n        \"mestre de yoga\",\r\n        \"praticante de tai chi\",\r\n        \"facilitador de constelação familiar\",\r\n        \"especialista em PNL (Programação Neurolinguística)\",\r\n        \"terapeuta de vidas passadas\",\r\n        \"curador quântico\",\r\n        \"especialista em dieta ayurvédica\",\r\n        \"profissional de aromaterapia\",\r\n        \"instrutor de qigong\",\r\n        \"praticante de shiatsu\",\r\n        \"terapeuta de som\",\r\n        \"especialista em terapia com cristais\",\r\n        \"facilitador de retiros espirituais\",\r\n        \"instrutor de kundalini yoga\",\r\n        \"especialista em chakras\",\r\n        \"praticante de wicca\",\r\n        \"especialista em magia cerimonial\",\r\n        \"facilitador de workshops de autoconhecimento\",\r\n        \"consultor de tarot e oráculos\",\r\n        \"especialista em banhos energéticos\",\r\n        \"terapeuta de regressão\",\r\n        \"médium espiritual\",\r\n        \"praticante de ho'oponopono\",\r\n        \"facilitador de círculos de mulheres\",\r\n        \"instrutor de práticas de grounding\"\r\n    ]\r\n}",
+									"raw": "{\r\n    \"quantidade\": 15,\r\n    \"mes\": \"março\",\r\n    \"termos\": [\r\n        \"meditação\",\r\n        \"reiki\",\r\n        \"tarot\",\r\n        \"astrologia\",\r\n        \"autoconhecimento\",\r\n        \"mapa astrológico\",\r\n        \"cura energética\",\r\n        \"chakras\",\r\n        \"leitura de oráculos\",\r\n        \"magia\",\r\n        \"hipnose\",\r\n        \"aura\",\r\n        \"cristaloterapia\",\r\n        \"numerologia\",\r\n        \"limpeza energética\",\r\n        \"vidência\",\r\n        \"pêndulo\",\r\n        \"rituais de proteção\",\r\n        \"feng shui\",\r\n        \"incensos\",\r\n        \"amuletos de proteção\",\r\n        \"guias espirituais\",\r\n        \"karma\",\r\n        \"clarividência\",\r\n        \"yoga\",\r\n        \"apometria\",\r\n        \"massagens terapêuticas\",\r\n        \"sonhos lúcidos\",\r\n        \"viagem astral\",\r\n        \"lei da atração\",\r\n        \"sincronicidade\",\r\n        \"banhos de limpeza\",\r\n        \"ervas mágicas\",\r\n        \"óleos essenciais\",\r\n        \"anjos e arcanjos\",\r\n        \"totens animais\",\r\n        \"plano astral\",\r\n        \"registros akáshicos\",\r\n        \"desenvolvimento psíquico\",\r\n        \"telepatia\",\r\n        \"radiestesia\",\r\n        \"elementais da natureza\",\r\n        \"sabedoria ancestral\",\r\n        \"círculos de poder\",\r\n        \"altar sagrado\",\r\n        \"magia natural\",\r\n        \"alinhamento de chakras\",\r\n        \"purificação de ambientes\",\r\n        \"mantras\",\r\n        \"coach espiritual\",\r\n        \"terapeuta holístico\",\r\n        \"instrutor de meditação\",\r\n        \"especialista em feng shui\",\r\n        \"consultor de numerologia\",\r\n        \"mestre de yoga\",\r\n        \"praticante de tai chi\",\r\n        \"facilitador de constelação familiar\",\r\n        \"especialista em PNL (Programação Neurolinguística)\",\r\n        \"terapeuta de vidas passadas\",\r\n        \"curador quântico\",\r\n        \"especialista em dieta ayurvédica\",\r\n        \"profissional de aromaterapia\",\r\n        \"instrutor de qigong\",\r\n        \"praticante de shiatsu\",\r\n        \"terapeuta de som\",\r\n        \"especialista em terapia com cristais\",\r\n        \"facilitador de retiros espirituais\",\r\n        \"instrutor de kundalini yoga\",\r\n        \"especialista em chakras\",\r\n        \"praticante de wicca\",\r\n        \"especialista em magia cerimonial\",\r\n        \"facilitador de workshops de autoconhecimento\",\r\n        \"consultor de tarot e oráculos\",\r\n        \"especialista em banhos energéticos\",\r\n        \"terapeuta de regressão\",\r\n        \"médium espiritual\",\r\n        \"praticante de ho'oponopono\",\r\n        \"facilitador de círculos de mulheres\",\r\n        \"instrutor de práticas de grounding\",\r\n        \"fases da luas e suas energias\",\r\n        \"energias da lua crescente\",\r\n        \"energias da lua nova\",\r\n        \"energias da lua minguante\",\r\n        \"portal energetico\",\r\n        \"portal 03/03 e suas energias\",\r\n        \"energias de prosperidade\",\r\n        \"trabalhos mágicos de banimento \",\r\n        \"rituais de banimento \",\r\n        \"atrair abundancia e prosperidade\",\r\n        \"signos astrais\"\r\n    ]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -265,13 +265,13 @@
 									}
 								],
 								"url": {
-									"raw": "{{endereco}}/tag/1",
+									"raw": "{{endereco}}/tag/2",
 									"host": [
 										"{{endereco}}"
 									],
 									"path": [
 										"tag",
-										"1"
+										"2"
 									]
 								}
 							},
@@ -334,6 +334,42 @@
 										"tag",
 										"2",
 										"update"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Caraga Lote Matéria",
+					"item": [
+						{
+							"name": "Processar Geração de Massa de Matérias",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"ideias\": {\r\n        \"quantidade\": 62,\r\n        \"mes\": \"janeiro\",\r\n        \"termos\": [\r\n            \"meditação\",\r\n            \"reiki\",\r\n            \"tarot\",\r\n            \"astrologia\",\r\n            \"autoconhecimento\",\r\n            \"mapa astrológico\",\r\n            \"cura energética\",\r\n            \"chakras\",\r\n            \"leitura de oráculos\",\r\n            \"magia\"\r\n        ]\r\n    },\r\n    \"hoarios\": [\r\n        \"11:00\",\r\n        \"18:00\"\r\n    ],\r\n    \"publicar\": false,\r\n    \"data-inicio-publicacao\": \"2024-03-01\",\r\n    \"data-fim-publicacao\": \"2024-03-31\"\r\n}"
+								},
+								"url": {
+									"raw": "{{endereco}}/carga-materia-massa/processar",
+									"host": [
+										"{{endereco}}"
+									],
+									"path": [
+										"carga-materia-massa",
+										"processar"
 									]
 								}
 							},

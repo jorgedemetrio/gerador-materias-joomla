@@ -6,6 +6,8 @@ package com.br.sobieskiproducoes.geradormateriasjoomla.materia.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -47,16 +49,29 @@ class TagServiceTest {
 
   @Test
   void apagarTest() {
+    // Cenário
     final Long id = 10L;
     final String titulo = "Titulo";
     final TagEntity tag = new TagEntity();
     tag.setId(id);
     tag.setTitulo(titulo);
-    final Optional<TagEntity> tagEntityOpt = Optional.of(new TagEntity());
-    when(repository.findById(id)).thenReturn(tagEntityOpt);
-    final ArgumentCaptor<TagEntity> capTagEntity = ArgumentCaptor.forClass(TagEntity.class);
+    final Optional<TagEntity> tagEntityOpt = Optional.of(tag);
+    when(repository.findById(anyLong())).thenReturn(tagEntityOpt);
+
+    // Chamada do teste, como ele retorna um objeto simples já estou validadndo se
+    // está retorando True.
+    // Se fosse um objeto complexo receberia em uma variavel e validaria cara
+    // atributo.
     assertTrue(service.apagar(id));
-    verify(repository).delete(capTagEntity.capture());
+
+    // Validação do resultado do teste e suas chamadas internas
+    final ArgumentCaptor<TagEntity> capTagEntity = ArgumentCaptor.forClass(TagEntity.class);
+    final ArgumentCaptor<Long> capIdLong = ArgumentCaptor.forClass(Long.class);
+
+    verify(repository, times(1)).delete(capTagEntity.capture());
+    verify(repository, times(1)).findById(capIdLong.capture());
+
+    assertEquals(id, capIdLong.getValue());
     assertEquals(id, capTagEntity.getValue().getId());
     assertEquals(titulo, capTagEntity.getValue().getTitulo());
   }
