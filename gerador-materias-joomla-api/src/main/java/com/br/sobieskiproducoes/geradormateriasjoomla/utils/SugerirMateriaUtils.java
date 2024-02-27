@@ -8,6 +8,7 @@ import static java.util.Objects.isNull;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.text.Normalizer;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -58,6 +59,12 @@ public class SugerirMateriaUtils {
 
   }
 
+  public static String normalizeText(final String text) {
+    String normalized = Normalizer.normalize(text, Normalizer.Form.NFD).replaceAll("[^a-zA-Z0-9\\s-]", "");
+    normalized = normalized.replaceAll("\\s", "-");
+    normalized = normalized.toLowerCase();
+    return normalized.replaceAll("^[-]+|[-]+$", "");
+  }
   /**
    * Não permite a criação de uma instância nova.
    */
