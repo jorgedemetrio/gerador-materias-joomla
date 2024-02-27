@@ -12,42 +12,41 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.controller.dto.HorarioRequisiscaoDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.controller.dto.RequisicaoCaragMassaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.MateriaConstants;
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ConfiguracoesProperties;
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.controller.dto.MapaPerguntaDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.service.GerarMapaPerguntasService;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.PropostaMateriaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.SugerirMateriaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.GerarMateriaService;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.MateriaJoomlaService;
 import com.br.sobieskiproducoes.geradormateriasjoomla.utils.SugerirMateriaUtils;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
 /**
  * @author Jorge Demetrio
- * @since 25 de fev. de 2024 09:44:23
+ * @since 26 de fev. de 2024 20:16:51
  * @version 1.0.0
  */
 @Log
 @RequiredArgsConstructor
-@Service
-public class CargaMateriaEmMassaV2Service {
+@Component
+public class CargaProcessoMateriaService {
 
-  private final GerarMapaPerguntasService gerarMapaPerguntasService;
-  private final GerarMateriaService gerarMateriaService;
-  private final MateriaJoomlaService materiaJoomlaService;
+
   private final ConfiguracoesProperties properties;
+  private final MateriaJoomlaService materiaJoomlaService;
+  private final GerarMateriaService gerarMateriaService;
+  private final List<MapaPerguntaDTO> itens;
+
 
   private List<String> getTermos(final MapaPerguntaDTO dto) {
     final List<String> itens = new ArrayList<>(dto.getPerguntasAlternativas());
@@ -55,50 +54,11 @@ public class CargaMateriaEmMassaV2Service {
     return itens;
   }
 
-  public List<MapaPerguntaDTO> processar(final RequisicaoCaragMassaDTO request) {
+  @Transactional
+  public void iniciarProcesso(final RequisicaoCaragMassaDTO request, final String uuid) {
 
-    log.info("Inicio processamento ".concat(LocalDateTime.now().toString()));
-    final String uuid = UUID.randomUUID().toString();
-    final List<MapaPerguntaDTO> itens = gerarMapaPerguntasService.gerarMapa(request.getIdeias(), uuid);
-
-    processarMaterias(uuid, request, itens);
-
-    log.info("Concluído processamento dos mapas e vai iniciar os da materias em lote"
-        .concat(LocalDateTime.now().toString()));
-    return itens;
-  }
-
-  /**
-   * @param data
-   * @param dataPublicadas
-   * @param mapaPerguntaDTO
-   */
-  private void processarMateriaJoomla(final LocalDateTime data, final Set<String> dataPublicadas,
-      final MapaPerguntaDTO mapaPerguntaDTO, final String uuid, final RequisicaoCaragMassaDTO request,
-      final List<MapaPerguntaDTO> itens) {
-    if (!dataPublicadas.contains(data.format(MateriaConstants.DATETIME_FORMATTER))) {
-      try {
-        final List<PropostaMateriaDTO> maerias = gerarMateriaService
-            .gerarSugestaoMateria(new SugerirMateriaDTO(uuid, getTermos(mapaPerguntaDTO), data,
-                mapaPerguntaDTO.getCategoria().getId(), request.getIdeias().getAudiencias()));
-        if (request.getPublicar()) {
-          for (final PropostaMateriaDTO propostaMateriaDTO : maerias) {
-            materiaJoomlaService.publicarMateriaJoomla(propostaMateriaDTO.getId(), data);
-
-          }
-        }
-        dataPublicadas.add(data.format(MateriaConstants.DATETIME_FORMATTER));
-        itens.remove(mapaPerguntaDTO);
-      } catch (final Exception ex) {
-        log.log(Level.SEVERE, "Erro o gravar a materia e publicar.", ex);
-      }
-    }
-  }
-
-  @Async
-  public void processarMaterias(final String uuid, final RequisicaoCaragMassaDTO request,
-      final List<MapaPerguntaDTO> itens) {
     final LocalDate hoje = LocalDate.now();
+    log.info("Inicio de processamento lote em massa.");
     new File(properties.getCargaDadosImagens().getImagens().getPastaImagemMaterias()).mkdirs();
 
     LocalDateTime data = null;
@@ -125,7 +85,7 @@ public class CargaMateriaEmMassaV2Service {
                 && mapaPerguntaDTO.getDataSugestaoPublicacao().isAfter(request.getDataFimPublicacao()))) {
           data = SugerirMateriaUtils.getLocalDateTime(mapaPerguntaDTO.getDataSugestaoPublicacao(), hora.getHoraio());
 
-          processarMateriaJoomla(data, dataPublicadas, mapaPerguntaDTO, uuid, request, itens);
+          processarMateria(data, dataPublicadas, mapaPerguntaDTO, request, uuid);
         }
       }
     }
@@ -134,12 +94,44 @@ public class CargaMateriaEmMassaV2Service {
           ? SugerirMateriaUtils.getDaysBetween(request.getDataInicioPublicacao(), request.getDataFimPublicacao())
           : 1L;
       long rodaram = 0;
-      while ((rodaram++) <= rodar && itens.size() > 0) {
+      while (rodaram <= rodar && itens.size() > 0) {
+
         final MapaPerguntaDTO mapaPerguntaDTO = itens.get(0);
         data = SugerirMateriaUtils.getLocalDateTime(request.getDataInicioPublicacao(), hora.getHoraio(), rodaram);
-        processarMateriaJoomla(data, dataPublicadas, mapaPerguntaDTO, uuid, request, itens);
+        processarMateria(data, dataPublicadas, mapaPerguntaDTO, request, uuid);
+        rodaram++;
+      }
+    }
+    log.info("Fim de processamento lote em massa total processamento: " + (dataPublicadas.size()));
+    dataPublicadas.forEach(n -> log.info("Materia publciada para ".concat(n)));
+
+  }
+
+
+  /**
+   * @param data
+   * @param dataPublicadas
+   * @param mapaPerguntaDTO
+   */
+  private void processarMateria(final LocalDateTime data, final Set<String> dataPublicadas,
+      final MapaPerguntaDTO mapaPerguntaDTO, final RequisicaoCaragMassaDTO request, final String uuid) {
+    if (!dataPublicadas.contains(data.format(MateriaConstants.DATETIME_FORMATTER))) {
+      try {
+        final List<PropostaMateriaDTO> maerias = gerarMateriaService
+            .gerarSugestaoMateria(new SugerirMateriaDTO(uuid, getTermos(mapaPerguntaDTO), data,
+                mapaPerguntaDTO.getCategoria().getId(), request.getIdeias().getAudiencias()));
+        if (request.getPublicar()) {
+          for (final PropostaMateriaDTO propostaMateriaDTO : maerias) {
+            materiaJoomlaService.publicarMateriaJoomla(propostaMateriaDTO.getId(), data);
+
+          }
+        }
+
+        dataPublicadas.add(data.format(MateriaConstants.DATETIME_FORMATTER));
+        itens.remove(mapaPerguntaDTO);
+      } catch (final Exception ex) {
+        log.log(Level.SEVERE, "Erro o gravar a materia e publicar.", ex);
       }
     }
   }
-
 }
