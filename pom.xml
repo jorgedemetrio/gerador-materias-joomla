@@ -19,6 +19,7 @@
 	
 	<modules>
 		<module>gerador-materias-joomla-api</module>
+		<module>gerador-materias-joomla-batch</module>
 	</modules>
 	<properties>
 		<java.version>17</java.version>

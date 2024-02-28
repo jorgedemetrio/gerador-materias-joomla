@@ -71,6 +71,24 @@ public interface MateriaConvert {
   TagEntity convert(String tag);
 
   @Mapping(target = "tags", ignore = true)
+  @Mapping(target = "id", ignore = true)
+  @Mapping(target = "metadesc", source = "metaDescricao")
+  @Mapping(target = "metakey", source = "keywords")
+  @Mapping(target = "title", expression = "java((Objects.isNull(materia.getTituloSelecionado()) || materia.getTituloSelecionado() == 1? "
+      + "  materia.getTitulo1() : materia.getTituloSelecionado() == 2 ? materia.getTitulo2() : materia.getTitulo3()) )")
+
+  @Mapping(target = "publishUp", source = "publicar", dateFormat = "yyyy-MM-dd HH:mm:ss")
+  @Mapping(target = "featured", expression = "java(1)")
+  @Mapping(target = "state", expression = "java(1)")
+  @Mapping(target = "access", expression = "java(1)")
+  @Mapping(target = "text", source = "materia")
+  @Mapping(target = "typeAlias", expression = "java(\"com_content.article\")")
+  @Mapping(target = "alias", source = "apelido")
+  @Mapping(target = "version", expression = "java(9)")
+  @Mapping(target = "language", expression = "java(\"*\")")
+  @Mapping(target = "relationships.category.data.type", expression = "java(\"categories\")")
+  @Mapping(target = "relationships.category.data.id", source = "categoria.idJoomla")
+  @Mapping(target = "intro", source = "primeiroParagrafo")
   AtributosArtigoJoomlaDTO convertJoomla(MateriaEntity materia);
 
   @Mapping(target = "materia", source = "content")

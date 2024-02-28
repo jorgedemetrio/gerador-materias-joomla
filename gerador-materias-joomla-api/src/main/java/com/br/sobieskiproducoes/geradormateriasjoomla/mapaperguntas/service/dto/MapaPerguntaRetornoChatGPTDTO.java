@@ -36,6 +36,7 @@ public class MapaPerguntaRetornoChatGPTDTO {
   private String pergunta;
 
   private List<String> perguntasAlternativas;
+  private List<String> termos;
 
   private Integer ordemRelevancia;
   private String motivoSugestao;

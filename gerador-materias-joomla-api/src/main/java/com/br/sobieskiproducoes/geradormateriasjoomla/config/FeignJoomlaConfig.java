@@ -25,6 +25,7 @@ public class FeignJoomlaConfig {
   private static final String AUTHORIZATION = "Authorization";
   private static final String BEARER = "Bearer ";
 
+
   private final ConfiguracoesProperties priperties;
 
   @Bean
@@ -37,7 +38,6 @@ public class FeignJoomlaConfig {
     log.info("Realizando autenticação token beader com serviços internos para chamada via Feign Client");
 
     return requestTemplate -> {
-
       requestTemplate.header(AUTHORIZATION, BEARER.concat(priperties.getJoomla().getBearer()));
     };
   }

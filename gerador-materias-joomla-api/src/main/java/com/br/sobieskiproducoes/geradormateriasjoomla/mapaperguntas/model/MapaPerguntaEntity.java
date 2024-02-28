@@ -49,7 +49,10 @@ public class MapaPerguntaEntity {
   @Column(name = "pergunta", nullable = false, insertable = true, updatable = false, unique = false, length = 3000)
   private String pergunta;
 
-  @OneToMany(mappedBy = "peguntaPrincipal")
+  @OneToMany(mappedBy = "peguntaPrincipal", cascade = CascadeType.ALL)
+  private List<TermosMapaPerguntaEntity> termos;
+
+  @OneToMany(mappedBy = "peguntaPrincipal", cascade = CascadeType.ALL)
   private List<SubMapaPerguntasEntity> perguntasAlternativas;
 
   @Column(name = "ordem_relevancia", nullable = true, insertable = true, updatable = true, unique = false)

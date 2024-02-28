@@ -4,6 +4,7 @@
 package com.br.sobieskiproducoes.geradormateriasjoomla.materia.service;
 
 import static com.br.sobieskiproducoes.geradormateriasjoomla.utils.SugerirMateriaUtils.limparTexto;
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 import java.time.LocalDateTime;
@@ -17,10 +18,12 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.request.MessageChatGPTDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.response.ChoicesDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.response.RepostaResponseDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.service.ChatGPTService;
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ChatGPTProperties;
+import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ConfiguracoesProperties;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.PropostaMateriaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.SugerirMateriaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.CategoriaEntity;
@@ -56,6 +59,7 @@ public class GerarMateriaService {
   private final ChatGPTService chatgpt;
 
   private final ChatGPTProperties chatGPTProperties;
+  private final ConfiguracoesProperties properties;
 
   private final ObjectMapper objectMapper;
 
@@ -86,13 +90,20 @@ public class GerarMateriaService {
   @Transactional
   public List<PropostaMateriaDTO> gerarSugestaoMateria(@Validated final SugerirMateriaDTO request, final String uuid) {
 
+    if (isNull(request) || isNull(request.getTermos())) {
+      return null;
+    }
+
     final LocalDateTime inicio = LocalDateTime.now();
 
     final String redesSociais = chatGPTProperties.getRedesSociais().stream().map(n -> n.trim().toLowerCase())
         .collect(Collectors.joining(", "));
     final String conhecimento = chatGPTProperties.getEspecialista().stream().map(n -> n.trim().toLowerCase())
         .collect(Collectors.joining(", "));
-    final String termos = request.getTermos().stream().map(n -> n.trim().toLowerCase())
+    // Pegar interesses
+    final String termos =
+
+        request.getTermos().stream().map(n -> n.trim().toLowerCase())
         .collect(Collectors.joining(", "));
 
     final String audiencias = nonNull(request.getAudiencias()) && !request.getAudiencias().isEmpty()
@@ -102,7 +113,14 @@ public class GerarMateriaService {
     final String perguntaDadosMateria = chatGPTProperties.getPrompts().getPedirDadosMateria().formatted(conhecimento,
         chatGPTProperties.getSite(), redesSociais, audiencias, termos, request.getTema());
 
-    final RepostaResponseDTO itensDaMateriaRetornoGPT = chatgpt.pergunta(perguntaDadosMateria, uuid, inicio);
+    final RepostaResponseDTO itensDaMateriaRetornoGPT = chatgpt.pergunta(perguntaDadosMateria,
+        uuid, inicio);
+
+    final List<MessageChatGPTDTO> perguntasChatGPTDTOs = new ArrayList<>();
+    perguntasChatGPTDTOs.add(new MessageChatGPTDTO(properties.getChatgpt().getRoleUser(), perguntaDadosMateria));
+    perguntasChatGPTDTOs.add(new MessageChatGPTDTO(itensDaMateriaRetornoGPT.getChoices().get(0).getMessage().getRole(),
+        itensDaMateriaRetornoGPT.getChoices().get(0).getMessage().getContent()));
+
 
     final List<PropostaMateriaDTO> propostasSemMateria = itensDaMateriaRetornoGPT.getChoices().stream()
         .map(this::convetToPropostaMateriaDTO).collect(Collectors.toList());
@@ -110,7 +128,9 @@ public class GerarMateriaService {
     final String perguntaMateria = chatGPTProperties.getPrompts().getPedirMateria().formatted(conhecimento,
         chatGPTProperties.getSite(), redesSociais, audiencias, termos, request.getTema());
 
-    final RepostaResponseDTO materiaRetornoGPT = chatgpt.pergunta(perguntaMateria, uuid, inicio);
+    perguntasChatGPTDTOs.add(new MessageChatGPTDTO(properties.getChatgpt().getRoleUser(), perguntaMateria));
+
+    final RepostaResponseDTO materiaRetornoGPT = chatgpt.perguntasObjeto(perguntasChatGPTDTOs, uuid, inicio);
 
     final List<PropostaMateriaDTO> propostasRetorno = new ArrayList<>();
     try {

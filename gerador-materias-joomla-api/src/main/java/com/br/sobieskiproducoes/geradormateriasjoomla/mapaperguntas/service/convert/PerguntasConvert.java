@@ -9,6 +9,7 @@ import org.mapstruct.Mapping;
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.controller.dto.MapaPerguntaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.model.MapaPerguntaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.model.SubMapaPerguntasEntity;
+import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.model.TermosMapaPerguntaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.service.dto.MapaPerguntaRetornoChatGPTDTO;
 
 /**
@@ -19,18 +20,29 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.service.dto.
 @Mapper
 public interface PerguntasConvert {
 
+  @Mapping(target = "termos", ignore = true)
   @Mapping(target = "perguntasAlternativas", ignore = true)
   @Mapping(target = "categoria.pai", ignore = true)
   MapaPerguntaDTO convert(MapaPerguntaEntity perunta);
 
+  @Mapping(target = "termos", ignore = true)
   @Mapping(target = "perguntasAlternativas", ignore = true)
   MapaPerguntaEntity convert(MapaPerguntaRetornoChatGPTDTO perunta);
 
+  @Mapping(target = "termos", ignore = true)
+  @Mapping(target = "perguntasAlternativas", ignore = true)
+  MapaPerguntaDTO toMapaPerguntaDTO(MapaPerguntaEntity perunta);
+
   @Mapping(target = "id", ignore = true)
   @Mapping(target = "uuid", ignore = true)
-  @Mapping(target = "pergunta", source = "perunta")
+  @Mapping(target = "pergunta", source = "pergunta")
   @Mapping(target = "peguntaPrincipal", ignore = true)
-  SubMapaPerguntasEntity convert(String perunta);
+  SubMapaPerguntasEntity toSubMapaPerguntasEntity(String pergunta);
 
+  @Mapping(target = "id", ignore = true)
+  @Mapping(target = "uuid", ignore = true)
+  @Mapping(target = "termo", source = "termo")
+  @Mapping(target = "peguntaPrincipal", ignore = true)
+  TermosMapaPerguntaEntity toTermosMapaPerguntaEntity(String termo);
 
 }

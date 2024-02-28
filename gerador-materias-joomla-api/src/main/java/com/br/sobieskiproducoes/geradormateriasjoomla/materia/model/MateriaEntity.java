@@ -64,7 +64,7 @@ public class MateriaEntity {
   @Column(name = "titulo_3", nullable = true, insertable = true, updatable = true, unique = false, length = 200)
   private String titulo3;
 
-  @Column(name = "meta_descircao", nullable = true, insertable = true, updatable = true, unique = false, length = 150)
+  @Column(name = "meta_descircao", nullable = true, insertable = true, updatable = true, unique = false, length = 250)
   private String metaDescricao;
 
   @Column(name = "keywords", nullable = true, insertable = true, updatable = true, unique = false, length = 1000)

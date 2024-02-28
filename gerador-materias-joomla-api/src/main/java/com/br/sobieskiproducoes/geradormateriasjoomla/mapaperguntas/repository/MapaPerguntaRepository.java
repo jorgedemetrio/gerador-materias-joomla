@@ -3,7 +3,10 @@
  */
 package com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.model.MapaPerguntaEntity;
 
@@ -14,4 +17,5 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.model.MapaPe
  */
 public interface MapaPerguntaRepository extends JpaRepository<MapaPerguntaEntity, Long> {
 
+  List<MapaPerguntaEntity> findByUuid(@Param("uuid") String uuid);
 }
