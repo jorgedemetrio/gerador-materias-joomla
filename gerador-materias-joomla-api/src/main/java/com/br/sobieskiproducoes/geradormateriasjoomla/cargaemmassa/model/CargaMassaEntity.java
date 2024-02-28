@@ -5,6 +5,8 @@ package com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.model;
 
 import java.time.LocalDateTime;
 
+import com.br.sobieskiproducoes.geradormateriasjoomla.dto.StatusProcessamentoEnum;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -43,7 +45,7 @@ public class CargaMassaEntity {
 
   @Enumerated(EnumType.STRING)
   @Column(name = "status", nullable = true, insertable = true, updatable = true, unique = false)
-  private StatusCargaEnum status;
+  private StatusProcessamentoEnum status;
 
   @Column(name = "data_inicio_processo", nullable = true, insertable = true, updatable = true, unique = false)
   private LocalDateTime dataInicioProcesso;

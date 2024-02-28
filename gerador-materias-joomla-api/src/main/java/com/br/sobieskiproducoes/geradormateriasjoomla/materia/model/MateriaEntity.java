@@ -6,9 +6,14 @@ package com.br.sobieskiproducoes.geradormateriasjoomla.materia.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.br.sobieskiproducoes.geradormateriasjoomla.dto.StatusProcessamentoEnum;
+import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.model.MapaPerguntaEntity;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -98,5 +103,13 @@ public class MateriaEntity {
 
   @OneToMany(cascade = CascadeType.ALL)
   private List<FAQEntity> faqs;
+
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "id_mapa_pergunta", nullable = true, insertable = true, updatable = true, unique = false)
+  private MapaPerguntaEntity peguntaPrincipal;
+
+  @Enumerated(EnumType.STRING)
+  @Column(name = "status", nullable = true, insertable = true, updatable = true, unique = false)
+  private StatusProcessamentoEnum status;
 
 }

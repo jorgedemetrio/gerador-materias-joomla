@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.controller.dto.RequisicaoCaragMassaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.model.CargaMassaEntity;
-import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.model.StatusCargaEnum;
 import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.repository.CargaMassaRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ConfiguracoesProperties;
+import com.br.sobieskiproducoes.geradormateriasjoomla.dto.StatusProcessamentoEnum;
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.controller.dto.MapaPerguntaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.service.GerarMapaPerguntasService;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.GerarMateriaService;
@@ -52,7 +52,7 @@ public class CargaMateriaEmMassaService {
     // gerarMateriaService, uuid, request, itens)).start();
 
     try {
-      repository.save(new CargaMassaEntity(null, uuid, StatusCargaEnum.PROCESSAR,
+      repository.save(new CargaMassaEntity(null, uuid, StatusProcessamentoEnum.PROCESSAR,
           SugerirMateriaUtils.getLocalDateTime(request.getDataInicioPublicacao(),
               request.getHoarios().get(0).getHoraio()),
           SugerirMateriaUtils.getLocalDateTime(request.getDataFimPublicacao(), request.getHoarios().get(0).getHoraio()),
