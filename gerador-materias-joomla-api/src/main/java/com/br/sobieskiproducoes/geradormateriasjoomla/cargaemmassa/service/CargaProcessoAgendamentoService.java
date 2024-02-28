@@ -51,7 +51,7 @@ public class CargaProcessoAgendamentoService {
               cargaMassaEntity.setStatus(StatusProcessamentoEnum.PROCESSADO);
             } else {
               cargaMassaEntity.setStatus(StatusProcessamentoEnum.ERRO);
-              cargaMassaEntity.setNota("Errop em um processamento interno.");
+              cargaMassaEntity.setNota("Errop em um processamento interno. ");
             }
           } catch (final Exception e) {
             cargaMassaEntity.setStatus(StatusProcessamentoEnum.ERRO);
