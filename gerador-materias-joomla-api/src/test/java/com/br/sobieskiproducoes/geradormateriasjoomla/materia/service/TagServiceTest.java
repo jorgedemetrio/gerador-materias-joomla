@@ -20,8 +20,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.ResponseEntity;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.TagJoomlaClient;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.TagDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.TagEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.TagRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.convert.TagConvert;
@@ -77,7 +79,7 @@ class TagServiceTest {
   }
 
   @Test
-  void testApagarTestTagEntityNotFound() {
+  void tesBuscarTestTagEntityNotFound() {
 
     final Long id = 10L;
 
@@ -91,7 +93,69 @@ class TagServiceTest {
     verify(repository, times(1)).findById(capIdLong.capture());
 
     assertEquals(id, capIdLong.getValue());
-
   }
+  
+  
+  	@Test
+	void apagarTest_TagEntityNotFound() {
+
+		final Long id = 10L;
+		final Optional<TagEntity> tagEntityOpt = Optional.empty();
+		when(repository.findById(id)).thenReturn(tagEntityOpt);
+		assertFalse(service.apagar(id));
+		// assertThrows(BusinessException.class, () -> service.apagar(1L));
+	}
+  
+	@Test
+	void buscarTest() {
+		//cenário
+		final Long id = 10L;
+		final String titulo = "Titulo";
+		final TagEntity tag = new TagEntity();
+		tag.setTitulo(titulo);
+		final Optional<TagEntity> tagEntityOpt = Optional.of(tag);
+		when(repository.findById(anyLong())).thenReturn(tagEntityOpt);
+		
+		// Chamada do teste
+		//o objeto TagDTO retornado pelo metodo é armazenado na variavel TagDTO
+		//um novo objeto tagdto chamado expectedtagdto é criado com os valores esperados 
+		// e a função assertequals compara o objt tagdto com o expectedtagdto
+		 final TagDTO tagDTO = service.buscarPorId(id);
+		 final TagDTO expectedTagDTO = new TagDTO();
+		 expectedTagDTO.setId(id);
+		 expectedTagDTO.setTitulo(titulo);
+		 
+		 //se os dois objetos forem iguais, o teste será bem sucedido.
+		 assertEquals(expectedTagDTO, tagDTO);
+		
+		
+		
+	}
+  
+  @Test
+	void buscarTest() {
+		//cenário
+		final Long id = 10L;
+		final String titulo = "Titulo";
+		final TagEntity tag = new TagEntity();
+		tag.setTitulo(titulo);
+		final Optional<TagEntity> tagEntityOpt = Optional.of(tag);
+		when(repository.findById(anyLong())).thenReturn(tagEntityOpt);
+		
+		// Chamada do teste
+		//o objeto TagDTO retornado pelo metodo é armazenado na variavel TagDTO
+		//um novo objeto tagdto chamado expectedtagdto é criado com os valores esperados 
+		// e a função assertequals compara o objt tagdto com o expectedtagdto
+		 final TagDTO tagDTO = service.buscarPorId(id);
+		 final TagDTO expectedTagDTO = new TagDTO();
+		 expectedTagDTO.setId(id);
+		 expectedTagDTO.setTitulo(titulo);
+		 
+		 //se os dois objetos forem iguais, o teste será bem sucedido.
+		 assertEquals(expectedTagDTO, tagDTO);
+		
+		
+		
+	}
 
 }

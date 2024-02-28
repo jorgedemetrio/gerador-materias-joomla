@@ -35,4 +35,5 @@ public interface TagConvert {
   @Mapping(target = "titulo", source = "titulo", conditionExpression = "java(Objects.nonNull(tag.getTitulo()) && !tag.getTitulo().isBlank())")
   @Mapping(target = "idJoomla", source = "idJoomla ", conditionExpression = "java(Objects.nonNull(tag.getIdJoomla()) && tag.getIdJoomla() > 0L )")
   void merge(TagDTO tag, @MappingTarget TagEntity src);
+
 }
