@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.controller.dto.RequisicaoCaragMassaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.model.CargaMassaEntity;
-import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.model.StatusCargaEnum;
 import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.repository.CargaMassaRepository;
+import com.br.sobieskiproducoes.geradormateriasjoomla.dto.StatusProcessamentoEnum;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -47,10 +47,14 @@ public class CargaProcessoAgendamentoService {
           try {
             cargaMassaEntity.setExecutadoInicio(LocalDateTime.now());
             item = objectMapper.readValue(cargaMassaEntity.getRequisicao(), RequisicaoCaragMassaDTO.class);
-            processo.iniciarProcesso(item, cargaMassaEntity.getUuid());
-            cargaMassaEntity.setStatus(StatusCargaEnum.PROCESSADO);
+            if (processo.iniciarProcesso(item, cargaMassaEntity.getUuid())) {
+              cargaMassaEntity.setStatus(StatusProcessamentoEnum.PROCESSADO);
+            } else {
+              cargaMassaEntity.setStatus(StatusProcessamentoEnum.ERRO);
+              cargaMassaEntity.setNota("Errop em um processamento interno. ");
+            }
           } catch (final Exception e) {
-            cargaMassaEntity.setStatus(StatusCargaEnum.ERRO);
+            cargaMassaEntity.setStatus(StatusProcessamentoEnum.ERRO);
             cargaMassaEntity.setNota(e.getLocalizedMessage());
             log.log(Level.SEVERE, e.getMessage(), e);
           }

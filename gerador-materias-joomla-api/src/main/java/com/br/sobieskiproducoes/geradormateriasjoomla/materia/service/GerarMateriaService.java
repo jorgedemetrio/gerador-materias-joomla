@@ -24,6 +24,8 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.response.
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.service.ChatGPTService;
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ChatGPTProperties;
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ConfiguracoesProperties;
+import com.br.sobieskiproducoes.geradormateriasjoomla.dto.StatusProcessamentoEnum;
+import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.repository.MapaPerguntaRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.PropostaMateriaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.SugerirMateriaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.CategoriaEntity;
@@ -52,6 +54,9 @@ public class GerarMateriaService {
   private final MateriaRepository materiaRepository;
 
   private final CategoriaRepository categoriaRepository;
+
+  private final MapaPerguntaRepository mapaPerguntaRepository;
+
   private final TagRepository tagRepository;
 
   private final MateriaConvert convert;
@@ -78,7 +83,7 @@ public class GerarMateriaService {
 
   @Transactional
   public List<PropostaMateriaDTO> gerarSugestaoMateria(@Validated final SugerirMateriaDTO request) {
-    return gerarSugestaoMateria(request, UUID.randomUUID().toString());
+    return gerarSugestaoMateria(request, UUID.randomUUID().toString(), null);
   }
 
   /**
@@ -88,7 +93,8 @@ public class GerarMateriaService {
    * @return Lista de {@link PropostaMateriaDTO} com propostas de matéria.
    */
   @Transactional
-  public List<PropostaMateriaDTO> gerarSugestaoMateria(@Validated final SugerirMateriaDTO request, final String uuid) {
+  public List<PropostaMateriaDTO> gerarSugestaoMateria(@Validated final SugerirMateriaDTO request, final String uuid,
+      final Long idMapaProcessamento) {
 
     if (isNull(request) || isNull(request.getTermos())) {
       return null;
@@ -103,8 +109,7 @@ public class GerarMateriaService {
     // Pegar interesses
     final String termos =
 
-        request.getTermos().stream().map(n -> n.trim().toLowerCase())
-        .collect(Collectors.joining(", "));
+        request.getTermos().stream().map(n -> n.trim().toLowerCase()).collect(Collectors.joining(", "));
 
     final String audiencias = nonNull(request.getAudiencias()) && !request.getAudiencias().isEmpty()
         ? request.getAudiencias().stream().map(n -> n.trim().toLowerCase()).collect(Collectors.joining(", "))
@@ -113,14 +118,12 @@ public class GerarMateriaService {
     final String perguntaDadosMateria = chatGPTProperties.getPrompts().getPedirDadosMateria().formatted(conhecimento,
         chatGPTProperties.getSite(), redesSociais, audiencias, termos, request.getTema());
 
-    final RepostaResponseDTO itensDaMateriaRetornoGPT = chatgpt.pergunta(perguntaDadosMateria,
-        uuid, inicio);
+    final RepostaResponseDTO itensDaMateriaRetornoGPT = chatgpt.pergunta(perguntaDadosMateria, uuid, inicio);
 
     final List<MessageChatGPTDTO> perguntasChatGPTDTOs = new ArrayList<>();
     perguntasChatGPTDTOs.add(new MessageChatGPTDTO(properties.getChatgpt().getRoleUser(), perguntaDadosMateria));
     perguntasChatGPTDTOs.add(new MessageChatGPTDTO(itensDaMateriaRetornoGPT.getChoices().get(0).getMessage().getRole(),
         itensDaMateriaRetornoGPT.getChoices().get(0).getMessage().getContent()));
-
 
     final List<PropostaMateriaDTO> propostasSemMateria = itensDaMateriaRetornoGPT.getChoices().stream()
         .map(this::convetToPropostaMateriaDTO).collect(Collectors.toList());
@@ -140,7 +143,7 @@ public class GerarMateriaService {
           if ((nonNull(choice.getMessage()) && nonNull(choice.getMessage().getContent())
               && !choice.getMessage().getContent().isBlank())
               && nonNull(itemSalvar = convert.copy(item, uuid, limparTexto(choice.getMessage().getContent())))) {
-            propostasRetorno.add(this.salvarPropostaMateria(itemSalvar, request));
+            propostasRetorno.add(this.salvarPropostaMateria(itemSalvar, request, idMapaProcessamento));
           }
         }
       }
@@ -150,7 +153,8 @@ public class GerarMateriaService {
     return propostasRetorno;
   }
 
-  private PropostaMateriaDTO salvarPropostaMateria(final PropostaMateriaDTO in, final SugerirMateriaDTO request) {
+  private PropostaMateriaDTO salvarPropostaMateria(final PropostaMateriaDTO in, final SugerirMateriaDTO request,
+      final Long idMapaProcessamento) {
     try {
       final MateriaEntity materia = convert.convert(in);
       if (nonNull(request.getPublicar())) {
@@ -173,6 +177,10 @@ public class GerarMateriaService {
         if (categoria.isPresent()) {
           materia.setCategoria(categoria.get());
         }
+      }
+      materia.setStatus(StatusProcessamentoEnum.PROCESSAR);
+      if (nonNull(idMapaProcessamento)) {
+        materia.setPeguntaPrincipal(mapaPerguntaRepository.findById(idMapaProcessamento).get());
       }
       return convert.convert(materiaRepository.save(materia));
     } catch (final Exception ex) {

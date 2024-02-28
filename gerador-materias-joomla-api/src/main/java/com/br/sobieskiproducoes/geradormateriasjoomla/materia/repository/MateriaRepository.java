@@ -3,11 +3,13 @@
  */
 package com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.CategoriaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.MateriaEntity;
 
 /**
@@ -17,5 +19,8 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.MateriaEntit
  */
 @Repository
 public interface MateriaRepository extends JpaRepository<MateriaEntity, Long> {
-  CategoriaEntity findByIdJoomla(@Param("idJoomla") Long idJoomla);
+  @Query(name = "MateriaRepository.buscarPorPergunta", value = "SELECT m FROM MateriaEntity AS m JOIN m.peguntaPrincipal AS p WHERE p.id = :id")
+  Optional<MateriaEntity> buscarPorPergunta(@Param("id") Long id);
+
+  MateriaEntity findByIdJoomla(@Param("idJoomla") Long idJoomla);
 }
