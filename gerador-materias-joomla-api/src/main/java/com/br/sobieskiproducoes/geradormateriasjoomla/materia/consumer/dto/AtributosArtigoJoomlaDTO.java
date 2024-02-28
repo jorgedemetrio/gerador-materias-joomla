@@ -44,13 +44,13 @@ public class AtributosArtigoJoomlaDTO {
   private String metadesc;
   private String metakey;
   private String title;
-  private Long condition;
 
+  private String intro;
   private String typeAlias;
 
   @JsonProperty("asset_id")
   private Long assetId;
-  private Long state;
+  private Integer state;
 
   @JsonSerialize(using = LocalDateTimeSerializer.class)
   @JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -85,12 +85,12 @@ public class AtributosArtigoJoomlaDTO {
   private ImagesMateriaDTO images;
 
   private UrlDTO urls;
-  private Long version;
-  private Long access;
+  private Integer version;
+  private Integer access;
   private Long hits;
   private MetadataDTO metadata;
 
-  private Long featured;
+  private Integer featured;
 
   private String note;
   private Map<String, String> tags;
@@ -120,7 +120,7 @@ public class AtributosArtigoJoomlaDTO {
 
   private String category;
   private DadosDTO data;
-  private String type;
+
 
 
 

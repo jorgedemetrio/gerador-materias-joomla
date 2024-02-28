@@ -87,6 +87,7 @@ public class MateriaJoomlaService {
       }
     });
 
+
     entity.getTags().forEach(n -> item.getTags().put(n.getId().toString(), n.getTitulo()));
     if (isNull(entity.getTituloSelecionado()) || entity.getTituloSelecionado() <= 1
         || entity.getTituloSelecionado() > 3) {

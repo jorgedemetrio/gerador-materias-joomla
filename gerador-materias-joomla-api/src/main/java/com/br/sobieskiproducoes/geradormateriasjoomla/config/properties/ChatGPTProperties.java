@@ -49,4 +49,5 @@ public class ChatGPTProperties {
   @NotNull
   @NotEmpty
   private List<String> especialista;
+
 }

@@ -3,6 +3,7 @@
  */
 package com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.service;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 import java.io.File;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -23,11 +25,16 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.controller.dt
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.MateriaConstants;
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ConfiguracoesProperties;
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.controller.dto.MapaPerguntaDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.repository.MapaPerguntaRepository;
+import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.service.convert.PerguntasConvert;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.PropostaMateriaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.SugerirMateriaDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.MateriaEntity;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.MateriaRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.GerarMateriaService;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.MateriaJoomlaService;
 import com.br.sobieskiproducoes.geradormateriasjoomla.utils.SugerirMateriaUtils;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
@@ -41,22 +48,35 @@ import lombok.extern.java.Log;
 @Component
 public class CargaProcessoMateriaService {
 
-
   private final ConfiguracoesProperties properties;
   private final MateriaJoomlaService materiaJoomlaService;
   private final GerarMateriaService gerarMateriaService;
-  private final List<MapaPerguntaDTO> itens;
+  private final MateriaRepository repository;
+  private final MapaPerguntaRepository mapaPerguntaRepository;
+  private final PerguntasConvert perguntasConvert;
 
+  /**
+   * @param uuid
+   * @return
+   */
+  private List<MapaPerguntaDTO> extrairMapPerguntas(final String uuid) {
+    return mapaPerguntaRepository.findByUuid(uuid).stream().map(mapaPerguntaEntity -> {
+      final MapaPerguntaDTO mapaPerguntaDTO = perguntasConvert.toMapaPerguntaDTO(mapaPerguntaEntity);
+      mapaPerguntaDTO.setPerguntasAlternativas(new ArrayList<>());
+      mapaPerguntaDTO.setTermos(new ArrayList<>());
+      mapaPerguntaEntity.getPerguntasAlternativas()
+          .forEach(pergunta -> mapaPerguntaDTO.getPerguntasAlternativas().add(pergunta.getPergunta()));
 
-  private List<String> getTermos(final MapaPerguntaDTO dto) {
-    final List<String> itens = new ArrayList<>(dto.getPerguntasAlternativas());
-    itens.add(dto.getPergunta());
-    return itens;
+      mapaPerguntaEntity.getTermos().forEach(pergunta -> mapaPerguntaDTO.getTermos().add(pergunta.getTermo()));
+
+      return mapaPerguntaDTO;
+    }).collect(Collectors.toList());
   }
 
   @Transactional
   public void iniciarProcesso(final RequisicaoCaragMassaDTO request, final String uuid) {
 
+    final List<MapaPerguntaDTO> itens = extrairMapPerguntas(uuid);
     final LocalDate hoje = LocalDate.now();
     log.info("Inicio de processamento lote em massa.");
     new File(properties.getCargaDadosImagens().getImagens().getPastaImagemMaterias()).mkdirs();
@@ -65,30 +85,36 @@ public class CargaProcessoMateriaService {
     final Set<String> dataPublicadas = new HashSet<>();
     for (final HorarioRequisiscaoDTO hora : request.getHoarios()) {
 
-      // Primeiro processa os com data
-      final List<MapaPerguntaDTO> processarComData = itens.stream().filter(n -> nonNull(n.getDataSugestaoPublicacao()))
-          .collect(Collectors.toList());
-      for (final MapaPerguntaDTO mapaPerguntaDTO : processarComData) {
-
-        // Se ele propos um ano firente do atual
+      // Primeiro processa os com data válidas
+      final List<MapaPerguntaDTO> processarComData = itens.stream().filter(mapaPerguntaDTO -> {
+        if (isNull(mapaPerguntaDTO.getDataSugestaoPublicacao())) {
+          return false;
+        }
         if (mapaPerguntaDTO.getDataSugestaoPublicacao().getYear() < hoje.getYear()
             || mapaPerguntaDTO.getDataSugestaoPublicacao().getYear() > (hoje.getYear() + 1)) {
           mapaPerguntaDTO.setDataSugestaoPublicacao(mapaPerguntaDTO.getDataSugestaoPublicacao()
               .plusYears(hoje.getYear() - mapaPerguntaDTO.getDataSugestaoPublicacao().getYear()));
         }
-
         // Se a data proposta for maior ou igual a hoje e esteja dentro do range de
         // inicio e fim, se não será ignorada.
-        if ((mapaPerguntaDTO.getDataSugestaoPublicacao().isAfter(hoje)
+        return ((mapaPerguntaDTO.getDataSugestaoPublicacao().isAfter(hoje)
             || mapaPerguntaDTO.getDataSugestaoPublicacao().isEqual(hoje))
-            && (mapaPerguntaDTO.getDataSugestaoPublicacao().isAfter(request.getDataInicioPublicacao())
-                && mapaPerguntaDTO.getDataSugestaoPublicacao().isAfter(request.getDataFimPublicacao()))) {
-          data = SugerirMateriaUtils.getLocalDateTime(mapaPerguntaDTO.getDataSugestaoPublicacao(), hora.getHoraio());
+            && ((mapaPerguntaDTO.getDataSugestaoPublicacao().isAfter(request.getDataInicioPublicacao())
+                || mapaPerguntaDTO.getDataSugestaoPublicacao().isEqual(request.getDataInicioPublicacao()))
 
-          processarMateria(data, dataPublicadas, mapaPerguntaDTO, request, uuid);
-        }
+                && mapaPerguntaDTO.getDataSugestaoPublicacao().isBefore(request.getDataFimPublicacao())
+                || mapaPerguntaDTO.getDataSugestaoPublicacao().isEqual(request.getDataFimPublicacao())));
+
+      }).collect(Collectors.toList());
+      for (final MapaPerguntaDTO mapaPerguntaDTO : processarComData) {
+
+        data = SugerirMateriaUtils.getLocalDateTime(mapaPerguntaDTO.getDataSugestaoPublicacao(), hora.getHoraio());
+
+        processarMateria(itens, data, dataPublicadas, mapaPerguntaDTO, request, uuid);
+
       }
     }
+    // Será processado os que não tem data ou devem ignorar a data.
     for (final HorarioRequisiscaoDTO hora : request.getHoarios()) {
       final long rodar = nonNull(request.getDataFimPublicacao())
           ? SugerirMateriaUtils.getDaysBetween(request.getDataInicioPublicacao(), request.getDataFimPublicacao())
@@ -98,7 +124,9 @@ public class CargaProcessoMateriaService {
 
         final MapaPerguntaDTO mapaPerguntaDTO = itens.get(0);
         data = SugerirMateriaUtils.getLocalDateTime(request.getDataInicioPublicacao(), hora.getHoraio(), rodaram);
-        processarMateria(data, dataPublicadas, mapaPerguntaDTO, request, uuid);
+        processarMateria(itens, data, dataPublicadas, mapaPerguntaDTO, request, uuid);
+        //Força remover
+        itens.remove(mapaPerguntaDTO);
         rodaram++;
       }
     }
@@ -107,23 +135,43 @@ public class CargaProcessoMateriaService {
 
   }
 
+  private List<String> perguntas(final MapaPerguntaDTO dto) {
+    final List<String> itens = new ArrayList<>(dto.getPerguntasAlternativas());
+    itens.add(dto.getPergunta());
+    return itens;
+  }
 
   /**
    * @param data
    * @param dataPublicadas
    * @param mapaPerguntaDTO
    */
-  private void processarMateria(final LocalDateTime data, final Set<String> dataPublicadas,
-      final MapaPerguntaDTO mapaPerguntaDTO, final RequisicaoCaragMassaDTO request, final String uuid) {
+  private void processarMateria(final List<MapaPerguntaDTO> itens, final LocalDateTime data,
+      final Set<String> dataPublicadas, final MapaPerguntaDTO mapaPerguntaDTO, final RequisicaoCaragMassaDTO request,
+      final String uuid) {
     if (!dataPublicadas.contains(data.format(MateriaConstants.DATETIME_FORMATTER))) {
       try {
-        final List<PropostaMateriaDTO> maerias = gerarMateriaService
-            .gerarSugestaoMateria(new SugerirMateriaDTO(uuid, getTermos(mapaPerguntaDTO), data,
-                mapaPerguntaDTO.getCategoria().getId(), request.getIdeias().getAudiencias()));
+        final List<String> perguntas = perguntas(mapaPerguntaDTO);
+
+        final List<PropostaMateriaDTO> maerias = gerarMateriaService.gerarSugestaoMateria(
+            new SugerirMateriaDTO(perguntas.stream().collect(Collectors.joining(", ")), mapaPerguntaDTO.getTermos(), data,
+                mapaPerguntaDTO.getCategoria().getId(), request.getIdeias().getAudiencias()),
+            uuid);
         if (request.getPublicar()) {
           for (final PropostaMateriaDTO propostaMateriaDTO : maerias) {
-            materiaJoomlaService.publicarMateriaJoomla(propostaMateriaDTO.getId(), data);
 
+            final Optional<MateriaEntity> materia = repository.findById(propostaMateriaDTO.getId());
+
+            if (materia.isPresent()) {
+              try {
+                new File(properties.getCargaDadosImagens().getImagens().getPastaImagemMaterias()
+                    .concat(SugerirMateriaUtils.pathCategoria(materia.get().getCategoria()))).mkdirs();
+              } catch (final Exception ex) {
+                log.log(Level.SEVERE,
+                    "Erro ao criar a pasta da materia : ".concat(propostaMateriaDTO.getId().toString()), ex);
+              }
+              materiaJoomlaService.publicarMateriaJoomla(propostaMateriaDTO.getId(), data);
+            }
           }
         }
 

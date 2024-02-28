@@ -38,6 +38,7 @@ public class ChatGPTService {
   private final LogDialogoChatGPTRepository logDialogoChatGPTRepository;
   private final ChatGPTConvert convert;
 
+
   private void gravarLog(final RepostaResponseDTO itensDaMateriaRetornoGPT, final String uuid,
       final LocalDateTime inicio, final String pergunta) {
     try { // Grava o log da consulta.
@@ -52,17 +53,17 @@ public class ChatGPTService {
 
   }
 
-
   public RepostaResponseDTO pergunta(final String pergunta, final String uuid, final LocalDateTime inicio) {
 
-    final RepostaResponseDTO resposta = client.conversar(new PromptRequestDTO(properties.getChatgpt().getModel(),
-        Arrays.asList(new MessageChatGPTDTO(properties.getChatgpt().getRole(), pergunta)),
-        properties.getChatgpt().getTemperature()));
+    final RepostaResponseDTO resposta = client
+        .conversar(new PromptRequestDTO(properties.getChatgpt().getModel(),
+            Arrays.asList(new MessageChatGPTDTO(properties.getChatgpt().getRoleUser(), pergunta)),
+            properties.getChatgpt().getTemperature()));
 
     log.info("Pergunta feita ao chatGPT: ".concat(pergunta).concat(" tokens usados ")
         .concat(resposta.getUsage().getTotalTokens().toString()));
 
-    gravarLog(resposta, uuid, inicio, pergunta) ;
+    gravarLog(resposta, uuid, inicio, pergunta);
 
     return resposta;
 
@@ -70,15 +71,32 @@ public class ChatGPTService {
 
   public RepostaResponseDTO perguntas(final List<String> perguntas, final String uuid, final LocalDateTime inicio) {
 
-    final RepostaResponseDTO resposta = client.conversar(new PromptRequestDTO(properties.getChatgpt().getModel(),
-        perguntas.stream().map(pergunta -> new MessageChatGPTDTO(properties.getChatgpt().getRole(), pergunta))
-            .collect(Collectors.toList()),
-        properties.getChatgpt().getTemperature()));
+    final RepostaResponseDTO resposta = client
+        .conversar(new PromptRequestDTO(properties.getChatgpt().getModel(),
+            perguntas.stream().map(pergunta -> new MessageChatGPTDTO(properties.getChatgpt().getRoleUser(), pergunta))
+                .collect(Collectors.toList()),
+            properties.getChatgpt().getTemperature()));
 
     log.info("Pergunta feita ao chatGPT: ".concat(perguntas.toString()).concat(" tokens usados ")
         .concat(resposta.getUsage().getTotalTokens().toString()));
 
-    perguntas.forEach(pergunta -> gravarLog(resposta, uuid, inicio, pergunta) );
+    perguntas.forEach(pergunta -> gravarLog(resposta, uuid, inicio, pergunta.toString()));
+
+    return resposta;
+
+  }
+
+  public RepostaResponseDTO perguntasObjeto(final List<MessageChatGPTDTO> perguntas, final String uuid,
+      final LocalDateTime inicio) {
+
+    final RepostaResponseDTO resposta = client.conversar(
+        new PromptRequestDTO(
+        properties.getChatgpt().getModel(), perguntas, properties.getChatgpt().getTemperature()));
+
+    log.info("Pergunta feita ao chatGPT: ".concat(perguntas.toString()).concat(" tokens usados ")
+        .concat(resposta.getUsage().getTotalTokens().toString()));
+
+    perguntas.forEach(pergunta -> gravarLog(resposta, uuid, inicio, pergunta.toString()));
 
     return resposta;
 

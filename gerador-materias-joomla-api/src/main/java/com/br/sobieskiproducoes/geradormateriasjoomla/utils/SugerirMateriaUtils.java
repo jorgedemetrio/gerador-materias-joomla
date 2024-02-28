@@ -4,6 +4,7 @@
 package com.br.sobieskiproducoes.geradormateriasjoomla.utils;
 
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -16,6 +17,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.regex.Pattern;
 
 import org.springframework.util.StreamUtils;
+
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.CategoriaEntity;
 
 /**
  * @author Jorge Demetrio
@@ -65,6 +68,13 @@ public class SugerirMateriaUtils {
     normalized = normalized.toLowerCase();
     return normalized.replaceAll("^[-]+|[-]+$", "");
   }
+
+  public static String pathCategoria(final CategoriaEntity categoria) throws IOException {
+  return "/"
+      .concat(nonNull(categoria.getApelido()) || !categoria.getApelido().isBlank() ? categoria.getApelido()
+          : limparTexto(categoria.getTitulo()))
+      .concat(nonNull(categoria.getPai()) ? pathCategoria(categoria.getPai()) : "");
+}
   /**
    * Não permite a criação de uma instância nova.
    */

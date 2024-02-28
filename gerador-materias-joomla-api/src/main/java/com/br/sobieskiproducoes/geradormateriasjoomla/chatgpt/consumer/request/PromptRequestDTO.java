@@ -22,7 +22,13 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PromptRequestDTO {
+//  @JsonProperty("assistant_id")
+//  private String assistantId;
   private String model;
+//
+//  @JsonProperty("max_tokens")
+//  private Long maxTokens;
+//
   private List<MessageChatGPTDTO> messages;
   private Double temperature;
 }
