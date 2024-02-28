@@ -46,7 +46,7 @@ public class AtributosTagJoomlaDTO {
 
   private Long rgt;
 
-  private Long path;
+  private String path;
 
   private String note;
 

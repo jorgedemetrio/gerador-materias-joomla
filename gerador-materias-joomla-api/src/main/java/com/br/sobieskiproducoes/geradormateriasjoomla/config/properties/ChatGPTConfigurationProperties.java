@@ -35,6 +35,12 @@ public class ChatGPTConfigurationProperties {
   @NotBlank
   private String bearer;
 
+  private String assistente;
+
+  @NotNull
+  @NotBlank
+  private String organization;
+
   @NotNull
   @NotBlank
   private String model;
@@ -46,6 +52,17 @@ public class ChatGPTConfigurationProperties {
 
   @NotNull
   @NotBlank
-  private String role;
+  private String roleUser;
 
+  @NotNull
+  @NotBlank
+  private String roleSystem;
+
+  @NotNull
+  @NotBlank
+  private String roleAssistant;
+
+  @NotNull
+  @NotBlank
+  private String maxTokens;
 }

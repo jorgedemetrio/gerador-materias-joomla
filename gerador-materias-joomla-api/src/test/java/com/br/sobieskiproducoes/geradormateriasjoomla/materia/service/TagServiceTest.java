@@ -4,7 +4,7 @@
 package com.br.sobieskiproducoes.geradormateriasjoomla.materia.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
@@ -48,7 +48,7 @@ class TagServiceTest {
   private TagJoomlaClient client;
 
   @Test
-  void apagarTest() {
+  void testApagar() {
     // Cenário
     final Long id = 10L;
     final String titulo = "Titulo";
@@ -77,14 +77,21 @@ class TagServiceTest {
   }
 
   @Test
-  void apagarTest_TagEntityNotFound() {
+  void testApagarTestTagEntityNotFound() {
 
     final Long id = 10L;
-    final Optional<TagEntity> tagEntityOpt = Optional.empty();
-    when(repository.findById(id)).thenReturn(tagEntityOpt);
-    assertFalse(service.apagar(id));
-    // assertThrows(BusinessException.class, () -> service.apagar(1L));
-  }
 
+    final Optional<TagEntity> tagEntityOpt = Optional.empty();
+    when(repository.findById(anyLong())).thenReturn(tagEntityOpt);
+
+
+    assertNull(service.buscarPorId(id));
+
+    final ArgumentCaptor<Long> capIdLong = ArgumentCaptor.forClass(Long.class);
+    verify(repository, times(1)).findById(capIdLong.capture());
+
+    assertEquals(id, capIdLong.getValue());
+
+  }
 
 }

@@ -110,7 +110,10 @@ configuracao:
     bearer: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     model: gpt-4
     temperature: 0.7
-    role: system
+    max-tokens: 500
+    role-system: system
+    role-user: user
+    role-assistant: assistant
   carga-dados-imagens:
     imagens:
       pasta-imagem-materias: c:\temp\materias\
@@ -123,7 +126,7 @@ configuracao:
       cor-fundo-texto: ffffff 
       posicao-texto: baixo
       fonte-texto: Helvetica
-      tamanh-fonte-texto: 25
+      tamanho-fonte-texto: 25
     logo: 
       path: c:\temp\logo.png
       alinhado-horizontal: esquerda
@@ -138,13 +141,14 @@ chatgpt:
   audiencias: 
     - Pessoas que buscam conteúdo e informações no Google e outros mecanismos de buscas. 
   prompts:
+    pedir-dados-materia-seguinte: " - Deve ser diferente das que já passou anteriormente. \n" 
     pedir-dados-materia: "Torne-se um profissional com muito conhecimento em : Marketing de Conteúdo, Maketing Digital, Marketing Social \n
 Com especialidade técnica nos assuntos de : %s \n
 Entendento que uma matéria deve seguir os seguintes requisitos: \n
  - A matéria é para o site: %s .\n
  - Que tem as redes sociais: %s .\n
  - O perfil da audiência é : %s .\n 
- - Entregue em formato JSON, com layout : { titulos : array(string), primeiro-paragrafo: string,  url-proposta: string, meta-descricao: string, keywords: string, tags : array, faqs: array{pergunta: string, resposta: string}, roteiro: string, post-instagram: string} \n 
+ - Entregue em formato JSON, só o JSON pois será lido por um APP sua resposta, separados pos \",\" com layout : { titulos : array(string), primeiro-paragrafo: string,  url-proposta: string, meta-descricao: string, keywords: string, tags : array, faqs: array{pergunta: string, resposta: string}, roteiro: string, post-instagram: string} \n 
  - Use SEO na máteria para os termos : %s .\n
  - Devem ter 3 opções de Títulos, usando SEO, gatilhos mentais e emojis\n
  - Primeiro paragrafo ter no máximo 100 caracateres e deve ser usado estrutura de marketing para chamar atenção da máteria, como: Gatilhos mentais ou sensacionalismo. \n
@@ -161,9 +165,9 @@ Com especialidade técnica em : %s .\n
 Entendento que uma matéria deve seguir os requisitos: \n
  - A matéria é para o site: %s .\n
  - Que tem as redes sociais: %s .\n
- - O perfil da audiência é : %s .\n 
- - Formatar com HTML básico com subtitulos (htmls permitidos:  <font></font>, <br/>,<p></p>, <h2></h2>, <h3></h3>, <h4></h4>, <ul></ul>, <li><li>,<lo><lo>, <strong></strong>, <i></i>). \n
- - Use SEO na máteria para que ela seja o mais achavel possível em mecanismos de busca para os termos : %s .\n
+ - O perfil da audiência é : %s .\n
+ - Use SEO na máteria para que ela seja o mais achavel possível em mecanismos de busca para os termos : %s .\n 
+ - Formatar com HTML básico com subtitulos (htmls permitidos:  <table></table>, <tr></tr>, <td></td>, <th></th>, <font></font>, <br/>,<p></p>, <h2></h2>, <h3></h3>, <h4></h4>, <ul></ul>, <li><li>,<lo><lo>, <strong></strong>, <i></i>). \n
  - Trabalhe o melhor possível para que a matéria seja interessante e víral. \n
  - Pode usar emojis nos subtitulos e listas. \n
  - No minimo 5 subtitulos e cada um com no mínimo de 2 paragrafos por subtitulo. \n 
@@ -173,7 +177,8 @@ ${chatgpt.prompts.complemento-formato-pedir-materia}
  - Evite resumir a matéria sempre opite em expliar melhor principalmente termos tecnicos, entenda quanto mais atrativos os assuntos buscados que se relaciona ao tema da materia, mais chances ela tem de ser aberta e do usuário achar o que busca nela. \n
  - No final deve ter um subtitulo de perguntas frequentes sobre o tema e tenha 3 perguntas e as resposas delas.\n
  - Na conclusão da materia deve se fazer um call to action para o site, comentar abaixo da matéria ou ver as redes sociais. \n
- - Na matéria não deve ter hashtags.\n
+ - Na matéria não deve ter hashtags.
+
 \n
 E matéria deve falar sobre :\n
 %s "
@@ -187,7 +192,8 @@ Faça uma mapa mental de perguntas para usar como possíveis direcionamentos de 
  - Categorias que vamos trabalhar: [%s]\n 
 \n
  - Sua especialidade técnica : %s \n
- - Responda em JSon no layout : \"{pergunta : string, perguntasAlternativas : array(string), ordemRelevancia:int, motivoSugestao:string, perfilEnquadra:string, idCategoria: int, dataSugestaoPublicacao: date(formato: yyyy-mm-dd)} \".\n
+ - Responda em JSon pois será lido por um aplicativo que só lê JSon, sepradaos por \",\", somente no JSON no layout : \"{pergunta : string, perguntasAlternativas : array(string), ordemRelevancia:int, motivoSugestao:string, perfilEnquadra:string, idCategoria: int, dataSugestaoPublicacao: date(formato: yyyy-mm-dd), termos:array(String)} \".\n
+ - Vai devolver uma lista do conjunto ditado acima evite quebrar no meio pois nâo ficará legivel para leitura pelo aplicativo , 
  - Estude pessoas, suas dores e necessidades dos perfis: %s .\n
  - Não repetir as perguntas. \n
  - Pode usar os termos isolados para criar as perguntas ou combiná-los com outros termos, datas comemorativas e palavras dentro do grupo de perfis.\n 
@@ -199,6 +205,7 @@ Faça uma mapa mental de perguntas para usar como possíveis direcionamentos de 
  - O campo \"perfilEnquadra\" : Que perfil que identificou que é relevante a essa pergunta, pode ser um fora do que citamos, porém que pertença ao universo pelo menos próximo do que citamos caso tenha identificado uma oportunidade.\n
  - O Campo \"idCategoria\": Dentro das categorias cidade em um JSon cima quais seria o id da categocia que mais se encaixaria a pergunta?\n
  - O Campo \"dataSugestaoPublicaca\" : Não é obrigatório, se a materia não se trata de um evento como o especifico (como: feriados, eventos de calendários, datas festivas, etc) não necessita enviar, deve ser usado só quando a pergunta tiver relação à uma data festiva ou um feriado e ai deve ser sugerir a data com 2 dias de antecedência ao dia do evento o mês vigente e neste ano.\n
+ - O campo \"termos\" é uma array com no minimo 2 itens de termos de SEO sugeridos para essa titulo, dando preferência: termos técnicos, expressões linguisticas, jargões do assunto .\n
  - Retornar uma array de JSon com a quantidade mínima de perguntas: %d .\n
  - Pode combinar com feriados, ou datas festivas, ou informações relevantes do mês de %s, tendencias o mês.\n
  Usando os termos: %s \n"

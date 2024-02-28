@@ -28,6 +28,9 @@ import lombok.RequiredArgsConstructor;
 @Component
 public class ChatGPTConsumerClient {
 
+  private static final String ORGANIZATION = "OpenAI-Organization";
+  private static final String ASSISTENT = "OpenAI-Beta";
+  private static final String ASSISTENT_VALOR = "assistants=v1";
   private final RestTemplate restTemplate;
   private final ConfiguracoesProperties properties;
 
@@ -35,6 +38,9 @@ public class ChatGPTConsumerClient {
     final HttpHeaders headers = new HttpHeaders();
     headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
     headers.setBearerAuth(properties.getChatgpt().getBearer());
+    headers.add(ORGANIZATION, properties.getChatgpt().getOrganization());
+    headers.add(ASSISTENT, ASSISTENT_VALOR);
+    // dto.setAssistantId(properties.getChatgpt().getAssistente());
     final HttpEntity<PromptRequestDTO> httpEntity = new HttpEntity<>(dto, headers);
 
     final ResponseEntity<RepostaResponseDTO> resposta = restTemplate.exchange(properties.getChatgpt().getUrl(),
