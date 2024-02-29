@@ -3,7 +3,7 @@
  */
 package com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.service;
 
-import static com.br.sobieskiproducoes.geradormateriasjoomla.utils.SugerirMateriaUtils.limparTexto;
+import static com.br.sobieskiproducoes.geradormateriasjoomla.utils.SugerirMateriaUtils.limparTextoJson;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -93,7 +93,7 @@ public class GerarMapaPerguntasService {
   private List<MapaPerguntaEntity> convetToPropostaMateriaDTO(final ChoicesDTO choice, final String uuid) {
     final List<MapaPerguntaEntity> itensRetorno = new ArrayList<>();
     try {
-      String content = limparTexto(choice.getMessage().getContent());
+      String content = limparTextoJson(choice.getMessage().getContent());
       if (!content.trim().startsWith("[")) {
         content = "[" + content;
       }
@@ -186,9 +186,9 @@ public class GerarMapaPerguntasService {
           .collect(Collectors.joining(", "));
       termos = request.getTermos().stream().map(n -> n.trim().toLowerCase()).collect(Collectors.joining(", "));
 
-      categorias = (nonNull(request.getCategorias()) && !request.getCategorias().isEmpty()
+      categorias = nonNull(request.getCategorias()) && !request.getCategorias().isEmpty()
           ? categoriaRepository.findAllById(request.getCategorias())
-          : categoriaRepository.categoriasParaPrompt());
+          : categoriaRepository.categoriasParaPrompt();
 
       categoriasJson = String.join("[",
           categorias.stream().filter(Objects::nonNull).map(this::converterCategoria).collect(Collectors.joining(", ")),
@@ -202,7 +202,7 @@ public class GerarMapaPerguntasService {
       // Prepara a pegunta
       perguntaParaGerarPerguntas = chatGPTProperties.getPrompts().getPedirPerguntas().formatted(
           chatGPTProperties.getSite(), categoriasJson, conhecimento, audiencias, Integer.valueOf(processar), mes,
-          (contador == 0 ? "" : chatGPTProperties.getPrompts().getPedirDadosMateriaSeguinte()), termos);
+          contador == 0 ? "" : chatGPTProperties.getPrompts().getPedirDadosMateriaSeguinte(), termos);
 
 //      perguntasChatGPTDTOs
 //          .add(new MessageChatGPTDTO(properties.getChatgpt().getRoleUser(), perguntaParaGerarPerguntas));

@@ -6,17 +6,15 @@ package com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer;
 import java.util.List;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.FeignJoomlaConfig;
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoItemJoomlaResponse;
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoJoomlaDataDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosCategoriaJoomlaDTO;
-
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 /**
  * @author Jorge Demetrio
@@ -26,19 +24,17 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 @FeignClient(name = "categoriaJoomlaClient", url = "${configuracao.joomla.url}", dismiss404 = true, configuration = FeignJoomlaConfig.class)
 public interface CategoriaJoomlaClient {
 
-  @GetMapping(path = "/content/categories")
+  @GetMapping(path = "/content/categories", consumes = { MediaType.APPLICATION_JSON_VALUE })
   GenericoItemJoomlaResponse<List<GenericoJoomlaDataDTO<AtributosCategoriaJoomlaDTO>>> getCategorias();
 
-  @GetMapping("/content/categories?{url}")
+  @GetMapping(path = "/content/categories?{url}", consumes = { MediaType.APPLICATION_JSON_VALUE })
   GenericoItemJoomlaResponse<List<GenericoJoomlaDataDTO<AtributosCategoriaJoomlaDTO>>> getCategorias(
       @PathVariable("url") String url);
 
-  @GetMapping("/content/categories")
+  @GetMapping(path = "/content/categories", consumes = { MediaType.APPLICATION_JSON_VALUE })
   GenericoItemJoomlaResponse<List<GenericoJoomlaDataDTO<AtributosCategoriaJoomlaDTO>>> getCategorias(
       @RequestParam("page[offset]") String offset,
       @RequestParam("page[limit]") String limit);
 
-  @PostMapping("/content/categories")
-  GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosCategoriaJoomlaDTO>> gravar(
-      @RequestBody AtributosCategoriaJoomlaDTO artigo);
+
 }

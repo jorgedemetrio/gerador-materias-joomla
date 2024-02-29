@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoItemJoomlaResponse;
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoJoomlaDataDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosArtigoJoomlaDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosArtigoSalvoJoomlaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.PropostaMateriaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.PublilcarDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.SugerirMateriaDTO;
@@ -50,7 +50,7 @@ public class MateriaController {
       @ApiResponse(responseCode = "200", description = "Processado com sucesso", content = @Content(schema = @Schema(implementation = GenericoItemJoomlaResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE)) })
   @PostMapping(path = "{id}/publicar", consumes = { MediaType.APPLICATION_JSON_VALUE })
   @ResponseBody
-  public ResponseEntity<GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosArtigoJoomlaDTO>>> publicar(
+  public ResponseEntity<GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosArtigoSalvoJoomlaDTO>>> publicar(
       @PathVariable("id") final Long id, @RequestBody final PublilcarDTO dto) {
     log.info("Gerando materia sobre %d ".formatted(id));
     try {

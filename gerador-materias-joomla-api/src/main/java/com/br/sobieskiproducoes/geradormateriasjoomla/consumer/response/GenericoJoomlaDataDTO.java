@@ -3,6 +3,7 @@
  */
 package com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.AllArgsConstructor;
@@ -22,6 +23,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class GenericoJoomlaDataDTO<T> {
 
   private String type;

@@ -48,9 +48,6 @@ public class CargaMateriaEmMassaService {
     final String uuid = UUID.randomUUID().toString();
     final List<MapaPerguntaDTO> itens = gerarMapaPerguntasService.gerarMapa(request.getIdeias(), uuid);
 
-    // new Thread(new ProcessoLote(properties, materiaJoomlaService,
-    // gerarMateriaService, uuid, request, itens)).start();
-
     try {
       repository.save(new CargaMassaEntity(null, uuid, StatusProcessamentoEnum.PROCESSAR,
           SugerirMateriaUtils.getLocalDateTime(request.getDataInicioPublicacao(),

@@ -81,7 +81,7 @@ public class MateriaEntity {
   @Column(name = "materia", nullable = false, insertable = true, updatable = true, unique = false, columnDefinition = "TEXT")
   private String materia;
 
-  @Column(name = "alias", nullable = true, insertable = true, updatable = true, unique = false, length = 100)
+  @Column(name = "alias", nullable = true, insertable = true, updatable = true, unique = true, length = 500)
   private String apelido;
 
   @Column(name = "post_instagram", nullable = true, insertable = true, updatable = true, unique = false, length = 2000)

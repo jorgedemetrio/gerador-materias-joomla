@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.CategoriaEntity;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.MateriaEntity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -67,6 +68,9 @@ public class MapaPerguntaEntity {
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "id_categoria", nullable = false, insertable = true, updatable = true, unique = false)
   private CategoriaEntity categoria;
+
+  @OneToMany(mappedBy = "peguntaPrincipal", cascade = CascadeType.ALL)
+  private List<MateriaEntity> materias;
 
   @Column(name = "data_sugestao_publicacao", nullable = true, insertable = true, updatable = true, unique = false)
   private LocalDate dataSugestaoPublicacao;

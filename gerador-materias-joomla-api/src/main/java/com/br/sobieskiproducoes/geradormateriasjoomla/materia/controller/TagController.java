@@ -3,8 +3,10 @@
  */
 package com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller;
 
+import static java.util.Objects.isNull;
+
 import java.util.List;
-import static java.util.Objects.*;
+import java.util.Map;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,6 +51,16 @@ public class TagController {
 
   private final TagService service;
 
+  @Operation(summary = "Recarrega as categorias no banco de dados tirando do Joomla")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "Processado com sucesso") })
+  @RequestMapping(method = RequestMethod.PATCH, path = "recarregar", produces = { MediaType.APPLICATION_JSON_VALUE })
+  @ResponseBody
+  public ResponseEntity<Map<String, Integer>> atualizar() {
+    log.info("Inicio de processamento de recarga de Categoriaso Joomla");
+    return ResponseEntity.ok(service.atualizarBancoTag());
+  }
+
   @Operation(summary = "Busca lisda de Tag filtrando por titulo.")
   @ApiResponses({ @ApiResponse(responseCode = "202", description = "Apagado com sucesso."),
       @ApiResponse(responseCode = "202", description = "Gravado com sucesso."),
@@ -77,6 +90,7 @@ public class TagController {
     return ResponseEntity.ok(service.buscarPorTitulo(titulo, pagina));
   }
 
+
   @Operation(summary = "Busca TAG por id.")
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "Retorna um item ", content = @Content(schema = @Schema(implementation = TagDTO.class))),
@@ -93,6 +107,9 @@ public class TagController {
   }
 
 
+
+
+
   @Operation(summary = "Apaga a Tag .")
   @ApiResponses({ @ApiResponse(responseCode = "202", description = "Apagado com sucesso."),
       @ApiResponse(responseCode = "404", description = "Registro não encontrado.") })
@@ -105,10 +122,6 @@ public class TagController {
     }
     return ResponseEntity.notFound().build();
   }
-
-
-
-
 
   @Operation(summary = "Grava de Tag nova.")
   @ApiResponses({
