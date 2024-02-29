@@ -4,7 +4,7 @@
 package com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto;
 
 import java.time.LocalDateTime;
-import java.util.Map;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -35,7 +35,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AtributosArtigoJoomlaDTO {
+public class AtributosArtigoJoomlaSalvarDTO {
 
   private Long id;
 
@@ -97,7 +97,7 @@ public class AtributosArtigoJoomlaDTO {
   private Integer featured;
 
   private String note;
-  private Map<String, String> tags;
+  private List<String> tags;
 
   @JsonSerialize(using = LocalDateTimeSerializer.class)
   @JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -111,7 +111,7 @@ public class AtributosArtigoJoomlaDTO {
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime featuredDown;
 
-  private String text;
+  private String fulltext;
 
   private RelationshipDTO relationships;
 

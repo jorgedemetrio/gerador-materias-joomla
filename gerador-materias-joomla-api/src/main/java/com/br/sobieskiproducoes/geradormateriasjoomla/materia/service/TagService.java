@@ -6,14 +6,17 @@ package com.br.sobieskiproducoes.geradormateriasjoomla.materia.service;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.MateriaConstants;
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoItemJoomlaResponse;
@@ -21,8 +24,6 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.Generico
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.TagJoomlaClient;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosTagJoomlaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.TagDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.exception.BusinessException;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.exception.ObjectoJaExiteNoBancoBusinessException;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.TagEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.TagRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.convert.TagConvert;
@@ -54,6 +55,56 @@ public class TagService {
     repository.delete(tagEntityOpt.get());
     log.info("Apagado a Tag ".concat(id.toString()));
     return Boolean.TRUE;
+  }
+
+  /**
+   *
+   * @return O univero de registros atualizados.
+   */
+  @Transactional
+  public Map<String, Integer> atualizarBancoTag() {
+    final List<TagEntity> itens = new ArrayList<>();
+    GenericoItemJoomlaResponse<List<GenericoJoomlaDataDTO<AtributosTagJoomlaDTO>>> consulta = null;
+    int offset = 0;
+    final Map<String, Integer> retorno = new HashMap<>();
+    TagEntity tagEntity = null;
+    Optional<TagEntity> tagEntityOpt = null;
+    // Busca as Categorias
+    do {
+      if (isNull(consulta)) {
+        // Primeira pagina
+        consulta = client.getTags();
+      } else {
+        // Faz a proxima busca, pegando o next page e removendo a URL
+        consulta = client.getTags(String.valueOf(offset * 20), "20");
+
+      }
+      offset++;
+      if (nonNull(consulta) && nonNull(consulta.getData()) && !consulta.getData().isEmpty()) {
+
+        for (final GenericoJoomlaDataDTO<AtributosTagJoomlaDTO> tag : consulta.getData()) {
+          tagEntityOpt = repository.buscarPorApelidoTitulo(tag.getAttributes().getAlias(),
+              tag.getAttributes().getTitle());
+          if (tagEntityOpt.isPresent()) {
+            tagEntity = tagEntityOpt.get();
+            convert.merge(tag.getAttributes(), tagEntity);
+          } else {
+            tagEntity = convert.convertJoomla(tag.getAttributes());
+          }
+          repository.save(tagEntity);
+          itens.add(tagEntity);
+        }
+
+      }
+
+    } while (nonNull(consulta) && nonNull(consulta.getLinks()) && nonNull(consulta.getLinks().getNext())
+        && nonNull(consulta.getData()) && !consulta.getLinks().getNext().isBlank());
+
+    retorno.put("total", itens.size());
+
+    log.info("Gravando lista de %d de Tags.".formatted(itens.size()));
+    retorno.put("processados", itens.size());
+    return retorno;
   }
 
   public TagDTO buscarPorId(final Long id) {
@@ -94,31 +145,6 @@ public class TagService {
     }
 
     return convert.convert(repository.save(tagEntity));
-  }
-
-  public GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosTagJoomlaDTO>> publicarMateriaJoomla(
-      final Long id, final LocalDateTime publicar) throws BusinessException {
-    log.info("Inicio de publicação de materia no Joomla ID".concat(id.toString()));
-
-
-
-    final TagEntity entity = repository.findById(id).get();
-
-    if(nonNull(entity.getIdJoomla())) {
-      throw BusinessException.build().classe(ObjectoJaExiteNoBancoBusinessException.class)
-          .mensagem("Erro ao tentar acessar ").builder();
-    }
-
-    if (nonNull(publicar)) {
-      entity.getMaterias().forEach(n -> n.setPublicar(publicar));
-    }
-
-
-
-    final AtributosTagJoomlaDTO item = convert.convertJoomla(entity);
-
-
-    return client.gravarTag(item);
   }
 
 }

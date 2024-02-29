@@ -60,9 +60,18 @@ feign:
         loggerLevel: FULL
 
 
+http:
+  client:
+    max-body-size: 20MB
 
+server:
+  tomcat:
+    max-http-post-size: 20MB
 
 spring:
+  servlet:
+    multipart:
+      max-file-size: 20MB
   cloud:
     discovery:
       client:
@@ -102,13 +111,17 @@ spring:
 
 
 configuracao:
+  batch:
+    gerar-materia: 
+      delay: 3000000
   joomla:
     url: https://www.teste.com.br/api/index.php/v1
     bearer: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
   chatgpt:
     url: https://api.openai.com/v1/chat/completions
     bearer: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-    model: gpt-4
+    model: gpt-4-turbo-preview 
+    ## gpt-4
     temperature: 0.7
     max-tokens: 500
     role-system: system
@@ -116,6 +129,7 @@ configuracao:
     role-assistant: assistant
   carga-dados-imagens:
     imagens:
+      constante: "#joomlaImage://local-images"
       pasta-imagem-materias: c:\temp\materias\
       tamanho-horizontal: 985
       tamanho-vertical-minimo: 515

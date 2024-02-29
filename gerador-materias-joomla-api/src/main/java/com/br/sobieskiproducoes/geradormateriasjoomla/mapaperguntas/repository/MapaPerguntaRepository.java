@@ -17,5 +17,5 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.model.MapaPe
  */
 public interface MapaPerguntaRepository extends JpaRepository<MapaPerguntaEntity, Long> {
 
-  List<MapaPerguntaEntity> findByUuid(@Param("uuid") String uuid);
+  List<MapaPerguntaEntity> findByUuidOrderByMaterias(@Param("uuid") String uuid);
 }

@@ -18,7 +18,8 @@ import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.controller.dto.HorarioRequisiscaoDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.controller.dto.RequisicaoCaragMassaDTO;
@@ -37,6 +38,7 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.GerarMater
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.MateriaJoomlaService;
 import com.br.sobieskiproducoes.geradormateriasjoomla.utils.SugerirMateriaUtils;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
@@ -59,12 +61,15 @@ public class CargaProcessoMateriaService {
 
   private Boolean erroInterno = false;
 
+  private final PlatformTransactionManager transactionManager;
+
+
   /**
    * @param uuid
    * @return
    */
   private List<MapaPerguntaDTO> extrairMapPerguntas(final String uuid) {
-    return mapaPerguntaRepository.findByUuid(uuid).stream().map(mapaPerguntaEntity -> {
+    return mapaPerguntaRepository.findByUuidOrderByMaterias(uuid).stream().map(mapaPerguntaEntity -> {
       final MapaPerguntaDTO mapaPerguntaDTO = perguntasConvert.toMapaPerguntaDTO(mapaPerguntaEntity);
       mapaPerguntaDTO.setPerguntasAlternativas(new ArrayList<>());
       mapaPerguntaDTO.setTermos(new ArrayList<>());
@@ -157,19 +162,21 @@ public class CargaProcessoMateriaService {
       try {
         final List<String> perguntas = perguntas(mapaPerguntaDTO);
 
-        List<PropostaMateriaDTO> maerias = null;
+        List<PropostaMateriaDTO> materias = null;
 
         final Optional<MateriaEntity> materia = repository.buscarPorPergunta(mapaPerguntaDTO.getId());
 
         if (materia.isPresent()) {
           processarMateriaNoJoomla(data, materia.get());
         } else {
-          maerias = gerarMateriaService.gerarSugestaoMateria(
+          materias = gerarMateriaService.gerarSugestaoMateria(
               new SugerirMateriaDTO(perguntas.stream().collect(Collectors.joining(", ")), mapaPerguntaDTO.getTermos(),
                   data, mapaPerguntaDTO.getCategoria().getId(), request.getIdeias().getAudiencias()),
               uuid, mapaPerguntaDTO.getId());
-          if (request.getPublicar()) {
-            for (final PropostaMateriaDTO propostaMateriaDTO : maerias) {
+          if (materias.isEmpty()) {
+            erroInterno = true;
+          } else if (request.getPublicar()) {
+            for (final PropostaMateriaDTO propostaMateriaDTO : materias) {
               final Optional<MateriaEntity> materiaEntity = repository.findById(propostaMateriaDTO.getId());
               if (materiaEntity.isPresent()) {
                 processarMateriaNoJoomla(data, materiaEntity.get());
@@ -182,6 +189,7 @@ public class CargaProcessoMateriaService {
         itens.remove(mapaPerguntaDTO);
       } catch (final Exception ex) {
         log.log(Level.SEVERE, "Erro o gravar a materia e publicar.", ex);
+        erroInterno = true;
       }
     }
   }
@@ -205,6 +213,11 @@ public class CargaProcessoMateriaService {
     }
     if (isNull(materiaJoomlaService.publicarMateriaJoomla(materiaEntity, data))) {
       erroInterno = true;
+    }
+    else {
+      final DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+      def.setPropagationBehavior(DefaultTransactionDefinition.PROPAGATION_REQUIRES_NEW);
+      transactionManager.commit(transactionManager.getTransaction(def));
     }
 
   }

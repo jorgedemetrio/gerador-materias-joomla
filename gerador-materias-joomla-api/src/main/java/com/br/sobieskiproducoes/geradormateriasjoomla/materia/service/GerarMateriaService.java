@@ -4,6 +4,7 @@
 package com.br.sobieskiproducoes.geradormateriasjoomla.materia.service;
 
 import static com.br.sobieskiproducoes.geradormateriasjoomla.utils.SugerirMateriaUtils.limparTexto;
+import static com.br.sobieskiproducoes.geradormateriasjoomla.utils.SugerirMateriaUtils.limparTextoJson;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -71,7 +72,7 @@ public class GerarMateriaService {
   private PropostaMateriaDTO convetToPropostaMateriaDTO(final ChoicesDTO choice) {
 
     try {
-      final String content = limparTexto(choice.getMessage().getContent());
+      final String content = limparTextoJson(choice.getMessage().getContent());
       return objectMapper.readValue(content, PropostaMateriaDTO.class);
     } catch (final Exception e) {
       log.log(Level.SEVERE, "Erro ao converter objeto de retorno do ChatGPT: ".concat(e.getMessage())
@@ -140,8 +141,8 @@ public class GerarMateriaService {
       PropostaMateriaDTO itemSalvar;
       for (final PropostaMateriaDTO item : propostasSemMateria) {
         for (final ChoicesDTO choice : materiaRetornoGPT.getChoices()) {
-          if ((nonNull(choice.getMessage()) && nonNull(choice.getMessage().getContent())
-              && !choice.getMessage().getContent().isBlank())
+          if (nonNull(choice.getMessage()) && nonNull(choice.getMessage().getContent())
+              && !choice.getMessage().getContent().isBlank()
               && nonNull(itemSalvar = convert.copy(item, uuid, limparTexto(choice.getMessage().getContent())))) {
             propostasRetorno.add(this.salvarPropostaMateria(itemSalvar, request, idMapaProcessamento));
           }
@@ -164,16 +165,16 @@ public class GerarMateriaService {
       materia.getFaqs().forEach(n -> n.setUuid(in.getUuid()));
       // Verifica se a Tags já existe, se não da um uuid da sua crição.
       materia.setTags(materia.getTags().stream().map(n -> {
-        final List<TagEntity> entities = tagRepository.findByTitulo(n.getTitulo().trim());
-        if (entities.size() > 0) {
-          return entities.get(0);
+        final Optional<TagEntity> entities = tagRepository.buscarPorApelidoTitulo(n.getApelido(), n.getTitulo());
+        if (entities.isPresent()) {
+          return entities.get();
         }
         n.setUuid(in.getUuid());
         return n;
       }).collect(Collectors.toList()));
 
       if (nonNull(request.getCategoria())) {
-        final Optional<CategoriaEntity> categoria = categoriaRepository.findByIdJoomla(request.getCategoria());
+        final Optional<CategoriaEntity> categoria = categoriaRepository.findById(request.getCategoria());
         if (categoria.isPresent()) {
           materia.setCategoria(categoria.get());
         }

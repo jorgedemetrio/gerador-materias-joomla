@@ -19,7 +19,7 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.model.CargaMa
 @Repository
 public interface CargaMassaRepository extends JpaRepository<CargaMassaEntity, Long> {
 
-  @Query(name = "CargaMassaRepository.pegarCarga", value = "SELECT c FROM CargaMassaEntity AS c WHERE c.status = StatusCargaEnum.PROCESSAR ")
+  @Query(name = "CargaMassaRepository.pegarCarga", value = "SELECT c FROM CargaMassaEntity AS c WHERE c.status != StatusProcessamentoEnum.PROCESSADO ")
   List<CargaMassaEntity> pegarCarga();
 
 }

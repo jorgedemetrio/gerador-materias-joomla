@@ -25,9 +25,31 @@ public interface TagConvert {
   @Mapping(target = "id", ignore = true)
   TagEntity convert(TagDTO tag);
 
+  @Mapping(target = "id", source = "id")
+  @Mapping(target = "idJoomla", source = "idJoomla")
+  @Mapping(target = "titulo", source = "titulo")
+  @Mapping(target = "apelido", source = "apelido")
   TagDTO convert(TagEntity tag);
 
+  @Mapping(target = "idJoomla", source = "id")
+  @Mapping(target = "titulo", source = "title")
+  @Mapping(target = "apelido", source = "alias")
+  @Mapping(target = "id", ignore = true)
+  @Mapping(target = "uuid", ignore = true)
+  @Mapping(target = "materias", ignore = true)
+  TagEntity convertJoomla(AtributosTagJoomlaDTO tag);
+
+  @Mapping(target = "id", source = "idJoomla")
+  @Mapping(target = "title", source = "titulo")
+  @Mapping(target = "alias", source = "apelido")
   AtributosTagJoomlaDTO convertJoomla(TagEntity tag);
+
+  @Mapping(target = "materias", ignore = true)
+  @Mapping(target = "id", ignore = true)
+  @Mapping(target = "apelido", source = "alias", conditionExpression = "java(Objects.nonNull(tag.getAlias()) && !tag.getAlias().isBlank())")
+  @Mapping(target = "titulo", source = "title", conditionExpression = "java(Objects.nonNull(tag.getTitle()) && !tag.getTitle().isBlank())")
+  @Mapping(target = "idJoomla", source = "id ", conditionExpression = "java(Objects.nonNull(tag.getId()) && tag.getId() > 0L )")
+  void merge(AtributosTagJoomlaDTO tag, @MappingTarget TagEntity src);
 
   @Mapping(target = "materias", ignore = true)
   @Mapping(target = "id", ignore = true)
@@ -35,5 +57,4 @@ public interface TagConvert {
   @Mapping(target = "titulo", source = "titulo", conditionExpression = "java(Objects.nonNull(tag.getTitulo()) && !tag.getTitulo().isBlank())")
   @Mapping(target = "idJoomla", source = "idJoomla ", conditionExpression = "java(Objects.nonNull(tag.getIdJoomla()) && tag.getIdJoomla() > 0L )")
   void merge(TagDTO tag, @MappingTarget TagEntity src);
-
 }

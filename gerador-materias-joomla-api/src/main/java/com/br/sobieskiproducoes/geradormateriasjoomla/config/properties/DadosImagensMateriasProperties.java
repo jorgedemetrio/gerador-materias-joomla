@@ -51,6 +51,9 @@ public class DadosImagensMateriasProperties {
   @DecimalMax("1.0")
   private Double qualidade;
 
+  private String constante;
+  private String url;
+
   @JsonProperty(value = "instagram", defaultValue = "true", required = false)
   private Boolean instagram = Boolean.TRUE;
 }

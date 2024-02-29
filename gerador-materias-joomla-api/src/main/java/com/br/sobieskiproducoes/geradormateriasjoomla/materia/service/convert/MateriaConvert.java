@@ -14,7 +14,7 @@ import org.mapstruct.Mapping;
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.response.ChoicesDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.response.RepostaResponseDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.model.LogDialogoChatGPTEntity;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosArtigoJoomlaDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosArtigoJoomlaSalvarDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.FaqDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.PropostaMateriaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.FAQEntity;
@@ -72,6 +72,7 @@ public interface MateriaConvert {
 
   @Mapping(target = "tags", ignore = true)
   @Mapping(target = "id", ignore = true)
+  @Mapping(target = "images", ignore = true)
   @Mapping(target = "metadesc", source = "metaDescricao")
   @Mapping(target = "metakey", source = "keywords")
   @Mapping(target = "title", expression = "java((Objects.isNull(materia.getTituloSelecionado()) || materia.getTituloSelecionado() == 1? "
@@ -81,15 +82,15 @@ public interface MateriaConvert {
   @Mapping(target = "featured", expression = "java(1)")
   @Mapping(target = "state", expression = "java(1)")
   @Mapping(target = "access", expression = "java(1)")
-  @Mapping(target = "text", source = "materia")
+  @Mapping(target = "fulltext", source = "materia")
   @Mapping(target = "typeAlias", expression = "java(\"com_content.article\")")
   @Mapping(target = "alias", source = "apelido")
   @Mapping(target = "version", expression = "java(9)")
   @Mapping(target = "language", expression = "java(\"*\")")
-  @Mapping(target = "relationships.category.data.type", expression = "java(\"categories\")")
-  @Mapping(target = "relationships.category.data.id", source = "categoria.idJoomla")
-  @Mapping(target = "intro", source = "primeiroParagrafo")
-  AtributosArtigoJoomlaDTO convertJoomla(MateriaEntity materia);
+  @Mapping(target = "relationships", ignore = true)
+  @Mapping(target = "catid", source = "categoria.idJoomla")
+  @Mapping(target = "introtext", source = "primeiroParagrafo")
+  AtributosArtigoJoomlaSalvarDTO convertJoomla(MateriaEntity materia);
 
   @Mapping(target = "materia", source = "content")
   @Mapping(target = "uuid", source = "uuid")

@@ -6,17 +6,16 @@ package com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer;
 import java.util.List;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.FeignJoomlaConfig;
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoItemJoomlaResponse;
-import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoJoomlaDataDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosArtigoJoomlaDTO;
+
 import feign.Headers;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 /**
  * @author Jorge Demetrio
@@ -27,18 +26,16 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 @Headers({ "Authorization: Bearer ${configuracao.joomla.bearer}" })
 public interface ArtigoJoomlaClient {
 
-  @GetMapping(path = "/content/articles")
+  @GetMapping(path = "/content/articles", consumes = { MediaType.APPLICATION_JSON_VALUE })
   GenericoItemJoomlaResponse<List<AtributosArtigoJoomlaDTO>> get();
 
-  @GetMapping("/content/articles?{url}")
+  @GetMapping(path = "/content/articles?{url}", consumes = { MediaType.APPLICATION_JSON_VALUE })
   GenericoItemJoomlaResponse<List<AtributosArtigoJoomlaDTO>> get(@PathVariable("url") String url);
 
-  @GetMapping("/content/articles")
+  @GetMapping(path = "/content/articles", consumes = { MediaType.APPLICATION_JSON_VALUE })
   GenericoItemJoomlaResponse<List<AtributosArtigoJoomlaDTO>> get(@RequestParam("page[offset]") String offset,
       @RequestParam("page[limit]") String limit);
 
-  @PostMapping("/content/articles")
-  GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosArtigoJoomlaDTO>> gravar(
-      @RequestBody AtributosArtigoJoomlaDTO artigo);
+
 
 }

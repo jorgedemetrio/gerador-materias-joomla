@@ -30,6 +30,8 @@ public class SugerirMateriaUtils {
   public static final Pattern ENTER = Pattern.compile("\\n");
   public static final Pattern ASPAS_DUPLAS = Pattern.compile("\\\"");
   public static final Pattern ASPAS_SIMPLES = Pattern.compile("\\'");
+  public static final Pattern ASPAS_HTML_INICIO = Pattern.compile("```html");
+  public static final Pattern ASPAS_HTML = Pattern.compile("```");
 
   public static final Pattern HORA_SIMPLES = Pattern.compile("[0-9]{2}:[0-9]{2}");
   public static final Pattern HORA_COM_SEGUNDO = Pattern.compile("[0-9]{2}:[0-9]{2}::[0-9]{2}");
@@ -53,12 +55,40 @@ public class SugerirMateriaUtils {
     if (isNull(in) || in.isBlank()) {
       return null;
     }
-    return StreamUtils.copyToString(new ByteArrayInputStream(ENTER.matcher(// REMOVE O ENTER FALSO
+
+    return StreamUtils.copyToString(new ByteArrayInputStream(
+
+        ASPAS_HTML_INICIO.matcher(ASPAS_HTML.matcher(ENTER
+            .matcher(// REMOVE
+                                                                                                                        // O
+                                                                                                                        // ENTER
+                                                                                                                        // FALSO
         ASPAS_DUPLAS.matcher(// REMOVE AS ASPAS FALSAS
             ASPAS_SIMPLES.matcher( // REMOVE AS ASPAS FALSAS
                 in).replaceAll("'"))
             .replaceAll("\""))
-        .replaceAll("\n").getBytes()), StandardCharsets.UTF_8);
+        .replaceAll("\n")).replaceAll("")).replaceAll("").getBytes()), StandardCharsets.UTF_8);
+
+  }
+
+  public static String limparTextoJson(final String in) throws IOException {
+    if (isNull(in) || in.isBlank()) {
+      return null;
+    }
+    final String retorno = limparTexto(in);
+
+    int indexColchete = retorno.indexOf("[");
+    int indexChaves = retorno.indexOf("{");
+
+    final boolean comecaChaves = indexChaves < indexColchete && indexChaves >= 0;
+
+    final int primeiraPosicao = comecaChaves ? indexChaves : indexColchete;
+
+    indexColchete = retorno.lastIndexOf("]");
+    indexChaves = retorno.lastIndexOf("}");
+
+    final int fimPosicao = (indexColchete > indexChaves ? indexColchete : indexChaves) + 1;
+    return retorno.substring(primeiraPosicao, fimPosicao).trim();
 
   }
 
@@ -70,13 +100,16 @@ public class SugerirMateriaUtils {
   }
 
   public static String pathCategoria(final CategoriaEntity categoria) throws IOException {
-  return "/"
-      .concat(nonNull(categoria.getApelido()) || !categoria.getApelido().isBlank() ? categoria.getApelido()
-          : limparTexto(categoria.getTitulo()))
-      .concat(nonNull(categoria.getPai()) ? pathCategoria(categoria.getPai()) : "");
-}
+    return (nonNull(categoria.getPai()) ? pathCategoria(categoria.getPai()) : "")
+        .concat(categoria.getUsarEmPrompts()
+            ? "/".concat(nonNull(categoria.getApelido()) || !categoria.getApelido().isBlank() ? categoria.getApelido()
+                : limparTexto(categoria.getTitulo()))
+            : "");
+  }
+
   /**
    * Não permite a criação de uma instância nova.
    */
-  private SugerirMateriaUtils() {}
+  private SugerirMateriaUtils() {
+  }
 }
