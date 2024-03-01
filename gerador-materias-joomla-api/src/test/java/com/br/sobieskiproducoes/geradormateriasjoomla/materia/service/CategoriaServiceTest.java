@@ -52,7 +52,7 @@ class CategoriaServiceTest {
   CategoriaJoomlaClient categoriaJoomlaClient;
 
   @Spy
-  JoomlaConfigurationProperties properties = new JoomlaConfigurationProperties("url", "bearer");
+  JoomlaConfigurationProperties properties = new JoomlaConfigurationProperties("url", "bearer", "idioma");
 
   @Spy
   CategoriaConvert convert = new CategoriaConvertImpl();
@@ -67,31 +67,31 @@ class CategoriaServiceTest {
 
     when(categoriaJoomlaClient.getCategorias()).thenReturn(new GenericoItemJoomlaResponse<>(Arrays.asList(
         new GenericoJoomlaDataDTO<>("type", "1",
-            new AtributosCategoriaJoomlaDTO(1l, "title", "alias", "note", 1, 1, "checkedOut", "checkedOutTime", 1L,
+            new AtributosCategoriaJoomlaDTO(1L, "title", "alias", "note", 1, 1, "checkedOut", "checkedOutTime", 1L,
                 null, 1, 1, 1, "language", "description", "languageTitle", "languageImage", "editor", "access_level",
                 "authorName", 1, 1, 1, 1)),
         new GenericoJoomlaDataDTO<>("type", "2",
-            new AtributosCategoriaJoomlaDTO(2l, "title", "alias", "note", 1, 1, "checkedOut", "checkedOutTime", 1L, 1L,
+            new AtributosCategoriaJoomlaDTO(2L, "title", "alias", "note", 1, 1, "checkedOut", "checkedOutTime", 1L, 1L,
                 1, 1, 1, "language", "description", "languageTitle", "languageImage", "editor", "access_level",
                 "authorName", 1, 1, 1, 1)),
         new GenericoJoomlaDataDTO<>("type", "2",
-            new AtributosCategoriaJoomlaDTO(5l, "title", "alias", "note", 0, 1, "checkedOut", "checkedOutTime", 1L, 1L,
+            new AtributosCategoriaJoomlaDTO(5L, "title", "alias", "note", 0, 1, "checkedOut", "checkedOutTime", 1L, 1L,
                 1, 1, 1, "language", "description", "languageTitle", "languageImage", "editor", "access_level",
                 "authorName", 1, 1, 1, 1))
 
-    ), new LinkResponse("self", "url/next", "last", "first", "previous"), new MetaResponse(0l)));
+    ), new LinkResponse("self", "url/next", "last", "first", "previous"), new MetaResponse(0L)));
 
     when(categoriaJoomlaClient.getCategorias(anyString(), anyString())).thenReturn(new GenericoItemJoomlaResponse<>(Arrays.asList(
         new GenericoJoomlaDataDTO<>("type", "3",
-            new AtributosCategoriaJoomlaDTO(3l, "title", "alias", "note", 1, 1, "checkedOut", "checkedOutTime", 1L, 1L,
+            new AtributosCategoriaJoomlaDTO(3L, "title", "alias", "note", 1, 1, "checkedOut", "checkedOutTime", 1L, 1L,
                 1, 1, 1, "language", "description", "languageTitle", "languageImage", "editor", "access_level",
                 "authorName", 1, 1, 1, 1)),
         new GenericoJoomlaDataDTO<>("type", "4",
-            new AtributosCategoriaJoomlaDTO(4l, "title", "alias", "note", 1, 1, "checkedOut", "checkedOutTime", 1L, 1L,
+            new AtributosCategoriaJoomlaDTO(4L, "title", "alias", "note", 1, 1, "checkedOut", "checkedOutTime", 1L, 1L,
                 1, 1, 1, "language", "description", "languageTitle", "languageImage", "editor", "access_level",
                 "authorName", 1, 1, 1, 1))
 
-    ), new LinkResponse("self", null, "last", "first", "previous"), new MetaResponse(0l)));
+    ), new LinkResponse("self", null, "last", "first", "previous"), new MetaResponse(0L)));
 
     when(categoriaRepository.findByIdJoomla(anyLong())).thenReturn(Optional.empty(), Optional.empty(),
         Optional.of(new CategoriaEntity()), Optional.empty());

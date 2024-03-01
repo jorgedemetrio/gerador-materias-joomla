@@ -11,7 +11,8 @@ import java.time.format.DateTimeFormatter;
  * @version 1.0.0
  */
 public class MateriaConstants {
-  public static Integer MAX_INTENS_PER_PAGE = 30;
-  public static DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-  public static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+  public static final Integer MAX_INTENS_PER_PAGE = 30;
+  public static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+  public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+  public static final String SEM_IDIOMA = "*";
 }
