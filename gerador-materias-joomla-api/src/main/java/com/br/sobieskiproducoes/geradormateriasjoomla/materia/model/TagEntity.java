@@ -50,6 +50,8 @@ public class TagEntity {
   @Column(name = "alias", nullable = true, insertable = true, updatable = false, unique = true, length = 500)
   private String apelido;
 
+  @Column(name = "idioma", nullable = true, insertable = true, updatable = false, unique = true, length = 500)
+  private String language;
 
   @ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "tags")
   private List<MateriaEntity> materias;

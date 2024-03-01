@@ -114,9 +114,12 @@ configuracao:
   batch:
     gerar-materia: 
       delay: 3000000
+  youtube:
+    url: "https://www.googleapis.com/youtube/v3"
   joomla:
     url: https://www.teste.com.br/api/index.php/v1
     bearer: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    idioma: "*"
   chatgpt:
     url: https://api.openai.com/v1/chat/completions
     bearer: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -150,6 +153,8 @@ configuracao:
       transparencia: 0.7
       tamanho-horizontal: 100
       qualidade: 0.9 
+
+
     
 chatgpt:
   audiencias: 
@@ -174,6 +179,8 @@ Entendento que uma matéria deve seguir os seguintes requisitos: \n
  - Deve ter roteiro: um roteiro de 1:30 minutos no máximo sobre a matéria para reels do instagram, somente com falas, deve ser bem humorado e com foco de ser viral.\n
  - Deve ter post-instagram, que é a descrição do poste no facebook e instagram com 1500 caracateres mais ou menos usando Marketing Social, emojis e Hashtags.\n
 Agora gere esses dados para uma matéria sobre : \n%s \n"
+
+
     pedir-materia: "Vamos escrever agora o texto da matéria. Você é um profissional com muito conhecimento em Marketing de Conteúdo. Use o máximo de conhecimento e estratégias .\n
 Com especialidade técnica em : %s .\n 
 Entendento que uma matéria deve seguir os requisitos: \n
@@ -200,7 +207,7 @@ E matéria deve falar sobre :\n
 
 
     pedir-perguntas: " Se torne um profissional com muito conhecimento em Marketing Digital.\n
-Faça uma mapa mental de perguntas para usar como possíveis direcionamentos de matérias, para isso trabalhe em possíveis buscas de usuários hoje na internet em site como Google, baseado nos critérios.\n
+Faça uma mapa mental de perguntas em português para usar como possíveis direcionamentos de matérias, para isso trabalhe em possíveis buscas de usuários hoje na internet em site como Google, baseado nos critérios.\n
 \n
  - Site que se destinam as perguntas : %s \n
  - Categorias que vamos trabalhar: [%s]\n 
@@ -222,4 +229,6 @@ Faça uma mapa mental de perguntas para usar como possíveis direcionamentos de 
  - O campo \"termos\" é uma array com no minimo 2 itens de termos de SEO sugeridos para essa titulo, dando preferência: termos técnicos, expressões linguisticas, jargões do assunto .\n
  - Retornar uma array de JSon com a quantidade mínima de perguntas: %d .\n
  - Pode combinar com feriados, ou datas festivas, ou informações relevantes do mês de %s, tendencias o mês.\n
+ ${chatgpt.prompts.pedir-perguntas-detalhe}\n
+ \n
  Usando os termos: %s \n"

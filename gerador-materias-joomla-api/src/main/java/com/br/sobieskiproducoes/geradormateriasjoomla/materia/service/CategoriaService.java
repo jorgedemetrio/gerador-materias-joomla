@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.MateriaConstants;
+import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ConfiguracoesProperties;
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoItemJoomlaResponse;
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoJoomlaDataDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.dto.RetornoBusinessDTO;
@@ -46,6 +47,7 @@ public class CategoriaService {
   private final CategoriaRepository categoriaRepository;
   private final CategoriaJoomlaClient categoriaJoomlaClient;
   private final CategoriaConvert convert;
+  private final ConfiguracoesProperties properties;
 
   /**
    *
@@ -70,7 +72,11 @@ public class CategoriaService {
       offset++;
       if (nonNull(consulta) && nonNull(consulta.getData())) {
         itens.addAll(consulta.getData().stream()
-            .filter(c -> nonNull(c.getAttributes().getPublished()) && c.getAttributes().getPublished().intValue() > 0)
+            .filter(c -> nonNull(c.getAttributes().getPublished()) && c.getAttributes().getPublished().intValue() > 0
+            // Só importa a categoria que pertence ao Idioma permitido.
+                && (isNull(c.getAttributes())
+                    || c.getAttributes().getLanguage().equals(properties.getJoomla().getIdioma())
+                    || MateriaConstants.SEM_IDIOMA.equals(c.getAttributes().getLanguage())))
             .map(convert::convert).collect(Collectors.toList()));
 
       }
@@ -79,7 +85,7 @@ public class CategoriaService {
         && nonNull(consulta.getData()) && !consulta.getLinks().getNext().isBlank());
     retorno.put("total", itens.size());
     // Ordena pelo Id do Joomla
-    itens.sort((o1, o2) -> (int) ((o1.getIdJoomla().longValue() - o2.getIdJoomla().longValue())));
+    itens.sort((o1, o2) -> (int) (o1.getIdJoomla().longValue() - o2.getIdJoomla().longValue()));
 
     // Pega todos as categorias principais.
     List<CategoriaEntity> itensSalvar = itens.stream()
