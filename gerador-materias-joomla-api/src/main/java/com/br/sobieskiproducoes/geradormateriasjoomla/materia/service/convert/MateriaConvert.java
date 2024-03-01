@@ -86,7 +86,6 @@ public interface MateriaConvert {
   @Mapping(target = "typeAlias", expression = "java(\"com_content.article\")")
   @Mapping(target = "alias", source = "apelido")
   @Mapping(target = "version", expression = "java(9)")
-  @Mapping(target = "language", expression = "java(\"*\")")
   @Mapping(target = "relationships", ignore = true)
   @Mapping(target = "catid", source = "categoria.idJoomla")
   @Mapping(target = "introtext", source = "primeiroParagrafo")

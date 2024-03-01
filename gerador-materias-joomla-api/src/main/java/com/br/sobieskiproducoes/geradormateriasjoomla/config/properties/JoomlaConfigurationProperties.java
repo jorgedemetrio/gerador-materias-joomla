@@ -33,4 +33,6 @@ public class JoomlaConfigurationProperties {
   @NotBlank
   private String bearer;
 
+  private String idioma;
+
 }

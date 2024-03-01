@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.MateriaConstants;
+import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ConfiguracoesProperties;
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoItemJoomlaResponse;
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoJoomlaDataDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.TagJoomlaClient;
@@ -46,6 +48,7 @@ public class TagService {
   private final TagRepository repository;
   private final TagConvert convert;
   private final TagJoomlaClient client;
+  private final ConfiguracoesProperties properties;
 
   public Boolean apagar(@NotNull final Long id) {
     final Optional<TagEntity> tagEntityOpt = repository.findById(id);
@@ -83,16 +86,26 @@ public class TagService {
       if (nonNull(consulta) && nonNull(consulta.getData()) && !consulta.getData().isEmpty()) {
 
         for (final GenericoJoomlaDataDTO<AtributosTagJoomlaDTO> tag : consulta.getData()) {
-          tagEntityOpt = repository.buscarPorApelidoTitulo(tag.getAttributes().getAlias(),
-              tag.getAttributes().getTitle());
-          if (tagEntityOpt.isPresent()) {
-            tagEntity = tagEntityOpt.get();
-            convert.merge(tag.getAttributes(), tagEntity);
-          } else {
-            tagEntity = convert.convertJoomla(tag.getAttributes());
+          // Só salva Tag no banco que pertence ao idioma padrão do site.
+          if (isNull(tag.getAttributes())
+              || tag.getAttributes().getLanguage().equals(properties.getJoomla().getIdioma())
+              || MateriaConstants.SEM_IDIOMA.equals(tag.getAttributes().getLanguage())) {
+            tagEntityOpt = repository.buscarPorApelidoTitulo(tag.getAttributes().getAlias(),
+                tag.getAttributes().getTitle());
+            if (tagEntityOpt.isPresent()) {
+              tagEntity = tagEntityOpt.get();
+              convert.merge(tag.getAttributes(), tagEntity);
+            } else {
+              tagEntity = convert.convertJoomla(tag.getAttributes());
+            }
+
+            try {
+              repository.save(tagEntity);
+            } catch (final Exception ex) {
+              log.log(Level.SEVERE, ex.getLocalizedMessage(), ex.getCause());
+            }
+            itens.add(tagEntity);
           }
-          repository.save(tagEntity);
-          itens.add(tagEntity);
         }
 
       }

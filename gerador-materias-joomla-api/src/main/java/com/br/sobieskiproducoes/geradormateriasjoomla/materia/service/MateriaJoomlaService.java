@@ -7,10 +7,12 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ConfiguracoesProperties;
@@ -43,7 +45,9 @@ import lombok.extern.java.Log;
 @Service
 public class MateriaJoomlaService {
 
+  private static final DateTimeFormatter DATTE_TIME_FORMATTER_ALIAS =  DateTimeFormatter.ofPattern("yyyy-MM-dd-");
   private final MateriaRepository materiaRepository;
+
   private final TagRepository tagRepository;
 
   private final MateriaConvert convert;
@@ -71,19 +75,24 @@ public class MateriaJoomlaService {
       }
       if (nonNull(publicar)) {
         entity.setPublicar(publicar);
+        entity.setApelido(publicar.format(DATTE_TIME_FORMATTER_ALIAS) + entity.getApelido());
         materiaRepository.save(entity);
       }
 
       final AtributosArtigoJoomlaSalvarDTO item = convert.convertJoomla(entity);
       item.setTags(new ArrayList<>());
+      item.setLanguage(properties.getJoomla().getIdioma());
 
       // Mapeando Tags
 
       entity.getTags().forEach(n -> {
         if (isNull(n.getIdJoomla())) {
           final AtributosTagJoomlaDTO tag = new AtributosTagJoomlaDTO();
-          tag.setAlias(nonNull(n.getApelido()) && !n.getApelido().isBlank() ? n.getApelido()
+          final String alias = (nonNull(publicar) ? publicar.format(DATTE_TIME_FORMATTER_ALIAS) : "")
+              + (nonNull(n.getApelido()) && !n.getApelido().isBlank() ? n.getApelido()
               : SugerirMateriaUtils.normalizeText(n.getTitulo()));
+
+          tag.setAlias(alias);
           tag.setTitle(n.getTitulo());
           tag.setPublished(1L);
           tag.setAccess(1L);
@@ -91,17 +100,19 @@ public class MateriaJoomlaService {
           tag.setPath(tag.getAlias());
           tag.setAccessTitle("Public");
           tag.setParentId(1L);
-          tag.setLanguage("*");
-
-
+          tag.setLanguage(properties.getJoomla().getIdioma());
           try {
             final GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosTagJoomlaDTO>> retornoTag = consumerService
                 .gravarTag(tag);
             n.setIdJoomla(retornoTag.getData().getAttributes().getId());
             n.setApelido(tag.getAlias());
             tagRepository.save(n);
-          }
-          catch(final RestClientException ex) {
+          } catch (final HttpClientErrorException ex) {
+            log.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+//            if (!ex.getLocalizedMessage().contains("same alias")) {
+//
+//            }
+          } catch (final RestClientException ex) {
             log.log(Level.SEVERE, ex.getMessage(), ex);
           }
         }
@@ -136,10 +147,20 @@ public class MateriaJoomlaService {
       item.getImages().setImageFulltextAlt(entity.getTitulo3());
       item.getImages().setImageFulltext(nomeArquivoCompleto);
       item.getImages().setImageIntro(nomeArquivoCompleto);
+      try {
+        artigo = consumerService.gravarArtigo(item);
+        // org.springframework.web.client.HttpClientErrorException$BadRequest: 400 Bad
+        // Request: "{"errors":[{"title":"Save failed with the following error: Another
+        // Article in this category has the same alias.","code":400}]}"
 
-      artigo = consumerService.gravarArtigo(item);
-      entity.setIdJoomla(artigo.getData().getAttributes().getId());
-      entity.setStatus(StatusProcessamentoEnum.PROCESSADO);
+        entity.setIdJoomla(artigo.getData().getAttributes().getId());
+        entity.setStatus(StatusProcessamentoEnum.PROCESSADO);
+      } catch (final HttpClientErrorException ex) {
+        log.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+        if (!ex.getLocalizedMessage().contains("same alias")) {
+          entity.setStatus(StatusProcessamentoEnum.ERRO);
+        }
+      }
 
     } catch (final Exception ex) {
       log.log(Level.SEVERE, ex.getMessage(), ex);
