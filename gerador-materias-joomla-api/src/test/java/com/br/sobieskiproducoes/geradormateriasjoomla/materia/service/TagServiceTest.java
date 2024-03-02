@@ -3,10 +3,12 @@
  */
 package com.br.sobieskiproducoes.geradormateriasjoomla.materia.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -19,6 +21,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -132,6 +135,44 @@ class TagServiceTest {
     assertEquals(id, capIdLong.getValue());
     assertEquals(id, capTagEntity.getValue().getId());
     assertEquals(titulo, capTagEntity.getValue().getTitulo());
+  }
+  
+  @Test
+  void testGravar() throws Exception {
+
+      // Preparação
+      final Long id = 10L;
+      final String titulo = "Titulo Atualizado";
+      final TagDTO tagDTO = new TagDTO(id, null, titulo, null);
+      final Optional<TagEntity> tagEntityOpt = Optional.of(new TagEntity());
+      Mockito.when(repository.findById(anyLong())).thenReturn(tagEntityOpt);
+      final TagService service = new TagService(repository, convert, null, null);
+
+      // Ação
+      final TagDTO tagDTOGravada = service.gravar(tagDTO);
+
+      // Verificação
+      assertThat(tagDTOGravada.getId()).isEqualTo(id);
+      assertThat(tagDTOGravada.getTitulo()).isEqualTo(titulo);
+      Mockito.verify(repository).save(any(TagEntity.class));
+  }
+
+  @Test
+  void testgravarNotFound() throws Exception {
+
+      // Preparação
+      final String titulo = "Nova Tag";
+      final TagDTO tagDTO = new TagDTO(null, null, titulo, null);
+      Mockito.when(repository.save(any(TagEntity.class))).thenReturn(new TagEntity());
+      final TagService service = new TagService(repository, convert, null, null);
+
+      // Ação
+      final TagDTO tagDTOGravada = service.gravar(tagDTO);
+
+      // Verificação
+      assertThat(tagDTOGravada.getId()).isNotNull();
+      assertThat(tagDTOGravada.getTitulo()).isEqualTo(titulo);
+      Mockito.verify(repository).save(any(TagEntity.class));
   }
 
 }
