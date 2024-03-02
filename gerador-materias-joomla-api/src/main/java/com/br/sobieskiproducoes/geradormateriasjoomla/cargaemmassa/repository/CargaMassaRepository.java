@@ -22,4 +22,5 @@ public interface CargaMassaRepository extends JpaRepository<CargaMassaEntity, Lo
   @Query(name = "CargaMassaRepository.pegarCarga", value = "SELECT c FROM CargaMassaEntity AS c WHERE c.status != StatusProcessamentoEnum.PROCESSADO ")
   List<CargaMassaEntity> pegarCarga();
 
+
 }

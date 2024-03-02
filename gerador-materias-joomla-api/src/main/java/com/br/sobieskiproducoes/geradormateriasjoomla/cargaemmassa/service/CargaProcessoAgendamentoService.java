@@ -14,8 +14,6 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.controller.dt
 import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.model.CargaMassaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.repository.CargaMassaRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.dto.StatusProcessamentoEnum;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.CategoriaService;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.TagService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -34,32 +32,14 @@ public class CargaProcessoAgendamentoService {
   private final CargaMassaRepository repository;
   private final ObjectMapper objectMapper;
 
-  private final CargaProcessoMateriaService processo;
-  private final TagService tagService;
-  private final CategoriaService categoriaService;
+  private final ProcessamentoCriarMateriasService processoCriacaoMaterias;
+  private final ProcessamentoPublicarMateriasService processamentoPublicarMateriasService;
 
-  @Scheduled(fixedDelay = 3600000)
-  public void atualizaCategoria() {
-    try {
-      categoriaService.atualizarBancoCategoria();
-    } catch (final Throwable e) {// Casso ocorra algum continua o processo só gere log
-      log.log(Level.SEVERE, e.getMessage(), e);
-    }
-  }
 
-  // Atualiza o banco a cada 15 minutos
-  @Scheduled(fixedDelay = 900000)
-  public void atualizaTag() {
-    try {
-      tagService.atualizarBancoTag();
-    } catch (final Throwable e) {// Casso ocorra algum continua o processo só gere log
-      log.log(Level.SEVERE, e.getMessage(), e);
-    }
-  }
 
   // Roda sozinha a cada minuto 30 minutos depois da ultima vez que rodou
   @Scheduled(fixedDelay = 30000) // ${configuracao.batch.gerar-materia.delay})
-  public void processar() {
+  public void processarCriacaoMaterias() {
     try {
       final List<CargaMassaEntity> itens = repository.pegarCarga();
       RequisicaoCaragMassaDTO item = null;
@@ -67,7 +47,7 @@ public class CargaProcessoAgendamentoService {
         try {
           cargaMassaEntity.setExecutadoInicio(LocalDateTime.now());
           item = objectMapper.readValue(cargaMassaEntity.getRequisicao(), RequisicaoCaragMassaDTO.class);
-          if (processo.iniciarProcesso(item, cargaMassaEntity.getUuid())) {
+          if (processoCriacaoMaterias.iniciarProcesso(item, cargaMassaEntity.getUuid())) {
             cargaMassaEntity.setStatus(StatusProcessamentoEnum.PROCESSADO);
           } else {
             cargaMassaEntity.setStatus(StatusProcessamentoEnum.ERRO);
@@ -82,6 +62,17 @@ public class CargaProcessoAgendamentoService {
         repository.save(cargaMassaEntity);
       }
     } catch (final Throwable e) {// Casso ocorra algum continua o processo só gere log
+      log.log(Level.SEVERE, e.getMessage(), e);
+    }
+  }
+
+  // @Scheduled(fixedDelay = 3600000) // Uma vez por hora
+  @Scheduled(fixedDelay = 30000) // Uma vez por hora
+  public void processarPùblicacaoMateria() {
+    try {
+
+      processamentoPublicarMateriasService.processar();
+    } catch (final Throwable e) {
       log.log(Level.SEVERE, e.getMessage(), e);
     }
   }

@@ -57,13 +57,13 @@ public class MateriaJoomlaService {
   private final ConfiguracoesProperties properties;
 
   public GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosArtigoSalvoJoomlaDTO>> publicarMateriaJoomla(
-      final Long id, final LocalDateTime publicar) throws BusinessException {
+      final Long id) throws BusinessException {
 
-    return publicarMateriaJoomla(materiaRepository.findById(id).get(), publicar);
+    return publicarMateriaJoomla(materiaRepository.findById(id).get());
   }
 
   public GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosArtigoSalvoJoomlaDTO>> publicarMateriaJoomla(
-      final MateriaEntity entity, final LocalDateTime publicar) throws BusinessException {
+      final MateriaEntity entity) throws BusinessException {
     log.info("Inicio de publicação de materia no Joomla ID".concat(entity.getId().toString()));
 
     GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosArtigoSalvoJoomlaDTO>> artigo = null;
@@ -73,9 +73,9 @@ public class MateriaJoomlaService {
         throw BusinessException.build().classe(ObjectoJaExiteNoBancoBusinessException.class)
             .mensagem("Erro ao tentar acessar ").builder();
       }
-      if (nonNull(publicar)) {
-        entity.setPublicar(publicar);
-        entity.setApelido(publicar.format(DATTE_TIME_FORMATTER_ALIAS) + entity.getApelido());
+      if (nonNull(entity.getPublicar())) {
+        entity.setPublicar(entity.getPublicar());
+        entity.setApelido(entity.getPublicar().format(DATTE_TIME_FORMATTER_ALIAS) + entity.getApelido());
         materiaRepository.save(entity);
       }
 
@@ -88,7 +88,8 @@ public class MateriaJoomlaService {
       entity.getTags().forEach(n -> {
         if (isNull(n.getIdJoomla())) {
           final AtributosTagJoomlaDTO tag = new AtributosTagJoomlaDTO();
-          final String alias = (nonNull(publicar) ? publicar.format(DATTE_TIME_FORMATTER_ALIAS) : "")
+          final String alias = (nonNull(entity.getPublicar()) ? entity.getPublicar().format(DATTE_TIME_FORMATTER_ALIAS)
+              : "")
               + (nonNull(n.getApelido()) && !n.getApelido().isBlank() ? n.getApelido()
               : SugerirMateriaUtils.normalizeText(n.getTitulo()));
 
@@ -152,7 +153,7 @@ public class MateriaJoomlaService {
         // org.springframework.web.client.HttpClientErrorException$BadRequest: 400 Bad
         // Request: "{"errors":[{"title":"Save failed with the following error: Another
         // Article in this category has the same alias.","code":400}]}"
-
+        entity.setExportado(LocalDateTime.now());
         entity.setIdJoomla(artigo.getData().getAttributes().getId());
         entity.setStatus(StatusProcessamentoEnum.PROCESSADO);
       } catch (final HttpClientErrorException ex) {

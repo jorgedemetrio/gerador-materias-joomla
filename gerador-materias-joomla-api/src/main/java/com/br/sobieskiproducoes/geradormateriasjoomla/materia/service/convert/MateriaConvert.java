@@ -89,7 +89,11 @@ public interface MateriaConvert {
   @Mapping(target = "relationships", ignore = true)
   @Mapping(target = "catid", source = "categoria.idJoomla")
   @Mapping(target = "introtext", source = "primeiroParagrafo")
+
+  @Mapping(target = "created", expression = "java( Objects.nonNull(materia.getCriadoJoomla()) ? materia.getCriadoJoomla() : materia.getPublicar() )", dateFormat = "yyyy-MM-dd HH:mm:ss")
+
   AtributosArtigoJoomlaSalvarDTO convertJoomla(MateriaEntity materia);
+
 
   @Mapping(target = "materia", source = "content")
   @Mapping(target = "uuid", source = "uuid")

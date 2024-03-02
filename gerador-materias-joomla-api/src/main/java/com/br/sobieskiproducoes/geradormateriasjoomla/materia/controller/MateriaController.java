@@ -54,7 +54,7 @@ public class MateriaController {
       @PathVariable("id") final Long id, @RequestBody final PublilcarDTO dto) {
     log.info("Gerando materia sobre %d ".formatted(id));
     try {
-      return ResponseEntity.status(HttpStatus.CREATED).body(service.publicarMateriaJoomla(id, dto.getDataPublicacao()));
+      return ResponseEntity.status(HttpStatus.CREATED).body(service.publicarMateriaJoomla(id));
     } catch (final ObjectoJaExiteNoBancoBusinessException e) {
       log.log(Level.SEVERE, "Objecto que tentou salvar já existe", e);
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

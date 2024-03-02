@@ -19,19 +19,15 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.controller.dto.HorarioRequisiscaoDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.controller.dto.RequisicaoCaragMassaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.MateriaConstants;
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ConfiguracoesProperties;
-import com.br.sobieskiproducoes.geradormateriasjoomla.dto.StatusProcessamentoEnum;
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.controller.dto.MapaPerguntaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.repository.MapaPerguntaRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.service.convert.PerguntasConvert;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.PropostaMateriaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.SugerirMateriaDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.exception.BusinessException;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.MateriaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.MateriaRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.GerarMateriaService;
@@ -50,7 +46,7 @@ import lombok.extern.java.Log;
 @Log
 @RequiredArgsConstructor
 @Component
-public class CargaProcessoMateriaService {
+public class ProcessamentoCriarMateriasService {
 
   private final ConfiguracoesProperties properties;
   private final MateriaJoomlaService materiaJoomlaService;
@@ -62,7 +58,6 @@ public class CargaProcessoMateriaService {
   private Boolean erroInterno = false;
 
   private final PlatformTransactionManager transactionManager;
-
 
   /**
    * @param uuid
@@ -161,28 +156,18 @@ public class CargaProcessoMateriaService {
     if (!dataPublicadas.contains(data.format(MateriaConstants.DATETIME_FORMATTER))) {
       try {
         final List<String> perguntas = perguntas(mapaPerguntaDTO);
+        final Optional<MateriaEntity> item = repository.buscarPorPergunta(mapaPerguntaDTO.getId());
 
-        List<PropostaMateriaDTO> materias = null;
-
-        final Optional<MateriaEntity> materia = repository.buscarPorPergunta(mapaPerguntaDTO.getId());
-
-        if (materia.isPresent()) {
-          processarMateriaNoJoomla(data, materia.get());
+        if (item.isPresent()) {
+          final MateriaEntity itemMateria = item.get();
+          itemMateria.setPublicar(data);
+          itemMateria.setCriadoJoomla(data);
+          repository.save(itemMateria);
         } else {
-          materias = gerarMateriaService.gerarSugestaoMateria(
+          gerarMateriaService.gerarSugestaoMateria(
               new SugerirMateriaDTO(perguntas.stream().collect(Collectors.joining(", ")), mapaPerguntaDTO.getTermos(),
                   data, mapaPerguntaDTO.getCategoria().getId(), request.getIdeias().getAudiencias()),
               uuid, mapaPerguntaDTO.getId());
-          if (materias.isEmpty()) {
-            erroInterno = true;
-          } else if (request.getPublicar()) {
-            for (final PropostaMateriaDTO propostaMateriaDTO : materias) {
-              final Optional<MateriaEntity> materiaEntity = repository.findById(propostaMateriaDTO.getId());
-              if (materiaEntity.isPresent()) {
-                processarMateriaNoJoomla(data, materiaEntity.get());
-              }
-            }
-          }
         }
 
         dataPublicadas.add(data.format(MateriaConstants.DATETIME_FORMATTER));
@@ -194,31 +179,4 @@ public class CargaProcessoMateriaService {
     }
   }
 
-  /**
-   * @param data
-   * @param propostaMateriaDTO
-   * @param materia
-   * @throws BusinessException
-   */
-  private void processarMateriaNoJoomla(final LocalDateTime data, final MateriaEntity materiaEntity)
-      throws BusinessException {
-    if (StatusProcessamentoEnum.PROCESSADO.equals(materiaEntity.getStatus())) {
-      return;
-    }
-    try {
-      new File(properties.getCargaDadosImagens().getImagens().getPastaImagemMaterias()
-          .concat(SugerirMateriaUtils.pathCategoria(materiaEntity.getCategoria()))).mkdirs();
-    } catch (final Exception ex) {
-      log.log(Level.SEVERE, "Erro ao criar a pasta da materia : ".concat(materiaEntity.getId().toString()), ex);
-    }
-    if (isNull(materiaJoomlaService.publicarMateriaJoomla(materiaEntity, data))) {
-      erroInterno = true;
-    }
-    else {
-      final DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-      def.setPropagationBehavior(DefaultTransactionDefinition.PROPAGATION_REQUIRES_NEW);
-      transactionManager.commit(transactionManager.getTransaction(def));
-    }
-
-  }
 }
