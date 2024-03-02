@@ -10,8 +10,8 @@
 		<relativePath>../</relativePath> <!-- lookup parent from repository -->
 	</parent>
 	<artifactId>gerador-materias-joomla-api</artifactId>
-	
-	
+
+
 	<name>gerador-materias-joomla-api</name>
 	<description>Gerador de matérias com ChatGPT / Joomla</description>
 	<packaging>jar</packaging>
@@ -133,6 +133,15 @@
 			<artifactId>mockito-junit-jupiter</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!--
+		https://mvnrepository.com/artifact/com.google.api-client/google-api-client -->
+		<dependency>
+			<groupId>com.google.api-client</groupId>
+			<artifactId>google-api-client</artifactId>
+			<version>2.3.0</version>
+		</dependency>
+
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
