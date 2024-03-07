@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="pt_BR">
+	<head>
+		<title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Gerar
+			de matérias</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href="css/bootstrap.min.css" rel="stylesheet" />
+	</head>
+	<body>
+		<div th:replace="fragments/header::header"></div>
+		<div class="container">
+			<div th:fragment="content"></div>
+		</div>
+		<script src="js/bootstrap.bundle.js"></script>
+	</body>
+</html>

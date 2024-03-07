@@ -23,7 +23,7 @@ public interface TagConvert {
 
   @Mapping(target = "materias", ignore = true)
   @Mapping(target = "id", ignore = true)
-  TagEntity convert(TagDTO tag);
+  TagEntity toEntityNova(TagDTO tag);
 
   @Mapping(target = "id", source = "id")
   @Mapping(target = "idJoomla", source = "idJoomla")
