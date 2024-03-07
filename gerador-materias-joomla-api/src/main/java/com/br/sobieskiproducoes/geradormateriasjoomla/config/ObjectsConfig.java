@@ -42,17 +42,5 @@ public class ObjectsConfig {
     return new RestTemplate();
   }
 
-  /*
-   * @Bean
-   *
-   * @ConditionalOnMissingBean
-   *
-   * @ConditionalOnProperty(name = { "springdoc.use-management-port" },
-   * havingValue = "false", matchIfMissing = true) SwaggerWelcomeWebMvc
-   * swaggerWelcome(final SwaggerUiConfigProperties swaggerUiConfig, final
-   * SpringDocConfigProperties springDocConfigProperties, final
-   * SwaggerUiConfigParameters swaggerUiConfigParameters, final SpringWebProvider
-   * springWebProvider) { return new SwaggerWelcomeWebMvc(swaggerUiConfig,
-   * springDocConfigProperties, swaggerUiConfigParameters, springWebProvider); }
-   */
+
 }

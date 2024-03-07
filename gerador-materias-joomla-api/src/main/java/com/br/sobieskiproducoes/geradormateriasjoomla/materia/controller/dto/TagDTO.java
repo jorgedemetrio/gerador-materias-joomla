@@ -26,6 +26,7 @@ public class TagDTO {
 
   private Long id;
   private Long idJoomla;
+  private String uuid;
   private String titulo;
   private String apelido;
 

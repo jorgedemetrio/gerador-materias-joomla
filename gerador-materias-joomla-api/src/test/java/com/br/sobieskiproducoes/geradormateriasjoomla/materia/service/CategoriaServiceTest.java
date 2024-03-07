@@ -22,7 +22,13 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.CargaDadosImagensProperties;
+import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ChatGPTConfigurationProperties;
+import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ConfiguracoesProperties;
+import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.DadosImagensLogoProperties;
+import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.DadosImagensMateriasProperties;
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.JoomlaConfigurationProperties;
+import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.PosicaoEnum;
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoItemJoomlaResponse;
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoJoomlaDataDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.LinkResponse;
@@ -52,7 +58,16 @@ class CategoriaServiceTest {
   CategoriaJoomlaClient categoriaJoomlaClient;
 
   @Spy
-  JoomlaConfigurationProperties properties = new JoomlaConfigurationProperties("url", "bearer", "idioma");
+  ConfiguracoesProperties properties = new ConfiguracoesProperties(
+      new CargaDadosImagensProperties(
+          new DadosImagensMateriasProperties("pastaImagemMaterias","autor",1,1,0.3,"constante","url", Boolean.TRUE),
+          new DadosImagensLogoProperties("path", PosicaoEnum.ALEATORIO,
+              PosicaoEnum.ALEATORIO, 1, 1, 0.4d, 1,
+              0.4d)
+      ), new ChatGPTConfigurationProperties("url", "bearer", "assistente", "organization", "model", 0.4d, "roleUser",
+          "roleSystem", "roleAssistant", "maxTokens"),
+      new JoomlaConfigurationProperties("url", "bearer", "idioma"));
+
 
   @Spy
   CategoriaConvert convert = new CategoriaConvertImpl();
@@ -81,17 +96,18 @@ class CategoriaServiceTest {
 
     ), new LinkResponse("self", "url/next", "last", "first", "previous"), new MetaResponse(0L)));
 
-    when(categoriaJoomlaClient.getCategorias(anyString(), anyString())).thenReturn(new GenericoItemJoomlaResponse<>(Arrays.asList(
-        new GenericoJoomlaDataDTO<>("type", "3",
-            new AtributosCategoriaJoomlaDTO(3L, "title", "alias", "note", 1, 1, "checkedOut", "checkedOutTime", 1L, 1L,
-                1, 1, 1, "language", "description", "languageTitle", "languageImage", "editor", "access_level",
-                "authorName", 1, 1, 1, 1)),
-        new GenericoJoomlaDataDTO<>("type", "4",
-            new AtributosCategoriaJoomlaDTO(4L, "title", "alias", "note", 1, 1, "checkedOut", "checkedOutTime", 1L, 1L,
-                1, 1, 1, "language", "description", "languageTitle", "languageImage", "editor", "access_level",
-                "authorName", 1, 1, 1, 1))
+    when(categoriaJoomlaClient.getCategorias(anyString(), anyString()))
+        .thenReturn(new GenericoItemJoomlaResponse<>(Arrays.asList(
+            new GenericoJoomlaDataDTO<>("type", "3",
+                new AtributosCategoriaJoomlaDTO(3L, "title", "alias", "note", 1, 1, "checkedOut", "checkedOutTime", 1L,
+                    1L, 1, 1, 1, "language", "description", "languageTitle", "languageImage", "editor", "access_level",
+                    "authorName", 1, 1, 1, 1)),
+            new GenericoJoomlaDataDTO<>("type", "4",
+                new AtributosCategoriaJoomlaDTO(4L, "title", "alias", "note", 1, 1, "checkedOut", "checkedOutTime", 1L,
+                    1L, 1, 1, 1, "language", "description", "languageTitle", "languageImage", "editor", "access_level",
+                    "authorName", 1, 1, 1, 1))
 
-    ), new LinkResponse("self", null, "last", "first", "previous"), new MetaResponse(0L)));
+        ), new LinkResponse("self", null, "last", "first", "previous"), new MetaResponse(0L)));
 
     when(categoriaRepository.findByIdJoomla(anyLong())).thenReturn(Optional.empty(), Optional.empty(),
         Optional.of(new CategoriaEntity()), Optional.empty());

@@ -144,6 +144,7 @@ public class TagService {
     // Atualiza caso já tenha um ID no banco
     if (nonNull(tag.getId()) && tag.getId() > 0) {
       final Optional<TagEntity> tagEntityOpt = repository.findById(tag.getId());
+
       if (tagEntityOpt.isPresent()) {
         tagEntity = tagEntityOpt.get();
         log.info("Fez merge do Tag id: ".concat(tag.getId().toString()));
@@ -154,7 +155,7 @@ public class TagService {
     // Caso não tenha ID entende-se que é um Novo Registro
     if (isNull(tagEntity)) {
       log.info("Novo registro");
-      tagEntity = convert.convert(tag);
+      tagEntity = convert.toEntityNova(tag);
     }
 
     return convert.convert(repository.save(tagEntity));
