@@ -14,6 +14,7 @@ import org.mapstruct.Mapping;
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.response.ChoicesDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.response.RepostaResponseDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.model.LogDialogoChatGPTEntity;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosArtigoJoomlaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosArtigoJoomlaSalvarDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.FaqDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.PropostaMateriaDTO;
@@ -34,7 +35,7 @@ public interface MateriaConvert {
 
   @Mapping(target = "tags", expression = "java( Objects.nonNull(materia.getTags()) ? materia.getTags().stream().map(c->c.getTitulo()).collect(Collectors.toList()): null)")
   @Mapping(target = "titulos", expression = "java( Arrays.asList( materia.getTitulo1(), materia.getTitulo2(), materia.getTitulo3() ) )")
-  PropostaMateriaDTO convert(MateriaEntity materia);
+  Long convert(MateriaEntity materia);
 
   @Mapping(target = "titulo1", expression = "java( (Objects.nonNull(materia.getTitulos()) && !materia.getTitulos().isEmpty()) ? materia.getTitulos().get(0) : null )")
   @Mapping(target = "titulo2", expression = "java( (Objects.nonNull(materia.getTitulos()) && !materia.getTitulos().isEmpty()) ? materia.getTitulos().get(1) : null )")
@@ -92,11 +93,23 @@ public interface MateriaConvert {
 
   @Mapping(target = "created", expression = "java( Objects.nonNull(materia.getCriadoJoomla()) ? materia.getCriadoJoomla() : materia.getPublicar() )", dateFormat = "yyyy-MM-dd HH:mm:ss")
 
-  AtributosArtigoJoomlaSalvarDTO convertJoomla(MateriaEntity materia);
+  MateriaEntity convertJoomla(AtributosArtigoJoomlaDTO atributosArtigoJoomlaDTO);
 
 
   @Mapping(target = "materia", source = "content")
   @Mapping(target = "uuid", source = "uuid")
   PropostaMateriaDTO copy(PropostaMateriaDTO item, String uuid, String content);
+
+/**
+ * @param attributes
+ * @param materiaEntity
+ */
+void merge(AtributosArtigoJoomlaDTO attributes, MateriaEntity materiaEntity);
+
+/**
+ * @param materia
+ * @return
+ */
+MateriaEntity convert(AtributosArtigoJoomlaDTO materia);
 
 }
