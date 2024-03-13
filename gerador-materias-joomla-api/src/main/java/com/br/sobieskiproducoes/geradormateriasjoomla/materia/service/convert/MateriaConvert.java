@@ -35,7 +35,7 @@ public interface MateriaConvert {
 
   @Mapping(target = "tags", expression = "java( Objects.nonNull(materia.getTags()) ? materia.getTags().stream().map(c->c.getTitulo()).collect(Collectors.toList()): null)")
   @Mapping(target = "titulos", expression = "java( Arrays.asList( materia.getTitulo1(), materia.getTitulo2(), materia.getTitulo3() ) )")
-  PropostaMateriaDTO convert(MateriaEntity matéria);
+  PropostaMateriaDTO convert(MateriaEntity materia);
 
   @Mapping(target = "titulo1", expression = "java( (Objects.nonNull(materia.getTitulos()) && !materia.getTitulos().isEmpty()) ? materia.getTitulos().get(0) : null )")
   @Mapping(target = "titulo2", expression = "java( (Objects.nonNull(materia.getTitulos()) && !materia.getTitulos().isEmpty()) ? materia.getTitulos().get(1) : null )")
