@@ -10,16 +10,13 @@ import java.util.List;
 import java.util.logging.Level;
 
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.PlatformTransactionManager;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ConfiguracoesProperties;
 import com.br.sobieskiproducoes.geradormateriasjoomla.dto.StatusProcessamentoEnum;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.exception.BusinessException;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.MateriaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.MateriaRepository;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.CategoriaService;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.MateriaJoomlaService;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.TagService;
 import com.br.sobieskiproducoes.geradormateriasjoomla.utils.SugerirMateriaUtils;
 
 import jakarta.transaction.Transactional;
@@ -38,15 +35,10 @@ public class ProcessamentoPublicarMateriasService {
   private final ConfiguracoesProperties properties;
   private final MateriaJoomlaService materiaJoomlaService;
   private final MateriaRepository materiaRepository;
-  private final PlatformTransactionManager transactionManager;
-  private final TagService tagService;
-  private final CategoriaService categoriaService;
 
   @Transactional
   public void processar() throws BusinessException {
     log.info("Atualizando banco com informações do Joomla");
-    // tagService.atualizarBancoTag();
-    // categoriaService.atualizarBancoCategoria();
     final List<MateriaEntity> materias = materiaRepository.buscarMateriasPublicar();
     for (final MateriaEntity materiaEntity : materias) {
       processarMateriaNoJoomla(materiaEntity);
