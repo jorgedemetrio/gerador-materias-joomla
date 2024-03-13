@@ -25,7 +25,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
@@ -49,24 +48,23 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.convert.Ta
  * @param <MateriaProperties>
  */
 @ExtendWith(MockitoExtension.class)
-class TagServiceTest<MateriaProperties> {
+class TagServiceTest{
 
   @InjectMocks
-  private TagService service;
+  TagService service;
 
   @Mock
-  private TagRepository repository;
+  TagRepository repository;
 
   @Spy
-  private final TagConvert convert = new TagConvertImpl();
+  TagConvert convert = new TagConvertImpl();
 
   @Mock
-  private TagJoomlaClient client;
+  TagJoomlaClient client;
   
-  @Mock
-  private MateriaProperties properties;
+  @Spy
+  MateriaProperties properties = new MateriaProperties();
   
-  private List<TagEntity> tags;
 
   @Test
   void apagarTest_TagEntityNotFound() {
