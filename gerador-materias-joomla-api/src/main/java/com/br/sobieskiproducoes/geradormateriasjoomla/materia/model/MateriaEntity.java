@@ -6,9 +6,6 @@ package com.br.sobieskiproducoes.geradormateriasjoomla.materia.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.data.domain.Sort.Order;
-import org.springframework.data.util.Streamable;
-
 import com.br.sobieskiproducoes.geradormateriasjoomla.dto.StatusProcessamentoEnum;
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.model.MapaPerguntaEntity;
 
@@ -123,31 +120,5 @@ public class MateriaEntity {
   @Enumerated(EnumType.STRING)
   @Column(name = "status", nullable = true, insertable = true, updatable = true, unique = false)
   private StatusProcessamentoEnum status;
-
-/**
- * @return
- */
-public boolean isPresent() {
-	// TODO Auto-generated method stub
-	return false;
-}
-
-/**
- * @return
- */
-public MateriaEntity get() {
-	// TODO Auto-generated method stub
-	return null;
-}
-
-/**
- * @return
- */
-public static Object notFound() {
-	// TODO Auto-generated method stub
-	return null;
-}
-
-
 
 }
