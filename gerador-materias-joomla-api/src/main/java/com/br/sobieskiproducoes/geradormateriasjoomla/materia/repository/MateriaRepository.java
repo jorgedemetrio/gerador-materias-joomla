@@ -21,7 +21,7 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.MateriaEntit
 @Repository
 public interface MateriaRepository extends JpaRepository<MateriaEntity, Long> {
 
-  @Query(name = "MateriaRepository.buscarMateriasPublicar", value = "SELECT m FROM MateriaEntity AS m JOIN  m.idJoomla is null "
+  @Query(name = "MateriaRepository.buscarMateriasPublicar", value = "SELECT m FROM MateriaEntity AS m WHERE m.idJoomla is null "
       + " AND m.uuid is not null AND m.peguntaPrincipal is not null AND status = StatusProcessamentoEnum.PROCESSAR AND (m.publicar >= now() OR m.publicar is null) ORDER BY m.publicar")
   List<MateriaEntity> buscarMateriasPublicar();
 
