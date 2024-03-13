@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.FeignJoomlaConfig;
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoItemJoomlaResponse;
-import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoJoomlaDataDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosArtigoJoomlaDTO;
 
 import feign.Headers;
@@ -36,14 +35,6 @@ public interface ArtigoJoomlaClient {
   @GetMapping(path = "/content/articles", consumes = { MediaType.APPLICATION_JSON_VALUE })
   GenericoItemJoomlaResponse<List<AtributosArtigoJoomlaDTO>> get(@RequestParam("page[offset]") String offset,
       @RequestParam("page[limit]") String limit);
-
-/**
- * @param i
- * @param j
- * @return
- */
-GenericoItemJoomlaResponse<List<GenericoJoomlaDataDTO<AtributosArtigoJoomlaDTO>>> getMaterias(int i, int j);
-
 
 
 }
