@@ -69,6 +69,8 @@ server:
     max-http-post-size: 20MB
 
 spring:
+  resources:
+    static-locations: classpath:templates/
   servlet:
     multipart:
       max-file-size: 20MB
