@@ -5,6 +5,7 @@ package com.br.sobieskiproducoes.geradormateriasjoomla.fontedados.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -17,12 +18,13 @@ import lombok.extern.java.Log;
 @Log
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/youtube")
+@RequestMapping("/fontedados/youtube")
 public class YoutubeController {
 
-  @RequestMapping(value = "/index")
+  @RequestMapping(path = { "", "/" }, method = RequestMethod.GET)
   public String saveSeedstarter() {
-    return "redirect:/youtube/videos";
+    log.info("Passou aqui");
+    return "fontedados/youtube/index";
   }
 
 }
