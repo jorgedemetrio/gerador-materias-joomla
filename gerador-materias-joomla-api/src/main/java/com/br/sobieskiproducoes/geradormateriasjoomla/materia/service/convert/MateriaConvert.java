@@ -35,7 +35,7 @@ public interface MateriaConvert {
 
   @Mapping(target = "tags", expression = "java( Objects.nonNull(materia.getTags()) ? materia.getTags().stream().map(c->c.getTitulo()).collect(Collectors.toList()): null)")
   @Mapping(target = "titulos", expression = "java( Arrays.asList( materia.getTitulo1(), materia.getTitulo2(), materia.getTitulo3() ) )")
-  Long convert(MateriaEntity materia);
+  PropostaMateriaDTO convert(MateriaEntity matéria);
 
   @Mapping(target = "titulo1", expression = "java( (Objects.nonNull(materia.getTitulos()) && !materia.getTitulos().isEmpty()) ? materia.getTitulos().get(0) : null )")
   @Mapping(target = "titulo2", expression = "java( (Objects.nonNull(materia.getTitulos()) && !materia.getTitulos().isEmpty()) ? materia.getTitulos().get(1) : null )")
@@ -93,7 +93,7 @@ public interface MateriaConvert {
 
   @Mapping(target = "created", expression = "java( Objects.nonNull(materia.getCriadoJoomla()) ? materia.getCriadoJoomla() : materia.getPublicar() )", dateFormat = "yyyy-MM-dd HH:mm:ss")
 
-  MateriaEntity convertJoomla(AtributosArtigoJoomlaDTO atributosArtigoJoomlaDTO);
+  AtributosArtigoJoomlaSalvarDTO convertJoomla(MateriaEntity materia);
 
 
   @Mapping(target = "materia", source = "content")
