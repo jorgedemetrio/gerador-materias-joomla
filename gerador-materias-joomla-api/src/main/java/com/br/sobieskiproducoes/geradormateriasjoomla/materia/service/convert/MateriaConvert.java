@@ -14,6 +14,7 @@ import org.mapstruct.Mapping;
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.response.ChoicesDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.response.RepostaResponseDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.model.LogDialogoChatGPTEntity;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosArtigoJoomlaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosArtigoJoomlaSalvarDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.FaqDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.PropostaMateriaDTO;
@@ -98,5 +99,17 @@ public interface MateriaConvert {
   @Mapping(target = "materia", source = "content")
   @Mapping(target = "uuid", source = "uuid")
   PropostaMateriaDTO copy(PropostaMateriaDTO item, String uuid, String content);
+
+/**
+ * @param attributes
+ * @param materiaEntity
+ */
+void merge(AtributosArtigoJoomlaDTO attributes, MateriaEntity materiaEntity);
+
+/**
+ * @param materia
+ * @return
+ */
+MateriaEntity convert(AtributosArtigoJoomlaDTO materia);
 
 }

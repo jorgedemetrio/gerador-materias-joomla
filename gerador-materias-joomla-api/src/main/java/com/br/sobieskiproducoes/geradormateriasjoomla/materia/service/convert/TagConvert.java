@@ -9,8 +9,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosArtigoJoomlaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosTagJoomlaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.TagDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.MateriaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.TagEntity;
 
 /**
@@ -49,7 +51,7 @@ public interface TagConvert {
   @Mapping(target = "apelido", source = "alias", conditionExpression = "java(Objects.nonNull(tag.getAlias()) && !tag.getAlias().isBlank())")
   @Mapping(target = "titulo", source = "title", conditionExpression = "java(Objects.nonNull(tag.getTitle()) && !tag.getTitle().isBlank())")
   @Mapping(target = "idJoomla", source = "id ", conditionExpression = "java(Objects.nonNull(tag.getId()) && tag.getId() > 0L )")
-  void merge(AtributosTagJoomlaDTO tag, @MappingTarget TagEntity src);
+  void merge(AtributosArtigoJoomlaDTO atributosArtigoJoomlaDTO, @MappingTarget MateriaEntity materiaEntity);
 
   @Mapping(target = "materias", ignore = true)
   @Mapping(target = "id", ignore = true)

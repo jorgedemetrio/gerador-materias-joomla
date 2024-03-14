@@ -37,5 +37,4 @@ public interface ArtigoJoomlaClient {
       @RequestParam("page[limit]") String limit);
 
 
-
 }

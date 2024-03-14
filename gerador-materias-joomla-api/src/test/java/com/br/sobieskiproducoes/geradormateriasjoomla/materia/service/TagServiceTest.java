@@ -14,8 +14,12 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -23,8 +27,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
+import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoItemJoomlaResponse;
+import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoJoomlaDataDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.TagJoomlaClient;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosTagJoomlaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.TagDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.TagEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.TagRepository;
@@ -35,21 +45,26 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.convert.Ta
  * @author Jorge Demetrio
  * @since 26 de fev. de 2024 01:05:36
  * @version 1.0.0
+ * @param <MateriaProperties>
  */
 @ExtendWith(MockitoExtension.class)
-class TagServiceTest {
+class TagServiceTest{
 
   @InjectMocks
-  private TagService service;
+  TagService service;
 
   @Mock
-  private TagRepository repository;
+  TagRepository repository;
 
   @Spy
-  private final TagConvert convert = new TagConvertImpl();
+  TagConvert convert = new TagConvertImpl();
 
   @Mock
-  private TagJoomlaClient client;
+  TagJoomlaClient client;
+  
+  @Spy
+  MateriaProperties properties = new MateriaProperties();
+  
 
   @Test
   void apagarTest_TagEntityNotFound() {
@@ -245,5 +260,57 @@ class TagServiceTest {
       assertThat(tagDTOGravada.getIdJoomla()).isEqualTo(10L);
       assertThat(tagDTOGravada.getApelido()).isEqualTo("apelido");
   }
+  
+	  @BeforeEach
+	  void setUp() {
+	      tags = new ArrayList<>();
+	      tags.add(mockTag("1", "Apelido1", "Titulo1", "Descricao1", "idioma1"));
+	      tags.add(mockTag("2", "Apelido2", "Titulo2", "Descricao2", "idioma2"));
+	      tags.add(mockTag("3", "Apelido3", "Titulo3", "Descricao3", "idioma3"));
+	  }
+	
+	  @Test
+	  void testAtualizarBanco() {
+	      // Preparação
+	      when(repository.buscarPorApelidoTitulo(any(), any())).thenAnswer(invocation -> {
+	          String apelido = invocation.getArgument(0);
+	          String titulo = invocation.getArgument(1);
+	          return tags.stream().filter(tag -> tag.getApelido().equals(apelido) && tag.getTitulo().equals(titulo))
+	                  .findFirst();
+	      });
+	
+	      when(client.getTags()).thenReturn(getGenericoItemJoomlaResponse(0));
+	      when(client.getTags(any(), any())).thenAnswer(invocation -> getGenericoItemJoomlaResponse(Integer.parseInt(invocation.getArgument(0))));
+	
+	      when(convert.convertJoomla(any())).thenAnswer(invocation -> {
+	          AtributosTagJoomlaDTO attributes = invocation.getArgument(0);
+	          return new TagEntity(0, attributes.getAlias(), attributes.getTitle(), attributes.getDescription(),
+	                  attributes.getLanguage());
+	      });
+	
+	      // Chama o método para teste
+	      Map<String, Integer> result = service.atualizarBancoTag();
+	
+	      // Verifica o resultado
+	      assertEquals(3, result.get("total"));
+	      assertEquals(3, result.get("processados"));
+	  }
+	
+	  private TagEntity mockTag(String id, String apelido, String titulo, String descricao, String idioma) {
+	      return new TagEntity();
+	  }
+	
+	  private GenericoItemJoomlaResponse<List<GenericoJoomlaDataDTO<AtributosTagJoomlaDTO>>> getGenericoItemJoomlaResponse(int offset) {
+	      List<GenericoJoomlaDataDTO<AtributosTagJoomlaDTO>> data = new ArrayList<>();
+	      for (int i = offset; i < offset + 20 && i < tags.size(); i++) {
+	          TagEntity tag = tags.get(i);
+	          data.add(new GenericoJoomlaDataDTO<>(tag.getId(), tag.getApelido(), tag.getTitulo(), tag.getDescricao(),
+	                  tag.getIdioma()));
+	      }
+	      PageRequest pageable = PageRequest.of(offset / 20, 20);
+	      Page<TagEntity> page = new PageImpl<>(data, pageable, tags.size());
+	      return new GenericoItemJoomlaResponse<>(page.getContent(), page.getLinks().getNext());
+	  }
+	}
 
 }
