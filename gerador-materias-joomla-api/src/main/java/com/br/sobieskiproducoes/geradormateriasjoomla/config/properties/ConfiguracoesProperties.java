@@ -28,5 +28,5 @@ public class ConfiguracoesProperties {
   private CargaDadosImagensProperties cargaDadosImagens;
   private ChatGPTConfigurationProperties chatgpt;
   private JoomlaConfigurationProperties joomla;
-
+  private YoutubeConfigurationProperties youtube;
 }

@@ -118,6 +118,7 @@ configuracao:
       delay: 3000000
   youtube:
     url: "https://www.googleapis.com/youtube/v3"
+
   joomla:
     url: https://www.teste.com.br/api/index.php/v1
     bearer: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
