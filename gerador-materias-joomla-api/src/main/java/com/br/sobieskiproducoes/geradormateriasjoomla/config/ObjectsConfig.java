@@ -37,10 +37,12 @@ public class ObjectsConfig {
     return objectMapper;
   }
 
+
   @Bean
   public RestTemplate getRestTemplate() {
     return new RestTemplate();
   }
+
 
 
 }

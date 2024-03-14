@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.FeignJoomlaConfig;
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoItemJoomlaResponse;
+import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoJoomlaDataDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosArtigoJoomlaDTO;
 
 import feign.Headers;
@@ -27,13 +28,16 @@ import feign.Headers;
 public interface ArtigoJoomlaClient {
 
   @GetMapping(path = "/content/articles", consumes = { MediaType.APPLICATION_JSON_VALUE })
-  GenericoItemJoomlaResponse<List<AtributosArtigoJoomlaDTO>> get();
+  GenericoItemJoomlaResponse<List<GenericoJoomlaDataDTO<AtributosArtigoJoomlaDTO>>> get();
+
 
   @GetMapping(path = "/content/articles?{url}", consumes = { MediaType.APPLICATION_JSON_VALUE })
-  GenericoItemJoomlaResponse<List<AtributosArtigoJoomlaDTO>> get(@PathVariable("url") String url);
+  GenericoItemJoomlaResponse<List<GenericoJoomlaDataDTO<AtributosArtigoJoomlaDTO>>> get(
+      @PathVariable("url") String url);
 
   @GetMapping(path = "/content/articles", consumes = { MediaType.APPLICATION_JSON_VALUE })
-  GenericoItemJoomlaResponse<List<AtributosArtigoJoomlaDTO>> get(@RequestParam("page[offset]") String offset,
+  GenericoItemJoomlaResponse<List<GenericoJoomlaDataDTO<AtributosArtigoJoomlaDTO>>> get(
+      @RequestParam("page[offset]") String offset,
       @RequestParam("page[limit]") String limit);
 
 

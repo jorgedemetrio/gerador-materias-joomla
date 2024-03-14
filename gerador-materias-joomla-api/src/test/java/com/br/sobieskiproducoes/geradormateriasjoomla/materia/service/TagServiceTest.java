@@ -35,21 +35,22 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.convert.Ta
  * @author Jorge Demetrio
  * @since 26 de fev. de 2024 01:05:36
  * @version 1.0.0
+ * @param <MateriaProperties>
  */
 @ExtendWith(MockitoExtension.class)
 class TagServiceTest {
 
   @InjectMocks
-  private TagService service;
+  TagService service;
 
   @Mock
-  private TagRepository repository;
+  TagRepository repository;
 
   @Spy
-  private final TagConvert convert = new TagConvertImpl();
+  TagConvert convert = new TagConvertImpl();
 
   @Mock
-  private TagJoomlaClient client;
+  TagJoomlaClient client;
 
   @Test
   void apagarTest_TagEntityNotFound() {
@@ -90,6 +91,7 @@ class TagServiceTest {
     assertEquals(titulo, tagDTO.getTitulo());
 
   }
+
 
   @Test
   void tesBuscarTestTagEntityNotFound() {
@@ -136,41 +138,38 @@ class TagServiceTest {
     assertEquals(titulo, capTagEntity.getValue().getTitulo());
   }
 
+
+
   @Test
   void testGravar() throws Exception {
 
-      // Preparação
-      final Long id = 10L;
-      final String titulo = "Titulo Atualizado";
-      final TagDTO tagDTO = new TagDTO(id, 11L, "uuid", titulo, null);
-      final TagEntity entity = new TagEntity(10L, "uuid", 11L, titulo, "apelido", "language", null);
+    // Preparação
+    final Long id = 10L;
+    final String titulo = "Titulo Atualizado";
+    final TagDTO tagDTO = new TagDTO(id, 11L, "uuid", titulo, null);
+    final TagEntity entity = new TagEntity(10L, "uuid", 11L, titulo, "apelido", "language", null);
 
+    when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
+    when(repository.save(any(TagEntity.class))).thenReturn(entity);
 
+    // Ação
+    final TagDTO tagDTOGravada = service.gravar(tagDTO);
 
-      when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
-      when(repository.save(any(TagEntity.class))).thenReturn(entity);
+    // Verificação
+    final ArgumentCaptor<Long> captorLongId = ArgumentCaptor.forClass(Long.class);
+    final ArgumentCaptor<TagEntity> captorTagEntity = ArgumentCaptor.forClass(TagEntity.class);
 
+    verify(repository, times(1)).save(captorTagEntity.capture());
+    verify(repository, times(1)).findById(captorLongId.capture());
 
-      // Ação
-      final TagDTO tagDTOGravada = service.gravar(tagDTO);
+    assertEquals(10L, captorLongId.getValue());
+    assertEquals(titulo, captorTagEntity.getValue().getTitulo());
+    assertEquals(10L, captorTagEntity.getValue().getId());
+    assertEquals("uuid", captorTagEntity.getValue().getUuid());
+    assertEquals(11L, captorTagEntity.getValue().getIdJoomla());
 
-      // Verificação
-      final ArgumentCaptor<Long> captorLongId  = ArgumentCaptor.forClass(Long.class);
-      final ArgumentCaptor<TagEntity> captorTagEntity  = ArgumentCaptor.forClass(TagEntity.class);
-
-      verify(repository, times(1)).save(captorTagEntity.capture());
-      verify(repository, times(1)).findById(captorLongId.capture());
-
-      assertEquals(10L, captorLongId.getValue());
-      assertEquals(titulo, captorTagEntity.getValue().getTitulo());
-      assertEquals(10L, captorTagEntity.getValue().getId());
-      assertEquals("uuid", captorTagEntity.getValue().getUuid());
-      assertEquals(11L, captorTagEntity.getValue().getIdJoomla());
-
-      assertThat(tagDTOGravada.getId()).isEqualTo(id);
-      assertThat(tagDTOGravada.getTitulo()).isEqualTo(titulo);
-
-
+    assertThat(tagDTOGravada.getId()).isEqualTo(id);
+    assertThat(tagDTOGravada.getTitulo()).isEqualTo(titulo);
 
   }
 
@@ -191,7 +190,6 @@ class TagServiceTest {
 
     final ArgumentCaptor<TagEntity> captorTagEntity = ArgumentCaptor.forClass(TagEntity.class);
 
-
     verify(repository, times(0)).findById(anyLong());
     verify(repository, times(1)).save(captorTagEntity.capture());
 
@@ -210,40 +208,37 @@ class TagServiceTest {
   @Test
   void testGravarNotFound() throws Exception {
 
-      // Preparação
-      final String titulo = "Nova Tag";
-      final TagDTO tagDTO = new TagDTO(10L, 11L, "uuid", titulo, "apelido");
-      when(repository.findById(anyLong())).thenReturn(Optional.empty());
+    // Preparação
+    final String titulo = "Nova Tag";
+    final TagDTO tagDTO = new TagDTO(10L, 11L, "uuid", titulo, "apelido");
+    when(repository.findById(anyLong())).thenReturn(Optional.empty());
 
-      when(repository.save(any(TagEntity.class)))
-          .thenReturn(new TagEntity(10L, "uuid", 10L, titulo, "apelido", "language", null));
+    when(repository.save(any(TagEntity.class)))
+        .thenReturn(new TagEntity(10L, "uuid", 10L, titulo, "apelido", "language", null));
 
+    // Ação
+    final TagDTO tagDTOGravada = service.gravar(tagDTO);
 
+    // Verificação
 
-      // Ação
-      final TagDTO tagDTOGravada = service.gravar(tagDTO);
+    final ArgumentCaptor<TagEntity> captorTagEntity = ArgumentCaptor.forClass(TagEntity.class);
+    final ArgumentCaptor<Long> captorLong = ArgumentCaptor.forClass(Long.class);
 
+    verify(repository, times(1)).findById(captorLong.capture());
+    verify(repository, times(1)).save(captorTagEntity.capture());
 
+    assertEquals(titulo, captorTagEntity.getValue().getTitulo());
+    assertNull(captorTagEntity.getValue().getId());
+    assertEquals(11L, captorTagEntity.getValue().getIdJoomla());
+    assertEquals("apelido", captorTagEntity.getValue().getApelido());
+    assertEquals("uuid", captorTagEntity.getValue().getUuid());
+    assertEquals(10L, tagDTOGravada.getId());
+    assertEquals(10L, captorLong.getValue());
 
-      // Verificação
+    assertThat(tagDTOGravada.getTitulo()).isEqualTo(titulo);
+    assertThat(tagDTOGravada.getIdJoomla()).isEqualTo(10L);
+    assertThat(tagDTOGravada.getApelido()).isEqualTo("apelido");
 
-      final ArgumentCaptor<TagEntity> captorTagEntity = ArgumentCaptor.forClass(TagEntity.class);
-      final ArgumentCaptor<Long> captorLong = ArgumentCaptor.forClass(Long.class);
-
-      verify(repository, times(1)).findById(captorLong.capture());
-      verify(repository, times(1)).save(captorTagEntity.capture());
-
-      assertEquals(titulo, captorTagEntity.getValue().getTitulo());
-      assertNull(captorTagEntity.getValue().getId());
-      assertEquals(11L, captorTagEntity.getValue().getIdJoomla());
-      assertEquals("apelido", captorTagEntity.getValue().getApelido());
-      assertEquals("uuid", captorTagEntity.getValue().getUuid());
-      assertEquals(10L, tagDTOGravada.getId());
-      assertEquals(10L, captorLong.getValue());
-
-      assertThat(tagDTOGravada.getTitulo()).isEqualTo(titulo);
-      assertThat(tagDTOGravada.getIdJoomla()).isEqualTo(10L);
-      assertThat(tagDTOGravada.getApelido()).isEqualTo("apelido");
   }
 
 }
