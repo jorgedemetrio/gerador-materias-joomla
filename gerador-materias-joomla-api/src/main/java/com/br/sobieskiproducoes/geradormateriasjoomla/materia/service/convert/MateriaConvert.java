@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.response.ChoicesDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.response.RepostaResponseDTO;
@@ -29,6 +30,13 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.TagEntity;
  */
 @Mapper(imports = { Objects.class, Collectors.class, Arrays.class })
 public interface MateriaConvert {
+
+  /**
+   * @param materia
+   * @return
+   */
+  @Mapping(target = "tags", ignore = true)
+  MateriaEntity convert(AtributosArtigoJoomlaDTO materia);
 
   @Mapping(target = "materia", ignore = true)
   FAQEntity convert(FaqDTO materia);
@@ -63,13 +71,15 @@ public interface MateriaConvert {
   LogDialogoChatGPTEntity convert(final RepostaResponseDTO dto, ChoicesDTO choice, LocalDateTime inicio,
       String pergunta, String uuid);
 
-
   @Mapping(target = "titulo", expression = "java(tag)")
   @Mapping(target = "id", ignore = true)
   @Mapping(target = "idJoomla", ignore = true)
   @Mapping(target = "apelido", ignore = true)
   @Mapping(target = "materias", ignore = true)
   TagEntity convert(String tag);
+
+  @Mapping(target = "tags", ignore = true)
+  MateriaEntity convertJoomla(AtributosArtigoJoomlaDTO materia);
 
   @Mapping(target = "tags", ignore = true)
   @Mapping(target = "id", ignore = true)
@@ -95,21 +105,15 @@ public interface MateriaConvert {
 
   AtributosArtigoJoomlaSalvarDTO convertJoomla(MateriaEntity materia);
 
-
   @Mapping(target = "materia", source = "content")
   @Mapping(target = "uuid", source = "uuid")
   PropostaMateriaDTO copy(PropostaMateriaDTO item, String uuid, String content);
 
-/**
- * @param attributes
- * @param materiaEntity
- */
-void merge(AtributosArtigoJoomlaDTO attributes, MateriaEntity materiaEntity);
-
-/**
- * @param materia
- * @return
- */
-MateriaEntity convert(AtributosArtigoJoomlaDTO materia);
+  /**
+   * @param attributes
+   * @param materiaEntity
+   */
+  @Mapping(target = "tags", ignore = true)
+  void merge(AtributosArtigoJoomlaDTO attributes, @MappingTarget MateriaEntity materiaEntity);
 
 }

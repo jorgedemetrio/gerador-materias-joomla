@@ -27,6 +27,7 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.DadosIma
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.DadosImagensMateriasProperties;
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.JoomlaConfigurationProperties;
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.PosicaoEnum;
+import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.YoutubeConfigurationProperties;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.CategoriaService;
 
 /**
@@ -51,7 +52,7 @@ class CategoriaControllerTest {
           new DadosImagensLogoProperties("path", PosicaoEnum.ALEATORIO, PosicaoEnum.ALEATORIO, 1, 1, 2.5d, 1, 2.4d)),
       new ChatGPTConfigurationProperties("url", "bearer", "assistente", "organization", "model", 2.3d, "roleUser",
           "roleSystem", "roleAssistant", "maxTokens"),
-      new JoomlaConfigurationProperties("url", "bearer", "idioma"));
+      new JoomlaConfigurationProperties("url", "bearer", "idioma"), new YoutubeConfigurationProperties());
 
   @Test
   void testAtualizar() {

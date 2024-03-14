@@ -9,10 +9,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosArtigoJoomlaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosTagJoomlaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.TagDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.MateriaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.TagEntity;
 
 /**
@@ -22,10 +20,6 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.TagEntity;
  */
 @Mapper(imports = { Objects.class })
 public interface TagConvert {
-
-  @Mapping(target = "materias", ignore = true)
-  @Mapping(target = "id", ignore = true)
-  TagEntity toEntityNova(TagDTO tag);
 
   @Mapping(target = "id", source = "id")
   @Mapping(target = "idJoomla", source = "idJoomla")
@@ -48,10 +42,11 @@ public interface TagConvert {
 
   @Mapping(target = "materias", ignore = true)
   @Mapping(target = "id", ignore = true)
-  @Mapping(target = "apelido", source = "alias", conditionExpression = "java(Objects.nonNull(tag.getAlias()) && !tag.getAlias().isBlank())")
-  @Mapping(target = "titulo", source = "title", conditionExpression = "java(Objects.nonNull(tag.getTitle()) && !tag.getTitle().isBlank())")
+  @Mapping(target = "apelido", source = "alias", conditionExpression = "java(Objects.nonNull(tag.getApelido()) && !tag.getApelido().isBlank())")
+  @Mapping(target = "titulo", source = "title", conditionExpression = "java(Objects.nonNull(tag.getTitulo()) && !tag.getTitulo().isBlank())")
   @Mapping(target = "idJoomla", source = "id ", conditionExpression = "java(Objects.nonNull(tag.getId()) && tag.getId() > 0L )")
-  void merge(AtributosArtigoJoomlaDTO atributosArtigoJoomlaDTO, @MappingTarget MateriaEntity materiaEntity);
+  void merge(AtributosTagJoomlaDTO atributosArtigoJoomlaDTO, @MappingTarget TagEntity tag);
+
 
   @Mapping(target = "materias", ignore = true)
   @Mapping(target = "id", ignore = true)
@@ -59,4 +54,8 @@ public interface TagConvert {
   @Mapping(target = "titulo", source = "titulo", conditionExpression = "java(Objects.nonNull(tag.getTitulo()) && !tag.getTitulo().isBlank())")
   @Mapping(target = "idJoomla", source = "idJoomla ", conditionExpression = "java(Objects.nonNull(tag.getIdJoomla()) && tag.getIdJoomla() > 0L )")
   void merge(TagDTO tag, @MappingTarget TagEntity src);
+
+  @Mapping(target = "materias", ignore = true)
+  @Mapping(target = "id", ignore = true)
+  TagEntity toEntityNova(TagDTO tag);
 }

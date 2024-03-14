@@ -94,8 +94,8 @@ public class TagService {
                 tag.getAttributes().getTitle());
             if (tagEntityOpt.isPresent()) {
               tagEntity = tagEntityOpt.get();
-              convert.merge(tag.getAttributes(), tagEntity);
             } else {
+              convert.merge(tag.getAttributes(), tagEntity);
               tagEntity = convert.convertJoomla(tag.getAttributes());
             }
 

@@ -29,5 +29,5 @@ public interface MateriaRepository extends JpaRepository<MateriaEntity, Long> {
   Optional<MateriaEntity> buscarPorPergunta(@Param("id") Long id);
 
 
-  MateriaEntity findByIdJoomla(@Param("idJoomla") Long idJoomla);
+  Optional<MateriaEntity> findByIdJoomla(@Param("idJoomla") Long idJoomla);
 }
