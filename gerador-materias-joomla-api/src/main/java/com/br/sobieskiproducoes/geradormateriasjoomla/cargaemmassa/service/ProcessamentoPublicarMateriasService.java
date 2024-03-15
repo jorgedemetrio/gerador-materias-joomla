@@ -17,7 +17,7 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.materia.exception.Business
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.MateriaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.MateriaRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.MateriaJoomlaService;
-import com.br.sobieskiproducoes.geradormateriasjoomla.utils.SugerirMateriaUtils;
+import com.br.sobieskiproducoes.geradormateriasjoomla.utils.MateriaUtils;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -59,7 +59,7 @@ public class ProcessamentoPublicarMateriasService {
     }
     try {
       new File(properties.getCargaDadosImagens().getImagens().getPastaImagemMaterias()
-          .concat(SugerirMateriaUtils.pathCategoria(materiaEntity.getCategoria()))).mkdirs();
+          .concat(MateriaUtils.pathCategoria(materiaEntity.getCategoria()))).mkdirs();
     } catch (final Exception ex) {
       log.log(Level.SEVERE, "Erro ao criar a pasta da materia : ".concat(materiaEntity.getId().toString()), ex);
     }

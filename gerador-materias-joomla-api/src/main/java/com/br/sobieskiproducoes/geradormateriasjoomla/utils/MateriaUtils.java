@@ -25,7 +25,7 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.CategoriaEnt
  * @since 24 de fev. de 2024 13:31:54
  * @version 1.0.0
  */
-public class SugerirMateriaUtils {
+public class MateriaUtils {
 
   public static final Pattern ENTER = Pattern.compile("\\n");
   public static final Pattern ASPAS_DUPLAS = Pattern.compile("\\\"");
@@ -35,6 +35,9 @@ public class SugerirMateriaUtils {
 
   public static final Pattern HORA_SIMPLES = Pattern.compile("[0-9]{2}:[0-9]{2}");
   public static final Pattern HORA_COM_SEGUNDO = Pattern.compile("[0-9]{2}:[0-9]{2}::[0-9]{2}");
+  public static final Pattern PATTERN_URL = Pattern
+      .compile("(https?://|ftp://|bit\\.ly/\\w+)\\S*",
+      Pattern.CASE_INSENSITIVE);
 
   public static long getDaysBetween(final LocalDate startDate, final LocalDate endDate) {
     return startDate.until(endDate, java.time.temporal.ChronoUnit.DAYS);
@@ -58,16 +61,16 @@ public class SugerirMateriaUtils {
 
     return StreamUtils.copyToString(new ByteArrayInputStream(
 
-        ASPAS_HTML_INICIO.matcher(ASPAS_HTML.matcher(ENTER
-            .matcher(// REMOVE
-                                                                                                                        // O
-                                                                                                                        // ENTER
-                                                                                                                        // FALSO
-        ASPAS_DUPLAS.matcher(// REMOVE AS ASPAS FALSAS
-            ASPAS_SIMPLES.matcher( // REMOVE AS ASPAS FALSAS
-                in).replaceAll("'"))
-            .replaceAll("\""))
-        .replaceAll("\n")).replaceAll("")).replaceAll("").getBytes()), StandardCharsets.UTF_8);
+        ASPAS_HTML_INICIO.matcher(ASPAS_HTML.matcher(ENTER.matcher(// REMOVE
+                                                                   // O
+                                                                   // ENTER
+                                                                   // FALSO
+            ASPAS_DUPLAS.matcher(// REMOVE AS ASPAS FALSAS
+                ASPAS_SIMPLES.matcher( // REMOVE AS ASPAS FALSAS
+                    in).replaceAll("'"))
+                .replaceAll("\""))
+            .replaceAll("\n")).replaceAll("")).replaceAll("").getBytes()),
+        StandardCharsets.UTF_8);
 
   }
 
@@ -107,9 +110,13 @@ public class SugerirMateriaUtils {
             : "");
   }
 
+  public static String removeUrls(final String text) {
+    return PATTERN_URL.matcher(text).replaceAll(" ");
+  }
+
   /**
    * Não permite a criação de uma instância nova.
    */
-  private SugerirMateriaUtils() {
+  private MateriaUtils() {
   }
 }
