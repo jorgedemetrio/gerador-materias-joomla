@@ -3,7 +3,7 @@
  */
 package com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.service;
 
-import static com.br.sobieskiproducoes.geradormateriasjoomla.utils.SugerirMateriaUtils.limparTextoJson;
+import static com.br.sobieskiproducoes.geradormateriasjoomla.utils.MateriaUtils.limparTextoJson;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 

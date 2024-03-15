@@ -30,7 +30,7 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.MateriaEntit
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.MateriaRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.TagRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.convert.MateriaConvert;
-import com.br.sobieskiproducoes.geradormateriasjoomla.utils.SugerirMateriaUtils;
+import com.br.sobieskiproducoes.geradormateriasjoomla.utils.MateriaUtils;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -91,7 +91,7 @@ public class MateriaJoomlaService {
           final String alias = (nonNull(entity.getPublicar()) ? entity.getPublicar().format(DATTE_TIME_FORMATTER_ALIAS)
               : "")
               + (nonNull(n.getApelido()) && !n.getApelido().isBlank() ? n.getApelido()
-              : SugerirMateriaUtils.normalizeText(n.getTitulo()));
+              : MateriaUtils.normalizeText(n.getTitulo()));
 
           tag.setAlias(alias);
           tag.setTitle(n.getTitulo());
@@ -124,21 +124,21 @@ public class MateriaJoomlaService {
 
       if (isNull(entity.getTituloSelecionado()) || entity.getTituloSelecionado() <= 1
           || entity.getTituloSelecionado() > 3) {
-        entity.setApelido(SugerirMateriaUtils.normalizeText(entity.getTitulo1()));
+        entity.setApelido(MateriaUtils.normalizeText(entity.getTitulo1()));
         entity.setTituloSelecionado(1);
       } else {
         switch (entity.getTituloSelecionado()) {
         case 2:
-          entity.setApelido(SugerirMateriaUtils.normalizeText(entity.getTitulo1()));
+          entity.setApelido(MateriaUtils.normalizeText(entity.getTitulo1()));
           break;
         case 3:
-          entity.setApelido(SugerirMateriaUtils.normalizeText(entity.getTitulo1()));
+          entity.setApelido(MateriaUtils.normalizeText(entity.getTitulo1()));
           break;
         }
       }
 
       // Imagens
-      final String diretorioImagens = SugerirMateriaUtils.pathCategoria(entity.getCategoria());
+      final String diretorioImagens = MateriaUtils.pathCategoria(entity.getCategoria());
       final String nomeArquivo = diretorioImagens.concat("/").concat(item.getAlias()).concat(".jpg");
       final String nomeArquivoCompleto = properties.getCargaDadosImagens().getImagens().getUrl() + nomeArquivo
           + properties.getCargaDadosImagens().getImagens().getConstante() + nomeArquivo + "?width=986&height=515";

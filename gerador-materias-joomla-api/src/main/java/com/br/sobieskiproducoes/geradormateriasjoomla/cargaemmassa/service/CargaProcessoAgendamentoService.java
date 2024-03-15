@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.logging.Level;
 
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.controller.dto.RequisicaoCaragMassaDTO;
@@ -38,7 +37,7 @@ public class CargaProcessoAgendamentoService {
 
 
   // Roda sozinha a cada minuto 30 minutos depois da ultima vez que rodou
-  @Scheduled(fixedDelay = 30000) // ${configuracao.batch.gerar-materia.delay})
+  // @Scheduled(fixedDelay = 30000) // ${configuracao.batch.gerar-materia.delay})
   public void processarCriacaoMaterias() {
     try {
       final List<CargaMassaEntity> itens = repository.pegarCarga();
@@ -67,7 +66,7 @@ public class CargaProcessoAgendamentoService {
   }
 
   // @Scheduled(fixedDelay = 3600000) // Uma vez por hora
-  @Scheduled(fixedDelay = 30000) // Uma vez por hora
+  // @Scheduled(fixedDelay = 30000) // Uma vez por hora
   public void processarPùblicacaoMateria() {
     try {
 

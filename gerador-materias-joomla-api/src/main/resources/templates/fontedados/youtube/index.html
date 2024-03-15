@@ -1,9 +1,54 @@
 <!DOCTYPE html>
-<html th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::main})}">
 <head>
-	<title>Titulo 2</title>
+<title>Titulo 2</title>
 </head>
 <body>
-	<main>Teste</main>
+	<main>
+		<h1>Gerar mat&eacute;ria de v&iacute;deo</h1>
+		<form th:action="@{/fontedados/youtube/lerVideo}" method="post" enctype="application/x-www-form-urlencoded">
+			<fieldset>
+				<legend>A partir de um v&iacute;deo</legend>
+				<div class="mb-3">
+					<label for="link" class="form-label">URL V&iacute;deo</label> <input id="link" name="link" type="text"
+						class="form-control" required="required" maxlength="250" minlength="10" aria-describedby="videoHelp"
+					/>
+					<div id="videoHelp" class="form-text">Campo requerido.</div>
+				</div>
+				<div class="mb-3">
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" id="publicarCMSVideo" name="publicarCMS"> <label
+							class="form-check-label" for="publicarCMSVideo"
+						> Publicar no servidor CMS </label>
+					</div>
+				</div>
+				<div class="col-auto">
+					<button type="submit" class="btn btn-primary mb-3">Gerar</button>
+				</div>
+			</fieldset>
+		</form>
+		
+		<form th:action="@{/fontedados/youtube/lerPlaylist}" method="post" enctype="application/x-www-form-urlencoded">
+			<fieldset>
+				<legend>A partir de uma playlist</legend>
+				<div class="mb-3">
+					<label for="link" class="form-label">URL da playlist</label> <input id="link" name="link" type="text"
+						class="form-control" required="required" maxlength="250" minlength="10"  aria-describedby="videoHelp"
+					/>
+					<div id="videoHelp" class="form-text">Campo requerido.</div>
+				</div>
+				<div class="mb-3">
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox"  id="publicarCMSPlayList" name="publicarCMS"> <label
+							class="form-check-label" for="publicarCMSPlayList"
+						> Publicar no servidor CMS </label>
+					</div>
+				</div>
+				<div class="col-auto">
+					<button type="submit" class="btn btn-primary mb-3">Gerar</button>
+				</div>
+			</fieldset>
+		</form>
+	</main>
 </body>
 </html>

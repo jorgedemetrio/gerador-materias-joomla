@@ -18,7 +18,7 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.controller.d
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.service.GerarMapaPerguntasService;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.GerarMateriaService;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.MateriaJoomlaService;
-import com.br.sobieskiproducoes.geradormateriasjoomla.utils.SugerirMateriaUtils;
+import com.br.sobieskiproducoes.geradormateriasjoomla.utils.MateriaUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -50,9 +50,9 @@ public class CargaMateriaEmMassaService {
 
     try {
       repository.save(new CargaMassaEntity(null, uuid, StatusProcessamentoEnum.PROCESSAR,
-          SugerirMateriaUtils.getLocalDateTime(request.getDataInicioPublicacao(),
+          MateriaUtils.getLocalDateTime(request.getDataInicioPublicacao(),
               request.getHoarios().get(0).getHoraio()),
-          SugerirMateriaUtils.getLocalDateTime(request.getDataFimPublicacao(), request.getHoarios().get(0).getHoraio()),
+          MateriaUtils.getLocalDateTime(request.getDataFimPublicacao(), request.getHoarios().get(0).getHoraio()),
           null, null, null, objectMapper.writeValueAsString(request)));
     } catch (final JsonProcessingException e) {
       log.info("Falha ao realizar o salvamento do processo em lote ".concat(uuid));
