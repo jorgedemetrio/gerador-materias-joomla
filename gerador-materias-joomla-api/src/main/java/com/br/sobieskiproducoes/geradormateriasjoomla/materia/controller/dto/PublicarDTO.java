@@ -31,7 +31,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PublilcarDTO {
+public class PublicarDTO {
 
   @FutureOrPresent
   @JsonSerialize(using = LocalDateTimeSerializer.class)
