@@ -62,7 +62,7 @@ public class TagService {
 
   /**
    *
-   * @return O univero de registros atualizados.
+   * @return O universo de registros atualizados.
    */
   @Transactional
   public Map<String, Integer> atualizarBancoTag() {

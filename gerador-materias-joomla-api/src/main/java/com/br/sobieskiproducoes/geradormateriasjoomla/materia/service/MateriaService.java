@@ -38,8 +38,6 @@ import lombok.extern.java.Log;
 public class MateriaService {
 	private final MateriaRepository repository;
     private final MateriaConvert convert;
-    private final ArtigoJoomlaClient client;
-    private final ConfiguracoesProperties properties;
 
 
     public Boolean apagar(@NotNull final Long id) {
@@ -53,60 +51,6 @@ public class MateriaService {
     }
 
 
-    public Map<String, Integer> atualizar() {
-        final List<MateriaEntity> itens = new ArrayList<>();
-        GenericoItemJoomlaResponse<List<GenericoJoomlaDataDTO<AtributosArtigoJoomlaDTO>>> consulta = null;
-        int offset = 0;
-        final Map<String, Integer> retorno = new HashMap<>();
-        MateriaEntity materiaEntity = null;
-        Optional<MateriaEntity> materiaEntityOpt = null;
-
-        // Busca as matérias
-        do {
-            if (consulta == null) {
-                // Primeira página
-                consulta = client.get();
-            } else {
-                // Busca a próxima página
-                consulta = client.get(String.valueOf(offset * 20), "20");
-            }
-            offset++;
-
-            if (consulta != null && consulta.getData() != null && !consulta.getData().isEmpty()) {
-
-                for (final GenericoJoomlaDataDTO<AtributosArtigoJoomlaDTO> materia : consulta.getData()) {
-                    // Salva apenas a matéria no banco que pertence ao idioma padrão do site
-                    if (materia.getAttributes() == null
-                            || materia.getAttributes().getLanguage().equals(properties.getJoomla().getIdioma())
-                            || MateriaConstants.SEM_IDIOMA.equals(materia.getAttributes().getLanguage())) {
-                        materiaEntityOpt = repository.findByIdJoomla(materia.getAttributes().getId());
-                        if (materiaEntityOpt.isPresent()) {
-                            materiaEntity = materiaEntityOpt.get();
-                            convert.merge(materia.getAttributes(), materiaEntity);
-                        } else {
-                            materiaEntity = convert.convertJoomla(materia.getAttributes());
-                        }
-
-                        try {
-                            repository.save(materiaEntity);
-                        } catch (final Exception ex) {
-                            log.log(Level.SEVERE, ex.getLocalizedMessage(), ex.getCause());
-                        }
-                        itens.add(materiaEntity);
-                    }
-                }
-
-            }
-
-        } while (consulta != null && consulta.getLinks() != null && consulta.getLinks().getNext() != null
-                && consulta.getData() != null && !consulta.getLinks().getNext().isBlank());
-
-        retorno.put("total", itens.size());
-
-        log.info("Gravando lista de %d de matérias.".formatted(itens.size()));
-        retorno.put("processados", itens.size());
-        return retorno;
-    }
 
     public PropostaMateriaDTO criar(final AtributosArtigoJoomlaDTO materia) {
     	MateriaEntity materiaEntity = null;
@@ -132,6 +76,7 @@ public class MateriaService {
     	    }
     	return convert.convert(materiaEntityOpt.get());
     }
-
+    
+    
 
 }
