@@ -3,20 +3,10 @@ package com.br.sobieskiproducoes.geradormateriasjoomla.materia.service;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.logging.Level;
 
 import org.springframework.stereotype.Service;
 
-import com.br.sobieskiproducoes.geradormateriasjoomla.config.MateriaConstants;
-import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ConfiguracoesProperties;
-import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoItemJoomlaResponse;
-import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoJoomlaDataDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.ArtigoJoomlaClient;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosArtigoJoomlaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.PropostaMateriaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.MateriaEntity;

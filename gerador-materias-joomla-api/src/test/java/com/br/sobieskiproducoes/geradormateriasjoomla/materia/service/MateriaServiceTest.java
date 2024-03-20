@@ -3,21 +3,28 @@
  */
 package com.br.sobieskiproducoes.geradormateriasjoomla.materia.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.PropostaMateriaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.MateriaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.MateriaRepository;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.convert.TagConvert;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.convert.MateriaConvert;
 
 /**
  * @author Ane Batista
@@ -36,7 +43,7 @@ public class MateriaServiceTest {
 	MateriaRepository repository;
 	
 	@Spy
-	TagConvert convert;
+	MateriaConvert convert;
 	
 	@Test
 	void  apagarMateriaTest() {
@@ -46,4 +53,23 @@ public class MateriaServiceTest {
 		assertFalse(service.apagar(id));
 		
 	}
+	
+	@Test
+	void buscarMateriasTest() {
+			final Long id = 10L;
+		 	MateriaEntity materiaEntity = new MateriaEntity();
+
+		    when(repository.findById(eq(id))).thenReturn(Optional.of(materiaEntity));
+
+		    final PropostaMateriaDTO propostaMateriaDTO = service.getBuscarMateria(id);
+
+		    final ArgumentCaptor<Long> capIdLong = ArgumentCaptor.forClass(Long.class);
+		    verify(repository, times(1)).findById(capIdLong.capture());
+		    assertEquals(id, capIdLong.getValue());
+
+		    assertNotNull(propostaMateriaDTO); // Verifica se propostaMateriaDTO não é null
+		    assertEquals(id, propostaMateriaDTO.getId());
+	}
+
+
 }
