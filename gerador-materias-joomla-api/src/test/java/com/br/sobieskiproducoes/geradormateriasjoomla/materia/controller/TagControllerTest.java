@@ -28,6 +28,7 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.DadosIma
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.JoomlaConfigurationProperties;
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.PosicaoEnum;
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.YoutubeConfigurationProperties;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.TagDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.TagService;
 
 /**
@@ -68,5 +69,24 @@ public class TagControllerTest {
 	    assertEquals(HttpStatus.OK, retorno.getStatusCode());
 	    assertEquals(10, retorno.getBody().get("total"));
 	}
+	
+	 @Test
+	    public void buscarItem_RetornaNotFoundQuandoNull() {
+	        when(service.buscarPorId(1L)).thenReturn(null);
+
+	        ResponseEntity<TagDTO> result = tagController.buscarItem(1L);
+
+	        assertEquals(ResponseEntity.notFound().build(), result);
+	    }
+
+	    @Test
+	    public void buscarItem_RetornaOkQuandoNaoNullTest() {
+	        TagDTO tag = new TagDTO();
+	        when(service.buscarPorId(1L)).thenReturn(tag);
+
+	        ResponseEntity<TagDTO> result = tagController.buscarItem(1L);
+
+	        assertEquals(ResponseEntity.ok(tag), result);
+	    }
 	 
 }
