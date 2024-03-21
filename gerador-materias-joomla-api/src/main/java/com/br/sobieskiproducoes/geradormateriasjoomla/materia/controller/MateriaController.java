@@ -20,7 +20,7 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.Generico
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoJoomlaDataDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosArtigoSalvoJoomlaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.PropostaMateriaDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.PublilcarDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.PublicarDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.SugerirMateriaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.exception.ObjectoJaExiteNoBancoBusinessException;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.GerarMateriaService;
@@ -51,7 +51,7 @@ public class MateriaController {
   @PostMapping(path = "{id}/publicar", consumes = { MediaType.APPLICATION_JSON_VALUE })
   @ResponseBody
   public ResponseEntity<GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosArtigoSalvoJoomlaDTO>>> publicar(
-      @PathVariable("id") final Long id, @RequestBody final PublilcarDTO dto) {
+      @PathVariable("id") final Long id, @RequestBody final PublicarDTO dto) {
     log.info("Gerando materia sobre %d ".formatted(id));
     try {
       return ResponseEntity.status(HttpStatus.CREATED).body(service.publicarMateriaJoomla(id));

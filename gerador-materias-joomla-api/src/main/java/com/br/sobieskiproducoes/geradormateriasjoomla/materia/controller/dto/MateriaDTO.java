@@ -1,5 +1,5 @@
 /**
- *
+ * 
  */
 package com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto;
 
@@ -12,19 +12,31 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * @author Jorge Demetrio
- * @since 22 de fev. de 2024 19:55:23
+ * @author Ane Batista
+ * @since 15 de mar. de 2024 19:58:18
  * @version 1.0.0
- */
+ * 
+ */
+
 @Getter
 @Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class FaqDTO {
-  private Long id;
-  private String uuid;
-  private String pergunta;
-  private String resposta;
+public class MateriaDTO {
+	private Long id;
+	private Long idJoomla;
+	private String tema;
+	private String uuid;
+	private String titulo1;
+	private String titulo2;
+	private String titulo3;
+	private String metaDescricao;
+	private String keywords;
+	private String materia;
+	private String apelido;
+	  
+	  
+	  
 }

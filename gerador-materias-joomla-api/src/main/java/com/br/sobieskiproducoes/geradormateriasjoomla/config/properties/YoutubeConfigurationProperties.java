@@ -28,4 +28,5 @@ public class YoutubeConfigurationProperties {
   private String clientId;
   private String secrets;
   private String chaveApi;
+  private String appId;
 }

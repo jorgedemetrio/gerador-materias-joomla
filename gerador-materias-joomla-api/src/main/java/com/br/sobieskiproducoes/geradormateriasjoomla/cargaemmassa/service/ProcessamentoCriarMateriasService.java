@@ -32,7 +32,7 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.MateriaEntit
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.MateriaRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.GerarMateriaService;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.MateriaJoomlaService;
-import com.br.sobieskiproducoes.geradormateriasjoomla.utils.SugerirMateriaUtils;
+import com.br.sobieskiproducoes.geradormateriasjoomla.utils.MateriaUtils;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -112,7 +112,7 @@ public class ProcessamentoCriarMateriasService {
       }).collect(Collectors.toList());
       for (final MapaPerguntaDTO mapaPerguntaDTO : processarComData) {
 
-        data = SugerirMateriaUtils.getLocalDateTime(mapaPerguntaDTO.getDataSugestaoPublicacao(), hora.getHoraio());
+        data = MateriaUtils.getLocalDateTime(mapaPerguntaDTO.getDataSugestaoPublicacao(), hora.getHoraio());
 
         processarMateria(itens, data, dataPublicadas, mapaPerguntaDTO, request, uuid);
 
@@ -121,13 +121,13 @@ public class ProcessamentoCriarMateriasService {
     // Será processado os que não tem data ou devem ignorar a data.
     for (final HorarioRequisiscaoDTO hora : request.getHoarios()) {
       final long rodar = nonNull(request.getDataFimPublicacao())
-          ? SugerirMateriaUtils.getDaysBetween(request.getDataInicioPublicacao(), request.getDataFimPublicacao())
+          ? MateriaUtils.getDaysBetween(request.getDataInicioPublicacao(), request.getDataFimPublicacao())
           : 1L;
       long rodaram = 0;
       while (rodaram <= rodar && itens.size() > 0) {
 
         final MapaPerguntaDTO mapaPerguntaDTO = itens.get(0);
-        data = SugerirMateriaUtils.getLocalDateTime(request.getDataInicioPublicacao(), hora.getHoraio(), rodaram);
+        data = MateriaUtils.getLocalDateTime(request.getDataInicioPublicacao(), hora.getHoraio(), rodaram);
         processarMateria(itens, data, dataPublicadas, mapaPerguntaDTO, request, uuid);
         // Força remover
         itens.remove(mapaPerguntaDTO);
