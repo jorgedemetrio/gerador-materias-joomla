@@ -88,5 +88,24 @@ public class TagControllerTest {
 
 	        assertEquals(ResponseEntity.ok(tag), result);
 	    }
+	    
+	    @Test
+	    public void salvar_RetornarOkQuandoTagNaoNull() {
+	        TagDTO tag = new TagDTO();
+	        tag.setTitulo("Teste");
+	        tag.setTitulo("Descrição do teste");
+
+	        TagDTO tagSalva = new TagDTO();
+	        tagSalva.setId(10L);
+	        tagSalva.setTitulo("Teste");
+	        tagSalva.setApelido("Apelido do teste");
+
+	        when(service.gravar(tag)).thenReturn(tagSalva);
+
+	        ResponseEntity<TagDTO> result = tagController.salvar(tag);
+
+
+	        assertEquals(ResponseEntity.ok(tagSalva), result);
+	    }
 	 
 }

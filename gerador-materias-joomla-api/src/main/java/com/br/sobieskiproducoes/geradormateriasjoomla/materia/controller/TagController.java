@@ -126,8 +126,7 @@ public class TagController {
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "Gravado com sucesso.", content = @Content(schema = @Schema(implementation = TagDTO.class))) })
   @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
-  @ResponseBody
-  private ResponseEntity<TagDTO> salvar(@NotNull @Validated @RequestBody final TagDTO tag) {
+  @ResponseBody ResponseEntity<TagDTO> salvar(@NotNull @Validated @RequestBody final TagDTO tag) {
 
     return ResponseEntity.ok(service.gravar(tag));
   }
