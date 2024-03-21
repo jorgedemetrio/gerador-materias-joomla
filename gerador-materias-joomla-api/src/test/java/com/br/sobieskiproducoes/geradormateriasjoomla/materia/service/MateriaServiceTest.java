@@ -1,12 +1,12 @@
 /**
- * 
+ *
  */
 package com.br.sobieskiproducoes.geradormateriasjoomla.materia.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -25,6 +25,7 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.Pro
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.MateriaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.MateriaRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.convert.MateriaConvert;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.convert.MateriaConvertImpl;
 
 /**
  * @author Ane Batista
@@ -35,31 +36,31 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.convert.Ma
 
 @ExtendWith(MockitoExtension.class)
 public class MateriaServiceTest {
-	
+
 	@InjectMocks
 	MateriaService service;
-	
+
 	@Mock
 	MateriaRepository repository;
-	
+
 	@Spy
-	MateriaConvert convert;
-	
+    MateriaConvert convert = new MateriaConvertImpl();
+
 	@Test
 	void  apagarMateriaTest() {
 		final Long id = 10L;
 		final Optional<MateriaEntity> materiaEntityOpt = repository.findById(id);
 		when(repository.findById(id)).thenReturn(materiaEntityOpt);
 		assertFalse(service.apagar(id));
-		
+
 	}
-	
+
 	@Test
 	void buscarMateriasTest() {
 			final Long id = 10L;
-		 	MateriaEntity materiaEntity = new MateriaEntity();
-
-		    when(repository.findById(eq(id))).thenReturn(Optional.of(materiaEntity));
+		 	final MateriaEntity materiaEntity = new MateriaEntity();
+            materiaEntity.setId(id);
+            when(repository.findById(anyLong())).thenReturn(Optional.of(materiaEntity));
 
 		    final PropostaMateriaDTO propostaMateriaDTO = service.getBuscarMateria(id);
 
