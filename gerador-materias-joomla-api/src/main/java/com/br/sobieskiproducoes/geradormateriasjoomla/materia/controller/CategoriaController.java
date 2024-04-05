@@ -3,13 +3,13 @@
  */
 package com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.dto.RetornoBusinessDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.CategoriaDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.TagDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.CategoriaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.CategoriaService;
 
@@ -95,6 +94,22 @@ public class CategoriaController {
 	      @NotNull @RequestParam(name = "p", required = false, defaultValue = "0") final Integer pagina) {
 	    return ResponseEntity.ok(service.busca(titulo, pagina));
 	  }
+  
+  @Operation(summary = "apaga a categoria")
+  @ApiResponse(responseCode = "200", description = "categoria apagada com sucesso")
+  @ApiResponse(responseCode = "404", description = "erro ao apagar categoria")
+  @DeleteMapping("/{id}/delete")
+  @ResponseBody
+  private ResponseEntity<?> delete(@NotNull @PathVariable(name = "id", required = false) final Long id){
+	  if (service.apagar(id)) {
+	      log.info("Não encontrada categoria com o id:".concat(id.toString()));
+	      return ResponseEntity.accepted().build();
+	    }
+	    return ResponseEntity.notFound().build();
+  }
+  
+  
+  
 
 }
 

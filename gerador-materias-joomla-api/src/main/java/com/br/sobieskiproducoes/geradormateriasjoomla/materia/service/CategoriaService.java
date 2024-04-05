@@ -28,6 +28,7 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.Categoria
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosCategoriaJoomlaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.CategoriaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.CategoriaEntity;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.TagEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.CategoriaRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.convert.CategoriaConvert;
 
@@ -176,14 +177,15 @@ public class CategoriaService {
     }
     return naoEstaSalvo;
   }
-/**
- * @param titulo
- * @param pagina
- * @return
- */
-public Object buscaPorTitulo(String titulo, @NotNull Integer pagina) {
-	// TODO Auto-generated method stub
-	return null;
-}
 
+  
+  public Boolean apagar(@NotNull final Long id) {
+	    final Optional<CategoriaEntity> categoriaEntityOpt = categoriaRepository.findById(id);
+	    if (!categoriaEntityOpt.isPresent()) {
+	      return Boolean.FALSE;
+	    }
+	    categoriaRepository.delete(categoriaEntityOpt.get());
+	    log.info("Apagado a Tag ".concat(id.toString()));
+	    return Boolean.TRUE;
+	  }
 }
