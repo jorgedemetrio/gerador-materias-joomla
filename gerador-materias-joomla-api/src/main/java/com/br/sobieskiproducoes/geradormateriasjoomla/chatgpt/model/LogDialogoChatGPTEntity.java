@@ -17,23 +17,17 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 /**
  * @author Jorge Demetrio
  * @since 23 de fev. de 2024 19:03:57
  * @version 1.0.0
  */
-@Getter
-@Setter
-@ToString
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(of = { "id" })
 @Entity
 @Table(name = "tbl_dialogo_chatgpt")
 public class LogDialogoChatGPTEntity {

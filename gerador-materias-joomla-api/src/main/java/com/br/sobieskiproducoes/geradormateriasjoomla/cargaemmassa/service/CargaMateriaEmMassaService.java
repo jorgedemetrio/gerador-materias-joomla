@@ -12,12 +12,9 @@ import org.springframework.stereotype.Service;
 import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.controller.dto.RequisicaoCaragMassaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.model.CargaMassaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.repository.CargaMassaRepository;
-import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ConfiguracoesProperties;
 import com.br.sobieskiproducoes.geradormateriasjoomla.dto.StatusProcessamentoEnum;
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.controller.dto.MapaPerguntaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.service.GerarMapaPerguntasService;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.GerarMateriaService;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.MateriaJoomlaService;
 import com.br.sobieskiproducoes.geradormateriasjoomla.utils.MateriaUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,9 +33,6 @@ import lombok.extern.java.Log;
 public class CargaMateriaEmMassaService {
 
   private final GerarMapaPerguntasService gerarMapaPerguntasService;
-  private final GerarMateriaService gerarMateriaService;
-  private final MateriaJoomlaService materiaJoomlaService;
-  private final ConfiguracoesProperties properties;
   private final CargaMassaRepository repository;
   private final ObjectMapper objectMapper;
 

@@ -12,7 +12,7 @@
 	<artifactId>gerador-materias-joomla-batch</artifactId>
 
 
-	<name>gerador-materias-joomla-api</name>
+	<name>gerador-materias-joomla-batch</name>
 	<description>Gerador de matérias com ChatGPT / Joomla</description>
 	<packaging>jar</packaging>
 	<properties>
