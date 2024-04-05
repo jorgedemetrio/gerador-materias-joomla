@@ -3,27 +3,18 @@
  */
 package com.br.sobieskiproducoes.geradormateriasjoomla.fontedados.consumer;
 
-import java.net.URI;
+import java.io.ByteArrayOutputStream;
 import java.net.URLDecoder;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.logging.Level;
 
 import org.springframework.stereotype.Component;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ConfiguracoesProperties;
 import com.br.sobieskiproducoes.geradormateriasjoomla.fontedados.dto.YoutubeVideoDTO;
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.youtube.YouTube;
-import com.google.api.services.youtube.model.Caption;
 import com.google.api.services.youtube.model.CaptionListResponse;
 import com.google.api.services.youtube.model.PlaylistItem;
 import com.google.api.services.youtube.model.PlaylistItemListResponse;
@@ -48,42 +39,29 @@ public class YoutubePlaylistParser {
   private final ConfiguracoesProperties properties;
 
   private String extractListParam(final String playlistUrl) throws Exception {
-    final HttpClient client = HttpClient.newHttpClient();
-    final HttpRequest request = HttpRequest.newBuilder().uri(URI.create(playlistUrl)).GET().build();
-
-    final HttpResponse<String> response = client.send(request,
-        HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
-    final Map<String, List<String>> params = new HashMap<>();
-    List<String> paramList = new ArrayList<>();
-    for (final String param : response.body().split("&")) {
-      final String[] keyValue = param.split("=");
-      paramList = new ArrayList<>();
-      paramList.add(URLDecoder.decode(keyValue[1], StandardCharsets.UTF_8.name()));
-      params.put(URLDecoder.decode(keyValue[0], StandardCharsets.UTF_8.name()), paramList);
+    final String params = playlistUrl.substring(playlistUrl.indexOf("?") + 1);
+    final String[] paramsArray = params.split("&");
+    String[] keyValue = null;
+    for (final String param : paramsArray) {
+      keyValue = param.split("=");
+      if ("list".equals(URLDecoder.decode(keyValue[0], StandardCharsets.UTF_8.name()))) {
+        return URLDecoder.decode(keyValue[1], StandardCharsets.UTF_8.name());
+      }
     }
-
-    final List<String> listValues = params.getOrDefault("list", Collections.emptyList());
-    return listValues.isEmpty() ? null : listValues.get(0);
-
+    return null;
   }
 
   private String extractVideoParam(final String playlistUrl) throws Exception {
-    final HttpClient client = HttpClient.newHttpClient();
-    final HttpRequest request = HttpRequest.newBuilder().uri(URI.create(playlistUrl)).GET().build();
-
-    final HttpResponse<String> response = client.send(request,
-        HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
-    final Map<String, List<String>> params = new HashMap<>();
-    List<String> paramList = new ArrayList<>();
-    for (final String param : response.body().split("&")) {
-      final String[] keyValue = param.split("=");
-      paramList = new ArrayList<>();
-      paramList.add(URLDecoder.decode(keyValue[1], StandardCharsets.UTF_8.name()));
-      params.put(URLDecoder.decode(keyValue[0], StandardCharsets.UTF_8.name()), paramList);
+    final String params = playlistUrl.substring(playlistUrl.indexOf("?") + 1);
+    final String[] paramsArray = params.split("&");
+    String[] keyValue = null;
+    for (final String param : paramsArray) {
+      keyValue = param.split("=");
+      if ("v".equals(URLDecoder.decode(keyValue[0], StandardCharsets.UTF_8.name()))) {
+        return URLDecoder.decode(keyValue[1], StandardCharsets.UTF_8.name());
+      }
     }
-
-    final List<String> listValues = params.getOrDefault("v", Collections.emptyList());
-    return listValues.isEmpty() ? null : listValues.get(0);
+    return null;
 
   }
 
@@ -92,15 +70,13 @@ public class YoutubePlaylistParser {
 
     final String videoId = extractVideoParam(url);
 
-    final YouTube youtube = youtubeService;
-
-    final YouTube.Videos.List request = youtube.videos().list(PART);
+    final YouTube.Videos.List request = youtubeService.videos().list(PART);
     request.setId(videoId);
+    request.setKey(properties.getYoutube().getChaveApi());
 
     final VideoListResponse response = request.execute();
 
     final List<Video> itens = response.getItems();
-
 
     return itens.size() > 0 ? getYoutubeVideoDTO(itens.get(0)) : null;
 
@@ -112,10 +88,7 @@ public class YoutubePlaylistParser {
     final List<YoutubeVideoDTO> titlesAndDescriptions = new ArrayList<>();
 
     for (final Video video : videos) {
-      final String title = video.getSnippet().getTitle();
-      final String description = video.getSnippet().getDescription();
       titlesAndDescriptions.add(getYoutubeVideoDTO(video));
-
     }
 
     return titlesAndDescriptions;
@@ -123,29 +96,45 @@ public class YoutubePlaylistParser {
 
   public String getLegenda(final String videoId) throws Exception {
     // JacksonFactory
-    final YouTube youtube = new YouTube.Builder(GoogleNetHttpTransport.newTrustedTransport(), new GsonFactory(),
-        request -> {
-        }).setApplicationName(properties.getYoutube().getAppId()).build();
+//    final YouTube youtube = new YouTube.Builder(GoogleNetHttpTransport.newTrustedTransport(), new GsonFactory(),
+//        request -> {
+//        }).setApplicationName(properties.getYoutube().getAppId()).build();
 
-    final YouTube.Captions.List request = youtube.captions().list(PART, videoId);
-    // request.setKey(properties.getYoutube().getChaveApi());
+//     ByteArrayOutputStream resultStream;
+//
+//    YouTube.Captions.Download request1;
+
+    final YouTube.Captions.List request2 = youtubeService.captions().list("id, snippet", videoId);
+    request2.setKey(properties.getYoutube().getChaveApi());
+    request2.setVideoId(videoId);
     // request.setPart(PART);
 
-    final CaptionListResponse response = request.execute();
-    final List<Caption> captionsList = response.getItems();
-    if (captionsList != null && !captionsList.isEmpty()) {
-      final Caption captions = captionsList.get(0);
-      return captions.getSnippet().getTrackKind() + ": " + captions.getSnippet().keySet().stream()
-          .map(n -> captions.getSnippet().get(n).toString()).collect(Collectors.joining());
-    }
+    final CaptionListResponse response = request2.execute();
+    final StringBuilder captionsInfo = new StringBuilder();
 
-    return "Nenhuma legenda encontrada.";
+    response.getItems().forEach(caption -> {
+      final ByteArrayOutputStream resultStream = new ByteArrayOutputStream();
+      try {
+        final YouTube.Captions.Download request1 = youtubeService.captions().download(caption.getId());
+        request1.setKey(properties.getYoutube().getChaveApi());
+        request1.getMediaHttpDownloader();
+        request1.executeMediaAndDownloadTo(resultStream);
+      } catch (final Exception ex) {
+        log.log(Level.SEVERE, ex.getMessage(), ex.getCause());
+      }
+      captionsInfo.append("Caption ID: ").append(caption.getId())
+                  .append(", Language: ").append(caption.getSnippet().getLanguage())
+                  .append(", Name: ").append(caption.getSnippet().getName())
+                  .append(", Legenda: ").append(resultStream.toString()).append("\n");
+
+    });
+    return captionsInfo.toString();
+
   }
 
   private List<Video> getVideosFromPlaylist(final String playlistId) throws Exception {
-    final YouTube youtube = youtubeService;
 
-    final YouTube.PlaylistItems.List request = youtube.playlistItems().list("id,snippet");
+    final YouTube.PlaylistItems.List request = youtubeService.playlistItems().list("id,snippet");
     request.setKey(properties.getYoutube().getChaveApi());
     request.setPlaylistId(playlistId);
     request.setMaxResults((long) 50);
@@ -162,7 +151,7 @@ public class YoutubePlaylistParser {
     for (final PlaylistItem playlistItemSnippet : itens) {
       final String videoId = playlistItemSnippet.getId();
 
-      final YouTube.Videos.List videoRequest = youtube.videos().list(videoId);
+      final YouTube.Videos.List videoRequest = youtubeService.videos().list(videoId);
       videoRequest.setKey(properties.getYoutube().getChaveApi());
       videoRequest.setId(videoId);
       videoRequest.setPart("snippet");

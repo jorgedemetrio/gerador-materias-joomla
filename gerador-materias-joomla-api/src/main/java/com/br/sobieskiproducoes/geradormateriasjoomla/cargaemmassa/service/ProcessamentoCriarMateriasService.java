@@ -18,7 +18,6 @@ import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.PlatformTransactionManager;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.controller.dto.HorarioRequisiscaoDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.controller.dto.RequisicaoCaragMassaDTO;
@@ -31,7 +30,6 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.Sug
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.MateriaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.MateriaRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.GerarMateriaService;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.MateriaJoomlaService;
 import com.br.sobieskiproducoes.geradormateriasjoomla.utils.MateriaUtils;
 
 import jakarta.transaction.Transactional;
@@ -49,7 +47,7 @@ import lombok.extern.java.Log;
 public class ProcessamentoCriarMateriasService {
 
   private final ConfiguracoesProperties properties;
-  private final MateriaJoomlaService materiaJoomlaService;
+
   private final GerarMateriaService gerarMateriaService;
   private final MateriaRepository repository;
   private final MapaPerguntaRepository mapaPerguntaRepository;
@@ -57,7 +55,6 @@ public class ProcessamentoCriarMateriasService {
 
   private Boolean erroInterno = false;
 
-  private final PlatformTransactionManager transactionManager;
 
   /**
    * @param uuid

@@ -14,21 +14,15 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 /**
  * @author Jorge Demetrio
  * @since 22 de fev. de 2024 14:21:37
  * @version 1.0.0
  */
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode(of = { "id" })
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -40,20 +34,20 @@ public class AtributosArtigoSalvoJoomlaDTO {
   private String title;
   private String alias;
   private Long state;
-  
+
   @JsonSerialize(using = LocalDateTimeSerializer.class)
   @JsonDeserialize(using = LocalDateTimeDeserializer.class)
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime created;
   private Long created_by;
   private String created_by_alias;
-  
+
   @JsonSerialize(using = LocalDateTimeSerializer.class)
   @JsonDeserialize(using = LocalDateTimeDeserializer.class)
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime modified;
   private Long modified_by;
-  
+
   @JsonSerialize(using = LocalDateTimeSerializer.class)
   @JsonDeserialize(using = LocalDateTimeDeserializer.class)
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -64,18 +58,18 @@ public class AtributosArtigoSalvoJoomlaDTO {
   private String metadesc;
   private Integer access;
   private Integer hits;
-  
+
   private Integer featured;
   private String language;
   private String note;
 
   private String text;
-  
+
   /*
   "metadata": [],
   "tags": [],
   "featured_up": null,
-  "featured_down": null,  
+  "featured_down": null,
   "publish_down": null,
   "images": [],
   "urls": [],

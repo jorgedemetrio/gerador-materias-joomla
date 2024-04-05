@@ -138,7 +138,6 @@ public class GerarMapaPerguntasService {
   @Transactional
   public List<MapaPerguntaDTO> gerarMapa(final RequisitaPerguntasDTO request, final String uuid) {
 
-    int totalProcessar = request.getQuantidade();
     int processar = 0;
 
     String mes = null;
@@ -165,17 +164,15 @@ public class GerarMapaPerguntasService {
 
 
 
-    while (totalProcessar > 0) {
+    while (itens.size() < request.getQuantidade()) {
 
       // Prepara a massa de dados usada nas perguntas.
 
-      if (totalProcessar > PROCESSOS_POR_VEZ) {
-        totalProcessar -= PROCESSOS_POR_VEZ;
+      if (itens.size() + PROCESSOS_POR_VEZ > request.getQuantidade()) {
         processar = PROCESSOS_POR_VEZ;
-        log.info("Quebrou o processamento do mapa restando processar : " + totalProcessar);
+        log.info("Quebrou o processamento do mapa restando processar : " + processar);
       } else {
-        processar = totalProcessar;
-        totalProcessar = 0;
+        processar = request.getQuantidade() - itens.size();
         log.info("O total " + processar);
       }
 
