@@ -4,10 +4,13 @@
 package com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller;
 
 import java.util.Map;
+import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.dto.RetornoBusinessDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.CategoriaDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.CategoriaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.CategoriaService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,6 +29,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
@@ -62,5 +67,21 @@ public class CategoriaController {
       @RequestParam(name = "p", required = false, defaultValue = "0") final Integer pagina) {
     return ResponseEntity.ok(service.busca(titulo, pagina));
   }
+  
+  @Operation(summary = "busca categoria por id")
+  @ApiResponse(responseCode = "200", description = "retorna uma categoria", content = @Content(array = @ArraySchema(schema = @Schema(implementation = CategoriaDTO.class))))
+  @ApiResponse(responseCode = "404", description = "categoria não encontrada")
+  @GetMapping(path = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
+  @ResponseBody
+  public ResponseEntity<CategoriaDTO> buscaPorId(@NotNull @PathVariable(name = "id", required = true) final Long id) {
+      Optional<CategoriaEntity> categoriaEntity = CategoriaEntity.findById(id);
+      if (categoriaEntity.isPresent()) {
+          CategoriaDTO categoriaDTO = new CategoriaDTO();
+          BeanUtils.copyProperties(categoriaEntity.get(), categoriaDTO);
+          return ResponseEntity.ok(categoriaDTO);
+      } else {
+          return ResponseEntity.notFound().build();
+      }
+  }}
 
-}
+

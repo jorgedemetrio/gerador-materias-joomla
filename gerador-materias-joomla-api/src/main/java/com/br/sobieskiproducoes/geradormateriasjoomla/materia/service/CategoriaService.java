@@ -53,6 +53,10 @@ public class CategoriaService {
    *
    * @return O univero de registros atualizados.
    */
+  
+  public Optional<CategoriaEntity> findById(Long id) {
+      return categoriaRepository.findById(id);
+  }
   @Transactional
   public Map<String, Integer> atualizarBancoCategoria() {
     final List<CategoriaEntity> itens = new ArrayList<>();
@@ -153,7 +157,7 @@ public class CategoriaService {
 
   private boolean jaEstaSalvoCorrigePai(final CategoriaEntity c1) {
     final boolean naoEstaSalvo = !categoriaRepository.findByIdJoomla(c1.getIdJoomla()).isPresent();
-    // Sen não estiver salvo verifica se o pai já está no banco , sen ão achar deixa
+    // Se não estiver salvo verifica se o pai já está no banco , se não achar deixa
     // null
     if (naoEstaSalvo) {
       if (nonNull(c1.getPai()) && nonNull(c1.getPai().getIdJoomla()) && isNull(c1.getPai().getId())
