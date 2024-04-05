@@ -78,7 +78,7 @@ public class YoutubeController {
     return "fontedados/youtube/index";
   }
 
-  @RequestMapping("/youtubeAuth")
+  @RequestMapping(path = "/youtubeAuth", method = RequestMethod.GET)
   public String youtubeAuth() throws Exception {
     final GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(GsonFactory.getDefaultInstance(),
         new FileReader(properties.getYoutube().getArquivoSecrets()));
