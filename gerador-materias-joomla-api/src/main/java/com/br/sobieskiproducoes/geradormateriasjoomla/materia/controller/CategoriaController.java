@@ -3,6 +3,7 @@
  */
 package com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.dto.RetornoBusinessDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.CategoriaDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.TagDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.CategoriaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.CategoriaService;
 
@@ -74,7 +76,7 @@ public class CategoriaController {
   @GetMapping(path = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
   @ResponseBody
   public ResponseEntity<CategoriaDTO> buscaPorId(@NotNull @PathVariable(name = "id", required = true) final Long id) {
-      Optional<CategoriaEntity> categoriaEntity = CategoriaEntity.findById(id);
+      Optional<CategoriaEntity> categoriaEntity = service.findById(id);
       if (categoriaEntity.isPresent()) {
           CategoriaDTO categoriaDTO = new CategoriaDTO();
           BeanUtils.copyProperties(categoriaEntity.get(), categoriaDTO);
@@ -82,6 +84,18 @@ public class CategoriaController {
       } else {
           return ResponseEntity.notFound().build();
       }
-  }}
+  }
+  
+  @Operation(summary = "busca categoria por titulo")
+  @ApiResponse(responseCode = "200", description = "retorna categoria", content = @Content(array = @ArraySchema(schema = @Schema(implementation = CategoriaDTO.class))))
+  @ApiResponse(responseCode = "404", description = "categoria não encontrada")
+  @GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
+  @ResponseBody()
+  private ResponseEntity<RetornoBusinessDTO<CategoriaDTO>> buscar(@RequestParam(name = "titulo", required = false) final String titulo,
+	      @NotNull @RequestParam(name = "p", required = false, defaultValue = "0") final Integer pagina) {
+	    return ResponseEntity.ok(service.busca(titulo, pagina));
+	  }
+
+}
 
 

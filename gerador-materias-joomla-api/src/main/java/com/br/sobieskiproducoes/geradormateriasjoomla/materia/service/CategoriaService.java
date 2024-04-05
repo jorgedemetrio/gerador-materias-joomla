@@ -31,6 +31,7 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.CategoriaEnt
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.CategoriaRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.convert.CategoriaConvert;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
@@ -175,5 +176,14 @@ public class CategoriaService {
     }
     return naoEstaSalvo;
   }
+/**
+ * @param titulo
+ * @param pagina
+ * @return
+ */
+public Object buscaPorTitulo(String titulo, @NotNull Integer pagina) {
+	// TODO Auto-generated method stub
+	return null;
+}
 
 }
