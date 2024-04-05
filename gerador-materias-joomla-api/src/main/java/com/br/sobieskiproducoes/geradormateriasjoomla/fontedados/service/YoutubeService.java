@@ -6,7 +6,7 @@ package com.br.sobieskiproducoes.geradormateriasjoomla.fontedados.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jvnet.hk2.annotations.Service;
+import org.springframework.stereotype.Service;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.fontedados.consumer.YoutubePlaylistParser;
 import com.br.sobieskiproducoes.geradormateriasjoomla.fontedados.dto.YoutubeGerarMateriaRequestDTO;

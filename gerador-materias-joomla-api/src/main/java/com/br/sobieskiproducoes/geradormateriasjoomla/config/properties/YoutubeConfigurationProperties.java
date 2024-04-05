@@ -29,4 +29,6 @@ public class YoutubeConfigurationProperties {
   private String secrets;
   private String chaveApi;
   private String appId;
+  private String arquivoSecrets;
+  private String callback;
 }
