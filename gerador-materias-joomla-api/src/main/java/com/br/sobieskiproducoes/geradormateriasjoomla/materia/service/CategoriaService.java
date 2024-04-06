@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -46,8 +47,10 @@ import lombok.extern.java.Log;
 @RequiredArgsConstructor
 @Service
 public class CategoriaService {
-
+	
+  @Autowired
   private final CategoriaRepository categoriaRepository;
+  
   private final CategoriaJoomlaClient categoriaJoomlaClient;
   private final CategoriaConvert convert;
   private final ConfiguracoesProperties properties;
@@ -186,27 +189,29 @@ public class CategoriaService {
 	      return Boolean.FALSE;
 	    }
 	    categoriaRepository.delete(categoriaEntityOpt.get());
-	    log.info("Apagada a categoria ".concat(id.toString()));
+	    log.info("Apagado a categoria.".concat(id.toString()));
 	    return Boolean.TRUE;
 	  }
   
-  public CategoriaDTO gravar(@NotNull @Valid CategoriaEntity categoria) {
-	  CategoriaEntity categoriaEntity = null;
+  
 
-	  if (nonNull(categoria.getId()) && categoria.getId() > 0) {
-	    final Optional<CategoriaEntity> categoriaEntityOpt = categoriaRepository.findById(categoria.getId());
+  public CategoriaEntity gravar(@NotNull @Valid CategoriaEntity categoria) {
+      CategoriaEntity categoriaEntity = null;
 
-	    if (categoriaEntityOpt.isPresent()) {
-	      categoriaEntity = categoriaEntityOpt.get();
-	      log.info("Fez merge da categoria id: " + categoria.getId().toString());
-	      convert.merge(categoria, categoriaEntity);
-	    }
-	  }
-	  if (isNull(categoriaEntity)) {
-	    log.info("Novo registro");
-	    categoriaEntity = convert.convertCategoriaDTO(categoria);
-	  }
+      if (nonNull(categoria.getId()) && categoria.getId() > 0) {
+          final Optional<CategoriaEntity> categoriaEntityOpt = categoriaRepository.findById(categoria.getId());
 
-	  return convert.convert(CategoriaRepository.save(categoriaEntity));
-	}
+          if (categoriaEntityOpt.isPresent()) {
+              categoriaEntity = categoriaEntityOpt.get();
+              log.info("Fez merge da categoria id: " + categoria.getId().toString());
+              convert.merge(categoria, categoriaEntity);
+          }
+      }
+      if (isNull(categoriaEntity)) {
+          log.info("Novo registro");
+          categoriaEntity = convert.convertCategoriaDTO(categoria);
+      }
+
+      return convert.convert(categoriaRepository.save(categoriaEntity));
+  }
 }

@@ -8,8 +8,6 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -23,11 +21,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.dto.RetornoBusinessDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.CategoriaDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.TagDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.CategoriaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.CategoriaService;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.convert.CategoriaConvert;
