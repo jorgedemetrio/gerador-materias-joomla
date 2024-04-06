@@ -9,9 +9,11 @@ import java.util.Optional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.dto.RetornoBusinessDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.CategoriaDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.TagDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.CategoriaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.CategoriaService;
 
@@ -107,6 +110,14 @@ public class CategoriaController {
 	    }
 	    return ResponseEntity.notFound().build();
   }
+  
+  @Operation(summary = "criar categoria")
+  @ApiResponse(responseCode = "200", description = "categoria salva com sucesso.", content = @Content(schema = @Schema(implementation = CategoriaDTO.class))))
+	@PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+	@ResponseBody ResponseEntity<CategoriaDTO> salvar(@NotNull @Validated @RequestBody final CategoriaDTO tag) {
+
+	    return ResponseEntity.ok(service.gravar(categoria));
+	  }
   
   
   

@@ -8,8 +8,10 @@ import org.mapstruct.Mapping;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoJoomlaDataDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosCategoriaJoomlaDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.CategoriaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.CategoriaEntity;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * @author Jorge Demetrio
@@ -27,9 +29,11 @@ public interface CategoriaConvert {
   @Mapping(target = "titulo", source = "attributes.title")
   @Mapping(target = "apelido", source = "attributes.alias")
   @Mapping(target = "pai.idJoomla", source = "attributes.parentId")
-  CategoriaEntity convert(GenericoJoomlaDataDTO<AtributosCategoriaJoomlaDTO> categoria);
+  CategoriaEntity convert(Object categoriaEntity);
+  GenericoJoomlaDataDTO<AtributosCategoriaJoomlaDTO> convertCategoriaEntityToGenericoJoomlaDataDTO(CategoriaEntity categoriaEntity);
+
 
   @Mapping(target = "pai.pai", ignore = true)
-  CategoriaDTO convertCategoriaDTO(CategoriaEntity categoria);
-
+  CategoriaEntity convertCategoriaDTO(CategoriaEntity categoria);
+  void merge(@NotNull @Valid CategoriaEntity categoria, CategoriaEntity categoriaEntity);
 }
