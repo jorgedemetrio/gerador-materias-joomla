@@ -7,24 +7,30 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.dto.RetornoBusinessDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.CategoriaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.TagDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.CategoriaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.CategoriaService;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.convert.CategoriaConvert;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -48,8 +54,13 @@ import lombok.extern.java.Log;
 @Tag(name = "Categoria", description = "Controller Gerenciador das Categorias das Matérias ")
 @RequestMapping("/categoria")
 public class CategoriaController {
+	
+	 @Autowired
+	  private CategoriaService service;
 
-  private final CategoriaService service;
+	  @Autowired
+	  private CategoriaConvert convert;
+
 
   @Operation(summary = "Recarrega as categorias no banco de dados tirando do Joomla")
   @ApiResponses({
@@ -111,13 +122,15 @@ public class CategoriaController {
 	    return ResponseEntity.notFound().build();
   }
   
-  @Operation(summary = "criar categoria")
-  @ApiResponse(responseCode = "200", description = "categoria salva com sucesso.", content = @Content(schema = @Schema(implementation = CategoriaDTO.class))))
-	@PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	@ResponseBody ResponseEntity<CategoriaDTO> salvar(@NotNull @Validated @RequestBody final CategoriaDTO tag) {
-
-	    return ResponseEntity.ok(service.gravar(categoria));
-	  }
+  @Operation(summary = "gravar categoria")
+  @ApiResponse(responseCode = "200", description = "categoria salva com sucesso.", content = @Content(schema = @Schema(implementation = CategoriaDTO.class)))
+  @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+  @ResponseBody ResponseEntity<CategoriaEntity> salvar(@NotNull @Validated @RequestBody final CategoriaDTO idJoomla) {
+      CategoriaEntity categoriaEntity = convert.convertCategoriaDTO(null);
+      CategoriaEntity savedCategoriaEntity = service.gravar(categoriaEntity);
+      CategoriaEntity savedCategoriaDTO = convert.convert(savedCategoriaEntity);
+      return ResponseEntity.ok(savedCategoriaDTO);
+  }
   
   
   
