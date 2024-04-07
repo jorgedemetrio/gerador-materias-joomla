@@ -31,6 +31,8 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.CategoriaEnt
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.CategoriaRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.convert.CategoriaConvert;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
@@ -49,10 +51,19 @@ public class CategoriaService {
   private final CategoriaConvert convert;
   private final ConfiguracoesProperties properties;
 
-  /**
-   *
-   * @return O univero de registros atualizados.
-   */
+  public Boolean apagar(@NotNull final Long id) {
+
+
+
+    final Optional<CategoriaEntity> categoriaEntityOpt = categoriaRepository.findById(id);
+    if (!categoriaEntityOpt.isPresent()) {
+      return Boolean.FALSE;
+    }
+    categoriaRepository.delete(categoriaEntityOpt.get());
+    log.info("Apagado a categoria.".concat(id.toString()));
+    return Boolean.TRUE;
+  }
+
   @Transactional
   public Map<String, Integer> atualizarBancoCategoria() {
     final List<CategoriaEntity> itens = new ArrayList<>();
@@ -151,9 +162,44 @@ public class CategoriaService {
 
   }
 
+  /**
+   *
+   * @return O univero de registros atualizados.
+   */
+
+  public CategoriaDTO findById(final Long id) {
+    final Optional<CategoriaEntity> entity = categoriaRepository.findById(id);
+
+    if (!entity.isPresent()) {
+      return null;
+    }
+
+    return convert.convert(entity.get());
+  }
+
+  public CategoriaDTO gravar(@NotNull @Valid final CategoriaDTO categoria) {
+    CategoriaEntity categoriaEntity = null;
+
+    if (nonNull(categoria.getId()) && categoria.getId() > 0) {
+      final Optional<CategoriaEntity> categoriaEntityOpt = categoriaRepository.findById(categoria.getId());
+
+      if (categoriaEntityOpt.isPresent()) {
+        categoriaEntity = categoriaEntityOpt.get();
+        log.info("Fez merge da categoria id: " + categoria.getId().toString());
+        convert.merge(categoria, categoriaEntity);
+      }
+    }
+    if (isNull(categoriaEntity)) {
+      log.info("Novo registro");
+      categoriaEntity = convert.toEntityNova(categoria);
+    }
+
+    return convert.convert(categoriaRepository.save(categoriaEntity));
+  }
+
   private boolean jaEstaSalvoCorrigePai(final CategoriaEntity c1) {
     final boolean naoEstaSalvo = !categoriaRepository.findByIdJoomla(c1.getIdJoomla()).isPresent();
-    // Sen não estiver salvo verifica se o pai já está no banco , sen ão achar deixa
+    // Se não estiver salvo verifica se o pai já está no banco , se não achar deixa
     // null
     if (naoEstaSalvo) {
       if (nonNull(c1.getPai()) && nonNull(c1.getPai().getIdJoomla()) && isNull(c1.getPai().getId())
@@ -171,5 +217,4 @@ public class CategoriaService {
     }
     return naoEstaSalvo;
   }
-
 }

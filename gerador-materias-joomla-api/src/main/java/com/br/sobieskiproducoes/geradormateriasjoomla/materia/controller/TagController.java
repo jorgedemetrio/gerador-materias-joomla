@@ -96,8 +96,7 @@ public class TagController {
       @ApiResponse(responseCode = "200", description = "Retorna um item ", content = @Content(schema = @Schema(implementation = TagDTO.class))),
       @ApiResponse(responseCode = "404", description = "Registro não encontrado.") })
   @GetMapping(path = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
-  @ResponseBody
-  private ResponseEntity<TagDTO> buscarItem(@NotNull @PathVariable(name = "id", required = true) final Long id) {
+  @ResponseBody ResponseEntity<TagDTO> buscarItem(@NotNull @PathVariable(name = "id", required = true) final Long id) {
     final TagDTO tag = service.buscarPorId(id);
     if (isNull(tag)) {
       log.info("A busca não achou a TAG com o id:".concat(id.toString()));
@@ -123,12 +122,11 @@ public class TagController {
     return ResponseEntity.notFound().build();
   }
 
-  @Operation(summary = "Grava de Tag nova.")
+  @Operation(summary = "Grava a Tag nova.")
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "Gravado com sucesso.", content = @Content(schema = @Schema(implementation = TagDTO.class))) })
   @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
-  @ResponseBody
-  private ResponseEntity<TagDTO> salvar(@NotNull @Validated @RequestBody final TagDTO tag) {
+  @ResponseBody ResponseEntity<TagDTO> salvar(@NotNull @Validated @RequestBody final TagDTO tag) {
 
     return ResponseEntity.ok(service.gravar(tag));
   }

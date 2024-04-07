@@ -168,7 +168,7 @@ public class GerarMapaPerguntasService {
 
       // Prepara a massa de dados usada nas perguntas.
 
-      if (itens.size() + PROCESSOS_POR_VEZ > request.getQuantidade()) {
+      if (itens.size() + PROCESSOS_POR_VEZ <= request.getQuantidade()) {
         processar = PROCESSOS_POR_VEZ;
         log.info("Quebrou o processamento do mapa restando processar : " + processar);
       } else {
@@ -227,10 +227,11 @@ public class GerarMapaPerguntasService {
     log.info("Gravando mapa mental em lote!");
     repository.saveAll(itens);
 
-    itens.forEach(n -> {
-      repository.save(n);
-    });
+//    itens.forEach(n -> {
+//      repository.save(n);
+//    });
 
+    repository.saveAll(itens);
     return itens.stream().map(this::convert).collect(Collectors.toList());
 
   }

@@ -4,9 +4,6 @@
 package com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.service.convert;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -20,7 +17,7 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.model.LogDialogoCh
  * @since 21 de fev. de 2024 17:50:59
  * @version 1.0.0
  */
-@Mapper(imports = { Objects.class, Collectors.class, Arrays.class })
+@Mapper
 public interface ChatGPTConvert {
 
 
