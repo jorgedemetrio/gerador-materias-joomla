@@ -160,6 +160,9 @@ configuracao:
 
     
 chatgpt:
+  falhas:
+    - "Desculpe, mas não"
+    - "Infelizmente, não posso"
   audiencias: 
     - Pessoas que buscam conteúdo e informações no Google e outros mecanismos de buscas. 
   prompts:

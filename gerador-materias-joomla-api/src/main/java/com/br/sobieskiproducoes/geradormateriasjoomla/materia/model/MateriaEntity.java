@@ -78,7 +78,7 @@ public class MateriaEntity {
   @Column(name = "introducao", nullable = true, insertable = true, updatable = true, unique = false, length = 2000)
   private String primeiroParagrafo;
 
-  @Column(name = "materia", nullable = false, insertable = true, updatable = true, unique = false, columnDefinition = "TEXT")
+  @Column(name = "materia", nullable = true, insertable = true, updatable = true, unique = false, columnDefinition = "TEXT")
   private String materia;
 
   @Column(name = "alias", nullable = true, insertable = true, updatable = true, unique = true, length = 500)
