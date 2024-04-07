@@ -9,6 +9,7 @@ import static com.br.sobieskiproducoes.geradormateriasjoomla.utils.MateriaUtils.
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +63,7 @@ public class GerarMateriaService {
 
   private final MateriaConvert convert;
 
-  private final ChatGPTService chatgpt;
+  private final ChatGPTService chatgptService;
 
   private final ChatGPTProperties chatGPTProperties;
 
@@ -121,7 +122,7 @@ public class GerarMateriaService {
     final String perguntaDadosMateria = chatGPTProperties.getPrompts().getPedirDadosMateria().formatted(conhecimento,
         chatGPTProperties.getSite(), redesSociais, audiencias, termos, request.getTema());
 
-    final RepostaResponseDTO itensDaMateriaRetornoGPT = chatgpt.pergunta(perguntaDadosMateria, uuid, inicio);
+    final RepostaResponseDTO itensDaMateriaRetornoGPT = chatgptService.pergunta(perguntaDadosMateria, uuid, inicio);
 
 //    final List<MessageChatGPTDTO> perguntasChatGPTDTOs = new ArrayList<>();
 //    perguntasChatGPTDTOs.add(new MessageChatGPTDTO(properties.getChatgpt().getRoleUser(), perguntaDadosMateria));
@@ -144,7 +145,7 @@ public class GerarMateriaService {
 //    perguntasChatGPTDTOs.add(new MessageChatGPTDTO(properties.getChatgpt().getRoleUser(), perguntaMateria));
     // final RepostaResponseDTO materiaRetornoGPT =
     // chatgpt.perguntasObjeto(perguntasChatGPTDTOs, uuid, inicio);
-    final RepostaResponseDTO materiaRetornoGPT = chatgpt.pergunta(perguntaMateria, uuid, inicio);
+    final RepostaResponseDTO materiaRetornoGPT = chatgptService.pergunta(perguntaMateria, uuid, inicio);
 
     final List<PropostaMateriaDTO> propostasRetorno = new ArrayList<>();
     try {
@@ -153,7 +154,8 @@ public class GerarMateriaService {
         for (final ChoicesDTO choice : materiaRetornoGPT.getChoices()) {
           if (nonNull(choice.getMessage()) && nonNull(choice.getMessage().getContent())
               && !choice.getMessage().getContent().isBlank()
-              && nonNull(itemSalvar = convert.copy(item, uuid, limparTexto(choice.getMessage().getContent())))) {
+              && nonNull(itemSalvar = convert.copy(item, uuid, textoMateria(choice.getMessage().getContent())))) {
+
             propostasRetorno.add(this.salvarPropostaMateria(itemSalvar, request, idMapaProcessamento));
           }
         }
@@ -207,7 +209,7 @@ public class GerarMateriaService {
     final String perguntaDadosMateria = chatGPTProperties.getPrompts().getPedirDadosMateria().formatted(conhecimento,
         chatGPTProperties.getSite(), redesSociais, audiencias, termos, tema);
 
-    final RepostaResponseDTO itensDaMateriaRetornoGPT = chatgpt.pergunta(perguntaDadosMateria, uuid, inicio);
+    final RepostaResponseDTO itensDaMateriaRetornoGPT = chatgptService.pergunta(perguntaDadosMateria, uuid, inicio);
 
 
     final List<PropostaMateriaDTO> propostasSemMateria = itensDaMateriaRetornoGPT.getChoices().stream()
@@ -223,7 +225,7 @@ public class GerarMateriaService {
     final String perguntaMateria = chatGPTProperties.getPrompts().getPedirMateria().formatted(conhecimento,
         chatGPTProperties.getSite(), redesSociais, audiencias, termos, titulos);
 
-    final RepostaResponseDTO materiaRetornoGPT = chatgpt.pergunta(perguntaMateria, uuid, inicio);
+    final RepostaResponseDTO materiaRetornoGPT = chatgptService.pergunta(perguntaMateria, uuid, inicio);
 
     final List<PropostaMateriaDTO> propostasRetorno = new ArrayList<>();
     try {
@@ -307,6 +309,18 @@ public class GerarMateriaService {
       log.info("Error ao gravar objeto: \n\n".concat(in.toString()));
       throw ex;
     }
+  }
+
+  private String textoMateria (final String materia) throws IOException {
+    final String texto = limparTexto(materia);
+    for (final String item :  chatGPTProperties.getFalhas()) {
+      if(texto.trim().toLowerCase().startsWith(item.toLowerCase().trim() )) {
+        return null; 
+      }
+      
+    
+    }
+    return texto;
   }
 
 }

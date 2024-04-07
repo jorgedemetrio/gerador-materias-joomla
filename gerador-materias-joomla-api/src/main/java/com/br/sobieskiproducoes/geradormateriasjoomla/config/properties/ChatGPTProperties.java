@@ -50,4 +50,6 @@ public class ChatGPTProperties {
   @NotEmpty
   private List<String> especialista;
 
+  private List<String> falhas;
+
 }

@@ -65,4 +65,5 @@ public class ChatGPTConfigurationProperties {
   @NotNull
   @NotBlank
   private String maxTokens;
+
 }

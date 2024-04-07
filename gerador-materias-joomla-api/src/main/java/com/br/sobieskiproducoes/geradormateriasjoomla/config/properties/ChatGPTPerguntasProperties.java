@@ -3,6 +3,8 @@
  */
 package com.br.sobieskiproducoes.geradormateriasjoomla.config.properties;
 
+import java.util.List;
+
 import org.springframework.validation.annotation.Validated;
 
 import jakarta.validation.constraints.NotBlank;
@@ -40,5 +42,5 @@ public class ChatGPTPerguntasProperties {
 
   private String complementoFormatoPedirMateria;
 
-
+  private List<String> falhas;
 }
