@@ -8,6 +8,10 @@ import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,21 +34,25 @@ import lombok.ToString;
 public class ProjetoDTO {
 	private Long id;
 	private String nome;
-	private char cnpj;
+	private String cnpj;
 	private String url;
-	private String tipo; //talvez seja boolean ou enum
+	private TipoEnum tipo; 
 	
 
 	@JsonProperty("id-usuario")
 	private Long idUsuario;
 	
-	@JsonProperty("data-de-criação")
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
+	@JsonProperty("data-de-criacao")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private LocalDateTime dataDeCriação;
+	private LocalDateTime dataDeCriacao;
 	
-	@JsonProperty("data-alteração")
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
+	@JsonProperty("data-alteracao")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private LocalDateTime dataAlteração;
+	private LocalDateTime dataAlteracao;
 	
 	@JsonProperty("id-usuario-alterador")
 	private String idUsuarioAlterador;
