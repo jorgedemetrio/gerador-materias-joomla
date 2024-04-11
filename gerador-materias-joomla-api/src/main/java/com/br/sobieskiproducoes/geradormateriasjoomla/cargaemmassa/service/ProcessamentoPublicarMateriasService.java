@@ -72,7 +72,7 @@ public class ProcessamentoPublicarMateriasService {
       log.log(Level.SEVERE, "Erro ao criar a pasta da materia : ".concat(materiaEntity.getId().toString()), ex);
     }
     if (nonNull(materiaJoomlaService.publicarMateriaJoomla(materiaEntity))) {
-      log.info("Publicado a materia :" + materiaEntity.getId());
+      log.info("Publicado a materia :" + materiaEntity.getIdJoomla());
 //      erroInterno = true;
 //    } else {
 //      final DefaultTransactionDefinition def = new DefaultTransactionDefinition();

@@ -56,7 +56,7 @@ public class RunnerResponseDTO {
   private String completedAt;
 
   @JsonProperty("last_error")
-  private String lastError;
+  private ErroResponseDTO lastError;
 
   private String model;
 

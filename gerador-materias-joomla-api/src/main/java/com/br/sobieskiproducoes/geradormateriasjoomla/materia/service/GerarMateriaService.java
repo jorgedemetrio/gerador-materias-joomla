@@ -72,11 +72,11 @@ public class GerarMateriaService {
       final var content = limparTextoJson(mensagem);
       return objectMapper.readValue(content, PropostaMateriaDTO.class);
     } catch (final Exception e) {
-      log.log(Level.SEVERE,
-          "Erro ao converter objeto de retorno do ChatGPT: ".concat(e.getMessage()).concat(" \nConteúdo: \n\n\n").concat(mensagem), e);
-      throw new RuntimeException("Erro ao tentar processar os dados do ChatGPT", e);
-    }
+      log.log(Level.SEVERE, "Erro ao converter objeto de retorno do ChatGPT: ".concat(e.getMessage()).concat(" \nConteúdo: \n\n\n").concat(mensagem), e);
 
+      // throw new RuntimeException("Erro ao tentar processar os dados do ChatGPT", e);
+    }
+    return null;
   }
 
   @Transactional
@@ -139,14 +139,21 @@ public class GerarMateriaService {
     final List<String> itensDaMateriaRetornoGPT = chatgptService.perguntarAssistente(perguntaDadosMateria, uuid, inicio);
 
 
-    final List<PropostaMateriaDTO> propostasSemMateria = itensDaMateriaRetornoGPT.stream().map(this::convetToPropostaMateriaDTO)
-        .collect(Collectors.toList());
+//    final List<PropostaMateriaDTO> propostasSemMateria = itensDaMateriaRetornoGPT.stream().map(this::convetToPropostaMateriaDTO).filter(n -> Objects.nonNull(n))
+//        .collect(Collectors.toList());
 
-    final List<String> titulosArry = new ArrayList<>();
-    propostasSemMateria.forEach(n -> {
-      titulosArry.addAll(n.getTitulos());
-      titulosArry.add(n.getTema());
-    });
+    
+    PropostaMateriaDTO propostaMateriaDTO = nonNull(itensDaMateriaRetornoGPT) && !itensDaMateriaRetornoGPT.isEmpty() ?
+        convetToPropostaMateriaDTO(itensDaMateriaRetornoGPT.get(itensDaMateriaRetornoGPT.size() - 1)) : null;
+    
+    if (isNull(propostaMateriaDTO)) {
+      log.info("Não conseguiu gerar a proposta de mateiria.");
+      return null;
+    }
+
+    final List<String> titulosArry = new ArrayList<>(propostaMateriaDTO.getTitulos());
+    titulosArry.add(propostaMateriaDTO.getTema());
+
     final String titulos = titulosArry.stream().filter(n -> Objects.nonNull(n) && !n.isBlank() && !NULL.equals(n.trim().toLowerCase()))
         .collect(Collectors.joining(", \n"));
 
@@ -162,20 +169,15 @@ public class GerarMateriaService {
     final String perguntaMateria = chatGPTProperties.getPrompts().getPedirMateria().formatted(conhecimento, chatGPTProperties.getSite(), redesSociais,
         audiencias, termos, titulos);
 
-
     String materia = null;
     final List<PropostaMateriaDTO> propostasRetorno = new ArrayList<>();
     try {
       materia = gerarTextoMateria(perguntaMateria, uuid, inicio, 0);
-      if (isNull(materia)) {
-        materia = "Deve ser gerado manualmente";
+      PropostaMateriaDTO itemSalvar = propostaMateriaDTO;
+      if (nonNull(itemSalvar = convert.copy(itemSalvar, uuid, materia))) {
+        propostasRetorno.add(this.salvarPropostaMateria(itemSalvar, request, idMapaProcessamento));
       }
-      PropostaMateriaDTO itemSalvar;
-      for (final PropostaMateriaDTO item : propostasSemMateria) {
-        if (nonNull(itemSalvar = convert.copy(item, uuid, materia))) {
-          propostasRetorno.add(this.salvarPropostaMateria(itemSalvar, request, idMapaProcessamento));
-        }
-      }
+
     } catch (final Exception e) {
       log.log(Level.SEVERE, "Erro ao gravar a Matéria".concat(e.getMessage()), e);
     }
@@ -197,10 +199,9 @@ public class GerarMateriaService {
     log.info("Gerando texto materia tentativa: " + tentativas);
     final List<String> materiaRetornoGPT = chatgptService.perguntarAssistente(perguntaMateria, uuid, inicio);
 
-    for (final String mensagem : materiaRetornoGPT) {
-      if (nonNull(mensagem) && !mensagem.isBlank()) {
-        materia = textoMateria(mensagem);
-      }
+    if (nonNull(materiaRetornoGPT) && !materiaRetornoGPT.isEmpty()) {
+      // Pega o ultimo registro da array.
+      materia = textoMateria(materiaRetornoGPT.get(materiaRetornoGPT.size() - 1));
     }
 
     if (tentativas >= 3) {
@@ -240,8 +241,7 @@ public class GerarMateriaService {
     final var perguntaDadosMateria = chatGPTProperties.getPrompts().getPedirDadosMateria().formatted(conhecimento, chatGPTProperties.getSite(), redesSociais,
         audiencias, termos, tema);
     final List<String> itensDaMateriaRetornoGPT = chatgptService.perguntarAssistente(perguntaDadosMateria, uuid, inicio);
-    final List<PropostaMateriaDTO> propostasSemMateria = itensDaMateriaRetornoGPT.stream().map(this::convetToPropostaMateriaDTO)
-        .collect(Collectors.toList());
+    final List<PropostaMateriaDTO> propostasSemMateria = itensDaMateriaRetornoGPT.stream().map(this::convetToPropostaMateriaDTO).collect(Collectors.toList());
     final List<String> titulosArry = new ArrayList<>();
     propostasSemMateria.forEach(n -> {
       titulosArry.addAll(n.getTitulos());
@@ -252,7 +252,6 @@ public class GerarMateriaService {
         termos, titulos);
 
     final List<PropostaMateriaDTO> propostasRetorno = new ArrayList<>();
-
 
     try {
       final List<String> materiaRetornoGPT = chatgptService.perguntarAssistente(perguntaMateria, uuid, inicio);

@@ -53,7 +53,7 @@ public class NextStepDataResponseDTO {
   private String failedAt;
 
   @JsonProperty("last_error")
-  private String lastError;
+  private ErroResponseDTO lastError;
 
   @JsonProperty("step_details")
   private NextStepDataStepDetailsResponseDTO stepDetails;

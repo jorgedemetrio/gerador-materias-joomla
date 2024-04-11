@@ -5,6 +5,8 @@ package com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.service;
 
 import static com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.response.RunnerStatuEnum.COMPLETED;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,6 +48,8 @@ public class ChatGPTService {
   private final LogDialogoChatGPTRepository logDialogoChatGPTRepository;
   private final ChatGPTConvert convert;
 
+  private static final int AGUARDAR = 2000;
+
   private void gravarLog(final RepostaResponseDTO itensDaMateriaRetornoGPT, final String uuid, final LocalDateTime inicio, final String pergunta) {
     try { // Grava o log da consulta.
       final List<LogDialogoChatGPTEntity> logs = itensDaMateriaRetornoGPT.getChoices().stream()
@@ -84,29 +88,34 @@ public class ChatGPTService {
   public List<String> perguntarAssistente(final String pergunta, final String uuid, final LocalDateTime inicio) throws Exception {
     ArrayList<String> respostas = new ArrayList<>();
     MensagemPostedResponseDTO mensagemPostedResponseDTO = client.conversar(pergunta, properties.getChatgpt().getThread());
-
+    Instant inicioProcesso = Instant.now();
+    
+    log.info("Pergunta feita ao chatGPT: ".concat(pergunta));
 
     RunnerResponseDTO runnerResponseDTO = client.iniciarChat(properties.getChatgpt().getThread());
     String chatgptRunnerId = runnerResponseDTO.getId();
 
     while (!COMPLETED.equals(runnerResponseDTO.getStatus())) {
-      Thread.currentThread().sleep(1000);
+      Thread.currentThread().sleep(AGUARDAR);
       runnerResponseDTO = client.lerRunner(properties.getChatgpt().getThread(), chatgptRunnerId);
     }
 
     NextStepResponseDTO nextStepResponseDTO = client.proximoPasso(properties.getChatgpt().getThread(), chatgptRunnerId);
 
     while (!COMPLETED.equals(nextStepResponseDTO.getData().get(0).getStatus())) {
-      Thread.currentThread().sleep(1000);
+      Thread.currentThread().sleep(AGUARDAR);
       nextStepResponseDTO = client.proximoPasso(properties.getChatgpt().getThread(), chatgptRunnerId);
     }
 
     for (NextStepDataResponseDTO item : nextStepResponseDTO.getData()) {
       mensagemPostedResponseDTO = client.lerMensagem(properties.getChatgpt().getThread(), item.getStepDetails().getMessageCreation().getMessageId());
 
+
       mensagemPostedResponseDTO.getContent().forEach(n -> respostas.add(n.getText().getValue()));
 
     }
+  
+    log.info("Demora para responder: " + Duration.between(inicioProcesso, Instant.now()).toSeconds());
 
     return respostas;
   }
