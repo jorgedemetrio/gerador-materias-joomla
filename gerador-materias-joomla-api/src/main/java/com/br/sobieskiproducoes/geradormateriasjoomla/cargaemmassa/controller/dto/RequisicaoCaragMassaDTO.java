@@ -4,7 +4,6 @@
 package com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.controller.dto;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.controller.dto.RequisitaPerguntasDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -17,7 +16,9 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -57,8 +58,10 @@ public class RequisicaoCaragMassaDTO {
   private LocalDate dataFimPublicacao;
 
 
-  @Size(min = 1, max = 3, message = "Horas devem pelo menos um.")
-  private List<HorarioRequisiscaoDTO> hoarios;
+  @NotEmpty(message = "O campo \"horario\" deve ser preenchido.")
+  @Size(min = 5, max = 5, message = "Hora devem estar no formato HH:mm .")
+  @Pattern(regexp = "[0-9]{2}:[0-9]{2}", message = "Hora devem estar no formato HH:mm .")
+  private String horario;
 
   @JsonProperty(defaultValue = "true")
   private Boolean publicar = Boolean.TRUE;

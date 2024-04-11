@@ -14,6 +14,7 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.controller.dt
 import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.model.CargaMassaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.repository.CargaMassaRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.dto.StatusProcessamentoEnum;
+import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.repository.MapaPerguntaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -31,11 +32,10 @@ public class CargaProcessoAgendamentoService {
 
   private final CargaMassaRepository repository;
   private final ObjectMapper objectMapper;
+  private final MapaPerguntaRepository mapaPerguntaRepository;
 
   private final ProcessamentoCriarMateriasService processoCriacaoMaterias;
   private final ProcessamentoPublicarMateriasService processamentoPublicarMateriasService;
-
-
 
   // Roda sozinha a cada minuto 30 minutos depois da ultima vez que rodou
   @Scheduled(fixedDelay = 60000) // ${configuracao.batch.gerar-materia.delay})
@@ -45,10 +45,15 @@ public class CargaProcessoAgendamentoService {
       RequisicaoCaragMassaDTO item = null;
       for (final CargaMassaEntity cargaMassaEntity : itens) {
         try {
+          log.info("Inicio de processamento de carga de materia.");
           cargaMassaEntity.setExecutadoInicio(LocalDateTime.now());
           item = objectMapper.readValue(cargaMassaEntity.getRequisicao(), RequisicaoCaragMassaDTO.class);
           if (processoCriacaoMaterias.iniciarProcesso(item, cargaMassaEntity.getUuid())) {
-            cargaMassaEntity.setStatus(StatusProcessamentoEnum.PROCESSADO);
+            cargaMassaEntity.setStatus(StatusProcessamentoEnum.PROCESSAR);
+            if (mapaPerguntaRepository.totalAProcessar(cargaMassaEntity.getUuid()) <= 0) {
+              cargaMassaEntity.setStatus(StatusProcessamentoEnum.PROCESSADO);
+              cargaMassaEntity.setExecutadoFim(LocalDateTime.now());
+            }
           } else {
             cargaMassaEntity.setStatus(StatusProcessamentoEnum.ERRO);
             cargaMassaEntity.setNota("Errop em um processamento interno. ");
@@ -58,7 +63,6 @@ public class CargaProcessoAgendamentoService {
           cargaMassaEntity.setNota(e.getLocalizedMessage());
           log.log(Level.SEVERE, e.getMessage(), e);
         }
-        cargaMassaEntity.setExecutadoFim(LocalDateTime.now());
         repository.save(cargaMassaEntity);
       }
     } catch (final Throwable e) {// Casso ocorra algum continua o processo só gere log
@@ -68,12 +72,12 @@ public class CargaProcessoAgendamentoService {
 
   // @Scheduled(fixedDelay = 3600000) // Uma vez por hora
   @Scheduled(fixedDelay = 30000) // Uma vez por minuto
-  public void processarPùblicacaoMateria() {
+  public void processarPublicacaoMateria() {
     try {
 
       processamentoPublicarMateriasService.processar();
     } catch (final Throwable e) {
-      log.log(Level.SEVERE, e.getMessage(), e);
+      log.log(Level.SEVERE, e.getLocalizedMessage(), e.getCause());
     }
   }
 

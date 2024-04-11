@@ -5,11 +5,13 @@ package com.br.sobieskiproducoes.geradormateriasjoomla.fontedados.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.springframework.stereotype.Service;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.fontedados.consumer.YoutubePlaylistParser;
 import com.br.sobieskiproducoes.geradormateriasjoomla.fontedados.dto.YoutubeGerarMateriaRequestDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.fontedados.dto.YoutubeVideoDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.PropostaMateriaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.GerarMateriaService;
 
@@ -39,7 +41,15 @@ public class YoutubeService {
   public List<PropostaMateriaDTO> geraMateriasPlayList(final YoutubeGerarMateriaRequestDTO dto) throws Exception {
     final List<PropostaMateriaDTO> retorno = new ArrayList<>();
 
-    parser.getDadosVideos(dto.getLink()).forEach(n -> retorno.addAll(gerarMateriaService.gerarSugestaoMateria(n)));
+    List<YoutubeVideoDTO> itens = parser.getDadosVideos(dto.getLink());
+    for (YoutubeVideoDTO youtubeVideoDTO : itens) {
+      try {
+        retorno.addAll(gerarMateriaService.gerarSugestaoMateria(youtubeVideoDTO));
+      } catch (Exception e) {
+        log.log(Level.SEVERE, e.getLocalizedMessage(), e.getCause());
+        throw e;
+      }
+    }
 
     log.info("Materias geradas " + retorno.size());
 

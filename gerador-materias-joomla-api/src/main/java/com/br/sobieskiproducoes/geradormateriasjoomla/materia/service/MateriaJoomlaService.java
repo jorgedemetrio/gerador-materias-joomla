@@ -68,13 +68,16 @@ public class MateriaJoomlaService {
 
     GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosArtigoSalvoJoomlaDTO>> artigo = null;
     try {
-
+      if (isNull(entity.getMateria()) || entity.getMateria().isBlank() || entity.getMateria().trim().length() < 10) {
+        log.info("Materia não pode ser rgavadar poser vazia" + entity.toString());
+        return null;
+      }
       if (nonNull(entity.getIdJoomla())) {
         throw BusinessException.build().classe(ObjectoJaExiteNoBancoBusinessException.class)
             .mensagem("Erro ao tentar acessar ").builder();
       }
       if (nonNull(entity.getPublicar())) {
-        entity.setPublicar(entity.getPublicar());
+        // entity.setPublicar(entity.getPublicar());
         entity.setApelido(entity.getPublicar().format(DATTE_TIME_FORMATTER_ALIAS) + entity.getApelido());
         materiaRepository.save(entity);
       }
@@ -150,11 +153,8 @@ public class MateriaJoomlaService {
       item.getImages().setImageIntro(nomeArquivoCompleto);
       try {
         artigo = consumerService.gravarArtigo(item);
-        // org.springframework.web.client.HttpClientErrorException$BadRequest: 400 Bad
-        // Request: "{"errors":[{"title":"Save failed with the following error: Another
-        // Article in this category has the same alias.","code":400}]}"
         entity.setExportado(LocalDateTime.now());
-        entity.setIdJoomla(artigo.getData().getAttributes().getId());
+        entity.setIdJoomla(nonNull(artigo.getData().getId()) ? Long.valueOf(artigo.getData().getId()) : artigo.getData().getAttributes().getId());
         entity.setStatus(StatusProcessamentoEnum.PROCESSADO);
       } catch (final HttpClientErrorException ex) {
         log.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
@@ -164,7 +164,7 @@ public class MateriaJoomlaService {
       }
 
     } catch (final Exception ex) {
-      log.log(Level.SEVERE, ex.getMessage(), ex);
+      log.log(Level.SEVERE, "Erro ao publicar a materia : " + entity.toString() + "\n\n" + ex.getLocalizedMessage(), ex.getCause());
       entity.setStatus(StatusProcessamentoEnum.ERRO);
     }
     materiaRepository.save(entity);

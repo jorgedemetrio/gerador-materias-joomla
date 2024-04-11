@@ -124,6 +124,17 @@ configuracao:
     bearer: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     idioma: "*"
   chatgpt:
+    url-criar-thrend: "https://api.openai.com/v1/threads"
+    url-postar-mensagem: "https://api.openai.com/v1/threads/%s/messages"
+    url-iniciar-run: "https://api.openai.com/v1/threads/%s/runs"
+    url-ler-runner: "https://api.openai.com/v1/threads/%s/runs/%s"
+    
+    url-avancar-message: "https://api.openai.com/v1/threads/%s/runs/%s/steps"
+    url-ler-mensagem: "https://api.openai.com/v1/threads/%s/messages/%s"
+    url-apagar-thrend: "https://api.openai.com/v1/threads/%s"
+    
+    
+    
     url: https://api.openai.com/v1/chat/completions
     bearer: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     model: gpt-4-turbo-preview 
@@ -169,19 +180,19 @@ chatgpt:
     pedir-dados-materia-seguinte: " - Deve ser diferente das que já passou anteriormente. \n" 
     pedir-dados-materia: "Torne-se um profissional com muito conhecimento em : Marketing de Conteúdo, Maketing Digital, Marketing Social \n
 Com especialidade técnica nos assuntos de : %s \n
-Entendento que uma matéria deve seguir os seguintes requisitos: \n
+Entendendo que uma matéria deve seguir os seguintes requisitos: \n
  - A matéria é para o site: %s .\n
  - Que tem as redes sociais: %s .\n
  - O perfil da audiência é : %s .\n 
  - Entregue em formato JSON, só o JSON pois será lido por um APP sua resposta, separados pos \",\" com layout : { titulos : array(string), primeiro-paragrafo: string,  url-proposta: string, meta-descricao: string, keywords: string, tags : array, faqs: array{pergunta: string, resposta: string}, roteiro: string, post-instagram: string} \n 
- - Use SEO na máteria para os termos : %s .\n
+ - Use SEO na matéria para os termos : %s .\n
  - Devem ter 3 opções de Títulos, usando SEO, gatilhos mentais e emojis\n
- - Primeiro paragrafo ter no máximo 100 caracateres e deve ser usado estrutura de marketing para chamar atenção da máteria, como: Gatilhos mentais ou sensacionalismo. \n
- - Proponha um apelido para página (url-proposta) da máteria usando SEO, tudo em letras minúsculas, em português e separados por - (traço). \n  
+ - Primeiro paragrafo ter no máximo 100 caracteres e deve ser usado estrutura de marketing para chamar atenção da matéria, como: Gatilhos mentais ou sensacionalismo. \n
+ - Proponha um apelido para página (url-proposta) da matéria usando SEO, tudo em letras minúsculas, em português e separados por - (traço). \n  
  - Deve ter Meta Descrição (o campo meta-descricao), que é um resumo de 160 caracteres pode ter emojis, extremamente chamativo para exibir nos mecanismos de buscas. \n
  - Deve ter keyowrds, palavras chaves de calda curta de SEO da matéria. \n
  - Deve ter tags, que são uma array de no mínimo 5 opções, que são palavras chaves de calda longa usando SEO pensando nas possíveis buscas que o usuário possa fazer para achar essa matéria. \n
- - Deve ter FAQs, que são no máximo 6 perguntas e no minimo de 4, e respostas de no máximo 120 caracteres cada pergunta e resposta. \n
+ - Deve ter FAQs, que são no máximo 6 perguntas e no mínimo  de 4, e respostas de no máximo 120 caracteres cada pergunta e resposta. \n
  - Deve ter roteiro: um roteiro de 1:30 minutos no máximo sobre a matéria para reels do instagram, somente com falas, deve ser bem humorado e com foco de ser viral.\n
  - Deve ter post-instagram, que é a descrição do poste no facebook e instagram com 1500 caracateres mais ou menos usando Marketing Social, emojis e Hashtags.\n
 Agora gere esses dados para uma matéria sobre : \n%s \n"
@@ -189,19 +200,19 @@ Agora gere esses dados para uma matéria sobre : \n%s \n"
 
     pedir-materia: "Vamos escrever agora o texto da matéria. Você é um profissional com muito conhecimento em Marketing de Conteúdo. Use o máximo de conhecimento e estratégias .\n
 Com especialidade técnica em : %s .\n 
-Entendento que uma matéria deve seguir os requisitos: \n
+Entendendo que uma matéria deve seguir os requisitos: \n
  - A matéria é para o site: %s .\n
  - Que tem as redes sociais: %s .\n
  - O perfil da audiência é : %s .\n
- - Use SEO na máteria para que ela seja o mais achavel possível em mecanismos de busca para os termos : %s .\n 
- - Formatar com HTML básico com subtitulos (htmls permitidos:  <table></table>, <tr></tr>, <td></td>, <th></th>, <font></font>, <br/>,<p></p>, <h2></h2>, <h3></h3>, <h4></h4>, <ul></ul>, <li><li>,<lo><lo>, <strong></strong>, <i></i>). \n
+ - Use SEO na matéria para que ela seja o mais achavel possível em mecanismos de busca para os termos : %s .\n 
+ - Formatar com HTML básico com subtítulos (HTMLs permitidos:  <table></table>, <tr></tr>, <td></td>, <th></th>, <font></font>, <br/>,<p></p>, <h2></h2>, <h3></h3>, <h4></h4>, <ul></ul>, <li><li>,<lo><lo>, <strong></strong>, <i></i>). \n
  - Trabalhe o melhor possível para que a matéria seja interessante e víral. \n
- - Pode usar emojis nos subtitulos e listas. \n
- - No minimo 5 subtitulos e cada um com no mínimo de 2 paragrafos por subtitulo. \n 
- - No caso de citar na matéria : descobertas, experimentos, livros, fatos históricos, etc, também adicione o nome dos envolvidos e datas relacionadas com fonte abnt. \n
+ - Pode usar emojis nos subtítulos e listas. \n
+ - No mínimo  5 subtítulos e cada um com no mínimo de 2 parágrafos por subtitulo. \n 
+ - No caso de citar na matéria : descobertas, experimentos, livros, fatos históricos, etc, também adicione o nome dos envolvidos e datas relacionadas com fontest. \n
  - Tente exemplificar o máximo que puder fazendo listas com exemplos se for o caso. \n 
 ${chatgpt.prompts.complemento-formato-pedir-materia}
- - Evite resumir a matéria sempre opite em expliar melhor principalmente termos tecnicos, entenda quanto mais atrativos os assuntos buscados que se relaciona ao tema da materia, mais chances ela tem de ser aberta e do usuário achar o que busca nela. \n
+ - Evite resumir a matéria sempre opte em explicar melhor principalmente termos técnicos, entenda quanto mais atrativos os assuntos buscados que se relaciona ao tema da materia, mais chances ela tem de ser aberta e do usuário achar o que busca nela. \n
  - No final deve ter um subtitulo de perguntas frequentes sobre o tema e tenha 3 perguntas e as resposas delas.\n
  - Na conclusão da materia deve se fazer um call to action para o site, comentar abaixo da matéria ou ver as redes sociais. \n
  - Na matéria não deve ter hashtags.
@@ -232,7 +243,7 @@ Faça uma mapa mental de perguntas em português para usar como possíveis direc
  - O campo \"perfilEnquadra\" : Que perfil que identificou que é relevante a essa pergunta, pode ser um fora do que citamos, porém que pertença ao universo pelo menos próximo do que citamos caso tenha identificado uma oportunidade.\n
  - O Campo \"idCategoria\": Dentro das categorias cidade em um JSon cima quais seria o id da categocia que mais se encaixaria a pergunta?\n
  - O Campo \"dataSugestaoPublicaca\" : Não é obrigatório, se a materia não se trata de um evento como o especifico (como: feriados, eventos de calendários, datas festivas, etc) não necessita enviar, deve ser usado só quando a pergunta tiver relação à uma data festiva ou um feriado e ai deve ser sugerir a data com 2 dias de antecedência ao dia do evento o mês vigente e neste ano.\n
- - O campo \"termos\" é uma array com no minimo 2 itens de termos de SEO sugeridos para essa titulo, dando preferência: termos técnicos, expressões linguisticas, jargões do assunto .\n
+ - O campo \"termos\" é uma array com no mínimo  2 itens de termos de SEO sugeridos para essa titulo, dando preferência: termos técnicos, expressões linguisticas, jargões do assunto .\n
  - Retornar uma array de JSon com a quantidade mínima de perguntas: %d .\n
  - Pode combinar com feriados, ou datas festivas, ou informações relevantes do mês de %s, tendencias o mês.\n
  ${chatgpt.prompts.pedir-perguntas-detalhe}\n

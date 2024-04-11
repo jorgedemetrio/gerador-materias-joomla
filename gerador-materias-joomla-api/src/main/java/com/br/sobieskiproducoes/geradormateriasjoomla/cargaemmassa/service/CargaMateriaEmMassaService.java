@@ -36,7 +36,7 @@ public class CargaMateriaEmMassaService {
   private final CargaMassaRepository repository;
   private final ObjectMapper objectMapper;
 
-  public List<MapaPerguntaDTO> processar(final RequisicaoCaragMassaDTO request) {
+  public List<MapaPerguntaDTO> processar(final RequisicaoCaragMassaDTO request) throws Exception {
 
     log.info("Inicio processamento ".concat(LocalDateTime.now().toString()));
     final String uuid = UUID.randomUUID().toString();
@@ -44,16 +44,13 @@ public class CargaMateriaEmMassaService {
 
     try {
       repository.save(new CargaMassaEntity(null, uuid, StatusProcessamentoEnum.PROCESSAR,
-          MateriaUtils.getLocalDateTime(request.getDataInicioPublicacao(),
-              request.getHoarios().get(0).getHoraio()),
-          MateriaUtils.getLocalDateTime(request.getDataFimPublicacao(), request.getHoarios().get(0).getHoraio()),
-          null, null, null, objectMapper.writeValueAsString(request)));
+          MateriaUtils.getLocalDateTime(request.getDataInicioPublicacao(), request.getHorario()),
+          MateriaUtils.getLocalDateTime(request.getDataFimPublicacao(), request.getHorario()), null, null, null, objectMapper.writeValueAsString(request)));
     } catch (final JsonProcessingException e) {
       log.info("Falha ao realizar o salvamento do processo em lote ".concat(uuid));
     }
 
-    log.info("Concluído processamento dos mapas e vai iniciar os da materias em lote"
-        .concat(LocalDateTime.now().toString()));
+    log.info("Concluído processamento dos mapas e vai iniciar os da materias em lote".concat(LocalDateTime.now().toString()));
     return itens;
   }
 

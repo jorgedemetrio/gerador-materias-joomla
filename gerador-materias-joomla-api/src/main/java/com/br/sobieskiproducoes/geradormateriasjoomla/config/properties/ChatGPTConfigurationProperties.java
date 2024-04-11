@@ -27,6 +27,16 @@ import lombok.ToString;
 @NoArgsConstructor
 public class ChatGPTConfigurationProperties {
 
+  private String urlCriarThrend;
+  private String urlPostarMensagem;
+  private String urlIniciarRun;
+  private String urlLerRunner;
+  private String urlAvancarMessage;
+  private String urlLerMensagem;
+  private String urlApagarThrend;
+
+  private String thread;
+
   @NotNull
   @NotBlank
   private String url;
@@ -34,6 +44,8 @@ public class ChatGPTConfigurationProperties {
   @NotNull
   @NotBlank
   private String bearer;
+
+
 
   private String assistente;
 

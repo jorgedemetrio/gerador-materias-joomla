@@ -1,9 +1,9 @@
 /**
- *
+ * 
  */
 package com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.response;
 
-import java.util.List;
+import java.util.HashMap;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -15,21 +15,21 @@ import lombok.ToString;
 
 /**
  * @author Jorge Demetrio
- * @since 22 de fev. de 2024 13:58:33
- * @version 1.0.0
+ * @since 10 de abr. de 2024 19:22:44
+ * @version 1.0-10 de abr. de 2024
  */
 @Getter
 @Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class RepostaResponseDTO {
+public class RepostaThrendsRunnerDTO {
   private String id;
   private TipoObjetoChatGPTEnum object;
-  private Long created;
-  private String model;
-  private List<ChoicesDTO> choices;
-  private UsageDTO usage;
-  @JsonProperty("system_fingerprint")
-  private String systemFingerprint;
+  
+  @JsonProperty("created_at")
+  private Long createdAt;
+
+  private HashMap<String, String> metadata;
+
 }

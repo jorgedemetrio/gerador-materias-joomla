@@ -94,15 +94,15 @@ public class TagService {
                 tag.getAttributes().getTitle());
             if (tagEntityOpt.isPresent()) {
               tagEntity = tagEntityOpt.get();
-            } else {
               convert.merge(tag.getAttributes(), tagEntity);
+            } else {
               tagEntity = convert.convertJoomla(tag.getAttributes());
             }
 
             try {
               repository.save(tagEntity);
             } catch (final Exception ex) {
-              log.log(Level.SEVERE, ex.getLocalizedMessage(), ex.getCause());
+              log.log(Level.SEVERE, "Erro ao salvar Tag : \n" + tagEntity.toString() + " \n\nmensagem:" + ex.getLocalizedMessage(), ex.getCause());
             }
             itens.add(tagEntity);
           }
