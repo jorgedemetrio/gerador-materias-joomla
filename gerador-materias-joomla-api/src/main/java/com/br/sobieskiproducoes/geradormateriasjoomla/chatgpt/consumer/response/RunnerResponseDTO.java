@@ -67,7 +67,7 @@ public class RunnerResponseDTO {
   @JsonProperty("file_ids")
   private List<String> fileIds;
 
-  private String usage;
+  private UsageDTO usage;
 
   private Long temperature;
 

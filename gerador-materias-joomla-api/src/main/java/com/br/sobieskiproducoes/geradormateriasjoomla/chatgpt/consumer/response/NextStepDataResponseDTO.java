@@ -58,6 +58,6 @@ public class NextStepDataResponseDTO {
   @JsonProperty("step_details")
   private NextStepDataStepDetailsResponseDTO stepDetails;
 
-  private NextStepDataUsageResponseDTO usage;
+  private UsageDTO usage;
 
 }
