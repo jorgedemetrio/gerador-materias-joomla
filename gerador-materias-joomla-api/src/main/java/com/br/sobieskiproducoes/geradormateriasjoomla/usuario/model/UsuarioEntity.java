@@ -3,6 +3,8 @@
  */
 package com.br.sobieskiproducoes.geradormateriasjoomla.usuario.model;
 
+import com.br.sobieskiproducoes.geradormateriasjoomla.usuario.controller.DTO.UsuarioDTO;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,13 +35,13 @@ public class UsuarioEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id-usuario", nullable=false, insertable=true, updatable=false)
-	private Long idUsuario;
+	private UsuarioDTO idUsuario;
 	
 	@Column(name = "nome", insertable=true, length=50, nullable=false, updatable=true)
 	private String nome;
 	
 	@Column(name ="usuario", insertable=true, length=20,nullable=false, updatable=true)
-	private String usuario;
+	private UsuarioDTO usuario;
 	
 	@Column(name= "senha", insertable=true, nullable=false, length=8, updatable=true)
 	private String senha;

@@ -5,11 +5,16 @@ package com.br.sobieskiproducoes.geradormateriasjoomla.usuario.model;
 
 import java.time.LocalDateTime;
 
+import com.br.sobieskiproducoes.geradormateriasjoomla.usuario.controller.DTO.UsuarioDTO;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,9 +39,10 @@ import lombok.ToString;
 public class LogAcessosEntity {
 	
 	@Id
+	@ManyToOne(cascade = CascadeType.ALL)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id-usuario",  nullable = false, insertable = true, updatable = false, unique = true)
-	private Long idUsuario;
+	@JoinColumn(name="id-usuario",  nullable = false, insertable = true, updatable = false, unique = true)
+	private UsuarioDTO idUsuario;
 	
 	@Column(name="data-de-criacao", nullable = false, insertable = true, updatable = false)
 	private LocalDateTime dataDeCriacao;
@@ -45,20 +51,20 @@ public class LogAcessosEntity {
 	private LocalDateTime dataAlteracao;
 
 	@Column(name="id-usuario-alterador", updatable=false, insertable=true, nullable=false, unique=true)
-	private String idUsuarioAlterador;
+	private UsuarioDTO idUsuarioAlterador;
 
 	@Column(name="id-usuario-criador", updatable=false, insertable=true, nullable=false, unique=true)
-	private String idUsuarioCriador;
+	private UsuarioDTO idUsuarioCriador;
 
 	@Column(name="ip-criador", updatable=false, insertable=true, nullable=false, unique=true)
-	private String ipCriador;
+	private UsuarioDTO ipCriador;
 
 	@Column(name="ip-proxi-criada", updatable=false, insertable=true, nullable=false, unique=true)
-	private String ipProxiCriada;
+	private UsuarioDTO ipProxiCriada;
 
 	@Column(name="ip-alterador", updatable=false, insertable=true, nullable=false, unique=true)
-	private String ipAlterador;
+	private UsuarioDTO ipAlterador;
 
 	@Column(name="ip-proxi-alterador", updatable=false, insertable=true, nullable=false, unique=true)
-	private String ipProxiAlterador;
+	private UsuarioDTO ipProxiAlterador;
 }

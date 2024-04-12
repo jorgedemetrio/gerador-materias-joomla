@@ -29,8 +29,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "tbl_gastos")
-public class GastosEntity {
+@Table(name = "tbl_extrato")
+public class ExtratoEntity {
 	
 	@Column(name="valor", updatable=true, insertable=true)
 	private Float valor;
@@ -49,10 +49,10 @@ public class GastosEntity {
 	private LocalDateTime dataAlteracao;
 
 	@Column(name="id-usuario-alterador", updatable=false, insertable=true, nullable=false, unique=true)
-	private String idUsuarioAlterador;
+	private UsuarioDTO idUsuarioAlterador;
 
 	@Column(name="id-usuario-criador", updatable=false, insertable=true, nullable=false, unique=true)
-	private String idUsuarioCriador;
+	private UsuarioDTO idUsuarioCriador;
 
 	@Column(name="ip-criador", updatable=false, insertable=true, nullable=false, unique=true)
 	private String ipCriador;

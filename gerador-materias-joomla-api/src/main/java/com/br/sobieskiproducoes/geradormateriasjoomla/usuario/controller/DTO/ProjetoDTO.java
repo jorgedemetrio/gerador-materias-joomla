@@ -33,14 +33,14 @@ import lombok.ToString;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProjetoDTO {
 	private Long id;
-	private String nome;
-	private String cnpj;
+	private UsuarioDTO nome;
+	private UsuarioDTO cnpj;
 	private String url;
 	private TipoEnum tipo; 
 	
 
 	@JsonProperty("id-usuario")
-	private Long idUsuario;
+	private UsuarioDTO idUsuario;
 	
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -55,20 +55,20 @@ public class ProjetoDTO {
 	private LocalDateTime dataAlteracao;
 	
 	@JsonProperty("id-usuario-alterador")
-	private String idUsuarioAlterador;
+	private UsuarioDTO idUsuarioAlterador;
 	
 	@JsonProperty("id-usuario-criador")
-	private String idUsuarioCriador;
+	private UsuarioDTO idUsuarioCriador;
 	
 	@JsonProperty("ip-criador")
-	private String ipCriador;
+	private UsuarioDTO ipCriador;
 	
 	@JsonProperty("ip-proxi-criada")
-	private String ipProxiCriada;
+	private UsuarioDTO ipProxiCriada;
 	
 	@JsonProperty("ip-alterador")
-	private String ipAlterador;
+	private UsuarioDTO ipAlterador;
 	
 	@JsonProperty("ip-proxi-alterador")
-	private String ipProxiAlterador;
+	private UsuarioDTO ipProxiAlterador;
 }
