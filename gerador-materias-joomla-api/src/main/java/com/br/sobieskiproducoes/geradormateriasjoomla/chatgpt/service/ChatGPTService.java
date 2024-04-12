@@ -50,6 +50,7 @@ public class ChatGPTService {
 
   private static final int AGUARDAR = 2000;
 
+
   private void gravarLog(final RepostaResponseDTO itensDaMateriaRetornoGPT, final String uuid, final LocalDateTime inicio, final String pergunta) {
     try { // Grava o log da consulta.
       final List<LogDialogoChatGPTEntity> logs = itensDaMateriaRetornoGPT.getChoices().stream()

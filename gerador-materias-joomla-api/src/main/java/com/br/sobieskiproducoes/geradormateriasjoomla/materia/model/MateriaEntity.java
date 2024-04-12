@@ -48,7 +48,7 @@ public class MateriaEntity {
   @Column(name = "id")
   private Long id;
 
-  @Column(name = "id_joomla", nullable = true, insertable = true, updatable = false)
+  @Column(name = "id_joomla", nullable = true, insertable = true, updatable = true)
   private Long idJoomla;
 
   @Column(name = "tema_proposto", nullable = true, insertable = true, updatable = true, unique = false, length = 1000)

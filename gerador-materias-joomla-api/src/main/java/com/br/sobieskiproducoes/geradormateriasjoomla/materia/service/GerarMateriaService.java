@@ -9,18 +9,23 @@ import static com.br.sobieskiproducoes.geradormateriasjoomla.utils.MateriaUtils.
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.logging.Level;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import com.aspose.html.converters.Converter;
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.service.ChatGPTService;
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ChatGPTProperties;
 import com.br.sobieskiproducoes.geradormateriasjoomla.dto.StatusProcessamentoEnum;
@@ -66,10 +71,13 @@ public class GerarMateriaService {
 
   private static final String NULL = "null";
 
+  Pattern ENTER = Pattern.compile("[\n\r]");
+  Pattern TAB = Pattern.compile("\t");
+
   private PropostaMateriaDTO convetToPropostaMateriaDTO(final String mensagem) {
 
     try {
-      final var content = limparTextoJson(mensagem);
+      final String content = limparTextoJson(TAB.matcher(ENTER.matcher(mensagem).replaceAll("")).replaceAll(" "));
       return objectMapper.readValue(content, PropostaMateriaDTO.class);
     } catch (final Exception e) {
       log.log(Level.SEVERE, "Erro ao converter objeto de retorno do ChatGPT: ".concat(e.getMessage()).concat(" \nConteúdo: \n\n\n").concat(mensagem), e);
@@ -139,12 +147,13 @@ public class GerarMateriaService {
     final List<String> itensDaMateriaRetornoGPT = chatgptService.perguntarAssistente(perguntaDadosMateria, uuid, inicio);
 
 
-//    final List<PropostaMateriaDTO> propostasSemMateria = itensDaMateriaRetornoGPT.stream().map(this::convetToPropostaMateriaDTO).filter(n -> Objects.nonNull(n))
-//        .collect(Collectors.toList());
+    final List<PropostaMateriaDTO> propostasSemMateria = itensDaMateriaRetornoGPT.stream().map(this::convetToPropostaMateriaDTO).filter(n -> Objects.nonNull(n))
+        .collect(Collectors.toList());
 
     
-    PropostaMateriaDTO propostaMateriaDTO = nonNull(itensDaMateriaRetornoGPT) && !itensDaMateriaRetornoGPT.isEmpty() ?
-        convetToPropostaMateriaDTO(itensDaMateriaRetornoGPT.get(itensDaMateriaRetornoGPT.size() - 1)) : null;
+    PropostaMateriaDTO propostaMateriaDTO = nonNull(propostasSemMateria) && !propostasSemMateria.isEmpty()
+        ? propostasSemMateria.get(propostasSemMateria.size() - 1)
+        : null;
     
     if (isNull(propostaMateriaDTO)) {
       log.info("Não conseguiu gerar a proposta de mateiria.");
@@ -204,12 +213,22 @@ public class GerarMateriaService {
       materia = textoMateria(materiaRetornoGPT.get(materiaRetornoGPT.size() - 1));
     }
 
+    if(nonNull(materia) && !materia.isBlank() && materia.indexOf("#")>0) {
+      materia = convertMarkdownToHtml(materia);
+    }
     if (tentativas >= 3) {
       log.info(
           "Motivo de não gerar a matéria: " + chatgptService.perguntarAssistente("Porque não pode gerar o texto que pedi?", uuid, inicio).get(0) + "\n\n\n");
     }
     // Se materia for null ele tenta 3 vezes
     return nonNull(materia) ? materia : tentativas < 3 ? gerarTextoMateria(perguntaMateria, uuid, inicio, ++tentativas) : null;
+  }
+
+  private String convertMarkdownToHtml(String markdown) {
+    // Convert Markdown string to InputStream
+    InputStream inputStream = new ByteArrayInputStream(markdown.getBytes(StandardCharsets.UTF_8));
+
+    return Converter.convertMarkdown(inputStream, "text/html").getTextContent();
   }
 
   @Transactional

@@ -5,6 +5,7 @@ package com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.response
 
 import java.util.HashMap;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class RepostaThrendsRunnerDTO {
   private String id;
   private TipoObjetoChatGPTEnum object;

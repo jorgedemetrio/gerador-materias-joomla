@@ -205,7 +205,7 @@ Entendendo que uma matéria deve seguir os requisitos: \n
  - Que tem as redes sociais: %s .\n
  - O perfil da audiência é : %s .\n
  - Use SEO na matéria para que ela seja o mais achavel possível em mecanismos de busca para os termos : %s .\n 
- - Formatar com HTML básico com subtítulos (HTMLs permitidos:  <table></table>, <tr></tr>, <td></td>, <th></th>, <font></font>, <br/>,<p></p>, <h2></h2>, <h3></h3>, <h4></h4>, <ul></ul>, <li><li>,<lo><lo>, <strong></strong>, <i></i>). \n
+ - Apenas o texto corpo da matéria e formatar apenas com HTML básico com subtítulos (TAGs HTMLs permitidos:  <table></table>, <tr></tr>, <td></td>, <th></th>, <font></font>, <br/>,<p></p>, <h2></h2>, <h3></h3>, <h4></h4>, <ul></ul>, <li><li>,<lo><lo>, <strong></strong>, <i></i>). \n
  - Trabalhe o melhor possível para que a matéria seja interessante e víral. \n
  - Pode usar emojis nos subtítulos e listas. \n
  - No mínimo  5 subtítulos e cada um com no mínimo de 2 parágrafos por subtitulo. \n 
@@ -216,7 +216,7 @@ ${chatgpt.prompts.complemento-formato-pedir-materia}
  - No final deve ter um subtitulo de perguntas frequentes sobre o tema e tenha 3 perguntas e as resposas delas.\n
  - Na conclusão da materia deve se fazer um call to action para o site, comentar abaixo da matéria ou ver as redes sociais. \n
  - Na matéria não deve ter hashtags.
-
+ 
 \n
 E matéria deve falar sobre :\n
 %s "

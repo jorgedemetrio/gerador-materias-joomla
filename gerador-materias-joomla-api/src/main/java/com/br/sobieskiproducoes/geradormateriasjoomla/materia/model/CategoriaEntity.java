@@ -32,16 +32,16 @@ public class CategoriaEntity {
   @Column(name = "id")
   private Long id;
 
-  @Column(name = "id_joomla", nullable = false, insertable = true, updatable = false, unique = true)
+  @Column(name = "id_joomla", nullable = false, insertable = true, updatable = true, unique = true)
   private Long idJoomla;
 
-  @Column(name = "titulo", nullable = false, insertable = true, updatable = false, unique = false, length = 1000)
+  @Column(name = "titulo", nullable = false, insertable = true, updatable = true, unique = false, length = 1000)
   private String titulo;
 
-  @Column(name = "alias", nullable = false, insertable = true, updatable = false, unique = false, length = 1000)
+  @Column(name = "alias", nullable = false, insertable = true, updatable = true, unique = false, length = 1000)
   private String apelido;
 
-  @Column(name = "usar_prompts", nullable = true, insertable = true, updatable = false, unique = false, columnDefinition = " tinyint(1) DEFAULT 1 ")
+  @Column(name = "usar_prompts", nullable = true, insertable = true, updatable = true, unique = false, columnDefinition = " tinyint(1) DEFAULT 1 ")
   private Boolean usarEmPrompts = Boolean.TRUE;
 
   @ManyToOne

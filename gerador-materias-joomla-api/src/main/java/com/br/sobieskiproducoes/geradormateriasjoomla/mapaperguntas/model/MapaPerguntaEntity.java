@@ -47,7 +47,7 @@ public class MapaPerguntaEntity {
   @Column(name = "uuid_requisicao", nullable = true, insertable = true, updatable = true, unique = false, length = 1000)
   private String uuid;
 
-  @Column(name = "pergunta", nullable = false, insertable = true, updatable = false, unique = false, length = 3000)
+  @Column(name = "pergunta", nullable = false, insertable = true, updatable = true, unique = false, length = 3000)
   private String pergunta;
 
   @OneToMany(mappedBy = "peguntaPrincipal", cascade = CascadeType.ALL)
