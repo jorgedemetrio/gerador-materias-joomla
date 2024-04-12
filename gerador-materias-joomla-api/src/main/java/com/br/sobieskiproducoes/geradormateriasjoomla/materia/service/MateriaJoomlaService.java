@@ -77,7 +77,6 @@ public class MateriaJoomlaService {
             .mensagem("Erro ao tentar acessar ").builder();
       }
       if (nonNull(entity.getPublicar())) {
-        // entity.setPublicar(entity.getPublicar());
         entity.setApelido(entity.getPublicar().format(DATTE_TIME_FORMATTER_ALIAS) + entity.getApelido());
         materiaRepository.save(entity);
       }

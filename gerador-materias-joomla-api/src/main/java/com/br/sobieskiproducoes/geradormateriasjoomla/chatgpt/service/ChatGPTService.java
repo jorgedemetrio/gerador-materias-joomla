@@ -54,7 +54,7 @@ public class ChatGPTService {
   private void gravarLog(final RepostaResponseDTO itensDaMateriaRetornoGPT, final String uuid, final LocalDateTime inicio, final String pergunta) {
     try { // Grava o log da consulta.
       final List<LogDialogoChatGPTEntity> logs = itensDaMateriaRetornoGPT.getChoices().stream()
-          .map(choice -> convert.convert(itensDaMateriaRetornoGPT, choice, inicio, pergunta, uuid)).collect(Collectors.toList());
+          .map(choice -> convert.convert(itensDaMateriaRetornoGPT, choice, inicio, pergunta, uuid)).toList();
       logs.forEach(logDialogoChatGPTRepository::save);
     } catch (final Exception ex) {
       log.log(Level.SEVERE, "Falha ao logar mensagens do ChatGPT no banco, mensagem:".concat(pergunta).concat(". Erro: ").concat(ex.getMessage()), ex);

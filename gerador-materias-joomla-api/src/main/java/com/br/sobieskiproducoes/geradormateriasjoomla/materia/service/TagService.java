@@ -134,7 +134,7 @@ public class TagService {
     // If ternario
     return (isNull(titulo) || titulo.isBlank() ? repository.findAll(page)
         : repository.findByTituloContainingIgnoreCase(titulo, page)).stream().map(convert::convert)
-            .collect(Collectors.toList());
+            .toList();
 
   }
 

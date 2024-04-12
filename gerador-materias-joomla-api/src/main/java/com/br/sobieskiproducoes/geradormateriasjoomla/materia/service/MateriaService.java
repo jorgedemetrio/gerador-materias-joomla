@@ -65,7 +65,7 @@ public class MateriaService {
 
     Page<MateriaEntity> itens = repository.buscarMateriaVazias(PageRequest.of(pagina, MateriaConstants.MAX_INTENS_PER_PAGE, Sort.by(ordenar)));
 
-    return new RetornoBusinessDTO<>(itens.getTotalElements(), pagina, itens.stream().map(convert::toDTO).collect(Collectors.toList()));
+    return new RetornoBusinessDTO<>(itens.getTotalElements(), pagina, itens.stream().map(convert::toDTO).toList());
   }
 
 }

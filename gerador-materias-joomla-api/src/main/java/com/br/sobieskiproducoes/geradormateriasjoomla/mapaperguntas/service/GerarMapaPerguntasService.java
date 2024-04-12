@@ -73,7 +73,7 @@ public class GerarMapaPerguntasService {
     final MapaPerguntaDTO retirno = convert.convert(item);
 
     retirno.setPerguntasAlternativas(
-        item.getPerguntasAlternativas().stream().map(SubMapaPerguntasEntity::getPergunta).collect(Collectors.toList()));
+        item.getPerguntasAlternativas().stream().map(SubMapaPerguntasEntity::getPergunta).toList());
 
     return retirno;
   }
@@ -111,13 +111,13 @@ public class GerarMapaPerguntasService {
           entity.setCategoria(categoria.get());
         }
         entity.setPerguntasAlternativas(mapaPergunta.getPerguntasAlternativas().stream()
-            .map(pergunta -> new SubMapaPerguntasEntity(null, uuid, pergunta, entity)).collect(Collectors.toList()));
+            .map(pergunta -> new SubMapaPerguntasEntity(null, uuid, pergunta, entity)).toList());
 
         entity.setTermos(mapaPergunta.getTermos().stream()
-            .map(termo -> new TermosMapaPerguntaEntity(null, uuid, termo, entity)).collect(Collectors.toList()));
+            .map(termo -> new TermosMapaPerguntaEntity(null, uuid, termo, entity)).toList());
 
         return entity;
-      }).collect(Collectors.toList()));
+      }).toList());
 
     } catch (final Exception e) {
       log.log(Level.SEVERE, "Erro ao converter objeto de retorno do ChatGPT: ".concat(e.getMessage())
@@ -213,7 +213,7 @@ public class GerarMapaPerguntasService {
 
 
     repository.saveAll(itens);
-    return itens.stream().map(this::convert).collect(Collectors.toList());
+    return itens.stream().map(this::convert).toList();
 
   }
 

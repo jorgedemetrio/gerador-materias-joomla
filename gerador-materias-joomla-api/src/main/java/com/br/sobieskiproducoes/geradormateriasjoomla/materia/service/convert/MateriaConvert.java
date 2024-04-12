@@ -42,7 +42,7 @@ public interface MateriaConvert {
   @Mapping(target = "materia", ignore = true)
   FAQEntity convert(FaqDTO materia);
 
-  @Mapping(target = "tags", expression = "java( Objects.nonNull(materia.getTags()) ? materia.getTags().stream().map(c->c.getTitulo()).collect(Collectors.toList()): null)")
+  @Mapping(target = "tags", expression = "java( Objects.nonNull(materia.getTags()) ? materia.getTags().stream().map(c->c.getTitulo()).toList(): null)")
   @Mapping(target = "titulos", expression = "java( Arrays.asList( materia.getTitulo1(), materia.getTitulo2(), materia.getTitulo3() ) )")
   PropostaMateriaDTO convert(MateriaEntity materia);
 

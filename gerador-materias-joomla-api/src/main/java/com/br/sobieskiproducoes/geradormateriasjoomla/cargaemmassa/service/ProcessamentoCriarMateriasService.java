@@ -67,7 +67,7 @@ public class ProcessamentoCriarMateriasService {
       mapaPerguntaEntity.getTermos().forEach(pergunta -> mapaPerguntaDTO.getTermos().add(pergunta.getTermo()));
 
       return mapaPerguntaDTO;
-    }).collect(Collectors.toList());
+    }).toList();
   }
 
   @Transactional
@@ -100,7 +100,7 @@ public class ProcessamentoCriarMateriasService {
               && mapaPerguntaDTO.getDataSugestaoPublicacao().isBefore(request.getDataFimPublicacao())
               || mapaPerguntaDTO.getDataSugestaoPublicacao().isEqual(request.getDataFimPublicacao()));
 
-    }).collect(Collectors.toList());
+    }).toList();
     for (final MapaPerguntaDTO mapaPerguntaDTO : processarComData) {
 
       data = MateriaUtils.getLocalDateTime(mapaPerguntaDTO.getDataSugestaoPublicacao(), request.getHorario());
