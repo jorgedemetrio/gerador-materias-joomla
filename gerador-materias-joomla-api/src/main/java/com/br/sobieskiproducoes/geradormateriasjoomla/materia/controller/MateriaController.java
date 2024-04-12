@@ -25,7 +25,7 @@ import lombok.extern.java.Log;
 @Log
 @RequiredArgsConstructor
 @Controller
-@Tag(name = "Matéiras", description = "Realiza todo processo de controle")
+@Tag(name = "Matérias", description = "Realiza todo processo de controle")
 @RequestMapping("/materia")
 public class MateriaController {
 
