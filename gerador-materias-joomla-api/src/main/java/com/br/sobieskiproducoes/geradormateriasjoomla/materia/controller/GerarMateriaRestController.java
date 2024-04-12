@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoItemJoomlaResponse;
@@ -49,7 +48,6 @@ public class GerarMateriaRestController {
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "Processado com sucesso", content = @Content(schema = @Schema(implementation = GenericoItemJoomlaResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE)) })
   @PostMapping(path = "{id}/publicar", consumes = { MediaType.APPLICATION_JSON_VALUE })
-  @ResponseBody
   public ResponseEntity<GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosArtigoSalvoJoomlaDTO>>> publicar(
       @PathVariable("id") final Long id, @RequestBody final PublicarDTO dto) {
     log.info("Gerando materia sobre %d ".formatted(id));
@@ -69,7 +67,6 @@ public class GerarMateriaRestController {
       @ApiResponse(responseCode = "200", description = "Processado com sucesso", content = @Content(schema = @Schema(implementation = String.class), mediaType = MediaType.APPLICATION_JSON_VALUE)) })
   @PostMapping(path = "sugerir", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
       MediaType.APPLICATION_JSON_VALUE })
-  @ResponseBody
   public ResponseEntity<List<PropostaMateriaDTO>> sugerirMateria(@RequestBody final SugerirMateriaDTO request) throws Exception {
     log.info("Gerando materia sobre %s ".formatted(request.getTema()));
     return ResponseEntity.status(HttpStatus.CREATED).body(gerarMateriaService.gerarSugestaoMateria(request));

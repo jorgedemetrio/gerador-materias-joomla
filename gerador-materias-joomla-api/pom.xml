@@ -263,6 +263,13 @@
 						</goals>
 					</execution>
 					<execution>
+						<id>report-aggregate</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>report-aggregate</goal>
+						</goals>
+					</execution>
+					<execution>
 						<id>report</id>
 						<goals>
 							<goal>report</goal>

@@ -60,7 +60,7 @@ public class RequisicaoCaragMassaDTO {
 
   @NotEmpty(message = "O campo \"horario\" deve ser preenchido.")
   @Size(min = 5, max = 5, message = "Hora devem estar no formato HH:mm .")
-  @Pattern(regexp = "[0-9]{2}:[0-9]{2}", message = "Hora devem estar no formato HH:mm .")
+  @Pattern(regexp = "\\d{2}:\\d{2}", message = "Hora devem estar no formato HH:mm .")
   private String horario;
 
   @JsonProperty(defaultValue = "true")

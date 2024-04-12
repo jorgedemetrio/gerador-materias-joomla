@@ -179,7 +179,8 @@ public class GerarMateriaService {
     try {
       materia = gerarTextoMateria(perguntaMateria, uuid, inicio, 0);
       PropostaMateriaDTO itemSalvar = propostaMateriaDTO;
-      if (nonNull(itemSalvar = convert.copy(itemSalvar, uuid, materia))) {
+      itemSalvar = convert.copy(itemSalvar, uuid, materia);
+      if (nonNull(itemSalvar)) {
         propostasRetorno.add(this.salvarPropostaMateria(itemSalvar, request, idMapaProcessamento));
       }
 
@@ -217,7 +218,15 @@ public class GerarMateriaService {
           "Motivo de não gerar a matéria: " + chatgptService.perguntarAssistente("Porque não pode gerar o texto que pedi?", uuid, inicio).get(0) + "\n\n\n");
     }
     // Se materia for null ele tenta 3 vezes
-    return nonNull(materia) ? materia : tentativas < 3 ? gerarTextoMateria(perguntaMateria, uuid, inicio, ++tentativas) : null;
+
+    if (nonNull(materia)) {
+      return materia;
+    }
+    if (tentativas < 3) {
+      return gerarTextoMateria(perguntaMateria, uuid, inicio, ++tentativas);
+    }
+
+    return null;
   }
 
   private String convertMarkdownToHtml(String markdown) {
