@@ -10,7 +10,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
-import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +33,6 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.LinkResp
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.MetaResponse;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.CategoriaJoomlaClient;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosCategoriaJoomlaDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.CategoriaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.CategoriaRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.convert.CategoriaConvert;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.convert.CategoriaConvertImpl;
@@ -58,54 +56,44 @@ class CategoriaServiceTest {
 
   @Spy
   ConfiguracoesProperties properties = new ConfiguracoesProperties(
-      new CargaDadosImagensProperties(
-          new DadosImagensMateriasProperties("pastaImagemMaterias", "autor", 1, 1, 0.3, "constante", "url",
-              Boolean.TRUE),
+      new CargaDadosImagensProperties(new DadosImagensMateriasProperties("pastaImagemMaterias", "autor", 1, 1, 0.3, "constante", "url", Boolean.TRUE),
           new DadosImagensLogoProperties("path", PosicaoEnum.ALEATORIO, PosicaoEnum.ALEATORIO, 1, 1, 0.4d, 1, 0.4d)),
-      new ChatGPTConfigurationProperties("url", "bearer", "assistente", "organization", "model", 0.4d, "roleUser",
-          "roleSystem", "roleAssistant", "maxTokens"),
+      new ChatGPTConfigurationProperties(
+
+          "urlCriarThrend", "urlPostarMensagem", "urlIniciarRun", "urlLerRunner", "urlAvancarMessage", "urlLerMensagem", "urlApagarThrend", "thread",
+
+          "url", "bearer", "assistente", "organization", "model", 0.4d, "roleUser", "roleSystem", "roleAssistant", "maxTokens"),
       new JoomlaConfigurationProperties("url", "bearer", "idioma"), new YoutubeConfigurationProperties());
 
   @Spy
   CategoriaConvert convert = new CategoriaConvertImpl();
 
   /**
-   * Test method for
-   * {@link com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.CategoriaService#atualizarBancoCategoria()}.
+   * Test method for {@link com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.CategoriaService#atualizarBancoCategoria()}.
    */
-  @SuppressWarnings("unchecked")
   @Test
-  // TODO: REfazer o teste
   void testAtualizarBancoCategoria() {
 
     when(categoriaJoomlaClient.getCategorias()).thenReturn(new GenericoItemJoomlaResponse<>(Arrays.asList(
         new GenericoJoomlaDataDTO<>("type", "1",
-            new AtributosCategoriaJoomlaDTO(1L, "title", "alias", "note", 1, 1, "checkedOut", "checkedOutTime", 1L,
-                null, 1, 1, 1, "language", "description", "languageTitle", "languageImage", "editor", "access_level",
-                "authorName", 1, 1, 1, 1)),
+            new AtributosCategoriaJoomlaDTO(1L, "title", "alias", "note", 1, 1, "checkedOut", "checkedOutTime", 1L, null, 1, 1, 1, "language", "description",
+                "languageTitle", "languageImage", "editor", "access_level", "authorName", 1, 1, 1, 1)),
         new GenericoJoomlaDataDTO<>("type", "2",
-            new AtributosCategoriaJoomlaDTO(2L, "title", "alias", "note", 1, 1, "checkedOut", "checkedOutTime", 1L, 1L,
-                1, 1, 1, "language", "description", "languageTitle", "languageImage", "editor", "access_level",
-                "authorName", 1, 1, 1, 1)),
-        new GenericoJoomlaDataDTO<>("type", "2",
-            new AtributosCategoriaJoomlaDTO(5L, "title", "alias", "note", 0, 1, "checkedOut", "checkedOutTime", 1L, 1L,
-                1, 1, 1, "language", "description", "languageTitle", "languageImage", "editor", "access_level",
-                "authorName", 1, 1, 1, 1))
+            new AtributosCategoriaJoomlaDTO(2L, "title", "alias", "note", 1, 1, "checkedOut", "checkedOutTime", 1L, 1L, 1, 1, 1, "language", "description",
+                "languageTitle", "languageImage", "editor", "access_level", "authorName", 1, 1, 1, 1)),
+        new GenericoJoomlaDataDTO<>("type", "2", new AtributosCategoriaJoomlaDTO(5L, "title", "alias", "note", 0, 1, "checkedOut", "checkedOutTime", 1L, 1L, 1,
+            1, 1, "language", "description", "languageTitle", "languageImage", "editor", "access_level", "authorName", 1, 1, 1, 1))
 
     ), new LinkResponse("self", "url/next", "last", "first", "previous"), new MetaResponse(0L)));
 
-    when(categoriaJoomlaClient.getCategorias(anyString(), anyString()))
-        .thenReturn(new GenericoItemJoomlaResponse<>(Arrays.asList(
-            new GenericoJoomlaDataDTO<>("type", "3",
-                new AtributosCategoriaJoomlaDTO(3L, "title", "alias", "note", 1, 1, "checkedOut", "checkedOutTime", 1L,
-                    1L, 1, 1, 1, "language", "description", "languageTitle", "languageImage", "editor", "access_level",
-                    "authorName", 1, 1, 1, 1)),
-            new GenericoJoomlaDataDTO<>("type", "4",
-                new AtributosCategoriaJoomlaDTO(4L, "title", "alias", "note", 1, 1, "checkedOut", "checkedOutTime", 1L,
-                    1L, 1, 1, 1, "language", "description", "languageTitle", "languageImage", "editor", "access_level",
-                    "authorName", 1, 1, 1, 1))
+    when(categoriaJoomlaClient.getCategorias(anyString(), anyString())).thenReturn(new GenericoItemJoomlaResponse<>(Arrays.asList(
+        new GenericoJoomlaDataDTO<>("type", "3",
+            new AtributosCategoriaJoomlaDTO(3L, "title", "alias", "note", 1, 1, "checkedOut", "checkedOutTime", 1L, 1L, 1, 1, 1, "language", "description",
+                "languageTitle", "languageImage", "editor", "access_level", "authorName", 1, 1, 1, 1)),
+        new GenericoJoomlaDataDTO<>("type", "4", new AtributosCategoriaJoomlaDTO(4L, "title", "alias", "note", 1, 1, "checkedOut", "checkedOutTime", 1L, 1L, 1,
+            1, 1, "language", "description", "languageTitle", "languageImage", "editor", "access_level", "authorName", 1, 1, 1, 1))
 
-        ), new LinkResponse("self", null, "last", "first", "previous"), new MetaResponse(0L)));
+    ), new LinkResponse("self", null, "last", "first", "previous"), new MetaResponse(0L)));
 
 //    when(categoriaRepository.findByIdJoomla(anyLong())).thenReturn(Optional.empty(), Optional.empty(),
 //        Optional.of(new CategoriaEntity()), Optional.empty());
@@ -114,10 +102,11 @@ class CategoriaServiceTest {
     final ArgumentCaptor<String> url2ArgumentCaptor = ArgumentCaptor.forClass(String.class);
     // final ArgumentCaptor<Long> idJoomlaArgumentCaptor =
     // ArgumentCaptor.forClass(Long.class);
-    final ArgumentCaptor<CategoriaEntity> categoriaEntityArgumentCaptor = ArgumentCaptor
-        .forClass(CategoriaEntity.class);
+//
+//    final ArgumentCaptor<CategoriaEntity> categoriaEntityArgumentCaptor = ArgumentCaptor
+//        .forClass(CategoriaEntity.class);
 
-    final Map<String, Integer> retornoItem = service.atualizarBancoCategoria();
+    final var retornoItem = service.atualizarBancoCategoria();
 
     verify(categoriaJoomlaClient, times(1)).getCategorias();
     verify(categoriaJoomlaClient, times(1)).getCategorias(url1ArgumentCaptor.capture(), url2ArgumentCaptor.capture());

@@ -44,13 +44,13 @@ public class TagEntity {
   @Column(name = "id_joomla", nullable = true, insertable = true, updatable = true, unique = false)
   private Long idJoomla;
 
-  @Column(name = "titulo", nullable = false, insertable = true, updatable = false, unique = false, length = 1000)
+  @Column(name = "titulo", nullable = false, insertable = true, updatable = true, unique = false, length = 1000)
   private String titulo;
 
-  @Column(name = "alias", nullable = true, insertable = true, updatable = false, unique = true, length = 500)
+  @Column(name = "alias", nullable = true, insertable = true, updatable = true, unique = false, length = 500)
   private String apelido;
 
-  @Column(name = "idioma", nullable = true, insertable = true, updatable = false, unique = true, length = 500)
+  @Column(name = "idioma", nullable = true, insertable = true, updatable = true, unique = false, length = 500)
   private String language;
 
   @ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "tags")

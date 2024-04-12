@@ -39,10 +39,10 @@ public class FAQEntity {
   @Column(name = "uuid_requisicao", nullable = true, insertable = true, updatable = true, unique = false, length = 1000)
   private String uuid;
 
-  @Column(name = "pergunta", nullable = false, insertable = true, updatable = false, unique = false, length = 1000)
+  @Column(name = "pergunta", nullable = false, insertable = true, updatable = true, unique = false, length = 1000)
   private String pergunta;
 
-  @Column(name = "resposta", nullable = false, insertable = true, updatable = false, unique = false, length = 1000)
+  @Column(name = "resposta", nullable = false, insertable = true, updatable = true, unique = false, length = 1000)
   private String resposta;
 
   @ManyToOne

@@ -42,9 +42,9 @@ public interface TagConvert {
 
   @Mapping(target = "materias", ignore = true)
   @Mapping(target = "id", ignore = true)
-  @Mapping(target = "apelido", source = "alias", conditionExpression = "java(Objects.nonNull(tag.getApelido()) && !tag.getApelido().isBlank())")
-  @Mapping(target = "titulo", source = "title", conditionExpression = "java(Objects.nonNull(tag.getTitulo()) && !tag.getTitulo().isBlank())")
-  @Mapping(target = "idJoomla", source = "id ", conditionExpression = "java(Objects.nonNull(tag.getId()) && tag.getId() > 0L )")
+  @Mapping(target = "apelido", source = "alias", conditionExpression = "java(Objects.nonNull(atributosArtigoJoomlaDTO.getAlias()) && !atributosArtigoJoomlaDTO.getAlias().isBlank())")
+  @Mapping(target = "titulo", source = "title", conditionExpression = "java(Objects.nonNull(atributosArtigoJoomlaDTO.getTitle()) && !atributosArtigoJoomlaDTO.getTitle().isBlank())")
+  @Mapping(target = "idJoomla", source = "id ", conditionExpression = "java(Objects.nonNull(atributosArtigoJoomlaDTO.getId()) && atributosArtigoJoomlaDTO.getId() > 0L )")
   void merge(AtributosTagJoomlaDTO atributosArtigoJoomlaDTO, @MappingTarget TagEntity tag);
 
 

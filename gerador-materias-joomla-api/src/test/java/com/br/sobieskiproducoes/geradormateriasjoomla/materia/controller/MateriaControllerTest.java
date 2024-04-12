@@ -40,7 +40,7 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.MateriaJoo
 @ExtendWith(MockitoExtension.class)
 public class MateriaControllerTest {
 	@InjectMocks
-	private MateriaController controller;
+	private GerarMateriaRestController controller;
 
 	@Mock
 	private MateriaJoomlaService service;
