@@ -58,16 +58,7 @@ public class CategoriaController {
 		return ResponseEntity.ok(service.atualizarBancoCategoria());
 	}
 
-	@Operation(summary = "Retorna a lista de itens")
-	@ApiResponses({
-			@ApiResponse(responseCode = "200", description = "Lista de Categoria", content = @Content(array = @ArraySchema(schema = @Schema(implementation = RetornoBusinessDTO.class)), mediaType = MediaType.APPLICATION_JSON_VALUE)) })
-	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
-	@ResponseBody
-	public ResponseEntity<RetornoBusinessDTO<CategoriaDTO>> find(
-			@RequestParam(name = "titulo", required = false) final String titulo,
-			@RequestParam(name = "p", required = false, defaultValue = "0") final Integer pagina) {
-		return ResponseEntity.ok(service.busca(titulo, pagina));
-	}
+
 
 	@Operation(summary = "busca categoria por id")
 	@ApiResponse(responseCode = "200", description = "retorna uma categoria", content = @Content(array = @ArraySchema(schema = @Schema(implementation = CategoriaDTO.class))))

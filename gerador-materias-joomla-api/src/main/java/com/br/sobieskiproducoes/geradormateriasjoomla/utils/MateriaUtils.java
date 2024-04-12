@@ -33,8 +33,8 @@ public class MateriaUtils {
   public static final Pattern ASPAS_HTML_INICIO = Pattern.compile("```html");
   public static final Pattern ASPAS_HTML = Pattern.compile("```");
 
-  public static final Pattern HORA_SIMPLES = Pattern.compile("[0-9]{2}:[0-9]{2}");
-  public static final Pattern HORA_COM_SEGUNDO = Pattern.compile("[0-9]{2}:[0-9]{2}::[0-9]{2}");
+  public static final Pattern HORA_SIMPLES = Pattern.compile("\\d{2}:\\d{2}");
+  public static final Pattern HORA_COM_SEGUNDO = Pattern.compile("\\d{2}:\\d{2}::\\d{2}");
   public static final Pattern PATTERN_URL = Pattern
       .compile("(https?://|ftp://|bit\\.ly/\\w+)\\S*",
       Pattern.CASE_INSENSITIVE);

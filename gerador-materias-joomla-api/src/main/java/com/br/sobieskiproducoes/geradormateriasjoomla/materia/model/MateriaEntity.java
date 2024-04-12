@@ -48,7 +48,7 @@ public class MateriaEntity {
   @Column(name = "id")
   private Long id;
 
-  @Column(name = "id_joomla", nullable = true, insertable = true, updatable = false)
+  @Column(name = "id_joomla", nullable = true, insertable = true, updatable = true)
   private Long idJoomla;
 
   @Column(name = "tema_proposto", nullable = true, insertable = true, updatable = true, unique = false, length = 1000)
@@ -81,7 +81,7 @@ public class MateriaEntity {
   @Column(name = "materia", nullable = true, insertable = true, updatable = true, unique = false, columnDefinition = "TEXT")
   private String materia;
 
-  @Column(name = "alias", nullable = true, insertable = true, updatable = true, unique = true, length = 500)
+  @Column(name = "alias", nullable = true, insertable = true, updatable = true, unique = false, length = 500)
   private String apelido;
 
   @Column(name = "post_instagram", nullable = true, insertable = true, updatable = true, unique = false, length = 2000)

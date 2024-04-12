@@ -52,7 +52,8 @@ public class TagControllerTest {
 	          new DadosImagensMateriasProperties("pastaImagemMaterias", "autor", 1, 1, 2.4d, "constante", "url",
 	              Boolean.TRUE),
 	          new DadosImagensLogoProperties("path", PosicaoEnum.ALEATORIO, PosicaoEnum.ALEATORIO, 1, 1, 2.5d, 1, 2.4d)),
-	      new ChatGPTConfigurationProperties("url", "bearer", "assistente", "organization", "model", 2.3d, "roleUser",
+        new ChatGPTConfigurationProperties("urlCriarThrend", "urlPostarMensagem", "urlIniciarRun", "urlLerRunner", "urlAvancarMessage", "urlLerMensagem",
+            "urlApagarThrend", "thread", "url", "bearer", "assistente", "organization", "model", 2.3d, "roleUser",
 	          "roleSystem", "roleAssistant", "maxTokens"),
 	      new JoomlaConfigurationProperties("url", "bearer", "idioma"), new YoutubeConfigurationProperties());
 	  

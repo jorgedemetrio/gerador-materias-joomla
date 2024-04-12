@@ -24,6 +24,7 @@ public class BuilderBusinessException {
 
   }
 
+  @SuppressWarnings("unchecked")
   public <T extends BusinessException> T builder() {
     if (isNull(classe)) {
       throw new RuntimeException("Defina o tipo de Expcetion ");

@@ -3,7 +3,7 @@
  */
 package com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.service;
 
-import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 import java.io.File;
 import java.util.List;
@@ -16,7 +16,9 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.dto.StatusProcessamentoEnu
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.exception.BusinessException;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.MateriaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.MateriaRepository;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.CategoriaService;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.MateriaJoomlaService;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.TagService;
 import com.br.sobieskiproducoes.geradormateriasjoomla.utils.MateriaUtils;
 
 import jakarta.transaction.Transactional;
@@ -35,11 +37,17 @@ public class ProcessamentoPublicarMateriasService {
   private final ConfiguracoesProperties properties;
   private final MateriaJoomlaService materiaJoomlaService;
   private final MateriaRepository materiaRepository;
+  private final CategoriaService categoriaService;
+  private final TagService tagService;
 
   @Transactional
   public void processar() throws BusinessException {
     log.info("Atualizando banco com informações do Joomla");
     final List<MateriaEntity> materias = materiaRepository.buscarMateriasPublicar();
+    if (nonNull(materias) && !materias.isEmpty()) {
+      categoriaService.atualizarBancoCategoria();
+      tagService.atualizarBancoTag();
+    }
     for (final MateriaEntity materiaEntity : materias) {
       processarMateriaNoJoomla(materiaEntity);
     }
@@ -63,7 +71,8 @@ public class ProcessamentoPublicarMateriasService {
     } catch (final Exception ex) {
       log.log(Level.SEVERE, "Erro ao criar a pasta da materia : ".concat(materiaEntity.getId().toString()), ex);
     }
-    if (!isNull(materiaJoomlaService.publicarMateriaJoomla(materiaEntity))) {
+    if (nonNull(materiaJoomlaService.publicarMateriaJoomla(materiaEntity))) {
+      log.info("Publicado a materia :" + materiaEntity.getIdJoomla());
 //      erroInterno = true;
 //    } else {
 //      final DefaultTransactionDefinition def = new DefaultTransactionDefinition();

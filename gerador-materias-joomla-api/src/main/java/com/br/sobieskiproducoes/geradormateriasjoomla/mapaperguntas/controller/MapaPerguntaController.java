@@ -49,7 +49,7 @@ public class MapaPerguntaController {
   @PostMapping(path = "gerar", produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = {
       MediaType.APPLICATION_JSON_VALUE })
   @ResponseBody
-  public ResponseEntity<List<MapaPerguntaDTO>> gerar(@NotNull @Validated @RequestBody final RequisitaPerguntasDTO request) {
+  public ResponseEntity<List<MapaPerguntaDTO>> gerar(@NotNull @Validated @RequestBody final RequisitaPerguntasDTO request) throws Exception {
     log.info("Gerando perguntas para o site.");
     return ResponseEntity.ok(gerarService.gerarMapa(request));
   }

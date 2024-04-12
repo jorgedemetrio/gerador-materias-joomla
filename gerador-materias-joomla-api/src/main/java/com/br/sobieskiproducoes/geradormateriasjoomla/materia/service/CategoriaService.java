@@ -88,7 +88,7 @@ public class CategoriaService {
                 && (isNull(c.getAttributes())
                     || c.getAttributes().getLanguage().equals(properties.getJoomla().getIdioma())
                     || MateriaConstants.SEM_IDIOMA.equals(c.getAttributes().getLanguage())))
-            .map(convert::convert).collect(Collectors.toList()));
+            .map(convert::convert).toList());
 
       }
 
@@ -101,7 +101,7 @@ public class CategoriaService {
     // Pega todos as categorias principais.
     List<CategoriaEntity> itensSalvar = itens.stream()
         .filter(c -> isNull(c.getPai()) || isNull(c.getPai().getIdJoomla()) || c.getPai().getIdJoomla().equals(0L))
-        .collect(Collectors.toList());
+        .toList();
 
     // Se não achar nada que não tenha pai, ele pega o com id menor tira o pai dele
     // e manda para gravação.
@@ -114,7 +114,7 @@ public class CategoriaService {
       itensSalvar = itens.stream()
           .filter(
               c -> nonNull(c.getPai()) && nonNull(c.getPai().getIdJoomla()) && idPai.equals(c.getPai().getIdJoomla()))
-          .collect(Collectors.toList());
+          .toList();
 
       itensSalvar.forEach(c -> c.setPai(pai));
 
@@ -124,7 +124,7 @@ public class CategoriaService {
     List<CategoriaEntity> agravar = null;
     while (nonNull(itensSalvar) && !itensSalvar.isEmpty()) {
 
-      agravar = itensSalvar.stream().filter(this::jaEstaSalvoCorrigePai).collect(Collectors.toList());
+      agravar = itensSalvar.stream().filter(this::jaEstaSalvoCorrigePai).toList();
       processados += agravar.size();
       agravar.forEach(categoriaRepository::save);
 
@@ -136,8 +136,8 @@ public class CategoriaService {
       // Busca os filhos dos paissalvos, proximos a serem salvos.
       itensSalvar = itens.stream().filter(c -> nonNull(c.getPai()) && nonNull(c.getPai().getIdJoomla()))
           .filter(c1 -> (itensSalvados.stream().filter(c2 -> c2.getIdJoomla().equals(c1.getPai().getIdJoomla()))
-              .collect(Collectors.toList()).size() > 0))
-          .collect(Collectors.toList());
+              .toList().size() > 0))
+          .toList();
 
     }
     retorno.put("processados", processados);
@@ -156,7 +156,7 @@ public class CategoriaService {
           MateriaConstants.MAX_INTENS_PER_PAGE, Sort.by("titulo").ascending()));
     }
 
-    final List<CategoriaDTO> retorno = itemPagina.get().map(convert::convertCategoriaDTO).collect(Collectors.toList());
+    final List<CategoriaDTO> retorno = itemPagina.get().map(convert::convertCategoriaDTO).toList();
 
     return new RetornoBusinessDTO<>(itemPagina.getTotalElements(), itemPagina.getTotalPages(), retorno);
 

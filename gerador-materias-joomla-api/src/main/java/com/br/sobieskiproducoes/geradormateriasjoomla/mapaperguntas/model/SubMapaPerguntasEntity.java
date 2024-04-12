@@ -39,10 +39,10 @@ public class SubMapaPerguntasEntity {
   @Column(name = "uuid_requisicao", nullable = true, insertable = true, updatable = true, unique = false, length = 1000)
   private String uuid;
 
-  @Column(name = "pergunta", nullable = false, insertable = true, updatable = false, unique = false, length = 3000)
+  @Column(name = "pergunta", nullable = false, insertable = true, updatable = true, unique = false, length = 3000)
   private String pergunta;
 
   @ManyToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "id_mapa_pergunta", nullable = false, insertable = true, updatable = false, unique = false)
+  @JoinColumn(name = "id_mapa_pergunta", nullable = false, insertable = true, updatable = true, unique = false)
   private MapaPerguntaEntity peguntaPrincipal;
 }
