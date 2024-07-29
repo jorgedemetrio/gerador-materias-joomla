@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ConfiguracoesProperties;
 import com.br.sobieskiproducoes.geradormateriasjoomla.fontedados.dto.YoutubeGerarMateriaRequestDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.fontedados.service.YoutubeService;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.http.javanet.NetHttpTransport;
@@ -33,15 +32,13 @@ import lombok.extern.java.Log;
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/fontedados/youtube")
-public class YoutubeController {
+public class YoutubeV1Controller {
 
   // arquivo de segredos do cliente
   private static final Collection<String> SCOPES = Collections
       .singletonList("https://www.googleapis.com/auth/youtube.readonly");
 
   private  final ConfiguracoesProperties properties;
-
-  private final YoutubeService service;
 
   private GoogleAuthorizationCodeFlow flow;
 
@@ -54,7 +51,7 @@ public class YoutubeController {
   public String lerPlaylist(final Model model,
       @ModelAttribute("youtube") final YoutubeGerarMateriaRequestDTO youtubeGerarMateriaRequestDTO) throws Exception {
 
-    model.addAttribute("materia", service.geraMateriasPlayList(youtubeGerarMateriaRequestDTO));
+    // model.addAttribute("materia", service.geraMateriasPlayList(youtubeGerarMateriaRequestDTO));
 
     return "/fontedados/youtube/materia";
   }
@@ -62,7 +59,7 @@ public class YoutubeController {
   @RequestMapping(path = { "lerVideo" }, method = RequestMethod.POST)
   public String lerVideo(final Model model,
       @ModelAttribute("youtube") final YoutubeGerarMateriaRequestDTO youtubeGerarMateriaRequestDTO) throws Exception {
-    model.addAttribute("materias", service.geraMateria(youtubeGerarMateriaRequestDTO));
+    // model.addAttribute("materias", service.geraMateria(youtubeGerarMateriaRequestDTO));
     return "/fontedados/youtube/materias";
   }
 

@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -87,9 +86,10 @@ public class ChatGPTService {
 
   @SuppressWarnings("static-access")
   public List<String> perguntarAssistente(final String pergunta, final String uuid, final LocalDateTime inicio) throws Exception {
+    Instant inicioProcesso = Instant.now();
     ArrayList<String> respostas = new ArrayList<>();
     MensagemPostedResponseDTO mensagemPostedResponseDTO = client.conversar(pergunta, properties.getChatgpt().getThread());
-    Instant inicioProcesso = Instant.now();
+
     
     log.info("Pergunta feita ao chatGPT: ".concat(pergunta));
 
@@ -107,13 +107,10 @@ public class ChatGPTService {
       Thread.currentThread().sleep(AGUARDAR);
       nextStepResponseDTO = client.proximoPasso(properties.getChatgpt().getThread(), chatgptRunnerId);
     }
-
+    Thread.currentThread().sleep(AGUARDAR);
     for (NextStepDataResponseDTO item : nextStepResponseDTO.getData()) {
       mensagemPostedResponseDTO = client.lerMensagem(properties.getChatgpt().getThread(), item.getStepDetails().getMessageCreation().getMessageId());
-
-
       mensagemPostedResponseDTO.getContent().forEach(n -> respostas.add(n.getText().getValue()));
-
     }
   
     log.info("Demora para responder: " + Duration.between(inicioProcesso, Instant.now()).toSeconds());

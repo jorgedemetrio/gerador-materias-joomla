@@ -28,7 +28,7 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.service.conv
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.SugerirMateriaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.MateriaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.MateriaRepository;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.GerarMateriaService;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.GerarMateriaPorMataService;
 import com.br.sobieskiproducoes.geradormateriasjoomla.utils.MateriaUtils;
 
 import jakarta.transaction.Transactional;
@@ -47,7 +47,7 @@ public class ProcessamentoCriarMateriasService {
 
   private final ConfiguracoesProperties properties;
 
-  private final GerarMateriaService gerarMateriaService;
+  private final GerarMateriaPorMataService gerarMateriaService;
   private final MateriaRepository repository;
   private final MapaPerguntaRepository mapaPerguntaRepository;
   private final PerguntasConvert perguntasConvert;
@@ -58,7 +58,7 @@ public class ProcessamentoCriarMateriasService {
    * @return
    */
   private List<MapaPerguntaDTO> extrairMapPerguntas(final String uuid) {
-    return mapaPerguntaRepository.buscaPorUiidParaCargaLimitado5(uuid).stream().map(mapaPerguntaEntity -> {
+    return new ArrayList<>(mapaPerguntaRepository.buscaPorUiidParaCargaLimitado5(uuid).stream().map(mapaPerguntaEntity -> {
       final MapaPerguntaDTO mapaPerguntaDTO = perguntasConvert.toMapaPerguntaDTO(mapaPerguntaEntity);
       mapaPerguntaDTO.setPerguntasAlternativas(new ArrayList<>());
       mapaPerguntaDTO.setTermos(new ArrayList<>());
@@ -67,7 +67,8 @@ public class ProcessamentoCriarMateriasService {
       mapaPerguntaEntity.getTermos().forEach(pergunta -> mapaPerguntaDTO.getTermos().add(pergunta.getTermo()));
 
       return mapaPerguntaDTO;
-    }).toList();
+    }).toList());
+
   }
 
   @Transactional
@@ -105,8 +106,8 @@ public class ProcessamentoCriarMateriasService {
 
       data = MateriaUtils.getLocalDateTime(mapaPerguntaDTO.getDataSugestaoPublicacao(), request.getHorario());
 
-      processarMateria(itens, data, dataPublicadas, mapaPerguntaDTO, request, uuid);
-
+      processarMateria(data, dataPublicadas, mapaPerguntaDTO, request, uuid);
+      itens.remove(mapaPerguntaDTO);
     }
 
     LocalDate publicar = request.getDataInicioPublicacao();
@@ -121,14 +122,14 @@ public class ProcessamentoCriarMateriasService {
         : 1L;
     long rodaram = 0;
     while (rodaram <= rodar && itens.size() > 0) {
-
       final MapaPerguntaDTO mapaPerguntaDTO = itens.get(0);
       data = MateriaUtils.getLocalDateTime(publicar, request.getHorario(), rodaram);
-      processarMateria(itens, data, dataPublicadas, mapaPerguntaDTO, request, uuid);
+      processarMateria(data, dataPublicadas, mapaPerguntaDTO, request, uuid);
       // Força remover
-      itens.remove(mapaPerguntaDTO);
       rodaram++;
+      itens.remove(0);
     }
+
     log.info("Fim de processamento lote em massa total processamento: " + dataPublicadas.size());
     dataPublicadas.forEach(n -> log.info("Materia publciada para ".concat(n)));
     return !erroInterno;
@@ -145,7 +146,7 @@ public class ProcessamentoCriarMateriasService {
    * @param dataPublicadas
    * @param mapaPerguntaDTO
    */
-  private void processarMateria(final List<MapaPerguntaDTO> itens, final LocalDateTime data, final Set<String> dataPublicadas,
+  private void processarMateria(final LocalDateTime data, final Set<String> dataPublicadas,
       final MapaPerguntaDTO mapaPerguntaDTO, final RequisicaoCaragMassaDTO request, final String uuid) {
     if (!dataPublicadas.contains(data.format(MateriaConstants.DATETIME_FORMATTER))) {
       try {
@@ -163,7 +164,6 @@ public class ProcessamentoCriarMateriasService {
         }
 
         dataPublicadas.add(data.format(MateriaConstants.DATETIME_FORMATTER));
-        itens.remove(mapaPerguntaDTO);
       } catch (final Exception ex) {
         log.log(Level.SEVERE, "Erro o gravar a materia e publicar.", ex);
         erroInterno = true;

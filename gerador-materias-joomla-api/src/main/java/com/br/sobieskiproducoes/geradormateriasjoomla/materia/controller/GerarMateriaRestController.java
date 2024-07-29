@@ -22,7 +22,7 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.Pro
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.PublicarDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.SugerirMateriaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.exception.ObjectoJaExiteNoBancoBusinessException;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.GerarMateriaService;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.GerarMateriaPorMataService;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.MateriaJoomlaService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,7 +41,7 @@ import lombok.extern.java.Log;
 @RequestMapping("/gerar-materia")
 public class GerarMateriaRestController {
 
-  private final GerarMateriaService gerarMateriaService;
+  private final GerarMateriaPorMataService gerarMateriaService;
   private final MateriaJoomlaService service;
 
   @Operation(summary = "Publica um máteria que está no banco de dados no Joomla")
