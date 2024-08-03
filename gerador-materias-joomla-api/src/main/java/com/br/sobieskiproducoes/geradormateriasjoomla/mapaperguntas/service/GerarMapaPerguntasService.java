@@ -30,6 +30,7 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.model.Termos
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.repository.MapaPerguntaRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.service.convert.PerguntasConvert;
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.service.dto.MapaPerguntaRetornoChatGPTDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.service.dto.QuestionsDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.CategoriaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.CategoriaRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -87,17 +88,31 @@ public class GerarMapaPerguntasService {
   private List<MapaPerguntaEntity> convetToPropostaMateriaDTO(final String mensagem, final String uuid) {
     final List<MapaPerguntaEntity> itensRetorno = new ArrayList<>();
     try {
-      String content = limparTextoJson(mensagem);
+      String content = limparTextoJson(mensagem).trim();
       if (!content.trim().startsWith("[")) {
         content = "[" + content;
       }
       if (!content.trim().endsWith("]")) {
         content = content + "]";
       }
-      final List<MapaPerguntaRetornoChatGPTDTO> itens = objectMapper.readValue(content, new TypeReference<List<MapaPerguntaRetornoChatGPTDTO>>() {
-      });
+      List<MapaPerguntaRetornoChatGPTDTO> itens = null;
 
+      if (content.contains("\"questions\":")) {
+        List<QuestionsDTO> itensTMP = objectMapper.readValue(content, new TypeReference<List<QuestionsDTO>>() {
+        });
+        itens = new ArrayList<>();
+        for (QuestionsDTO questionsDTO : itensTMP) {
+          itens.addAll(questionsDTO.getQuestions());
+        }
+      } else {
+        itens = objectMapper.readValue(content, new TypeReference<List<MapaPerguntaRetornoChatGPTDTO>>() {
+        });
+
+      }
       itensRetorno.addAll(itens.stream().map(mapaPergunta -> {
+        if (isNull(mapaPergunta.getIdCategoria())) {
+          return null;
+        }
         final MapaPerguntaEntity entity = convert.convert(mapaPergunta);
         entity.setUuid(uuid);
 
@@ -111,7 +126,7 @@ public class GerarMapaPerguntasService {
         entity.setTermos(mapaPergunta.getTermos().stream().map(termo -> new TermosMapaPerguntaEntity(null, uuid, termo, entity)).toList());
 
         return entity;
-      }).toList());
+      }).filter(Objects::nonNull).toList());
 
     } catch (final Exception e) {
       log.log(Level.SEVERE, "Erro ao converter objeto de retorno do ChatGPT: ".concat(e.getMessage()).concat(" \nConteúdo: \n\n\n").concat(mensagem), e);

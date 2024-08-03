@@ -26,6 +26,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import com.aspose.html.converters.Converter;
+import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.model.CargaMassaEntity;
+import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.repository.CargaMassaRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.service.ChatGPTService;
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ChatGPTProperties;
 import com.br.sobieskiproducoes.geradormateriasjoomla.dto.StatusProcessamentoEnum;
@@ -60,6 +62,8 @@ public class GerarMateriaPorMataService {
   private final CategoriaRepository categoriaRepository;
 
   private final MapaPerguntaRepository mapaPerguntaRepository;
+
+  private final CargaMassaRepository cargaMassaRepository;
 
   private final TagRepository tagRepository;
 
@@ -251,6 +255,17 @@ public class GerarMateriaPorMataService {
       final MateriaEntity materia = convert.convert(in);
       if (nonNull(request.getPublicar())) {
         materia.setPublicar(request.getPublicar());
+        
+        Optional<CargaMassaEntity> itemCargaMassa = cargaMassaRepository.findByUuid(in.getUuid());
+        if(itemCargaMassa.isPresent()) {
+          CargaMassaEntity entity = itemCargaMassa.get();
+          // Se adata proposta estiver fora do range definido no sistema de carga
+          if (materia.getPublicar().isBefore(entity.getDataInicioProcesso()) || materia.getPublicar().isAfter(entity.getDataFimProcesso())) {
+            LocalDateTime dataPublicar = materia.getPublicar().withYear(entity.getDataInicioProcesso().getYear());
+            dataPublicar = dataPublicar.withMonth(entity.getDataInicioProcesso().getMonthValue());
+            materia.setPublicar(dataPublicar);
+          }
+        }
       }
 
       materia.setTema(request.getTema());
