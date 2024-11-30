@@ -119,6 +119,11 @@ public class GerarMateriaFonteYoutubeService {
     final String perguntaDadosMateria = chatGPTProperties.getPrompts().getPedirDadosMateria().formatted(conhecimento, chatGPTProperties.getSite(), redesSociais,
         audiencias, termos, tema);
     final List<String> itensDaMateriaRetornoGPT = chatgptService.perguntarAssistente(perguntaDadosMateria, uuid, inicio);
+
+    if (nonNull(itensDaMateriaRetornoGPT)) {
+      return null;
+    }
+
     final List<PropostaMateriaDTO> propostasSemMateria = itensDaMateriaRetornoGPT.stream().map(this::convetToPropostaMateriaDTO).toList();
     final List<String> titulosArry = new ArrayList<>();
     propostasSemMateria.forEach(n -> {
@@ -133,6 +138,10 @@ public class GerarMateriaFonteYoutubeService {
     String mensagemFormatada = null;
     try {
       final List<String> materiaRetornoGPT = chatgptService.perguntarAssistente(perguntaMateria, uuid, inicio);
+      if (nonNull(itensDaMateriaRetornoGPT)) {
+        return null;
+      }
+
       PropostaMateriaDTO itemSalvar;
       for (final PropostaMateriaDTO item : propostasSemMateria) {
         for (final String mensagem : materiaRetornoGPT) {

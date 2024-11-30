@@ -157,6 +157,9 @@ public class GerarMateriaPorMataService {
      */
 
     final List<String> itensDaMateriaRetornoGPT = chatgptService.perguntarAssistente(perguntaDadosMateria, uuid, inicio);
+    if (nonNull(itensDaMateriaRetornoGPT)) {
+      return null;
+    }
 
     final List<PropostaMateriaDTO> propostasSemMateria = itensDaMateriaRetornoGPT.stream().map(this::convetToPropostaMateriaDTO).filter(n -> Objects.nonNull(n))
         .toList();

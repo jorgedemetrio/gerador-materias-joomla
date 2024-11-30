@@ -192,15 +192,18 @@ public class GerarMapaPerguntasService {
 
       repostaMapaPerguntas = chatgpt.perguntarAssistente(perguntaParaGerarPerguntas, uuid, inicio);
 
-      repostaMapaPerguntas.forEach(mensagem -> {
-        log.info("Mensagens:\n\n" + mensagem);
-      });
+      if (nonNull(repostaMapaPerguntas)) {
 
-      repostaMapaPerguntas.forEach(mensagem -> {
-        itens.addAll(convetToPropostaMateriaDTO(mensagem, uuid));
-      });
+        repostaMapaPerguntas.forEach(mensagem -> {
+          log.info("Mensagens:\n\n" + mensagem);
+        });
 
-      contador++;
+        repostaMapaPerguntas.forEach(mensagem -> {
+          itens.addAll(convetToPropostaMateriaDTO(mensagem, uuid));
+        });
+
+        contador++;
+      }
     }
     log.info("Gravando mapa mental em lote! " + itens.size());
     repository.saveAll(itens);

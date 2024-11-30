@@ -37,4 +37,6 @@ public class NextStepResponseDTO {
 
   @JsonProperty("has_more")
   private Boolean hasMore;
+
+  private RunnerStatuEnum status;
 }
