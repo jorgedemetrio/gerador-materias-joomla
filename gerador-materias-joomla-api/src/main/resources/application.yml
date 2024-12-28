@@ -137,7 +137,7 @@ configuracao:
     
     url: https://api.openai.com/v1/chat/completions
     bearer: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-    model: gpt-4-turbo-preview 
+    model: gpt-4o 
     ## gpt-4
     temperature: 0.7
     max-tokens: 500
@@ -199,13 +199,13 @@ Entendendo que uma matéria deve seguir os seguintes requisitos: \n
 Agora gere esses dados para uma matéria sobre : \n%s \n"
 
 
-    pedir-materia: "Vamos escrever agora o texto da matéria. Você é um profissional com muito conhecimento em Marketing de Conteúdo. Use o máximo de conhecimento e estratégias .\n
+    pedir-materia: "Escreva agora o texto da matéria. \n
 Com especialidade técnica em : %s .\n 
 Entendendo que uma matéria deve seguir os requisitos: \n
+ - A mtéria deve ter no mínimo 1000 palavras e no máximo 4000 palavras. \n
  - A matéria é para o site: %s .\n
  - Que tem as redes sociais: %s .\n
  - O perfil da audiência é : %s .\n
- - Deve ter no mínimo 1000 palavras e no máximo 4000 palavras. \n
  - Use SEO na matéria para que ela seja o mais achavel possível em mecanismos de busca para os termos : %s .\n
  - Nos subtitulos devem ter as palavras chaves escolhidas e em seu corpo deveter alternativas as palavras chaves. 
  - Apenas o texto corpo da matéria e formatar apenas com HTML básico com subtítulos (TAGs HTMLs permitidos:  <table></table>, <tr></tr>, <td></td>, <th></th>, <font></font>, <br/>,<p></p>, <h2></h2>, <h3></h3>, <h4></h4>, <ul></ul>, <li><li>,<lo><lo>, <strong></strong>, <i></i>). \n

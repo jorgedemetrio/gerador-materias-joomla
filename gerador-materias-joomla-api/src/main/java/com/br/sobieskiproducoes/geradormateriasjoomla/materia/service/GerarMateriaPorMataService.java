@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
@@ -26,7 +25,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import com.aspose.html.converters.Converter;
-import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.model.CargaMassaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.repository.CargaMassaRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.service.ChatGPTService;
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ChatGPTProperties;
@@ -34,9 +32,6 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.dto.StatusProcessamentoEnu
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.repository.MapaPerguntaRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.PropostaMateriaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.SugerirMateriaDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.CategoriaEntity;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.MateriaEntity;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.TagEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.CategoriaRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.MateriaRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.TagRepository;
@@ -83,20 +78,21 @@ public class GerarMateriaPorMataService {
   private PropostaMateriaDTO convetToPropostaMateriaDTO(final String mensagem) {
 
     try {
-      final String content = limparTextoJson(TAB.matcher(ENTER.matcher(mensagem).replaceAll("")).replaceAll(" "));
+      final var content = limparTextoJson(TAB.matcher(ENTER.matcher(mensagem).replaceAll("")).replaceAll(" "));
       return objectMapper.readValue(content, PropostaMateriaDTO.class);
     } catch (final Exception e) {
       // Erro de formatçaão de respostas
-      int apartirDe = mensagem.lastIndexOf("\"resposta\"");
+      final var apartirDe = mensagem.lastIndexOf("\"resposta\"");
       if (apartirDe > 0) {
 
-        int posConchete = mensagem.indexOf("}", apartirDe);
-        int posChaves = mensagem.indexOf("]", apartirDe);
+        final var posConchete = mensagem.indexOf("}", apartirDe);
+        final var posChaves = mensagem.indexOf("]", apartirDe);
         if (posConchete > posChaves) {
           return convetToPropostaMateriaDTO(mensagem.substring(0, posChaves) + "}" + mensagem.substring(posChaves));
         }
       }
-      log.log(Level.SEVERE, "Erro ao converter objeto de retorno do ChatGPT: ".concat(e.getMessage()).concat(" \nConteúdo: \n\n\n").concat(mensagem), e);
+      log.log(Level.SEVERE, "Erro ao converter objeto de retorno do ChatGPT: ".concat(e.getMessage())
+          .concat(" \nConteúdo: \n\n\n").concat(mensagem), e);
     }
     return null;
   }
@@ -114,13 +110,13 @@ public class GerarMateriaPorMataService {
    * @throws Exception
    */
   @Transactional
-  public List<PropostaMateriaDTO> gerarSugestaoMateria(@Validated final SugerirMateriaDTO request, final String uuid, final Long idMapaProcessamento)
-      throws Exception {
+  public List<PropostaMateriaDTO> gerarSugestaoMateria(@Validated final SugerirMateriaDTO request, final String uuid,
+      final Long idMapaProcessamento) throws Exception {
     /**************************************
      **************************************
      *
      * Preparando ambiente
-     * 
+     *
      **************************************
      **************************************
      */
@@ -128,43 +124,49 @@ public class GerarMateriaPorMataService {
       return null;
     }
 
-    final LocalDateTime inicio = LocalDateTime.now();
+    final var inicio = LocalDateTime.now();
 
-    final String redesSociais = chatGPTProperties.getRedesSociais().stream().filter(n -> Objects.nonNull(n) && !n.isBlank() && !NULL.equalsIgnoreCase(n.trim()))
+    final var redesSociais = chatGPTProperties.getRedesSociais().stream()
+        .filter(n -> Objects.nonNull(n) && !n.isBlank() && !NULL.equalsIgnoreCase(n.trim()))
         .map(n -> n.trim().toLowerCase()).collect(Collectors.joining(", "));
-    final String conhecimento = chatGPTProperties.getEspecialista().stream().filter(n -> Objects.nonNull(n) && !n.isBlank() && !NULL.equalsIgnoreCase(n.trim()))
+    final var conhecimento = chatGPTProperties.getEspecialista().stream()
+        .filter(n -> Objects.nonNull(n) && !n.isBlank() && !NULL.equalsIgnoreCase(n.trim()))
         .map(n -> n.trim().toLowerCase()).collect(Collectors.joining(", "));
     // Pegar interesses
-    final String termos = request.getTermos().stream().filter(n -> Objects.nonNull(n) && !n.isBlank() && !NULL.equalsIgnoreCase(n.trim()))
+    final var termos = request.getTermos().stream()
+        .filter(n -> Objects.nonNull(n) && !n.isBlank() && !NULL.equalsIgnoreCase(n.trim()))
         .map(n -> n.trim().toLowerCase()).collect(Collectors.joining(", "));
 
-    final String audiencias = nonNull(request.getAudiencias()) && !request.getAudiencias().isEmpty()
-        ? request.getAudiencias().stream().filter(n -> Objects.nonNull(n) && !n.isBlank() && !NULL.equalsIgnoreCase(n.trim())).map(n -> n.trim().toLowerCase())
-            .collect(Collectors.joining(", "))
-        : chatGPTProperties.getAudiencias().stream().filter(n -> Objects.nonNull(n) && !n.isBlank() && !NULL.equalsIgnoreCase(n.trim()))
+    final var audiencias = nonNull(request.getAudiencias()) && !request.getAudiencias().isEmpty()
+        ? request.getAudiencias().stream()
+            .filter(n -> Objects.nonNull(n) && !n.isBlank() && !NULL.equalsIgnoreCase(n.trim()))
+            .map(n -> n.trim().toLowerCase()).collect(Collectors.joining(", "))
+        : chatGPTProperties.getAudiencias().stream()
+            .filter(n -> Objects.nonNull(n) && !n.isBlank() && !NULL.equalsIgnoreCase(n.trim()))
             .map(n -> n.trim().toLowerCase()).collect(Collectors.joining(", "));
 
-    final String perguntaDadosMateria = chatGPTProperties.getPrompts().getPedirDadosMateria().formatted(conhecimento, chatGPTProperties.getSite(), redesSociais,
-        audiencias, termos, request.getTema());
+    final var perguntaDadosMateria = chatGPTProperties.getPrompts().getPedirDadosMateria().formatted(conhecimento,
+        chatGPTProperties.getSite(), redesSociais, audiencias, termos, request.getTema());
 
     /**************************************
      **************************************
      *
      * Executa pergunta dados
-     * 
+     *
      **************************************
      **************************************
      */
 
-    final List<String> itensDaMateriaRetornoGPT = chatgptService.perguntarAssistente(perguntaDadosMateria, uuid, inicio);
-    if (nonNull(itensDaMateriaRetornoGPT)) {
+    final var itensDaMateriaRetornoGPT = chatgptService.perguntarAssistente(perguntaDadosMateria, uuid,
+        inicio);
+    if (isNull(itensDaMateriaRetornoGPT)) {
       return null;
     }
 
-    final List<PropostaMateriaDTO> propostasSemMateria = itensDaMateriaRetornoGPT.stream().map(this::convetToPropostaMateriaDTO).filter(n -> Objects.nonNull(n))
-        .toList();
+    final var propostasSemMateria = itensDaMateriaRetornoGPT.stream()
+        .map(this::convetToPropostaMateriaDTO).filter(Objects::nonNull).toList();
 
-    PropostaMateriaDTO propostaMateriaDTO = nonNull(propostasSemMateria) && !propostasSemMateria.isEmpty()
+    final var propostaMateriaDTO = nonNull(propostasSemMateria) && !propostasSemMateria.isEmpty()
         ? propostasSemMateria.get(propostasSemMateria.size() - 1)
         : null;
 
@@ -176,26 +178,27 @@ public class GerarMateriaPorMataService {
     final List<String> titulosArry = new ArrayList<>(propostaMateriaDTO.getTitulos());
     titulosArry.add(propostaMateriaDTO.getTema());
 
-    final String titulos = titulosArry.stream().filter(n -> Objects.nonNull(n) && !n.isBlank() && !NULL.equalsIgnoreCase(n.trim()))
+    final var titulos = titulosArry.stream()
+        .filter(n -> Objects.nonNull(n) && !n.isBlank() && !NULL.equalsIgnoreCase(n.trim()))
         .collect(Collectors.joining(", \n"));
 
     /**************************************
      **************************************
      *
      * Executa pergunta matéria
-     * 
+     *
      **************************************
      **************************************
      */
 
-    final String perguntaMateria = chatGPTProperties.getPrompts().getPedirMateria().formatted(conhecimento, chatGPTProperties.getSite(), redesSociais,
-        audiencias, termos, titulos);
+    final var perguntaMateria = chatGPTProperties.getPrompts().getPedirMateria().formatted(conhecimento,
+        chatGPTProperties.getSite(), redesSociais, audiencias, termos, titulos);
 
     String materia = null;
     final List<PropostaMateriaDTO> propostasRetorno = new ArrayList<>();
     try {
       materia = gerarTextoMateria(perguntaMateria, uuid, inicio, 0);
-      PropostaMateriaDTO itemSalvar = propostaMateriaDTO;
+      var itemSalvar = propostaMateriaDTO;
       itemSalvar = convert.copy(itemSalvar, uuid, materia);
       if (nonNull(itemSalvar)) {
         propostasRetorno.add(this.salvarPropostaMateria(itemSalvar, request, idMapaProcessamento));
@@ -209,7 +212,7 @@ public class GerarMateriaPorMataService {
 
   /**
    * Sistema de tentativas de gerar a materia
-   * 
+   *
    * @param uuid
    * @param inicio
    * @param perguntaMateria
@@ -217,10 +220,11 @@ public class GerarMateriaPorMataService {
    * @return
    * @throws IOException
    */
-  private String gerarTextoMateria(final String perguntaMateria, final String uuid, final LocalDateTime inicio, int tentativas) throws Exception {
+  private String gerarTextoMateria(final String perguntaMateria, final String uuid, final LocalDateTime inicio,
+      int tentativas) throws Exception {
     String materia = null;
     log.info("Gerando texto materia tentativa: " + tentativas);
-    final List<String> materiaRetornoGPT = chatgptService.perguntarAssistente(perguntaMateria, uuid, inicio);
+    final var materiaRetornoGPT = chatgptService.perguntarAssistente(perguntaMateria, uuid, inicio);
 
     if (nonNull(materiaRetornoGPT) && !materiaRetornoGPT.isEmpty()) {
       // Pega o ultimo registro da array.
@@ -231,8 +235,9 @@ public class GerarMateriaPorMataService {
       materia = convertMarkdownToHtml(materia);
     }
     if (tentativas >= 3) {
-      log.info(
-          "Motivo de não gerar a matéria: " + chatgptService.perguntarAssistente("Porque não pode gerar o texto que pedi?", uuid, inicio).get(0) + "\n\n\n");
+      log.info("Motivo de não gerar a matéria: "
+          + chatgptService.perguntarAssistente("Porque não pode gerar o texto que pedi?", uuid, inicio).get(0)
+          + "\n\n\n");
     }
     // Se materia for null ele tenta 3 vezes
 
@@ -240,31 +245,34 @@ public class GerarMateriaPorMataService {
       return materia;
     }
     if (tentativas < 3) {
-      return gerarTextoMateria(perguntaMateria, uuid, inicio, ++tentativas);
+      tentativas++;
+      return gerarTextoMateria(perguntaMateria, uuid, inicio, tentativas);
     }
 
     return null;
   }
 
-  private String convertMarkdownToHtml(String markdown) {
+  private String convertMarkdownToHtml(final String markdown) {
     // Convert Markdown string to InputStream
-    InputStream inputStream = new ByteArrayInputStream(markdown.getBytes(StandardCharsets.UTF_8));
+    final InputStream inputStream = new ByteArrayInputStream(markdown.getBytes(StandardCharsets.UTF_8));
 
     return Converter.convertMarkdown(inputStream, "text/html").getTextContent();
   }
 
-  private PropostaMateriaDTO salvarPropostaMateria(final PropostaMateriaDTO in, final SugerirMateriaDTO request, final Long idMapaProcessamento) {
+  private PropostaMateriaDTO salvarPropostaMateria(final PropostaMateriaDTO in, final SugerirMateriaDTO request,
+      final Long idMapaProcessamento) {
     try {
-      final MateriaEntity materia = convert.convert(in);
+      final var materia = convert.convert(in);
       if (nonNull(request.getPublicar())) {
         materia.setPublicar(request.getPublicar());
-        
-        Optional<CargaMassaEntity> itemCargaMassa = cargaMassaRepository.findByUuid(in.getUuid());
-        if(itemCargaMassa.isPresent()) {
-          CargaMassaEntity entity = itemCargaMassa.get();
+
+        final var itemCargaMassa = cargaMassaRepository.findByUuid(in.getUuid());
+        if (itemCargaMassa.isPresent()) {
+          final var entity = itemCargaMassa.get();
           // Se adata proposta estiver fora do range definido no sistema de carga
-          if (materia.getPublicar().isBefore(entity.getDataInicioProcesso()) || materia.getPublicar().isAfter(entity.getDataFimProcesso())) {
-            LocalDateTime dataPublicar = materia.getPublicar().withYear(entity.getDataInicioProcesso().getYear());
+          if (materia.getPublicar().isBefore(entity.getDataInicioProcesso())
+              || materia.getPublicar().isAfter(entity.getDataFimProcesso())) {
+            var dataPublicar = materia.getPublicar().withYear(entity.getDataInicioProcesso().getYear());
             dataPublicar = dataPublicar.withMonth(entity.getDataInicioProcesso().getMonthValue());
             materia.setPublicar(dataPublicar);
           }
@@ -275,7 +283,7 @@ public class GerarMateriaPorMataService {
       materia.getFaqs().forEach(n -> n.setUuid(in.getUuid()));
       // Verifica se a Tags já existe, se não da um uuid da sua crição.
       materia.setTags(materia.getTags().stream().map(n -> {
-        final Optional<TagEntity> entities = tagRepository.buscarPorApelidoTitulo(n.getApelido(), n.getTitulo());
+        final var entities = tagRepository.buscarPorApelidoTitulo(n.getApelido(), n.getTitulo());
         if (entities.isPresent()) {
           return entities.get();
         }
@@ -284,7 +292,7 @@ public class GerarMateriaPorMataService {
       }).toList());
 
       if (nonNull(request.getCategoria())) {
-        final Optional<CategoriaEntity> categoria = categoriaRepository.findById(request.getCategoria());
+        final var categoria = categoriaRepository.findById(request.getCategoria());
         if (categoria.isPresent()) {
           materia.setCategoria(categoria.get());
         }
@@ -307,7 +315,7 @@ public class GerarMateriaPorMataService {
   }
 
   private String textoMateria(final String materia) throws IOException {
-    final String texto = limparTexto(materia);
+    final var texto = limparTexto(materia);
     for (final String item : chatGPTProperties.getFalhas()) {
       if (texto.trim().toLowerCase().startsWith(item.toLowerCase().trim())) {
         log.info("Corpo inválido de materia : " + texto.trim());

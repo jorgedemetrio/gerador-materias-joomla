@@ -31,14 +31,14 @@ import lombok.extern.java.Log;
 @Log
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/fontedados/youtube")
+@RequestMapping("/fontedados/youtubev1")
 public class YoutubeV1Controller {
 
   // arquivo de segredos do cliente
   private static final Collection<String> SCOPES = Collections
       .singletonList("https://www.googleapis.com/auth/youtube.readonly");
 
-  private  final ConfiguracoesProperties properties;
+  private final ConfiguracoesProperties properties;
 
   private GoogleAuthorizationCodeFlow flow;
 
@@ -51,7 +51,8 @@ public class YoutubeV1Controller {
   public String lerPlaylist(final Model model,
       @ModelAttribute("youtube") final YoutubeGerarMateriaRequestDTO youtubeGerarMateriaRequestDTO) throws Exception {
 
-    // model.addAttribute("materia", service.geraMateriasPlayList(youtubeGerarMateriaRequestDTO));
+    // model.addAttribute("materia",
+    // service.geraMateriasPlayList(youtubeGerarMateriaRequestDTO));
 
     return "/fontedados/youtube/materia";
   }
@@ -59,7 +60,8 @@ public class YoutubeV1Controller {
   @RequestMapping(path = { "lerVideo" }, method = RequestMethod.POST)
   public String lerVideo(final Model model,
       @ModelAttribute("youtube") final YoutubeGerarMateriaRequestDTO youtubeGerarMateriaRequestDTO) throws Exception {
-    // model.addAttribute("materias", service.geraMateria(youtubeGerarMateriaRequestDTO));
+    // model.addAttribute("materias",
+    // service.geraMateria(youtubeGerarMateriaRequestDTO));
     return "/fontedados/youtube/materias";
   }
 
@@ -77,13 +79,13 @@ public class YoutubeV1Controller {
 
   @RequestMapping(path = "/youtubeAuth", method = RequestMethod.GET)
   public String youtubeAuth() throws Exception {
-    final GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(GsonFactory.getDefaultInstance(),
+    final var clientSecrets = GoogleClientSecrets.load(GsonFactory.getDefaultInstance(),
         new FileReader(properties.getYoutube().getArquivoSecrets()));
 
     flow = new GoogleAuthorizationCodeFlow.Builder(new NetHttpTransport(), GsonFactory.getDefaultInstance(),
         clientSecrets, SCOPES).build();
 
-    final String url = flow.newAuthorizationUrl().setRedirectUri(properties.getYoutube().getCallback()).build();
+    final var url = flow.newAuthorizationUrl().setRedirectUri(properties.getYoutube().getCallback()).build();
     return "redirect:" + url;
   }
 

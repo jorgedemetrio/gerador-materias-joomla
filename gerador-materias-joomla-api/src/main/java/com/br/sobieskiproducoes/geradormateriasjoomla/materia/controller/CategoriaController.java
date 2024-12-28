@@ -47,63 +47,61 @@ import lombok.extern.java.Log;
 @RequestMapping("/categoria")
 public class CategoriaController {
 
-	private CategoriaService service;
+  private final CategoriaService service;
 
-	@Operation(summary = "Recarrega as categorias no banco de dados tirando do Joomla")
-	@ApiResponses({ @ApiResponse(responseCode = "200", description = "Processado com sucesso") })
-	@RequestMapping(method = RequestMethod.PATCH, path = "recarregar", produces = { MediaType.APPLICATION_JSON_VALUE })
-	@ResponseBody
-	public ResponseEntity<Map<String, Integer>> atualizar() {
-		log.info("Inicio de processamento de recarga de Categoriaso Joomla");
-		return ResponseEntity.ok(service.atualizarBancoCategoria());
-	}
+  @Operation(summary = "Recarrega as categorias no banco de dados tirando do Joomla")
+  @ApiResponses({ @ApiResponse(responseCode = "200", description = "Processado com sucesso") })
+  @RequestMapping(method = RequestMethod.PATCH, path = "recarregar", produces = { MediaType.APPLICATION_JSON_VALUE })
+  @ResponseBody
+  public ResponseEntity<Map<String, Integer>> atualizar() {
+    log.info("Inicio de processamento de recarga de Categoriaso Joomla");
+    return ResponseEntity.ok(service.atualizarBancoCategoria());
+  }
 
+  @Operation(summary = "busca categoria por id")
+  @ApiResponse(responseCode = "200", description = "retorna uma categoria", content = @Content(array = @ArraySchema(schema = @Schema(implementation = CategoriaDTO.class))))
+  @ApiResponse(responseCode = "404", description = "categoria não encontrada")
+  @GetMapping(path = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
+  @ResponseBody
+  public ResponseEntity<CategoriaDTO> buscaPorId(@NotNull @PathVariable(name = "id", required = true) final Long id) {
+    final var categoria = service.findById(id);
+    if (Objects.nonNull(categoria)) {
+      return ResponseEntity.ok(categoria);
+    }
+    return ResponseEntity.notFound().build();
+  }
 
+  @Operation(summary = "busca categoria por titulo")
+  @ApiResponse(responseCode = "200", description = "retorna categoria", content = @Content(array = @ArraySchema(schema = @Schema(implementation = CategoriaDTO.class))))
+  @ApiResponse(responseCode = "404", description = "categoria não encontrada")
+  @GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
+  @ResponseBody()
+  private ResponseEntity<RetornoBusinessDTO<CategoriaDTO>> buscar(
+      @RequestParam(name = "titulo", required = false) final String titulo,
+      @NotNull @RequestParam(name = "p", required = false, defaultValue = "0") final Integer pagina) {
+    return ResponseEntity.ok(service.busca(titulo, pagina));
+  }
 
-	@Operation(summary = "busca categoria por id")
-	@ApiResponse(responseCode = "200", description = "retorna uma categoria", content = @Content(array = @ArraySchema(schema = @Schema(implementation = CategoriaDTO.class))))
-	@ApiResponse(responseCode = "404", description = "categoria não encontrada")
-	@GetMapping(path = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
-	@ResponseBody
-	public ResponseEntity<CategoriaDTO> buscaPorId(@NotNull @PathVariable(name = "id", required = true) final Long id) {
-		var categoria = service.findById(id);
-		if (Objects.nonNull(categoria)) {
-			return ResponseEntity.ok(categoria);
-		}
-		return ResponseEntity.notFound().build();
-	}
+  @Operation(summary = "apaga a categoria")
+  @ApiResponse(responseCode = "200", description = "categoria apagada com sucesso")
+  @ApiResponse(responseCode = "404", description = "erro ao apagar categoria")
+  @DeleteMapping("/{id}/delete")
+  @ResponseBody
+  private ResponseEntity<?> delete(@NotNull @PathVariable(name = "id", required = false) final Long id) {
+    if (service.apagar(id)) {
+      log.info("Não encontrada categoria com o id:".concat(id.toString()));
+      return ResponseEntity.accepted().build();
+    }
+    return ResponseEntity.notFound().build();
+  }
 
-	@Operation(summary = "busca categoria por titulo")
-	@ApiResponse(responseCode = "200", description = "retorna categoria", content = @Content(array = @ArraySchema(schema = @Schema(implementation = CategoriaDTO.class))))
-	@ApiResponse(responseCode = "404", description = "categoria não encontrada")
-	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
-	@ResponseBody()
-	private ResponseEntity<RetornoBusinessDTO<CategoriaDTO>> buscar(
-			@RequestParam(name = "titulo", required = false) final String titulo,
-			@NotNull @RequestParam(name = "p", required = false, defaultValue = "0") final Integer pagina) {
-		return ResponseEntity.ok(service.busca(titulo, pagina));
-	}
+  @Operation(summary = "gravar categoria")
+  @ApiResponse(responseCode = "200", description = "categoria salva com sucesso.", content = @Content(schema = @Schema(implementation = CategoriaDTO.class)))
+  @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+  @ResponseBody
+  ResponseEntity<CategoriaDTO> salvar(@NotNull @Validated @RequestBody final CategoriaDTO categoria) {
 
-	@Operation(summary = "apaga a categoria")
-	@ApiResponse(responseCode = "200", description = "categoria apagada com sucesso")
-	@ApiResponse(responseCode = "404", description = "erro ao apagar categoria")
-	@DeleteMapping("/{id}/delete")
-	@ResponseBody
-	private ResponseEntity<?> delete(@NotNull @PathVariable(name = "id", required = false) final Long id) {
-		if (service.apagar(id)) {
-			log.info("Não encontrada categoria com o id:".concat(id.toString()));
-			return ResponseEntity.accepted().build();
-		}
-		return ResponseEntity.notFound().build();
-	}
-
-	@Operation(summary = "gravar categoria")
-	@ApiResponse(responseCode = "200", description = "categoria salva com sucesso.", content = @Content(schema = @Schema(implementation = CategoriaDTO.class)))
-	@PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	@ResponseBody
-	ResponseEntity<CategoriaDTO> salvar(@NotNull @Validated @RequestBody final CategoriaDTO categoria) {
-
-		return ResponseEntity.ok(service.gravar(categoria));
-	}
+    return ResponseEntity.ok(service.gravar(categoria));
+  }
 
 }

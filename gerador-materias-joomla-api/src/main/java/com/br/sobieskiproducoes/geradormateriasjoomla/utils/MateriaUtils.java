@@ -35,18 +35,15 @@ public class MateriaUtils {
 
   public static final Pattern HORA_SIMPLES = Pattern.compile("\\d{2}:\\d{2}");
   public static final Pattern HORA_COM_SEGUNDO = Pattern.compile("\\d{2}:\\d{2}::\\d{2}");
-  public static final Pattern PATTERN_URL = Pattern
-      .compile("(https?://|ftp://|bit\\.ly/\\w+)\\S*",
-      Pattern.CASE_INSENSITIVE);
+  public static final Pattern PATTERN_URL = Pattern.compile("(https?://|ftp://|bit\\.ly/\\w+)\\S*", Pattern.CASE_INSENSITIVE);
 
   public static long getDaysBetween(final LocalDate startDate, final LocalDate endDate) {
     return startDate.until(endDate, java.time.temporal.ChronoUnit.DAYS);
   }
 
   public static LocalDateTime getLocalDateTime(final LocalDate date, final String time) {
-    final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-    final LocalTime localTime = LocalTime.parse(HORA_COM_SEGUNDO.matcher(time).find() ? time : time.concat(":00"),
-        timeFormatter);
+    final var timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+    final var localTime = LocalTime.parse(HORA_COM_SEGUNDO.matcher(time).find() ? time : time.concat(":00"), timeFormatter);
     return LocalDateTime.of(date, localTime);
   }
 
@@ -59,7 +56,7 @@ public class MateriaUtils {
       return null;
     }
 
-    return StreamUtils.copyToString(new ByteArrayInputStream(
+    var texto = StreamUtils.copyToString(new ByteArrayInputStream(
 
         ASPAS_HTML_INICIO.matcher(ASPAS_HTML.matcher(ENTER.matcher(// REMOVE
                                                                    // O
@@ -71,33 +68,36 @@ public class MateriaUtils {
                 .replaceAll("\""))
             .replaceAll("\n")).replaceAll("")).replaceAll("").getBytes()),
         StandardCharsets.UTF_8);
-
+    if (texto.toLowerCase().startsWith("html")) {
+      texto = texto.substring(4);
+    }
+    return texto;
   }
 
   public static String limparTextoJson(final String in) throws IOException {
     if (isNull(in) || in.isBlank()) {
       return null;
     }
-    final String retorno = limparTexto(in);
+    final var retorno = limparTexto(in);
 
-    int indexColchete = retorno.indexOf("[");
-    int indexChaves = retorno.indexOf("{");
+    var indexColchete = retorno.indexOf("[");
+    var indexChaves = retorno.indexOf("{");
 
-    final boolean comecaChaves = indexChaves < indexColchete && indexChaves >= 0;
+    final var comecaChaves = indexChaves < indexColchete && indexChaves >= 0;
 
-    final int primeiraPosicao = comecaChaves ? indexChaves : indexColchete;
+    final var primeiraPosicao = comecaChaves ? indexChaves : indexColchete;
 
     indexColchete = retorno.lastIndexOf("]");
     indexChaves = retorno.lastIndexOf("}");
 
-    final int fimPosicao = (indexColchete > indexChaves ? indexColchete : indexChaves) + 1;
+    final var fimPosicao = (indexColchete > indexChaves ? indexColchete : indexChaves) + 1;
     return retorno.substring(primeiraPosicao, fimPosicao).trim();
 
   }
 
   public static String normalizeText(final String text) {
-    String normalized = Normalizer.normalize(text, Normalizer.Form.NFD).replaceAll("[^a-zA-Z0-9\\s-]", "");
-    normalized = normalized.replaceAll("\\s", "-");
+    var normalized = Normalizer.normalize(text, Normalizer.Form.NFD).replaceAll("[^a-zA-Z0-9\\s-]", "");
+    normalized = normalized.replaceAll("\\s", "-").replace('ã', 'a').replace('ç', 'c').replace('é', 'e').replace('á', 'a');
     normalized = normalized.toLowerCase();
     return normalized.replaceAll("^[-]+|[-]+$", "");
   }
@@ -105,8 +105,8 @@ public class MateriaUtils {
   public static String pathCategoria(final CategoriaEntity categoria) throws IOException {
     return (nonNull(categoria.getPai()) ? pathCategoria(categoria.getPai()) : "")
         .concat(categoria.getUsarEmPrompts()
-            ? "/".concat(nonNull(categoria.getApelido()) || !categoria.getApelido().isBlank() ? categoria.getApelido()
-                : limparTexto(categoria.getTitulo()))
+            ? "/".concat(
+                nonNull(categoria.getApelido()) || !categoria.getApelido().isBlank() ? categoria.getApelido() : limparTexto(categoria.getTitulo()))
             : "");
   }
 
