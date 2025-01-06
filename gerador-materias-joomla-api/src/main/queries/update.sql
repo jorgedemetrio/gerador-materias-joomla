@@ -1,1 +1,1 @@
-UPDATE `tbl_categoria` SET `usar_prompts` = '0' WHERE is null;
+UPDATE `tbl_categoria` SET `usar_prompts` = '0' WHERE `id_pai` is null;

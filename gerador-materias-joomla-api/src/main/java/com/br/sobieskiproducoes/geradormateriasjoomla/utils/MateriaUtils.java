@@ -3,9 +3,6 @@
  */
 package com.br.sobieskiproducoes.geradormateriasjoomla.utils;
 
-import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -14,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 import org.springframework.util.StreamUtils;
@@ -43,27 +41,27 @@ public class MateriaUtils {
 
   public static LocalDateTime getLocalDateTime(final LocalDate date, final String time) {
     final var timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-    final var localTime = LocalTime.parse(HORA_COM_SEGUNDO.matcher(time).find() ? time : time.concat(":00"), timeFormatter);
+    final var localTime = LocalTime.parse(MateriaUtils.HORA_COM_SEGUNDO.matcher(time).find() ? time : time.concat(":00"), timeFormatter);
     return LocalDateTime.of(date, localTime);
   }
 
   public static LocalDateTime getLocalDateTime(final LocalDate date, final String time, final long dias) {
-    return getLocalDateTime(date.plusDays(dias), time);
+    return MateriaUtils.getLocalDateTime(date.plusDays(dias), time);
   }
 
   public static String limparTexto(final String in) throws IOException {
-    if (isNull(in) || in.isBlank()) {
+    if (Objects.isNull(in) || in.isBlank()) {
       return null;
     }
 
     var texto = StreamUtils.copyToString(new ByteArrayInputStream(
 
-        ASPAS_HTML_INICIO.matcher(ASPAS_HTML.matcher(ENTER.matcher(// REMOVE
-                                                                   // O
-                                                                   // ENTER
-                                                                   // FALSO
-            ASPAS_DUPLAS.matcher(// REMOVE AS ASPAS FALSAS
-                ASPAS_SIMPLES.matcher( // REMOVE AS ASPAS FALSAS
+        MateriaUtils.ASPAS_HTML_INICIO.matcher(MateriaUtils.ASPAS_HTML.matcher(MateriaUtils.ENTER.matcher(// REMOVE
+            // O
+            // ENTER
+            // FALSO
+            MateriaUtils.ASPAS_DUPLAS.matcher(// REMOVE AS ASPAS FALSAS
+                MateriaUtils.ASPAS_SIMPLES.matcher( // REMOVE AS ASPAS FALSAS
                     in).replaceAll("'"))
                 .replaceAll("\""))
             .replaceAll("\n")).replaceAll("")).replaceAll("").getBytes()),
@@ -75,10 +73,10 @@ public class MateriaUtils {
   }
 
   public static String limparTextoJson(final String in) throws IOException {
-    if (isNull(in) || in.isBlank()) {
+    if (Objects.isNull(in) || in.isBlank()) {
       return null;
     }
-    final var retorno = limparTexto(in);
+    final var retorno = MateriaUtils.limparTexto(in);
 
     var indexColchete = retorno.indexOf("[");
     var indexChaves = retorno.indexOf("{");
@@ -91,7 +89,7 @@ public class MateriaUtils {
     indexChaves = retorno.lastIndexOf("}");
 
     final var fimPosicao = (indexColchete > indexChaves ? indexColchete : indexChaves) + 1;
-    return retorno.substring(primeiraPosicao, fimPosicao).trim();
+    return (primeiraPosicao < 0 ? retorno.trim() : retorno.substring(primeiraPosicao, fimPosicao).trim());
 
   }
 
@@ -103,15 +101,14 @@ public class MateriaUtils {
   }
 
   public static String pathCategoria(final CategoriaEntity categoria) throws IOException {
-    return (nonNull(categoria.getPai()) ? pathCategoria(categoria.getPai()) : "")
-        .concat(categoria.getUsarEmPrompts()
-            ? "/".concat(
-                nonNull(categoria.getApelido()) || !categoria.getApelido().isBlank() ? categoria.getApelido() : limparTexto(categoria.getTitulo()))
-            : "");
+    return (Objects.nonNull(categoria.getPai()) ? MateriaUtils.pathCategoria(categoria.getPai()) : "").concat(categoria.getUsarEmPrompts()
+        ? "/".concat(Objects.nonNull(categoria.getApelido()) || !categoria.getApelido().isBlank() ? categoria.getApelido()
+            : MateriaUtils.limparTexto(categoria.getTitulo()))
+        : "");
   }
 
   public static String removeUrls(final String text) {
-    return PATTERN_URL.matcher(text).replaceAll(" ");
+    return MateriaUtils.PATTERN_URL.matcher(text).replaceAll(" ");
   }
 
   /**

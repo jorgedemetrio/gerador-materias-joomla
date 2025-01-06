@@ -81,6 +81,9 @@ public class MateriaEntity {
   @Column(name = "materia", nullable = true, insertable = true, updatable = true, unique = false, columnDefinition = "TEXT")
   private String materia;
 
+  @Column(name = "stream", nullable = true, insertable = true, updatable = true, unique = false, columnDefinition = "TEXT")
+  private String stream;
+
   @Column(name = "alias", nullable = true, insertable = true, updatable = true, unique = false, length = 500)
   private String apelido;
 
