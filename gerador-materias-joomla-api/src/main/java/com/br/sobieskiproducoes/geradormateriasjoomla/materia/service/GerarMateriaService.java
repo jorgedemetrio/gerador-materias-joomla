@@ -266,7 +266,7 @@ public class GerarMateriaService {
           if (nonNull(mensagem) && !mensagem.isBlank()) {
             itemSalvar = convert.copy(item, uuid, MateriaUtils.limparTexto(mensagem));
             if (nonNull(itemSalvar)) {
-              propostasRetorno.add(this.salvarPropostaMateria(itemSalvar, request, idMapaProcessamento, null));
+              propostasRetorno.add(this.salvarPropostaMateria(itemSalvar, request, idMapaProcessamento));
             }
           }
         }
