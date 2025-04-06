@@ -89,7 +89,7 @@ public class MateriaUtils {
     indexChaves = retorno.lastIndexOf("}");
 
     final var fimPosicao = (indexColchete > indexChaves ? indexColchete : indexChaves) + 1;
-    return (primeiraPosicao < 0 ? retorno.trim() : retorno.substring(primeiraPosicao, fimPosicao).trim());
+    return primeiraPosicao < 0 ? retorno.trim() : retorno.substring(primeiraPosicao, fimPosicao).trim();
 
   }
 
@@ -101,10 +101,15 @@ public class MateriaUtils {
   }
 
   public static String pathCategoria(final CategoriaEntity categoria) throws IOException {
-    return (Objects.nonNull(categoria.getPai()) ? MateriaUtils.pathCategoria(categoria.getPai()) : "").concat(categoria.getUsarEmPrompts()
-        ? "/".concat(Objects.nonNull(categoria.getApelido()) || !categoria.getApelido().isBlank() ? categoria.getApelido()
-            : MateriaUtils.limparTexto(categoria.getTitulo()))
-        : "");
+
+//    return (Objects.nonNull(categoria.getPai()) ? MateriaUtils.pathCategoria(categoria.getPai()) : "").concat(
+//        categoria.getUsarEmPrompts()   ? "/".concat(Objects.nonNull(categoria.getApelido()) || !categoria.getApelido().isBlank() ? categoria.getApelido()
+//            : MateriaUtils.limparTexto(categoria.getTitulo()))
+//        : "");
+
+    return (Objects.nonNull(categoria.getPai()) ? MateriaUtils.pathCategoria(categoria.getPai()) : "")
+        .concat("/".concat(Objects.nonNull(categoria.getApelido()) || !categoria.getApelido().isBlank() ? categoria.getApelido()
+            : MateriaUtils.limparTexto(categoria.getTitulo())));
   }
 
   public static String removeUrls(final String text) {
