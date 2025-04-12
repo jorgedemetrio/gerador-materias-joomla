@@ -187,7 +187,8 @@ Entendendo que uma matéria deve seguir os seguintes requisitos: \n
  - Entregue em formato JSON, só o JSON pois será lido por um APP sua resposta, separados pos \",\" com layout : { titulos : array(string), primeiro-paragrafo: string,  url-proposta: string, meta-descricao: string, keywords: string, tags : array, faqs: array({pergunta: string, resposta: string}), roteiro: string, post-instagram: string} \n
  - Responda em formato JSON, respeitando a cadeia de \"{\", \"}\", \"[\", \"]\" que define os obbjetos e arrays.
  - Use SEO na matéria para os termos : %s .\n
- - Devem ter 3 opções de Títulos, usando SEO, gatilhos mentais e emojis\n
+ - Respeite o sintaxe JSON.\n
+ - Devem ter 3 opções de Títulos, usando SEO, gatilhos mentais e emojis. \n
  - Primeiro paragrafo ter no máximo 100 caracteres e deve ser usado estrutura de marketing para chamar atenção da matéria, como: Gatilhos mentais ou sensacionalismo. \n
  - Proponha um apelido para página (url-proposta) da matéria usando SEO, tudo em letras minúsculas, em português e separados por - (traço). \n  
  - Deve ter Meta Descrição (o campo meta-descricao), que é um resumo de 160 caracteres pode ter emojis, extremamente chamativo para exibir nos mecanismos de buscas. \n

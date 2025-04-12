@@ -3,6 +3,8 @@
  */
 package com.br.sobieskiproducoes.geradormateriasjoomla.materia.model;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,7 +12,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,8 +26,7 @@ import lombok.ToString;
 
 /**
  * @author Jorge Demetrio
- * @since 21 de fev. de 2024 17:22:54
- * @version 1.0.0
+ *
  */
 @Getter
 @Setter
@@ -28,8 +34,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "tbl_faq")
-public class FAQEntity {
+@Table(name = "tbl_chatgpt_treinamento")
+public class ChatGPTPromptsEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,17 +46,27 @@ public class FAQEntity {
   @JoinColumn(name = "id_configuracao", insertable = true, updatable = true, nullable = false, unique = false)
   private ConfiguracoesEntity configuracao;
 
-  @Column(name = "uuid_requisicao", nullable = true, insertable = true, updatable = true, unique = false, length = 1000)
-  private String uuid;
+  @NotNull
+  @Valid
+  @OneToMany(mappedBy = "configuracao")
+  private ChatGPTPerguntasEntity prompts;
 
-  @Column(name = "pergunta", nullable = false, insertable = true, updatable = true, unique = false, length = 1000)
-  private String pergunta;
+  @NotEmpty
+  private List<String> audiencias;
 
-  @Column(name = "resposta", nullable = false, insertable = true, updatable = true, unique = false, length = 1000)
-  private String resposta;
+  @NotNull
+  @NotBlank
+  @Column(name = "site", nullable = false, insertable = true, updatable = true, unique = false, length = 2000)
+  private String site;
 
-  @ManyToOne
-  @JoinColumn(name = "id_materia")
-  private MateriaEntity materia;
+  @NotNull
+  @NotEmpty
+  private List<String> redesSociais;
+
+  @NotNull
+  @NotEmpty
+  private List<String> especialista;
+
+  private List<String> falhas;
 
 }

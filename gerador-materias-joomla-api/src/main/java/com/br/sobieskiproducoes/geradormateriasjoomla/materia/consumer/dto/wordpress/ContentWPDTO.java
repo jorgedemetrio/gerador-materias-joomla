@@ -1,10 +1,8 @@
-/**
- *
- */
-package com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto;
+package com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.wordpress;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,11 +10,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-/**
- * @author Jorge Demetrio
- * @since 22 de fev. de 2024 15:32:45
- * @version 1.0.0
- */
 @Getter
 @Setter
 @ToString
@@ -24,7 +17,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CategoryDTO {
-
-  private DadosDTO data;
+public class ContentWPDTO {
+  public String rendered;
+  @JsonProperty("protected")
+  public Boolean myprotected;
 }

@@ -39,6 +39,10 @@ public class ProcessamentoLogMateriaEntity {
   @Column(name = "id")
   private Long id;
 
+  @ManyToOne
+  @JoinColumn(name = "id_configuracao", insertable = true, updatable = true, nullable = false, unique = false)
+  private ConfiguracoesEntity configuracao;
+
   @Column(name = "stream_materia", nullable = true, insertable = true, updatable = true, unique = false, columnDefinition = "TEXT")
   private String textoMateria;
 

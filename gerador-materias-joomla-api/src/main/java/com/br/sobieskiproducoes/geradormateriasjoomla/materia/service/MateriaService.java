@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.MateriaConstants;
 import com.br.sobieskiproducoes.geradormateriasjoomla.dto.RetornoBusinessDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosArtigoJoomlaDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.joomla.AtributosArtigoJoomlaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.MateriaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.MateriaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.MateriaRepository;

@@ -34,15 +34,21 @@ public class ObjectsConfig {
     objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
     objectMapper.configure(SerializationFeature.FAIL_ON_SELF_REFERENCES, false);
     objectMapper.configure(SerializationFeature.FAIL_ON_UNWRAPPED_TYPE_IDENTIFIERS, false);
+
+    objectMapper.configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
+
+    // Allow JSON with unquoted field names
+    objectMapper.configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
+
+    // Format output JSON with indentation for better readability
+    objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+
     return objectMapper;
   }
-
 
   @Bean
   public RestTemplate getRestTemplate() {
     return new RestTemplate();
   }
-
-
 
 }
