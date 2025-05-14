@@ -30,6 +30,7 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.model.Termos
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.repository.MapaPerguntaRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.service.convert.PerguntasConvert;
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.service.dto.MapaPerguntaRetornoChatGPTDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.service.dto.QuestionsDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.CategoriaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.CategoriaRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -63,8 +64,6 @@ public class GerarMapaPerguntasService {
 
   private final MapaPerguntaRepository repository;
 
-
-
   private MapaPerguntaDTO convert(final MapaPerguntaEntity item) {
     if (isNull(item)) {
       return null;
@@ -72,8 +71,7 @@ public class GerarMapaPerguntasService {
 
     final MapaPerguntaDTO retirno = convert.convert(item);
 
-    retirno.setPerguntasAlternativas(
-        item.getPerguntasAlternativas().stream().map(SubMapaPerguntasEntity::getPergunta).toList());
+    retirno.setPerguntasAlternativas(item.getPerguntasAlternativas().stream().map(SubMapaPerguntasEntity::getPergunta).toList());
 
     return retirno;
   }
@@ -83,26 +81,38 @@ public class GerarMapaPerguntasService {
       return null;
     }
 
-    return String.join("{\"id\":", categoria.getId().toString(), ", \"nome\":\"",
-        categoria.getTitulo().trim().toLowerCase(), "\"}");
+    return "{\"id\":" + categoria.getId().toString() + ", \"nome\":\"" + categoria.getTitulo().trim().toLowerCase() + "\"}";
 
   }
 
   private List<MapaPerguntaEntity> convetToPropostaMateriaDTO(final String mensagem, final String uuid) {
     final List<MapaPerguntaEntity> itensRetorno = new ArrayList<>();
     try {
-      String content = limparTextoJson(mensagem);
+      String content = limparTextoJson(mensagem).trim();
       if (!content.trim().startsWith("[")) {
         content = "[" + content;
       }
       if (!content.trim().endsWith("]")) {
         content = content + "]";
       }
-      final List<MapaPerguntaRetornoChatGPTDTO> itens = objectMapper.readValue(content,
-          new TypeReference<List<MapaPerguntaRetornoChatGPTDTO>>() {
-          });
+      List<MapaPerguntaRetornoChatGPTDTO> itens = null;
 
+      if (content.contains("\"questions\":")) {
+        List<QuestionsDTO> itensTMP = objectMapper.readValue(content, new TypeReference<List<QuestionsDTO>>() {
+        });
+        itens = new ArrayList<>();
+        for (QuestionsDTO questionsDTO : itensTMP) {
+          itens.addAll(questionsDTO.getQuestions());
+        }
+      } else {
+        itens = objectMapper.readValue(content, new TypeReference<List<MapaPerguntaRetornoChatGPTDTO>>() {
+        });
+
+      }
       itensRetorno.addAll(itens.stream().map(mapaPergunta -> {
+        if (isNull(mapaPergunta.getIdCategoria())) {
+          return null;
+        }
         final MapaPerguntaEntity entity = convert.convert(mapaPergunta);
         entity.setUuid(uuid);
 
@@ -110,18 +120,16 @@ public class GerarMapaPerguntasService {
         if (categoria.isPresent()) {
           entity.setCategoria(categoria.get());
         }
-        entity.setPerguntasAlternativas(mapaPergunta.getPerguntasAlternativas().stream()
-            .map(pergunta -> new SubMapaPerguntasEntity(null, uuid, pergunta, entity)).toList());
+        entity.setPerguntasAlternativas(
+            mapaPergunta.getPerguntasAlternativas().stream().map(pergunta -> new SubMapaPerguntasEntity(null, uuid, pergunta, entity)).toList());
 
-        entity.setTermos(mapaPergunta.getTermos().stream()
-            .map(termo -> new TermosMapaPerguntaEntity(null, uuid, termo, entity)).toList());
+        entity.setTermos(mapaPergunta.getTermos().stream().map(termo -> new TermosMapaPerguntaEntity(null, uuid, termo, entity)).toList());
 
         return entity;
-      }).toList());
+      }).filter(Objects::nonNull).toList());
 
     } catch (final Exception e) {
-      log.log(Level.SEVERE, "Erro ao converter objeto de retorno do ChatGPT: ".concat(e.getMessage())
-          .concat(" \nConteúdo: \n\n\n").concat(mensagem), e);
+      log.log(Level.SEVERE, "Erro ao converter objeto de retorno do ChatGPT: ".concat(e.getMessage()).concat(" \nConteúdo: \n\n\n").concat(mensagem), e);
       // throw new RuntimeException("Erro ao tentar processar os dados do ChatGPT",
       // e);
     }
@@ -132,20 +140,11 @@ public class GerarMapaPerguntasService {
   public List<MapaPerguntaDTO> gerarMapa(final RequisitaPerguntasDTO request) throws Exception {
     return gerarMapa(request, UUID.randomUUID().toString());
   }
+
   @Transactional
   public List<MapaPerguntaDTO> gerarMapa(final RequisitaPerguntasDTO request, final String uuid) throws Exception {
 
     int processar = 0;
-
-    String mes = null;
-
-    String conhecimento = null;
-    String termos = null;
-    List<CategoriaEntity> categorias = null;
-
-    String categoriasJson = null;
-
-    String audiencias = null;
 
     // Prepara a pegunta
 
@@ -159,7 +158,21 @@ public class GerarMapaPerguntasService {
     final List<MapaPerguntaEntity> itens = new ArrayList<>();
 //    final List<MessageChatGPTDTO> perguntasChatGPTDTOs = new ArrayList<>();
 
+    String mes = nonNull(request.getMes()) ? request.getMes().toString()
+        : LocalDateTime.now().getMonth().getDisplayName(TextStyle.FULL, Locale.forLanguageTag("pt-BR"));
 
+    String conhecimento = String.join(", ", chatGPTProperties.getEspecialista()).trim();
+    String termos = String.join(", ", request.getTermos()).trim().toLowerCase();
+
+    List<CategoriaEntity> categorias = nonNull(request.getCategorias()) && !request.getCategorias().isEmpty()
+        ? categoriaRepository.findAllById(request.getCategorias())
+        : categoriaRepository.categoriasParaPrompt();
+
+    String categoriasJson = "[" + categorias.stream().filter(Objects::nonNull).map(this::converterCategoria).collect(Collectors.joining(", ")) + "]";
+
+    String audiencias = nonNull(request.getAudiencias()) && !request.getAudiencias().isEmpty()
+        ? request.getAudiencias().stream().map(n -> n.trim().toLowerCase()).collect(Collectors.joining(", "))
+        : chatGPTProperties.getAudiencias().stream().map(n -> n.trim().toLowerCase()).collect(Collectors.joining(", "));
 
     while (itens.size() < request.getQuantidade()) {
 
@@ -173,46 +186,28 @@ public class GerarMapaPerguntasService {
         log.info("O total " + processar);
       }
 
-      mes = nonNull(request.getMes()) ? request.getMes().toString()
-          : LocalDateTime.now().getMonth().getDisplayName(TextStyle.FULL, Locale.forLanguageTag("pt-BR"));
-
-      conhecimento = chatGPTProperties.getEspecialista().stream().map(n -> n.trim().toLowerCase())
-          .collect(Collectors.joining(", "));
-      termos = request.getTermos().stream().map(n -> n.trim().toLowerCase()).collect(Collectors.joining(", "));
-
-      categorias = nonNull(request.getCategorias()) && !request.getCategorias().isEmpty()
-          ? categoriaRepository.findAllById(request.getCategorias())
-          : categoriaRepository.categoriasParaPrompt();
-
-      categoriasJson = String.join("[",
-          categorias.stream().filter(Objects::nonNull).map(this::converterCategoria).collect(Collectors.joining(", ")),
-          "]");
-
-      audiencias = nonNull(request.getAudiencias()) && !request.getAudiencias().isEmpty()
-          ? request.getAudiencias().stream().map(n -> n.trim().toLowerCase()).collect(Collectors.joining(", "))
-          : chatGPTProperties.getAudiencias().stream().map(n -> n.trim().toLowerCase())
-              .collect(Collectors.joining(", "));
-
       // Prepara a pegunta
-      perguntaParaGerarPerguntas = chatGPTProperties.getPrompts().getPedirPerguntas().formatted(
-          chatGPTProperties.getSite(), categoriasJson, conhecimento, audiencias, Integer.valueOf(processar), mes,
-          contador == 0 ? "" : chatGPTProperties.getPrompts().getPedirDadosMateriaSeguinte(), termos);
+      perguntaParaGerarPerguntas = chatGPTProperties.getPrompts().getPedirPerguntas().formatted(chatGPTProperties.getSite(), categoriasJson, conhecimento,
+          audiencias, Integer.valueOf(processar), mes, contador == 0 ? "" : chatGPTProperties.getPrompts().getPedirDadosMateriaSeguinte(), termos);
 
       repostaMapaPerguntas = chatgpt.perguntarAssistente(perguntaParaGerarPerguntas, uuid, inicio);
 
+      if (nonNull(repostaMapaPerguntas)) {
 
+        repostaMapaPerguntas.forEach(mensagem -> {
+          log.info("Mensagens:\n\n" + mensagem);
+        });
 
-      repostaMapaPerguntas.forEach(mensagem -> {
-        itens.addAll(convetToPropostaMateriaDTO(mensagem, uuid));
-      });
+        repostaMapaPerguntas.forEach(mensagem -> {
+          itens.addAll(convetToPropostaMateriaDTO(mensagem, uuid));
+        });
 
-      contador++;
+        contador++;
+      }
     }
-    log.info("Gravando mapa mental em lote!");
+    log.info("Gravando mapa mental em lote! " + itens.size());
     repository.saveAll(itens);
 
-
-    repository.saveAll(itens);
     return itens.stream().map(this::convert).toList();
 
   }

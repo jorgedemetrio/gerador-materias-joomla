@@ -17,7 +17,7 @@ public enum RunnerStatuEnum {
   IN_PROGRESS("in_progress"), // While in_progress, the Assistant uses the model and tools to perform steps. You can view progress being made by the Run by
                               // examining the Run
                // Steps.
-
+  INCOMPLETO("incomplete"),
   COMPLETED("completed"), // The Run successfully completed! You can now view all Messages the Assistant added to the Thread, and all the steps the Run took.
                           // You can also
              // continue the conversation by adding more user Messages to the Thread and creating another Run.
@@ -35,6 +35,7 @@ public enum RunnerStatuEnum {
   FAILED("failed");// You can view the reason for the failure by looking at the last_error object in the Run. The timestamp for the failure will be recorded
                    // under
          // failed_at.
+
 
   private final String valor;
 

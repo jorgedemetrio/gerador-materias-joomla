@@ -65,6 +65,35 @@ public class YoutubePlaylistParser {
 
   }
 
+  public YoutubeVideoDTO getDadosBasicosVideo(final String url) throws Exception {
+    // JacksonFactory
+
+    final String videoId = extractVideoParam(url);
+
+    final YouTube.Videos.List request = youtubeService.videos().list(PART);
+    request.setId(videoId);
+    request.setKey(properties.getYoutube().getChaveApi());
+
+    final VideoListResponse response = request.execute();
+
+    final List<Video> itens = response.getItems();
+
+    return itens.size() > 0 ? getYoutubeBasicoVideoDTO(itens.get(0)) : null;
+
+  }
+
+  public List<YoutubeVideoDTO> getDadosBasicoVideos(final String playlistUrl) throws Exception {
+    final String idListParam = extractListParam(playlistUrl);
+    final List<Video> videos = getVideosFromPlaylist(idListParam);
+    final List<YoutubeVideoDTO> titlesAndDescriptions = new ArrayList<>();
+
+    for (final Video video : videos) {
+      titlesAndDescriptions.add(getYoutubeBasicoVideoDTO(video));
+    }
+
+    return titlesAndDescriptions;
+  }
+
   public YoutubeVideoDTO getDadosVideo(final String url) throws Exception {
     // JacksonFactory
 
@@ -94,6 +123,14 @@ public class YoutubePlaylistParser {
     return titlesAndDescriptions;
   }
 
+  /**
+   * Deve ser implementado na V2.
+   * 
+   * @param videoId
+   * @return
+   * @throws Exception
+   */
+  @Deprecated
   public String getLegenda(final String videoId) throws Exception {
     // JacksonFactory
 //    final YouTube youtube = new YouTube.Builder(GoogleNetHttpTransport.newTrustedTransport(), new GsonFactory(),
@@ -122,10 +159,8 @@ public class YoutubePlaylistParser {
       } catch (final Exception ex) {
         log.log(Level.SEVERE, ex.getMessage(), ex.getCause());
       }
-      captionsInfo.append("Caption ID: ").append(caption.getId())
-                  .append(", Language: ").append(caption.getSnippet().getLanguage())
-                  .append(", Name: ").append(caption.getSnippet().getName())
-                  .append(", Legenda: ").append(resultStream.toString()).append("\n");
+      captionsInfo.append("Caption ID: ").append(caption.getId()).append(", Language: ").append(caption.getSnippet().getLanguage()).append(", Name: ")
+          .append(caption.getSnippet().getName()).append(", Legenda: ").append(resultStream.toString()).append("\n");
 
     });
     return captionsInfo.toString();
@@ -163,9 +198,16 @@ public class YoutubePlaylistParser {
     return videos;
   }
 
+  private YoutubeVideoDTO getYoutubeBasicoVideoDTO(final Video video) throws Exception {
+    final String title = video.getSnippet().getTitle();
+    final String description = video.getSnippet().getDescription();
+    return new YoutubeVideoDTO(title, description, null, video.getSnippet().getTags());
+  }
+
   private YoutubeVideoDTO getYoutubeVideoDTO(final Video video) throws Exception {
     final String title = video.getSnippet().getTitle();
     final String description = video.getSnippet().getDescription();
-    return new YoutubeVideoDTO(title, description, getLegenda(video.getId()), video.getSnippet().getTags());
+    return new YoutubeVideoDTO(title, description, getLegenda(description), video.getSnippet().getTags());
   }
+
 }

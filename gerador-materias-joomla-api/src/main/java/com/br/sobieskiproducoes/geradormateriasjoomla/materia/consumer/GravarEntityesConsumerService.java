@@ -5,6 +5,7 @@ package com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
+import java.util.Random;
 import java.util.logging.Level;
 
 import org.springframework.http.CacheControl;
@@ -25,6 +26,8 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.Generico
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosArtigoJoomlaSalvarDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosArtigoSalvoJoomlaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosTagJoomlaDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.ErrosJoomlaDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.ItemErroJoomlaDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,6 +48,10 @@ public class GravarEntityesConsumerService {
   private final ConfiguracoesProperties properties;
 
   private final ObjectMapper objectMapper;
+
+  private final Random rnd = new Random();
+
+  private static final String ERRO_SAME_ALIAS = "Save failed with the following error: Another Article in this category has the same alias.";
 
   public GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosArtigoSalvoJoomlaDTO>> gravarArtigo(
       final AtributosArtigoJoomlaSalvarDTO dto) {
@@ -69,6 +76,19 @@ public class GravarEntityesConsumerService {
             });
       }
     } catch (final HttpClientErrorException e) {
+      
+      try {
+        ErrosJoomlaDTO erros = objectMapper.readValue(e.getResponseBodyAsString(), ErrosJoomlaDTO.class);
+        for (ItemErroJoomlaDTO itemErro: erros.getErrors()) {
+          if (ERRO_SAME_ALIAS.equalsIgnoreCase(itemErro.getTitle().trim())) {
+            dto.setAlias(dto.getAlias() + "-" + String.format("%x", (int) (Math.random() * 255)).trim().toLowerCase());
+            return gravarArtigo(dto);
+          }
+        }
+      }
+      catch(Exception ex) {
+        log.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+      }
       log.info("Erro:\n".concat(e.getResponseBodyAsString()));
       log.log(Level.SEVERE, e.getLocalizedMessage() + " " + e.getStatusText(), e.getMostSpecificCause());
     } catch (final RestClientException e) {

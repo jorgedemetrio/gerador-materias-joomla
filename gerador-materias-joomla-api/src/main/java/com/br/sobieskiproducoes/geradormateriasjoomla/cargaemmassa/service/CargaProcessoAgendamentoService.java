@@ -71,7 +71,7 @@ public class CargaProcessoAgendamentoService {
   }
 
   // @Scheduled(fixedDelay = 3600000) // Uma vez por hora
-  @Scheduled(fixedDelay = 30000) // Uma vez por minuto
+  @Scheduled(fixedDelay = 60000) // Uma vez por minuto
   public void processarPublicacaoMateria() {
     try {
 

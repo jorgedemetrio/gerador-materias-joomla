@@ -65,6 +65,9 @@ public class MapaPerguntaEntity {
   @Column(name = "perfil_enquadra", nullable = true, insertable = true, updatable = true, unique = false, length = 3000)
   private String perfilEnquadra;
 
+  @Column(name = "stream", nullable = true, insertable = true, updatable = true, unique = false, columnDefinition = "TEXT")
+  private String stream;
+
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "id_categoria", nullable = false, insertable = true, updatable = true, unique = false)
   private CategoriaEntity categoria;

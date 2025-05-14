@@ -20,9 +20,6 @@ public class BuilderBusinessException {
   private String codigo = null;
   private Throwable cause = null;
 
-  public BuilderBusinessException() {
-
-  }
 
   @SuppressWarnings("unchecked")
   public <T extends BusinessException> T builder() {
