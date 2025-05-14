@@ -23,12 +23,12 @@ import org.springframework.http.ResponseEntity;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoItemJoomlaResponse;
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoJoomlaDataDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosArtigoSalvoJoomlaDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.joomla.AtributosArtigoSalvoJoomlaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.PropostaMateriaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.PublicarDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.SugerirMateriaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.exception.ObjectoJaExiteNoBancoBusinessException;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.GerarMateriaService;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.GerarMateriaPorMataService;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.MateriaJoomlaService;
 
 /**
@@ -46,7 +46,7 @@ public class MateriaControllerTest {
 	private MateriaJoomlaService service;
 
 	@Mock
-	private GerarMateriaService gerarMateriaService;
+	private GerarMateriaPorMataService gerarMateriaService;
 
 	@Test
 	public void publicarSuccessoTest() throws Exception {

@@ -9,7 +9,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosTagJoomlaDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.joomla.AtributosTagJoomlaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.TagDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.TagEntity;
 

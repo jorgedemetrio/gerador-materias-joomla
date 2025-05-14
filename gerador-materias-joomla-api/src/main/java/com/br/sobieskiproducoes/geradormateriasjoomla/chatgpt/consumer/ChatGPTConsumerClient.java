@@ -22,6 +22,7 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.response.
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.response.RepostaResponseDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.response.RepostaThrendsRunnerDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.response.RunnerResponseDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.chatgpt.consumer.response.RunnerStatuEnum;
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ConfiguracoesProperties;
 
 import lombok.RequiredArgsConstructor;
@@ -37,7 +38,7 @@ public class ChatGPTConsumerClient {
 
   private static final String ORGANIZATION = "OpenAI-Organization";
   private static final String ASSISTENT = "OpenAI-Beta";
-  private static final String ASSISTENT_VALOR = "assistants=v1";
+  private static final String ASSISTENT_VALOR = "assistants=v2";
   private final RestTemplate restTemplate;
   private final ConfiguracoesProperties properties;
 
@@ -123,7 +124,7 @@ public class ChatGPTConsumerClient {
     return resposta.getBody();
   }
 
-  public NextStepResponseDTO proximoPasso(final String threadId, final String runnerId) {
+  public NextStepResponseDTO proximoPasso(final String threadId, final String runnerId, final RunnerStatuEnum status) {
     final HttpHeaders headers = new HttpHeaders();
     headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
     headers.setBearerAuth(properties.getChatgpt().getBearer());
@@ -135,7 +136,9 @@ public class ChatGPTConsumerClient {
     final ResponseEntity<NextStepResponseDTO> resposta = restTemplate.exchange(properties.getChatgpt().getUrlAvancarMessage().formatted(threadId, runnerId),
         HttpMethod.GET, httpEntity, NextStepResponseDTO.class);
 
-    return resposta.getBody();
+    NextStepResponseDTO retorno = resposta.getBody();
+    retorno.setStatus(status);
+    return retorno;
   }
 
   public MensagemPostedResponseDTO lerMensagem(final String threadId, final String mensagemId) {

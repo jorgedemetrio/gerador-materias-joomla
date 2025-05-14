@@ -137,7 +137,7 @@ configuracao:
     
     url: https://api.openai.com/v1/chat/completions
     bearer: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-    model: gpt-4-turbo-preview 
+    model: gpt-4o 
     ## gpt-4
     temperature: 0.7
     max-tokens: 500
@@ -184,9 +184,11 @@ Entendendo que uma matéria deve seguir os seguintes requisitos: \n
  - A matéria é para o site: %s .\n
  - Que tem as redes sociais: %s .\n
  - O perfil da audiência é : %s .\n 
- - Entregue em formato JSON, só o JSON pois será lido por um APP sua resposta, separados pos \",\" com layout : { titulos : array(string), primeiro-paragrafo: string,  url-proposta: string, meta-descricao: string, keywords: string, tags : array, faqs: array{pergunta: string, resposta: string}, roteiro: string, post-instagram: string} \n 
+ - Entregue em formato JSON, só o JSON pois será lido por um APP sua resposta, separados pos \",\" com layout : { titulos : array(string), primeiro-paragrafo: string,  url-proposta: string, meta-descricao: string, keywords: string, tags : array, faqs: array({pergunta: string, resposta: string}), roteiro: string, post-instagram: string} \n
+ - Responda em formato JSON, respeitando a cadeia de \"{\", \"}\", \"[\", \"]\" que define os obbjetos e arrays.
  - Use SEO na matéria para os termos : %s .\n
- - Devem ter 3 opções de Títulos, usando SEO, gatilhos mentais e emojis\n
+ - Respeite o sintaxe JSON.\n
+ - Devem ter 3 opções de Títulos, usando SEO, gatilhos mentais e emojis. \n
  - Primeiro paragrafo ter no máximo 100 caracteres e deve ser usado estrutura de marketing para chamar atenção da matéria, como: Gatilhos mentais ou sensacionalismo. \n
  - Proponha um apelido para página (url-proposta) da matéria usando SEO, tudo em letras minúsculas, em português e separados por - (traço). \n  
  - Deve ter Meta Descrição (o campo meta-descricao), que é um resumo de 160 caracteres pode ter emojis, extremamente chamativo para exibir nos mecanismos de buscas. \n
@@ -198,13 +200,15 @@ Entendendo que uma matéria deve seguir os seguintes requisitos: \n
 Agora gere esses dados para uma matéria sobre : \n%s \n"
 
 
-    pedir-materia: "Vamos escrever agora o texto da matéria. Você é um profissional com muito conhecimento em Marketing de Conteúdo. Use o máximo de conhecimento e estratégias .\n
+    pedir-materia: "Escreva agora o texto da matéria. \n
 Com especialidade técnica em : %s .\n 
 Entendendo que uma matéria deve seguir os requisitos: \n
+ - A mtéria deve ter no mínimo 1000 palavras e no máximo 4000 palavras. \n
  - A matéria é para o site: %s .\n
  - Que tem as redes sociais: %s .\n
  - O perfil da audiência é : %s .\n
- - Use SEO na matéria para que ela seja o mais achavel possível em mecanismos de busca para os termos : %s .\n 
+ - Use SEO na matéria para que ela seja o mais achavel possível em mecanismos de busca para os termos : %s .\n
+ - Nos subtitulos devem ter as palavras chaves escolhidas e em seu corpo deveter alternativas as palavras chaves. 
  - Apenas o texto corpo da matéria e formatar apenas com HTML básico com subtítulos (TAGs HTMLs permitidos:  <table></table>, <tr></tr>, <td></td>, <th></th>, <font></font>, <br/>,<p></p>, <h2></h2>, <h3></h3>, <h4></h4>, <ul></ul>, <li><li>,<lo><lo>, <strong></strong>, <i></i>). \n
  - Trabalhe o melhor possível para que a matéria seja interessante e víral. \n
  - Pode usar emojis nos subtítulos e listas. \n
@@ -215,7 +219,7 @@ ${chatgpt.prompts.complemento-formato-pedir-materia}
  - Evite resumir a matéria sempre opte em explicar melhor principalmente termos técnicos, entenda quanto mais atrativos os assuntos buscados que se relaciona ao tema da materia, mais chances ela tem de ser aberta e do usuário achar o que busca nela. \n
  - No final deve ter um subtitulo de perguntas frequentes sobre o tema e tenha 3 perguntas e as resposas delas.\n
  - Na conclusão da materia deve se fazer um call to action para o site, comentar abaixo da matéria ou ver as redes sociais. \n
- - Na matéria não deve ter hashtags.
+ - No corpo da matéria não deve ter hashtags.
  
 \n
 E matéria deve falar sobre :\n
@@ -227,7 +231,7 @@ E matéria deve falar sobre :\n
 Faça uma mapa mental de perguntas em português para usar como possíveis direcionamentos de matérias, para isso trabalhe em possíveis buscas de usuários hoje na internet em site como Google, baseado nos critérios.\n
 \n
  - Site que se destinam as perguntas : %s \n
- - Categorias que vamos trabalhar: [%s]\n 
+ - Categorias que vamos trabalhar: %s\n 
 \n
  - Sua especialidade técnica : %s \n
  - Responda em JSon pois será lido por um aplicativo que só lê JSon, sepradaos por \",\", somente no JSON no layout : \"{pergunta : string, perguntasAlternativas : array(string), ordemRelevancia:int, motivoSugestao:string, perfilEnquadra:string, idCategoria: int, dataSugestaoPublicacao: date(formato: yyyy-mm-dd), termos:array(String)} \".\n
@@ -247,5 +251,5 @@ Faça uma mapa mental de perguntas em português para usar como possíveis direc
  - Retornar uma array de JSon com a quantidade mínima de perguntas: %d .\n
  - Pode combinar com feriados, ou datas festivas, ou informações relevantes do mês de %s, tendencias o mês.\n
  ${chatgpt.prompts.pedir-perguntas-detalhe}\n
- \n
+%s \n
  Usando os termos: %s \n"

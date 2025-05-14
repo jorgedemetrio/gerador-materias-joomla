@@ -32,8 +32,15 @@ public class CategoriaEntity {
   @Column(name = "id")
   private Long id;
 
+  @ManyToOne
+  @JoinColumn(name = "id_configuracao", insertable = true, updatable = true, nullable = false, unique = false)
+  private ConfiguracoesEntity configuracao;
+
   @Column(name = "id_joomla", nullable = false, insertable = true, updatable = true, unique = true)
   private Long idJoomla;
+
+  @Column(name = "id_wordpress", nullable = false, insertable = true, updatable = true, unique = true)
+  private Long idWordPress;
 
   @Column(name = "titulo", nullable = false, insertable = true, updatable = true, unique = false, length = 1000)
   private String titulo;
@@ -47,8 +54,5 @@ public class CategoriaEntity {
   @ManyToOne
   @JoinColumn(name = "id_pai")
   private CategoriaEntity pai;
-
-
-
 
 }

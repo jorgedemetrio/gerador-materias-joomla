@@ -20,10 +20,10 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.Generico
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoJoomlaDataDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.dto.StatusProcessamentoEnum;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.GravarEntityesConsumerService;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosArtigoJoomlaSalvarDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosArtigoSalvoJoomlaDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosTagJoomlaDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.ImagesMateriaDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.joomla.AtributosArtigoJoomlaSalvarDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.joomla.AtributosArtigoSalvoJoomlaDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.joomla.AtributosTagJoomlaDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.joomla.ImagesMateriaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.exception.BusinessException;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.exception.ObjectoJaExiteNoBancoBusinessException;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.MateriaEntity;

@@ -11,7 +11,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,6 +42,13 @@ public class TagEntity {
 
   @Column(name = "uuid_requisicao", nullable = true, insertable = true, updatable = true, unique = false, length = 1000)
   private String uuid;
+
+  @ManyToOne
+  @JoinColumn(name = "id_configuracao", insertable = true, updatable = true, nullable = false, unique = false)
+  private ConfiguracoesEntity configuracao;
+
+  @Column(name = "id_wordpress", nullable = true, insertable = true, updatable = true)
+  private Long idWprdPress;
 
   @Column(name = "id_joomla", nullable = true, insertable = true, updatable = true, unique = false)
   private Long idJoomla;

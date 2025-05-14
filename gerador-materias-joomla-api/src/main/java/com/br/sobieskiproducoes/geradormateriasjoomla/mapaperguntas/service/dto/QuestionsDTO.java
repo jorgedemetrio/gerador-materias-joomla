@@ -1,9 +1,10 @@
 /**
- *
+ * 
  */
-package com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto;
+package com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.AllArgsConstructor;
@@ -14,8 +15,8 @@ import lombok.ToString;
 
 /**
  * @author Jorge Demetrio
- * @since 22 de fev. de 2024 15:34:26
- * @version 1.0.0
+ * @since 1 de ago. de 2024 02:25:58
+ * @version 1.0-1 de ago. de 2024
  */
 @Getter
 @Setter
@@ -23,7 +24,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class UsuarioDTO {
-  private DadosDTO data;
+public class QuestionsDTO {
+  private List<MapaPerguntaRetornoChatGPTDTO> questions;
 }

@@ -42,7 +42,7 @@ import lombok.extern.java.Log;
 @RequestMapping("/carga-materia-massa")
 public class CargaMateriaEmMassaController {
 
-  private final CargaMateriaEmMassaService serveice;
+  private final CargaMateriaEmMassaService service;
 
   @Operation(summary = "Subir matérias novas no Joomla.")
   @ApiResponses({
@@ -56,7 +56,7 @@ public class CargaMateriaEmMassaController {
     log.info("Inicio de processamento de em massa com dados: ".concat(request.toString()));
 
     try {
-      return ResponseEntity.ok(serveice.processar(request));
+      return ResponseEntity.ok(service.processar(request));
     } catch (final Exception ex) {
       log.log(Level.SEVERE, ex.getMessage(), ex);
       return ResponseEntity.internalServerError().build();

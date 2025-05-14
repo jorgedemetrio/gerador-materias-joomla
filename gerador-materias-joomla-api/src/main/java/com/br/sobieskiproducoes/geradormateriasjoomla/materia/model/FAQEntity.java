@@ -36,6 +36,10 @@ public class FAQEntity {
   @Column(name = "id")
   private Long id;
 
+  @ManyToOne
+  @JoinColumn(name = "id_configuracao", insertable = true, updatable = true, nullable = false, unique = false)
+  private ConfiguracoesEntity configuracao;
+
   @Column(name = "uuid_requisicao", nullable = true, insertable = true, updatable = true, unique = false, length = 1000)
   private String uuid;
 

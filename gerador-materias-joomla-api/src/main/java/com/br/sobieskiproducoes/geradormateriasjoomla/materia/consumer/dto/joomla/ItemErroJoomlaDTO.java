@@ -1,7 +1,7 @@
 /**
- *
+ * 
  */
-package com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto;
+package com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.joomla;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -14,8 +14,8 @@ import lombok.ToString;
 
 /**
  * @author Jorge Demetrio
- * @since 22 de fev. de 2024 15:32:32
- * @version 1.0.0
+ * @since 1 de ago. de 2024 01:38:54
+ * @version 1.0-1 de ago. de 2024
  */
 @Getter
 @Setter
@@ -24,7 +24,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RelationshipDTO {
-
-  private CategoryDTO category;
+public class ItemErroJoomlaDTO {
+  private String title;
+  private Integer code;
 }

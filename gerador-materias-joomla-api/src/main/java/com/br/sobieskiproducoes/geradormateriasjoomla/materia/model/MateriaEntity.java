@@ -48,8 +48,15 @@ public class MateriaEntity {
   @Column(name = "id")
   private Long id;
 
+  @ManyToOne
+  @JoinColumn(name = "id_configuracao", insertable = true, updatable = true, nullable = false, unique = false)
+  private ConfiguracoesEntity configuracao;
+
   @Column(name = "id_joomla", nullable = true, insertable = true, updatable = true)
   private Long idJoomla;
+
+  @Column(name = "id_wordpress", nullable = true, insertable = true, updatable = true)
+  private Long idWprdPress;
 
   @Column(name = "tema_proposto", nullable = true, insertable = true, updatable = true, unique = false, length = 1000)
   private String tema;
@@ -80,6 +87,9 @@ public class MateriaEntity {
 
   @Column(name = "materia", nullable = true, insertable = true, updatable = true, unique = false, columnDefinition = "TEXT")
   private String materia;
+
+  @Column(name = "stream", nullable = true, insertable = true, updatable = true, unique = false, columnDefinition = "TEXT")
+  private String stream;
 
   @Column(name = "alias", nullable = true, insertable = true, updatable = true, unique = false, length = 500)
   private String apelido;

@@ -1,25 +1,81 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{layout :: layout(~{::title}, ~{::main})}">
 <head>
 <title>Titulo 2</title>
 </head>
 <body>
 	<main>
+		<script async defer src="https://apis.google.com/js/api.js"
+			onload="this.onload=function(){};handleClientLoad();"
+			onreadystatechange="if (this.readyState === 'complete') this.onload();">
+			
+		</script>
+
+		<script>
+			// Enter the API key from the Google Develoepr Console - to handle any unauthenticated
+			// requests in the code.
+			// The provided key works for this sample only when run from
+			// https://google-api-javascript-client.googlecode.com/hg/samples/requestSample.html
+			// To use in your own application, replace this API key with your own.
+			var apiKey = 'AIzaSyAdjHPT5Pb7Nu56WJ_nlrMGOAgUAtKjiPM';
+
+			function handleClientLoad() {
+				gapi.load('client', makeRequest);
+			}
+
+			function initClient() {
+				gapi.client.init({
+					apiKey : apiKey,
+				}).then(makeRequest)
+			}
+
+			function makeRequest() {
+				gapi.client.setApiKey(apiKey);
+
+				function writeResponse(resp) {
+					var responseText;
+					if (resp.error
+							&& resp.error.errors[0].debugInfo == 'QuotaState: BLOCKED') {
+						responseText = 'Invalid API key provided. Please replace the "apiKey" value with your own.';
+					} else {
+						responseText = 'Short URL ' + shortUrl + ' expands to '
+								+ resp.longUrl;
+					}
+					var infoDiv = document.getElementById('info');
+					infoDiv.innerHTML = '';
+					infoDiv.appendChild(document.createTextNode(responseText));
+				}
+
+				var shortUrl = document.getElementById('shortUrl').value;
+				var restRequest = gapi.client.request({
+					'path' : '/urlshortener/v1/url',
+					'params' : {
+						'shortUrl' : shortUrl
+					}
+				});
+
+				restRequest.execute(writeResponse);
+			}
+		</script>
 		<h1>Gerar mat&eacute;ria de v&iacute;deo</h1>
-		<form th:action="@{/fontedados/youtube/lerVideo}" method="post" enctype="application/x-www-form-urlencoded">
+		<form th:action="@{/fontedados/youtube/lerVideo}" method="post"
+			enctype="application/x-www-form-urlencoded">
 			<fieldset>
 				<legend>A partir de um v&iacute;deo</legend>
 				<div class="mb-3">
-					<label for="link" class="form-label">URL V&iacute;deo</label> <input id="link" name="link" type="text"
-						class="form-control" required="required" maxlength="250" minlength="10" aria-describedby="videoHelp"
-					/>
+					<label for="link" class="form-label">URL V&iacute;deo</label> <input
+						id="link" name="link" type="text" class="form-control"
+						required="required" maxlength="250" minlength="10"
+						aria-describedby="videoHelp" />
 					<div id="videoHelp" class="form-text">Campo requerido.</div>
 				</div>
 				<div class="mb-3">
 					<div class="form-check">
-						<input class="form-check-input" type="checkbox" id="publicarCMSVideo" name="publicarCMS"> <label
-							class="form-check-label" for="publicarCMSVideo"
-						> Publicar no servidor CMS </label>
+						<input class="form-check-input" type="checkbox"
+							id="publicarCMSVideo" name="publicarCMS"> <label
+							class="form-check-label" for="publicarCMSVideo">
+							Publicar no servidor CMS </label>
 					</div>
 				</div>
 				<div class="col-auto">
@@ -27,21 +83,24 @@
 				</div>
 			</fieldset>
 		</form>
-		
-		<form th:action="@{/fontedados/youtube/lerPlaylist}" method="post" enctype="application/x-www-form-urlencoded">
+
+		<form th:action="@{/fontedados/youtube/lerPlaylist}" method="post"
+			enctype="application/x-www-form-urlencoded">
 			<fieldset>
 				<legend>A partir de uma playlist</legend>
 				<div class="mb-3">
-					<label for="link" class="form-label">URL da playlist</label> <input id="link" name="link" type="text"
-						class="form-control" required="required" maxlength="250" minlength="10"  aria-describedby="videoHelp"
-					/>
+					<label for="link" class="form-label">URL da playlist</label> <input
+						id="link" name="link" type="text" class="form-control"
+						required="required" maxlength="250" minlength="10"
+						aria-describedby="videoHelp" />
 					<div id="videoHelp" class="form-text">Campo requerido.</div>
 				</div>
 				<div class="mb-3">
 					<div class="form-check">
-						<input class="form-check-input" type="checkbox"  id="publicarCMSPlayList" name="publicarCMS"> <label
-							class="form-check-label" for="publicarCMSPlayList"
-						> Publicar no servidor CMS </label>
+						<input class="form-check-input" type="checkbox"
+							id="publicarCMSPlayList" name="publicarCMS"> <label
+							class="form-check-label" for="publicarCMSPlayList">
+							Publicar no servidor CMS </label>
 					</div>
 				</div>
 				<div class="col-auto">

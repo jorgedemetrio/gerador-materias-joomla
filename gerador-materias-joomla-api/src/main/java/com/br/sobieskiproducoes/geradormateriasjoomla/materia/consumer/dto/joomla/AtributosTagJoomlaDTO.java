@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto;
+package com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.joomla;
 
 import java.time.LocalDateTime;
 

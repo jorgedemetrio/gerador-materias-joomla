@@ -11,7 +11,7 @@
 
 # Índice 
 
-
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=jorgedemetrio_gerador-materias-joomla&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=jorgedemetrio_gerador-materias-joomla)
 
 
 # Criação de banco
