@@ -26,6 +26,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.TagJoomlaClient;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.TagDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.ConfiguracoesEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.TagEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.TagRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.convert.TagConvert;
@@ -92,7 +93,6 @@ class TagServiceTest {
 
   }
 
-
   @Test
   void tesBuscarTestTagEntityNotFound() {
 
@@ -138,8 +138,6 @@ class TagServiceTest {
     assertEquals(titulo, capTagEntity.getValue().getTitulo());
   }
 
-
-
   @Test
   void testGravar() throws Exception {
 
@@ -147,7 +145,7 @@ class TagServiceTest {
     final Long id = 10L;
     final String titulo = "Titulo Atualizado";
     final TagDTO tagDTO = new TagDTO(id, 11L, "uuid", titulo, null);
-    final TagEntity entity = new TagEntity(10L, "uuid", 11L, titulo, "apelido", "language", null);
+    final TagEntity entity = new TagEntity(10L, "uuid", new ConfiguracoesEntity(), 0L, 11L, titulo, "apelido", "language", null);
 
     when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
     when(repository.save(any(TagEntity.class))).thenReturn(entity);
@@ -180,8 +178,7 @@ class TagServiceTest {
     final String titulo = "Nova Tag";
     final TagDTO tagDTO = new TagDTO(null, 11L, "uuid", titulo, "apelido");
 
-    when(repository.save(any(TagEntity.class)))
-        .thenReturn(new TagEntity(10L, "uuid", 10L, titulo, "apelido", "language", null));
+    when(repository.save(any(TagEntity.class))).thenReturn(new TagEntity(10L, "uuid", new ConfiguracoesEntity(), 0L, 10L, titulo, "apelido", "language", null));
 
     // Ação
     final TagDTO tagDTOGravada = service.gravar(tagDTO);
@@ -213,8 +210,7 @@ class TagServiceTest {
     final TagDTO tagDTO = new TagDTO(10L, 11L, "uuid", titulo, "apelido");
     when(repository.findById(anyLong())).thenReturn(Optional.empty());
 
-    when(repository.save(any(TagEntity.class)))
-        .thenReturn(new TagEntity(10L, "uuid", 10L, titulo, "apelido", "language", null));
+    when(repository.save(any(TagEntity.class))).thenReturn(new TagEntity(10L, "uuid", new ConfiguracoesEntity(), 0L, 10L, titulo, "apelido", "language", null));
 
     // Ação
     final TagDTO tagDTOGravada = service.gravar(tagDTO);
@@ -240,7 +236,5 @@ class TagServiceTest {
     assertThat(tagDTOGravada.getApelido()).isEqualTo("apelido");
 
   }
-  
-
 
 }
