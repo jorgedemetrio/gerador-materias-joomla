@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -25,6 +26,7 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.controller.d
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.repository.MapaPerguntaRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.service.convert.PerguntasConvert;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.SugerirMateriaDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.MateriaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.MateriaRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.GerarMateriaPorMataService;
 import com.br.sobieskiproducoes.geradormateriasjoomla.utils.MateriaUtils;
@@ -56,18 +58,16 @@ public class ProcessamentoCriarMateriasService {
    * @return
    */
   private List<MapaPerguntaDTO> extrairMapPerguntas(final String uuid) {
-    return new ArrayList<>(
-        mapaPerguntaRepository.buscaPorUiidParaCargaLimitado5(uuid).stream().map(mapaPerguntaEntity -> {
-          final var mapaPerguntaDTO = perguntasConvert.toMapaPerguntaDTO(mapaPerguntaEntity);
-          mapaPerguntaDTO.setPerguntasAlternativas(new ArrayList<>());
-          mapaPerguntaDTO.setTermos(new ArrayList<>());
-          mapaPerguntaEntity.getPerguntasAlternativas()
-              .forEach(pergunta -> mapaPerguntaDTO.getPerguntasAlternativas().add(pergunta.getPergunta()));
+    return new ArrayList<>(mapaPerguntaRepository.buscaPorUiidParaCargaLimitado5(uuid).stream().map(mapaPerguntaEntity -> {
+      final var mapaPerguntaDTO = perguntasConvert.toMapaPerguntaDTO(mapaPerguntaEntity);
+      mapaPerguntaDTO.setPerguntasAlternativas(new ArrayList<>());
+      mapaPerguntaDTO.setTermos(new ArrayList<>());
+      mapaPerguntaEntity.getPerguntasAlternativas().forEach(pergunta -> mapaPerguntaDTO.getPerguntasAlternativas().add(pergunta.getPergunta()));
 
-          mapaPerguntaEntity.getTermos().forEach(pergunta -> mapaPerguntaDTO.getTermos().add(pergunta.getTermo()));
+      mapaPerguntaEntity.getTermos().forEach(pergunta -> mapaPerguntaDTO.getTermos().add(pergunta.getTermo()));
 
-          return mapaPerguntaDTO;
-        }).toList());
+      return mapaPerguntaDTO;
+    }).toList());
 
   }
 
@@ -89,13 +89,12 @@ public class ProcessamentoCriarMateriasService {
       }
       if (mapaPerguntaDTO.getDataSugestaoPublicacao().getYear() < hoje.getYear()
           || mapaPerguntaDTO.getDataSugestaoPublicacao().getYear() > hoje.getYear() + 1) {
-        mapaPerguntaDTO.setDataSugestaoPublicacao(mapaPerguntaDTO.getDataSugestaoPublicacao()
-            .plusYears(hoje.getYear() - mapaPerguntaDTO.getDataSugestaoPublicacao().getYear()));
+        mapaPerguntaDTO.setDataSugestaoPublicacao(
+            mapaPerguntaDTO.getDataSugestaoPublicacao().plusYears(hoje.getYear() - mapaPerguntaDTO.getDataSugestaoPublicacao().getYear()));
       }
       // Se a data proposta for maior ou igual a hoje e esteja dentro do range de
       // inicio e fim, se não será ignorada.
-      return (mapaPerguntaDTO.getDataSugestaoPublicacao().isAfter(hoje)
-          || mapaPerguntaDTO.getDataSugestaoPublicacao().isEqual(hoje))
+      return (mapaPerguntaDTO.getDataSugestaoPublicacao().isAfter(hoje) || mapaPerguntaDTO.getDataSugestaoPublicacao().isEqual(hoje))
           && ((mapaPerguntaDTO.getDataSugestaoPublicacao().isAfter(request.getDataInicioPublicacao())
               || mapaPerguntaDTO.getDataSugestaoPublicacao().isEqual(request.getDataInicioPublicacao()))
 
@@ -119,8 +118,7 @@ public class ProcessamentoCriarMateriasService {
 
     // Será processado os que não tem data ou devem ignorar a data.
 
-    final var rodar = nonNull(request.getDataFimPublicacao())
-        ? MateriaUtils.getDaysBetween(request.getDataInicioPublicacao(), request.getDataFimPublicacao())
+    final var rodar = nonNull(request.getDataFimPublicacao()) ? MateriaUtils.getDaysBetween(request.getDataInicioPublicacao(), request.getDataFimPublicacao())
         : 1L;
     var rodaram = 0L;
     while (rodaram <= rodar && itens.size() > 0) {
@@ -148,23 +146,21 @@ public class ProcessamentoCriarMateriasService {
    * @param dataPublicadas
    * @param mapaPerguntaDTO
    */
-  private void processarMateria(final LocalDateTime data, final Set<String> dataPublicadas,
-      final MapaPerguntaDTO mapaPerguntaDTO, final RequisicaoCaragMassaDTO request, final String uuid) {
+  private void processarMateria(final LocalDateTime data, final Set<String> dataPublicadas, final MapaPerguntaDTO mapaPerguntaDTO,
+      final RequisicaoCaragMassaDTO request, final String uuid) {
     if (!dataPublicadas.contains(data.format(MateriaConstants.DATETIME_FORMATTER))) {
       try {
-        final var perguntas = perguntas(mapaPerguntaDTO);
-        final var item = repository.buscarPorPergunta(mapaPerguntaDTO.getId());
+        final List<String> perguntas = perguntas(mapaPerguntaDTO);
+        final Optional<MateriaEntity> item = repository.buscarPorPergunta(mapaPerguntaDTO.getId());
 
         if (item.isPresent()) {
-          final var itemMateria = item.get();
+          final MateriaEntity itemMateria = item.get();
           itemMateria.setPublicar(data);
           itemMateria.setCriadoJoomla(data);
           repository.save(itemMateria);
         } else {
-          gerarMateriaService.gerarSugestaoMateria(
-              new SugerirMateriaDTO(perguntas.stream().collect(Collectors.joining(", ")), mapaPerguntaDTO.getTermos(),
-                  data, mapaPerguntaDTO.getCategoria().getId(), request.getIdeias().getAudiencias()),
-              uuid, mapaPerguntaDTO.getId());
+          gerarMateriaService.gerarSugestaoMateria(new SugerirMateriaDTO(perguntas.stream().collect(Collectors.joining(", ")), mapaPerguntaDTO.getTermos(),
+              data, mapaPerguntaDTO.getCategoria().getId(), request.getIdeias().getAudiencias()), uuid, mapaPerguntaDTO.getId());
         }
 
         dataPublicadas.add(data.format(MateriaConstants.DATETIME_FORMATTER));

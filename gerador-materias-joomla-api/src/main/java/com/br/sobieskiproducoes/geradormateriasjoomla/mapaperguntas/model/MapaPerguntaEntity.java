@@ -12,6 +12,7 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.MateriaEntit
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -50,7 +51,7 @@ public class MapaPerguntaEntity {
   @Column(name = "pergunta", nullable = false, insertable = true, updatable = true, unique = false, length = 3000)
   private String pergunta;
 
-  @OneToMany(mappedBy = "peguntaPrincipal", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "peguntaPrincipal", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private List<TermosMapaPerguntaEntity> termos;
 
   @OneToMany(mappedBy = "peguntaPrincipal", cascade = CascadeType.ALL)
