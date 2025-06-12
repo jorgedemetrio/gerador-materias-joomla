@@ -45,7 +45,7 @@ import lombok.extern.java.Log;
 @Service
 public class MateriaJoomlaService {
 
-  private static final DateTimeFormatter DATTE_TIME_FORMATTER_ALIAS =  DateTimeFormatter.ofPattern("yyyy-MM-dd-");
+  private static final DateTimeFormatter DATTE_TIME_FORMATTER_ALIAS = DateTimeFormatter.ofPattern("yyyy-MM-dd-");
   private final MateriaRepository materiaRepository;
 
   private final TagRepository tagRepository;
@@ -56,25 +56,23 @@ public class MateriaJoomlaService {
 
   private final ConfiguracoesProperties properties;
 
-  public GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosArtigoSalvoJoomlaDTO>> publicarMateriaJoomla(
-      final Long id) throws BusinessException {
+  public GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosArtigoSalvoJoomlaDTO>> publicarMateriaJoomla(final Long id) throws BusinessException {
 
     return publicarMateriaJoomla(materiaRepository.findById(id).get());
   }
 
-  public GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosArtigoSalvoJoomlaDTO>> publicarMateriaJoomla(
-      final MateriaEntity entity) throws BusinessException {
-    log.info("Inicio de publicação de materia no Joomla ID".concat(entity.getId().toString()));
+  public GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosArtigoSalvoJoomlaDTO>> publicarMateriaJoomla(final MateriaEntity entity)
+      throws BusinessException {
+    log.info("Inicio de publicação de materia no Joomla ID ".concat(entity.getId().toString()));
 
     GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosArtigoSalvoJoomlaDTO>> artigo = null;
     try {
       if (isNull(entity.getMateria()) || entity.getMateria().isBlank() || entity.getMateria().trim().length() < 10) {
-        log.info("Materia não pode ser rgavadar poser vazia" + entity.toString());
+        log.info("Materia não pode ser gravadar poser vazia" + entity.toString());
         return null;
       }
       if (nonNull(entity.getIdJoomla())) {
-        throw BusinessException.build().classe(ObjectoJaExiteNoBancoBusinessException.class)
-            .mensagem("Erro ao tentar acessar ").builder();
+        throw BusinessException.build().classe(ObjectoJaExiteNoBancoBusinessException.class).mensagem("Erro ao tentar acessar ").builder();
       }
       if (nonNull(entity.getPublicar())) {
         entity.setApelido(entity.getPublicar().format(DATTE_TIME_FORMATTER_ALIAS) + entity.getApelido());
@@ -90,10 +88,8 @@ public class MateriaJoomlaService {
       entity.getTags().forEach(n -> {
         if (isNull(n.getIdJoomla())) {
           final AtributosTagJoomlaDTO tag = new AtributosTagJoomlaDTO();
-          final String alias = (nonNull(entity.getPublicar()) ? entity.getPublicar().format(DATTE_TIME_FORMATTER_ALIAS)
-              : "")
-              + (nonNull(n.getApelido()) && !n.getApelido().isBlank() ? n.getApelido()
-              : MateriaUtils.normalizeText(n.getTitulo()));
+          final String alias = (nonNull(entity.getPublicar()) ? entity.getPublicar().format(DATTE_TIME_FORMATTER_ALIAS) : "")
+              + (nonNull(n.getApelido()) && !n.getApelido().isBlank() ? n.getApelido() : MateriaUtils.normalizeText(n.getTitulo()));
 
           tag.setAlias(alias);
           tag.setTitle(n.getTitulo());
@@ -105,8 +101,7 @@ public class MateriaJoomlaService {
           tag.setParentId(1L);
           tag.setLanguage(properties.getJoomla().getIdioma());
           try {
-            final GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosTagJoomlaDTO>> retornoTag = consumerService
-                .gravarTag(tag);
+            final GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosTagJoomlaDTO>> retornoTag = consumerService.gravarTag(tag);
             n.setIdJoomla(retornoTag.getData().getAttributes().getId());
             n.setApelido(tag.getAlias());
             tagRepository.save(n);
@@ -124,8 +119,7 @@ public class MateriaJoomlaService {
         }
       });
 
-      if (isNull(entity.getTituloSelecionado()) || entity.getTituloSelecionado() <= 1
-          || entity.getTituloSelecionado() > 3) {
+      if (isNull(entity.getTituloSelecionado()) || entity.getTituloSelecionado() <= 1 || entity.getTituloSelecionado() > 3) {
         entity.setApelido(MateriaUtils.normalizeText(entity.getTitulo1()));
         entity.setTituloSelecionado(1);
       } else {

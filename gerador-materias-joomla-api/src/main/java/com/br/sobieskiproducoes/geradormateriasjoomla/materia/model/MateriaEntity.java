@@ -14,6 +14,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -105,18 +106,18 @@ public class MateriaEntity {
   @Column(name = "exportado_para_plataforma", nullable = true, insertable = true, updatable = true, unique = false, length = 2000)
   private LocalDateTime exportado;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinColumn(name = "id_categoria")
   private CategoriaEntity categoria;
 
-  @ManyToMany(cascade = CascadeType.ALL)
+  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinTable(joinColumns = { @JoinColumn(name = "id_categoria", table = "tbl_materia_tag") })
   private List<TagEntity> tags;
 
-  @OneToMany(cascade = CascadeType.ALL)
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private List<FAQEntity> faqs;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinColumn(name = "id_mapa_pergunta", nullable = true, insertable = true, updatable = true, unique = false)
   private MapaPerguntaEntity peguntaPrincipal;
 

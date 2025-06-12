@@ -3,6 +3,9 @@
  */
 package com.br.sobieskiproducoes.geradormateriasjoomla.config;
 
+import java.time.Duration;
+
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -18,6 +21,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
  */
 @Configuration
 public class ObjectsConfig {
+
+  private static final int TIMEOUT = 60000 * 5;
 
   @Bean
   public ObjectMapper getObjectMapper() {
@@ -37,12 +42,9 @@ public class ObjectsConfig {
     return objectMapper;
   }
 
-
   @Bean
-  public RestTemplate getRestTemplate() {
-    return new RestTemplate();
+  public RestTemplate getRestTemplate(final RestTemplateBuilder builder) {
+    return builder.setConnectTimeout(Duration.ofMillis(TIMEOUT)).setReadTimeout(Duration.ofMillis(TIMEOUT)).build();
   }
-
-
 
 }

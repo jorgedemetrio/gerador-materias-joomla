@@ -5,9 +5,10 @@ package com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
-import java.util.Random;
+import java.util.List;
 import java.util.logging.Level;
 
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -23,6 +24,7 @@ import org.springframework.web.client.RestTemplate;
 import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ConfiguracoesProperties;
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoItemJoomlaResponse;
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoJoomlaDataDTO;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosArtigoJoomlaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosArtigoJoomlaSalvarDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosArtigoSalvoJoomlaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosTagJoomlaDTO;
@@ -44,21 +46,72 @@ import lombok.extern.java.Log;
 @RequiredArgsConstructor
 @Component
 public class GravarEntityesConsumerService {
+  private static final String ERRO_SAME_ALIAS = "Save failed with the following error: Another Article in this category has the same alias.";
   private final RestTemplate restTemplate;
+
   private final ConfiguracoesProperties properties;
 
   private final ObjectMapper objectMapper;
 
-  private final Random rnd = new Random();
+  public GenericoItemJoomlaResponse<List<GenericoJoomlaDataDTO<AtributosArtigoJoomlaDTO>>> get() {
+    final HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    headers.setBearerAuth(properties.getJoomla().getBearer());
+    final HttpEntity<Void> httpEntity = new HttpEntity<>(headers);
+    try {
+      final ResponseEntity<GenericoItemJoomlaResponse<List<GenericoJoomlaDataDTO<AtributosArtigoJoomlaDTO>>>> resposta = restTemplate.exchange(
+          properties.getJoomla().getUrl() + "/content/articles", HttpMethod.GET, httpEntity,
+          new ParameterizedTypeReference<GenericoItemJoomlaResponse<List<GenericoJoomlaDataDTO<AtributosArtigoJoomlaDTO>>>>() {
+          });
 
-  private static final String ERRO_SAME_ALIAS = "Save failed with the following error: Another Article in this category has the same alias.";
+      return resposta.getBody();
+    } catch (final Exception ex) {
+      log.log(Level.SEVERE, ex.getMessage(), ex.getCause());
+      throw ex;
+    }
+  }
 
-  public GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosArtigoSalvoJoomlaDTO>> gravarArtigo(
-      final AtributosArtigoJoomlaSalvarDTO dto) {
+  public GenericoItemJoomlaResponse<List<GenericoJoomlaDataDTO<AtributosArtigoJoomlaDTO>>> get(final String url) {
+    final HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    headers.setBearerAuth(properties.getJoomla().getBearer());
+    final HttpEntity<Void> httpEntity = new HttpEntity<>(headers);
+    try {
+      final ResponseEntity<GenericoItemJoomlaResponse<List<GenericoJoomlaDataDTO<AtributosArtigoJoomlaDTO>>>> resposta = restTemplate.exchange(
+          properties.getJoomla().getUrl() + "/content/articles?" + url, HttpMethod.GET, httpEntity,
+          new ParameterizedTypeReference<GenericoItemJoomlaResponse<List<GenericoJoomlaDataDTO<AtributosArtigoJoomlaDTO>>>>() {
+          });
+
+      return resposta.getBody();
+    } catch (final Exception ex) {
+      log.log(Level.SEVERE, ex.getMessage(), ex.getCause());
+      throw ex;
+    }
+  }
+
+  public GenericoItemJoomlaResponse<List<GenericoJoomlaDataDTO<AtributosArtigoJoomlaDTO>>> get(final String offset, final String limit) {
+    final HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    headers.setBearerAuth(properties.getJoomla().getBearer());
+    final HttpEntity<Void> httpEntity = new HttpEntity<>(headers);
+    try {
+      final ResponseEntity<GenericoItemJoomlaResponse<List<GenericoJoomlaDataDTO<AtributosArtigoJoomlaDTO>>>> resposta = restTemplate.exchange(
+          properties.getJoomla().getUrl() + "/content/articles?page[offset]=" + offset + "page[limit]=" + limit, HttpMethod.GET, httpEntity,
+          new ParameterizedTypeReference<GenericoItemJoomlaResponse<List<GenericoJoomlaDataDTO<AtributosArtigoJoomlaDTO>>>>() {
+          });
+
+      return resposta.getBody();
+    } catch (final Exception ex) {
+      log.log(Level.SEVERE, ex.getMessage(), ex.getCause());
+      throw ex;
+    }
+  }
+
+  public GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosArtigoSalvoJoomlaDTO>> gravarArtigo(final AtributosArtigoJoomlaSalvarDTO dto) {
     log.info("Gravando aritgo: ".concat(dto.getTitle()));
     GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosArtigoSalvoJoomlaDTO>> retorno = null;
     final HttpHeaders headers = new HttpHeaders();
-    headers.setAccept(Collections.singletonList(MediaType.ALL));
+    // headers.setAccept(Collections.singletonList(MediaType.ALL));
     headers.setContentType(MediaType.APPLICATION_JSON);
     headers.setBearerAuth(properties.getJoomla().getBearer());
 
@@ -67,8 +120,8 @@ public class GravarEntityesConsumerService {
       headers.setContentLength(bodyEnvio.getBytes(StandardCharsets.UTF_8).length);
       final HttpEntity<String> httpEntity = new HttpEntity<>(bodyEnvio, headers);
 
-      final ResponseEntity<String> resposta = restTemplate.exchange(
-          properties.getJoomla().getUrl().concat("/content/articles"), HttpMethod.POST, httpEntity, String.class);
+      final ResponseEntity<String> resposta = restTemplate.exchange(properties.getJoomla().getUrl().concat("/content/articles"), HttpMethod.POST, httpEntity,
+          String.class);
 
       if (HttpStatus.OK.equals(resposta.getStatusCode())) {
         retorno = objectMapper.readValue(resposta.getBody(),
@@ -76,17 +129,16 @@ public class GravarEntityesConsumerService {
             });
       }
     } catch (final HttpClientErrorException e) {
-      
+
       try {
-        ErrosJoomlaDTO erros = objectMapper.readValue(e.getResponseBodyAsString(), ErrosJoomlaDTO.class);
-        for (ItemErroJoomlaDTO itemErro: erros.getErrors()) {
+        final ErrosJoomlaDTO erros = objectMapper.readValue(e.getResponseBodyAsString(), ErrosJoomlaDTO.class);
+        for (final ItemErroJoomlaDTO itemErro : erros.getErrors()) {
           if (ERRO_SAME_ALIAS.equalsIgnoreCase(itemErro.getTitle().trim())) {
             dto.setAlias(dto.getAlias() + "-" + String.format("%x", (int) (Math.random() * 255)).trim().toLowerCase());
             return gravarArtigo(dto);
           }
         }
-      }
-      catch(Exception ex) {
+      } catch (final Exception ex) {
         log.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
       }
       log.info("Erro:\n".concat(e.getResponseBodyAsString()));
@@ -100,8 +152,7 @@ public class GravarEntityesConsumerService {
     return retorno;
   }
 
-  public GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosTagJoomlaDTO>> gravarTag(
-      final AtributosTagJoomlaDTO dto) {
+  public GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosTagJoomlaDTO>> gravarTag(final AtributosTagJoomlaDTO dto) {
 
     log.info("Gravando tag: ".concat(dto.getTitle()));
     GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosTagJoomlaDTO>> retorno = null;
@@ -116,13 +167,11 @@ public class GravarEntityesConsumerService {
       headers.setContentLength(bodyEnvio.getBytes(StandardCharsets.UTF_8).length);
       final HttpEntity<String> httpEntity = new HttpEntity<>(bodyEnvio, headers);
 
-      final ResponseEntity<String> resposta = restTemplate.exchange(properties.getJoomla().getUrl().concat("/tags"),
-          HttpMethod.POST, httpEntity, String.class);
+      final ResponseEntity<String> resposta = restTemplate.exchange(properties.getJoomla().getUrl().concat("/tags"), HttpMethod.POST, httpEntity, String.class);
 
       if (HttpStatus.OK.equals(resposta.getStatusCode())) {
-        retorno = objectMapper.readValue(resposta.getBody(),
-            new TypeReference<GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosTagJoomlaDTO>>>() {
-            });
+        retorno = objectMapper.readValue(resposta.getBody(), new TypeReference<GenericoItemJoomlaResponse<GenericoJoomlaDataDTO<AtributosTagJoomlaDTO>>>() {
+        });
       }
     } catch (final HttpClientErrorException e) {
       log.info("Erro:\n".concat(e.getResponseBodyAsString()));

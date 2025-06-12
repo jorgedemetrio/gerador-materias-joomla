@@ -31,7 +31,7 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.Generico
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoJoomlaDataDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.LinkResponse;
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.MetaResponse;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.CategoriaJoomlaClient;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.CategoriaJoomlaRestTemplateClient;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosCategoriaJoomlaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.CategoriaRepository;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.convert.CategoriaConvert;
@@ -52,7 +52,7 @@ class CategoriaServiceTest {
   CategoriaRepository categoriaRepository;
 
   @Mock
-  CategoriaJoomlaClient categoriaJoomlaClient;
+  CategoriaJoomlaRestTemplateClient categoriaJoomlaClient;
 
   @Spy
   ConfiguracoesProperties properties = new ConfiguracoesProperties(
@@ -69,7 +69,8 @@ class CategoriaServiceTest {
   CategoriaConvert convert = new CategoriaConvertImpl();
 
   /**
-   * Test method for {@link com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.CategoriaService#atualizarBancoCategoria()}.
+   * Test method for
+   * {@link com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.CategoriaService#atualizarBancoCategoria()}.
    */
   @Test
   void testAtualizarBancoCategoria() {

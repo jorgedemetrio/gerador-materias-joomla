@@ -1,0 +1,56 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password: sa
+    driver-class-name: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+configuracao:
+  chatgpt:
+    url-criar-thrend: "http://localhost:${wiremock.server.port}/v1/threads"
+    url-postar-mensagem: "http://localhost:${wiremock.server.port}/v1/threads/%s/messages"
+    url-iniciar-run: "http://localhost:${wiremock.server.port}/v1/threads/%s/runs"
+    url-ler-runner: "http://localhost:${wiremock.server.port}/v1/threads/%s/runs/%s"
+    url-avancar-message: "http://localhost:${wiremock.server.port}/v1/threads/%s/runs/%s/steps"
+    url-ler-mensagem: "http://localhost:${wiremock.server.port}/v1/threads/%s/messages/%s"
+    url-apagar-thrend: "http://localhost:${wiremock.server.port}/v1/threads/%s"
+    bearer: test-bearer
+    model: gpt-4
+    temperature: 0.7
+    max-tokens: 500
+    role-system: system
+    role-user: user
+    role-assistant: assistant
+    thread: test-thread-id
+    assistente: test-assistant-id
+
+  joomla:
+    url: http://localhost:${wiremock.server.port}/api/index.php/v1
+    bearer: test-bearer
+    idioma: "*"
+
+chatgpt:
+  falhas:
+    - "Desculpe, mas não"
+    - "Infelizmente, não posso"
+  audiencias: 
+    - "Teste Audiencia 1"
+    - "Teste Audiencia 2"
+  prompts:
+    pedir-dados-materia: "Test prompt for data"
+    pedir-materia: "Test prompt for content"
+  especialista:
+    - "Especialista 1"
+    - "Especialista 2"
+  redes-sociais:
+    - "Test Social 1"
+    - "Test Social 2"

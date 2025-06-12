@@ -16,12 +16,15 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.Generico
 import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoJoomlaDataDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.AtributosTagJoomlaDTO;
 
+import feign.Headers;
+
 /**
  * @author Jorge Demetrio
  * @since 21 de fev. de 2024 18:25:40
  * @version 1.0.0
  */
 @FeignClient(name = "tagJoomlaClient", url = "${configuracao.joomla.url}", configuration = FeignJoomlaConfig.class)
+@Headers({ "Authorization: Bearer ${configuracao.joomla.bearer}" })
 public interface TagJoomlaClient {
 
   @GetMapping(path = "/tags/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE })
@@ -31,12 +34,10 @@ public interface TagJoomlaClient {
   GenericoItemJoomlaResponse<List<GenericoJoomlaDataDTO<AtributosTagJoomlaDTO>>> getTags();
 
   @GetMapping(path = "/tags?{url}", consumes = { MediaType.APPLICATION_JSON_VALUE })
-  GenericoItemJoomlaResponse<List<GenericoJoomlaDataDTO<AtributosTagJoomlaDTO>>> getTags(
-      @PathVariable("url") String url);
+  GenericoItemJoomlaResponse<List<GenericoJoomlaDataDTO<AtributosTagJoomlaDTO>>> getTags(@PathVariable("url") String url);
 
   @GetMapping(path = "/tags", consumes = { MediaType.APPLICATION_JSON_VALUE })
-  GenericoItemJoomlaResponse<List<GenericoJoomlaDataDTO<AtributosTagJoomlaDTO>>> getTags(
-      @RequestParam("page[offset]") String offset,
+  GenericoItemJoomlaResponse<List<GenericoJoomlaDataDTO<AtributosTagJoomlaDTO>>> getTags(@RequestParam("page[offset]") String offset,
       @RequestParam("page[limit]") String limit);
 
 }

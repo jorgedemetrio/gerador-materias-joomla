@@ -58,7 +58,12 @@ feign:
     config:
       default:
         loggerLevel: FULL
-
+        connectTimeout: 10000  # 5 segundos em milissegundos
+        readTimeout: 10000 
+    default:
+      loggerLevel: FULL
+      connectTimeout: 10000  # 5 segundos em milissegundos
+      readTimeout: 10000 
 
 http:
   client:
@@ -178,46 +183,39 @@ chatgpt:
     - Pessoas que buscam conteúdo e informações no Google e outros mecanismos de buscas. 
   prompts:
     pedir-dados-materia-seguinte: " - Deve ser diferente das que já passou anteriormente. \n" 
-    pedir-dados-materia: "Torne-se um profissional com muito conhecimento em : Marketing de Conteúdo, Maketing Digital, Marketing Social \n
-Com especialidade técnica nos assuntos de : %s \n
+    pedir-dados-materia: " Você tem conhecimento de Marketing de Conteúdo e com especialidade técnica nos assuntos de : %s \n
 Entendendo que uma matéria deve seguir os seguintes requisitos: \n
- - A matéria é para o site: %s .\n
- - Que tem as redes sociais: %s .\n
- - O perfil da audiência é : %s .\n 
- - Entregue em formato JSON, só o JSON pois será lido por um APP sua resposta, separados pos \",\" com layout : { titulos : array(string), primeiro-paragrafo: string,  url-proposta: string, meta-descricao: string, keywords: string, tags : array, faqs: array({pergunta: string, resposta: string}), roteiro: string, post-instagram: string} \n
- - Responda em formato JSON, respeitando a cadeia de \"{\", \"}\", \"[\", \"]\" que define os obbjetos e arrays.
+ - O site: %s .\n
+ - Redes sociais: %s .\n
+ - Perfil da audiência é : %s .\n 
+ - Entregue em formato JSON, pois será lido por um APP sua resposta, separados pos \",\" com layout : { titulos : array(string), primeiro-paragrafo: string,  url-proposta: string, meta-descricao: string, keywords: string, tags : array, faqs: array({pergunta: string, resposta: string})} \n
  - Use SEO na matéria para os termos : %s .\n
  - Devem ter 3 opções de Títulos, usando SEO, gatilhos mentais e emojis\n
- - Primeiro paragrafo ter no máximo 100 caracteres e deve ser usado estrutura de marketing para chamar atenção da matéria, como: Gatilhos mentais ou sensacionalismo. \n
+ - Primeiro paragrafo ter no máximo 120 caracteres e deve ser usado estrutura de marketing para chamar atenção da matéria, como: Gatilhos mentais e/ou identifique problemas que o assunto possa resolver e destaque o. \n
  - Proponha um apelido para página (url-proposta) da matéria usando SEO, tudo em letras minúsculas, em português e separados por - (traço). \n  
  - Deve ter Meta Descrição (o campo meta-descricao), que é um resumo de 160 caracteres pode ter emojis, extremamente chamativo para exibir nos mecanismos de buscas. \n
  - Deve ter keyowrds, palavras chaves de calda curta de SEO da matéria. \n
  - Deve ter tags, que são uma array de no mínimo 5 opções, que são palavras chaves de calda longa usando SEO pensando nas possíveis buscas que o usuário possa fazer para achar essa matéria. \n
  - Deve ter FAQs, que são no máximo 6 perguntas e no mínimo  de 4, e respostas de no máximo 120 caracteres cada pergunta e resposta. \n
- - Deve ter roteiro: um roteiro de 1:30 minutos no máximo sobre a matéria para reels do instagram, somente com falas, deve ser bem humorado e com foco de ser viral.\n
- - Deve ter post-instagram, que é a descrição do poste no facebook e instagram com 1500 caracateres mais ou menos usando Marketing Social, emojis e Hashtags.\n
 Agora gere esses dados para uma matéria sobre : \n%s \n"
 
 
     pedir-materia: "Escreva agora o texto da matéria. \n
 Com especialidade técnica em : %s .\n 
 Entendendo que uma matéria deve seguir os requisitos: \n
- - A mtéria deve ter no mínimo 1000 palavras e no máximo 4000 palavras. \n
- - A matéria é para o site: %s .\n
- - Que tem as redes sociais: %s .\n
+ - A matéria deve ter no mínimo 3000 palavras e no máximo 6000 palavras. \n
+ - Site: %s .\n
+ - Redes sociais: %s .\n
  - O perfil da audiência é : %s .\n
- - Use SEO na matéria para que ela seja o mais achavel possível em mecanismos de busca para os termos : %s .\n
- - Nos subtitulos devem ter as palavras chaves escolhidas e em seu corpo deveter alternativas as palavras chaves. 
- - Apenas o texto corpo da matéria e formatar apenas com HTML básico com subtítulos (TAGs HTMLs permitidos:  <table></table>, <tr></tr>, <td></td>, <th></th>, <font></font>, <br/>,<p></p>, <h2></h2>, <h3></h3>, <h4></h4>, <ul></ul>, <li><li>,<lo><lo>, <strong></strong>, <i></i>). \n
- - Trabalhe o melhor possível para que a matéria seja interessante e víral. \n
+ - Use SEO na matéria para os termos como : %s .\n
+ - Apenas o texto corpo da matéria e pode formatar apenas com HTML básico com subtítulos (TAGs HTMLs permitidos:  <table></table>, <tr></tr>, <td></td>, <th></th>, <font></font>, <br/>,<p></p>, <h2></h2>, <h3></h3>, <h4></h4>, <ul></ul>, <li><li>,<lo><lo>, <strong></strong>, <i></i>). \n
+ - A matéria deve ser víral e com bom SEO. \n
  - Pode usar emojis nos subtítulos e listas. \n
- - No mínimo  5 subtítulos e cada um com no mínimo de 2 parágrafos por subtitulo. \n 
- - No caso de citar na matéria : descobertas, experimentos, livros, fatos históricos, etc, também adicione o nome dos envolvidos e datas relacionadas com fontest. \n
+ - Citar nome dos envolvidos e datas relacionadas com fontes no caso de quando puder ser informado sobre : experimentos, livros, fatos históricos, etc. \n
  - Tente exemplificar o máximo que puder fazendo listas com exemplos se for o caso. \n 
 ${chatgpt.prompts.complemento-formato-pedir-materia}
- - Evite resumir a matéria sempre opte em explicar melhor principalmente termos técnicos, entenda quanto mais atrativos os assuntos buscados que se relaciona ao tema da materia, mais chances ela tem de ser aberta e do usuário achar o que busca nela. \n
  - No final deve ter um subtitulo de perguntas frequentes sobre o tema e tenha 3 perguntas e as resposas delas.\n
- - Na conclusão da materia deve se fazer um call to action para o site, comentar abaixo da matéria ou ver as redes sociais. \n
+ - Na conclusão da materia deve se fazer um call to action para o rede sociais criativo relacionado ao assunto. \n
  - No corpo da matéria não deve ter hashtags.
  
 \n

@@ -1,20 +1,27 @@
 /**
  *
  */
-package com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.service;
+package com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.lote;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.logging.Level;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.controller.dto.RequisicaoCaragMassaDTO;
 import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.model.CargaMassaEntity;
 import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.repository.CargaMassaRepository;
+import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.service.ProcessamentoCriarMateriasService;
+import com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.service.ProcessamentoPublicarMateriasService;
 import com.br.sobieskiproducoes.geradormateriasjoomla.dto.StatusProcessamentoEnum;
 import com.br.sobieskiproducoes.geradormateriasjoomla.mapaperguntas.repository.MapaPerguntaRepository;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.MateriaRepository;
+import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.GerarMateriaPorMataService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -31,8 +38,11 @@ import lombok.extern.java.Log;
 public class CargaProcessoAgendamentoService {
 
   private final CargaMassaRepository repository;
+
+  private final MateriaRepository materiaRepository;
   private final ObjectMapper objectMapper;
   private final MapaPerguntaRepository mapaPerguntaRepository;
+  private final GerarMateriaPorMataService gerarMateriaPorMataService;
 
   private final ProcessamentoCriarMateriasService processoCriacaoMaterias;
   private final ProcessamentoPublicarMateriasService processamentoPublicarMateriasService;
@@ -64,6 +74,25 @@ public class CargaProcessoAgendamentoService {
           log.log(Level.SEVERE, e.getMessage(), e);
         }
         repository.save(cargaMassaEntity);
+      }
+    } catch (final Throwable e) {// Casso ocorra algum continua o processo só gere log
+      log.log(Level.SEVERE, e.getMessage(), e);
+    }
+  }
+
+  @Scheduled(fixedDelay = 90000) // ${configuracao.batch.gerar-materia.delay})
+  public void processarCriacaoMateriasErro() {
+    try {
+      final PageRequest page = PageRequest.of(0, 10, Sort.by("publicar").descending());
+
+      final Page<Long> itens = materiaRepository.buscarMateriaComErro(page);
+      for (final Long cargaMassaEntity : itens) {
+        try {
+          log.info("Inicio retentativa de gerar materia com erro no momento de gerar matéria.");
+          gerarMateriaPorMataService.gerarSugestaoMateria(cargaMassaEntity);
+        } catch (final Exception e) {
+          log.log(Level.SEVERE, e.getMessage(), e);
+        }
       }
     } catch (final Throwable e) {// Casso ocorra algum continua o processo só gere log
       log.log(Level.SEVERE, e.getMessage(), e);

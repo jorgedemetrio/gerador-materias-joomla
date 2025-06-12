@@ -24,6 +24,9 @@ import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.MateriaEntit
 @Repository
 public interface MateriaRepository extends JpaRepository<MateriaEntity, Long> {
 
+  @Query(name = "MateriaRepository.buscarMateriaVazias", value = "SELECT m.id FROM MateriaEntity AS m WHERE m.materia IS NULL AND m.status = 'ERRO' AND m.titulo1 is not null  AND m.titulo2 is not null  AND m.titulo3 is not null  AND m.categoria is not null ")
+  Page<Long> buscarMateriaComErro(Pageable page);
+
   @Query(name = "MateriaRepository.buscarMateriasPublicar", value = """
       SELECT m FROM MateriaEntity AS m WHERE m.uuid is not null AND m.peguntaPrincipal is not null \
        AND m.status = StatusProcessamentoEnum.PROCESSAR \
@@ -34,14 +37,13 @@ public interface MateriaRepository extends JpaRepository<MateriaEntity, Long> {
        LIMIT 15 """) //
   List<MateriaEntity> buscarMateriasPublicar();
 
+  @Query(name = "MateriaRepository.buscarMateriaVazias", value = "SELECT m FROM MateriaEntity AS m WHERE m.materia IS NULL ")
+  Page<MateriaEntity> buscarMateriaVazias(Pageable page);
+
   @Query(name = "MateriaRepository.buscarPorPergunta", value = "SELECT m FROM MateriaEntity AS m JOIN m.peguntaPrincipal AS p WHERE p.id = :id")
   Optional<MateriaEntity> buscarPorPergunta(@Param("id") Long id);
 
-
   Optional<MateriaEntity> findByIdJoomla(@Param("idJoomla") Long idJoomla);
-
-  @Query(name = "MateriaRepository.buscarMateriaVazias", value = "SELECT m FROM MateriaEntity AS m WHERE m.materia IS NULL ")
-  Page<MateriaEntity> buscarMateriaVazias(Pageable page);
 
   @Query(name = "MapaPerguntaRepository.totalAProcessar", value = "SELECT max(data_publicar) FROM tbl_materia AS m "
       + " WHERE uuid_requisicao =:uuid AND TIME_FORMAT(data_publicar, '%H:%i') = :hora", nativeQuery = true)
