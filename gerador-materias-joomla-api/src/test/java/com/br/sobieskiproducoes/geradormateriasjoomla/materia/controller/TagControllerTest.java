@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller;
+package com.br.sobieskiproducoes.geradormaterias.materia.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
@@ -20,16 +20,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.CargaDadosImagensProperties;
-import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ChatGPTConfigurationProperties;
-import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ConfiguracoesProperties;
-import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.DadosImagensLogoProperties;
-import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.DadosImagensMateriasProperties;
-import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.JoomlaConfigurationProperties;
-import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.PosicaoEnum;
-import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.YoutubeConfigurationProperties;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.TagDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.TagService;
+import com.br.sobieskiproducoes.geradormaterias.config.properties.CargaDadosImagensProperties;
+import com.br.sobieskiproducoes.geradormaterias.config.properties.ChatGPTConfigurationProperties;
+import com.br.sobieskiproducoes.geradormaterias.config.properties.ConfiguracoesProperties;
+import com.br.sobieskiproducoes.geradormaterias.config.properties.DadosImagensLogoProperties;
+import com.br.sobieskiproducoes.geradormaterias.config.properties.DadosImagensMateriasProperties;
+import com.br.sobieskiproducoes.geradormaterias.config.properties.JoomlaConfigurationProperties;
+import com.br.sobieskiproducoes.geradormaterias.config.properties.PosicaoEnum;
+import com.br.sobieskiproducoes.geradormaterias.config.properties.YoutubeConfigurationProperties;
+import com.br.sobieskiproducoes.geradormaterias.materia.controller.dto.TagDTO;
+import com.br.sobieskiproducoes.geradormaterias.materia.service.TagService;
 
 /**
  * @author Ane Batista

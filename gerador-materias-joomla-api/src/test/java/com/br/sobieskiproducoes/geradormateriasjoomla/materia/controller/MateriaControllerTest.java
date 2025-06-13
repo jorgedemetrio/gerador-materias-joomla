@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller;
+package com.br.sobieskiproducoes.geradormaterias.materia.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
@@ -21,15 +21,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoItemJoomlaResponse;
-import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoJoomlaDataDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.joomla.AtributosArtigoSalvoJoomlaDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.PropostaMateriaDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.PublicarDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.SugerirMateriaDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.exception.ObjectoJaExiteNoBancoBusinessException;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.GerarMateriaPorMataService;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.MateriaJoomlaService;
+import com.br.sobieskiproducoes.geradormaterias.consumer.response.GenericoItemJoomlaResponse;
+import com.br.sobieskiproducoes.geradormaterias.consumer.response.GenericoJoomlaDataDTO;
+import com.br.sobieskiproducoes.geradormaterias.materia.consumer.dto.joomla.AtributosArtigoSalvoJoomlaDTO;
+import com.br.sobieskiproducoes.geradormaterias.materia.controller.dto.PropostaMateriaDTO;
+import com.br.sobieskiproducoes.geradormaterias.materia.controller.dto.PublicarDTO;
+import com.br.sobieskiproducoes.geradormaterias.materia.controller.dto.SugerirMateriaDTO;
+import com.br.sobieskiproducoes.geradormaterias.materia.exception.ObjectoJaExiteNoBancoBusinessException;
+import com.br.sobieskiproducoes.geradormaterias.materia.service.GerarMateriaPorMataService;
+import com.br.sobieskiproducoes.geradormaterias.materia.service.MateriaJoomlaService;
 
 /**
  * @author Ane Batista

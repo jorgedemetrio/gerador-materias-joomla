@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.br.sobieskiproducoes.geradormateriasjoomla.materia.service;
+package com.br.sobieskiproducoes.geradormaterias.materia.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -24,13 +24,13 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.TagJoomlaClient;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.controller.dto.TagDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.ConfiguracoesEntity;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.TagEntity;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.TagRepository;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.convert.TagConvert;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.convert.TagConvertImpl;
+import com.br.sobieskiproducoes.geradormaterias.empresa.model.ConfiguracoesEntity;
+import com.br.sobieskiproducoes.geradormaterias.materia.consumer.TagJoomlaClient;
+import com.br.sobieskiproducoes.geradormaterias.materia.controller.dto.TagDTO;
+import com.br.sobieskiproducoes.geradormaterias.materia.model.TagEntity;
+import com.br.sobieskiproducoes.geradormaterias.materia.repository.TagRepository;
+import com.br.sobieskiproducoes.geradormaterias.materia.service.convert.TagConvert;
+import com.br.sobieskiproducoes.geradormaterias.materia.service.convert.TagConvertImpl;
 
 /**
  * @author Jorge Demetrio

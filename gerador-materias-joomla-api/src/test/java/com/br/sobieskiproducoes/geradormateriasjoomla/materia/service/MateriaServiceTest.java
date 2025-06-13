@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.br.sobieskiproducoes.geradormateriasjoomla.materia.service;
+package com.br.sobieskiproducoes.geradormaterias.materia.service;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.when;
@@ -15,10 +15,10 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.model.MateriaEntity;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.MateriaRepository;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.convert.MateriaConvert;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.convert.MateriaConvertImpl;
+import com.br.sobieskiproducoes.geradormaterias.materia.model.MateriaEntity;
+import com.br.sobieskiproducoes.geradormaterias.materia.repository.MateriaRepository;
+import com.br.sobieskiproducoes.geradormaterias.materia.service.convert.MateriaConvert;
+import com.br.sobieskiproducoes.geradormaterias.materia.service.convert.MateriaConvertImpl;
 
 /**
  * @author Ane Batista

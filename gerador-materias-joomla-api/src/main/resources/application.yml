@@ -113,6 +113,8 @@ spring:
 
 
 configuracao:
+	serper:
+		key: XXXXXXXXXXXXX
   batch:
     gerar-materia: 
       delay: 3000000

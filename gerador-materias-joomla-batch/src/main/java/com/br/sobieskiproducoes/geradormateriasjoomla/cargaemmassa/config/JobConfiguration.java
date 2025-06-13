@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.br.sobieskiproducoes.geradormateriasjoomla.cargaemmassa.config;
+package com.br.sobieskiproducoes.geradormaterias.cargaemmassa.config;
 
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.step.builder.StepBuilder;

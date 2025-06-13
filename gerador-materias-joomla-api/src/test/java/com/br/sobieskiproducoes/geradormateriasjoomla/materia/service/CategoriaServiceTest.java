@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.br.sobieskiproducoes.geradormateriasjoomla.materia.service;
+package com.br.sobieskiproducoes.geradormaterias.materia.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -19,23 +19,23 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.CargaDadosImagensProperties;
-import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ChatGPTConfigurationProperties;
-import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.ConfiguracoesProperties;
-import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.DadosImagensLogoProperties;
-import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.DadosImagensMateriasProperties;
-import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.JoomlaConfigurationProperties;
-import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.PosicaoEnum;
-import com.br.sobieskiproducoes.geradormateriasjoomla.config.properties.YoutubeConfigurationProperties;
-import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoItemJoomlaResponse;
-import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.GenericoJoomlaDataDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.LinkResponse;
-import com.br.sobieskiproducoes.geradormateriasjoomla.consumer.response.MetaResponse;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.CategoriaJoomlaClient;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.consumer.dto.joomla.AtributosCategoriaJoomlaDTO;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.repository.CategoriaRepository;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.convert.CategoriaConvert;
-import com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.convert.CategoriaConvertImpl;
+import com.br.sobieskiproducoes.geradormaterias.config.properties.CargaDadosImagensProperties;
+import com.br.sobieskiproducoes.geradormaterias.config.properties.ChatGPTConfigurationProperties;
+import com.br.sobieskiproducoes.geradormaterias.config.properties.ConfiguracoesProperties;
+import com.br.sobieskiproducoes.geradormaterias.config.properties.DadosImagensLogoProperties;
+import com.br.sobieskiproducoes.geradormaterias.config.properties.DadosImagensMateriasProperties;
+import com.br.sobieskiproducoes.geradormaterias.config.properties.JoomlaConfigurationProperties;
+import com.br.sobieskiproducoes.geradormaterias.config.properties.PosicaoEnum;
+import com.br.sobieskiproducoes.geradormaterias.config.properties.YoutubeConfigurationProperties;
+import com.br.sobieskiproducoes.geradormaterias.consumer.response.GenericoItemJoomlaResponse;
+import com.br.sobieskiproducoes.geradormaterias.consumer.response.GenericoJoomlaDataDTO;
+import com.br.sobieskiproducoes.geradormaterias.consumer.response.LinkResponse;
+import com.br.sobieskiproducoes.geradormaterias.consumer.response.MetaResponse;
+import com.br.sobieskiproducoes.geradormaterias.materia.consumer.CategoriaJoomlaClient;
+import com.br.sobieskiproducoes.geradormaterias.materia.consumer.dto.joomla.AtributosCategoriaJoomlaDTO;
+import com.br.sobieskiproducoes.geradormaterias.materia.repository.CategoriaRepository;
+import com.br.sobieskiproducoes.geradormaterias.materia.service.convert.CategoriaConvert;
+import com.br.sobieskiproducoes.geradormaterias.materia.service.convert.CategoriaConvertImpl;
 
 /**
  * @author Jorge Demetrio
@@ -69,7 +69,7 @@ class CategoriaServiceTest {
   CategoriaConvert convert = new CategoriaConvertImpl();
 
   /**
-   * Test method for {@link com.br.sobieskiproducoes.geradormateriasjoomla.materia.service.CategoriaService#atualizarBancoCategoria()}.
+   * Test method for {@link com.br.sobieskiproducoes.geradormaterias.materia.service.CategoriaService#atualizarBancoCategoria()}.
    */
   @Test
   void testAtualizarBancoCategoria() {
