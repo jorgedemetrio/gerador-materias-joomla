@@ -43,15 +43,13 @@ public class ChatGPTConfigurationProperties {
 
   @NotNull
   @NotBlank
-  private String bearer;
+//  private String bearer;
 
-
-
-  private String assistente;
+//  private String assistente;
 
   @NotNull
   @NotBlank
-  private String organization;
+//  private String organization;
 
   @NotNull
   @NotBlank

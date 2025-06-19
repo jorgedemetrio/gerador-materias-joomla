@@ -25,5 +25,7 @@ import lombok.ToString;
 @Validated
 public class SerperProperties {
 
-  private String key;
+  private String bearer;
+  private String search;
+
 }

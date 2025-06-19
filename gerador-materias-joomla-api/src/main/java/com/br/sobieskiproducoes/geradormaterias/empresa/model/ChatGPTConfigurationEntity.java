@@ -43,8 +43,8 @@ public class ChatGPTConfigurationEntity {
   @JoinColumn(name = "id_configuracao", insertable = true, updatable = true, nullable = false, unique = false)
   private ConfiguracoesEntity configuracao;
 
-  @Column(name = "id_thrend", nullable = true, insertable = true, updatable = true, unique = false, length = 2000)
-  private String thread;
+//  @Column(name = "id_thrend", nullable = true, insertable = true, updatable = true, unique = false, length = 2000)
+//  private String thread;
 
   @NotNull
   @NotBlank

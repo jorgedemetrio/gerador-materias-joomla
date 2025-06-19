@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -20,11 +19,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.br.sobieskiproducoes.geradormaterias.config.MateriaConstants;
-import com.br.sobieskiproducoes.geradormaterias.config.properties.ConfiguracoesProperties;
 import com.br.sobieskiproducoes.geradormaterias.consumer.response.GenericoItemJoomlaResponse;
 import com.br.sobieskiproducoes.geradormaterias.consumer.response.GenericoJoomlaDataDTO;
-import com.br.sobieskiproducoes.geradormaterias.materia.consumer.TagJoomlaClient;
+import com.br.sobieskiproducoes.geradormaterias.empresa.model.JoomlaConfigurationEntity;
 import com.br.sobieskiproducoes.geradormaterias.materia.consumer.dto.joomla.AtributosTagJoomlaDTO;
+import com.br.sobieskiproducoes.geradormaterias.materia.consumer.joomla.TagJoomlaClient;
 import com.br.sobieskiproducoes.geradormaterias.materia.controller.dto.TagDTO;
 import com.br.sobieskiproducoes.geradormaterias.materia.model.TagEntity;
 import com.br.sobieskiproducoes.geradormaterias.materia.repository.TagRepository;
@@ -48,7 +47,6 @@ public class TagService {
   private final TagRepository repository;
   private final TagConvert convert;
   private final TagJoomlaClient client;
-  private final ConfiguracoesProperties properties;
 
   public Boolean apagar(@NotNull final Long id) {
     final Optional<TagEntity> tagEntityOpt = repository.findById(id);
@@ -65,7 +63,7 @@ public class TagService {
    * @return O universo de registros atualizados.
    */
   @Transactional
-  public Map<String, Integer> atualizarBancoTag() {
+  public Map<String, Integer> atualizarBancoTag(final JoomlaConfigurationEntity config) {
     final List<TagEntity> itens = new ArrayList<>();
     GenericoItemJoomlaResponse<List<GenericoJoomlaDataDTO<AtributosTagJoomlaDTO>>> consulta = null;
     int offset = 0;
@@ -76,10 +74,10 @@ public class TagService {
     do {
       if (isNull(consulta)) {
         // Primeira pagina
-        consulta = client.getTags();
+        consulta = client.getTags(config);
       } else {
         // Faz a proxima busca, pegando o next page e removendo a URL
-        consulta = client.getTags(String.valueOf(offset * 20), "20");
+        consulta = client.getTags(String.valueOf(offset * 20), "20", config);
 
       }
       offset++;
@@ -87,11 +85,9 @@ public class TagService {
 
         for (final GenericoJoomlaDataDTO<AtributosTagJoomlaDTO> tag : consulta.getData()) {
           // Só salva Tag no banco que pertence ao idioma padrão do site.
-          if (isNull(tag.getAttributes())
-              || tag.getAttributes().getLanguage().equals(properties.getJoomla().getIdioma())
+          if (isNull(tag.getAttributes()) || tag.getAttributes().getLanguage().equals(config.getIdioma())
               || MateriaConstants.SEM_IDIOMA.equals(tag.getAttributes().getLanguage())) {
-            tagEntityOpt = repository.buscarPorApelidoTitulo(tag.getAttributes().getAlias(),
-                tag.getAttributes().getTitle());
+            tagEntityOpt = repository.buscarPorApelidoTitulo(tag.getAttributes().getAlias(), tag.getAttributes().getTitle());
             if (tagEntityOpt.isPresent()) {
               tagEntity = tagEntityOpt.get();
               convert.merge(tag.getAttributes(), tagEntity);
@@ -110,8 +106,8 @@ public class TagService {
 
       }
 
-    } while (nonNull(consulta) && nonNull(consulta.getLinks()) && nonNull(consulta.getLinks().getNext())
-        && nonNull(consulta.getData()) && !consulta.getLinks().getNext().isBlank());
+    } while (nonNull(consulta) && nonNull(consulta.getLinks()) && nonNull(consulta.getLinks().getNext()) && nonNull(consulta.getData())
+        && !consulta.getLinks().getNext().isBlank());
 
     retorno.put("total", itens.size());
 
@@ -129,12 +125,10 @@ public class TagService {
   }
 
   public List<TagDTO> buscarPorTitulo(final String titulo, final Integer pagina) {
-    final PageRequest page = PageRequest.of(pagina, MateriaConstants.MAX_INTENS_PER_PAGE,
-        Sort.by("titulo").ascending());
+    final PageRequest page = PageRequest.of(pagina, MateriaConstants.MAX_INTENS_PER_PAGE, Sort.by("titulo").ascending());
     // If ternario
-    return (isNull(titulo) || titulo.isBlank() ? repository.findAll(page)
-        : repository.findByTituloContainingIgnoreCase(titulo, page)).stream().map(convert::convert)
-            .toList();
+    return (isNull(titulo) || titulo.isBlank() ? repository.findAll(page) : repository.findByTituloContainingIgnoreCase(titulo, page)).stream()
+        .map(convert::convert).toList();
 
   }
 

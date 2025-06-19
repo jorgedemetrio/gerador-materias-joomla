@@ -23,7 +23,9 @@ import com.br.sobieskiproducoes.geradormaterias.chatgpt.consumer.response.Repost
 import com.br.sobieskiproducoes.geradormaterias.chatgpt.consumer.response.RepostaThrendsRunnerDTO;
 import com.br.sobieskiproducoes.geradormaterias.chatgpt.consumer.response.RunnerResponseDTO;
 import com.br.sobieskiproducoes.geradormaterias.chatgpt.consumer.response.RunnerStatuEnum;
+import com.br.sobieskiproducoes.geradormaterias.chatgpt.dto.SessaoChatGPTDTO;
 import com.br.sobieskiproducoes.geradormaterias.config.properties.ConfiguracoesProperties;
+import com.br.sobieskiproducoes.geradormaterias.empresa.model.ConfiguracoesEntity;
 
 import lombok.RequiredArgsConstructor;
 
@@ -42,18 +44,32 @@ public class ChatGPTConsumerClient {
   private final RestTemplate restTemplate;
   private final ConfiguracoesProperties properties;
 
-  public RepostaResponseDTO conversar(final PromptRequestDTO dto) {
+  public RepostaResponseDTO conversar(final PromptRequestDTO dto, final SessaoChatGPTDTO sessao) {
     final HttpHeaders headers = new HttpHeaders();
     headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-    headers.setBearerAuth(properties.getChatgpt().getBearer());
-    headers.add(ORGANIZATION, properties.getChatgpt().getOrganization());
+    headers.setBearerAuth(sessao.getConfiguracao().getChatgpt().getBearer());
+    headers.add(ORGANIZATION, sessao.getConfiguracao().getChatgpt().getOrganization());
     headers.add(ASSISTENT, ASSISTENT_VALOR);
     // dto.setAssistantId(properties.getChatgpt().getAssistente());
     final HttpEntity<PromptRequestDTO> httpEntity = new HttpEntity<>(dto, headers);
 
-    final ResponseEntity<RepostaResponseDTO> resposta = restTemplate.exchange(properties.getChatgpt().getUrl(),
-        HttpMethod.POST,
-        httpEntity, RepostaResponseDTO.class);
+    final ResponseEntity<RepostaResponseDTO> resposta = restTemplate.exchange(properties.getChatgpt().getUrl(), HttpMethod.POST, httpEntity,
+        RepostaResponseDTO.class);
+
+    return resposta.getBody();
+  }
+
+  public MensagemPostedResponseDTO conversar(final String pergunta, final SessaoChatGPTDTO sessao) {
+    final HttpHeaders headers = new HttpHeaders();
+    headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+    headers.setBearerAuth(sessao.getConfiguracao().getChatgpt().getBearer());
+    headers.add(ORGANIZATION, sessao.getConfiguracao().getChatgpt().getOrganization());
+    headers.add(ASSISTENT, ASSISTENT_VALOR);
+
+    final HttpEntity<MessageChatGPTDTO> httpEntity = new HttpEntity<>(new MessageChatGPTDTO(properties.getChatgpt().getRoleUser(), pergunta), headers);
+
+    final ResponseEntity<MensagemPostedResponseDTO> resposta = restTemplate
+        .exchange(properties.getChatgpt().getUrlPostarMensagem().formatted(sessao.getThreadId()), HttpMethod.POST, httpEntity, MensagemPostedResponseDTO.class);
 
     return resposta.getBody();
   }
@@ -63,11 +79,11 @@ public class ChatGPTConsumerClient {
    *
    * @return
    */
-  public RepostaThrendsRunnerDTO criarThrend() {
+  public RepostaThrendsRunnerDTO criarThrend(final ConfiguracoesEntity configuracao) {
     final HttpHeaders headers = new HttpHeaders();
     headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
     headers.setContentType(MediaType.APPLICATION_JSON);
-    headers.setBearerAuth(properties.getChatgpt().getBearer());
+    headers.setBearerAuth(configuracao.getChatgpt().getBearer());
     headers.add(ASSISTENT, ASSISTENT_VALOR);
 
     final HttpEntity<Void> httpEntity = new HttpEntity<>(headers);
@@ -78,97 +94,81 @@ public class ChatGPTConsumerClient {
     return resposta.getBody();
   }
 
-  public MensagemPostedResponseDTO conversar(final String pergunta, final String threadId) {
+  public DeleteThreadDTO finalizarThread(final SessaoChatGPTDTO sessao) {
     final HttpHeaders headers = new HttpHeaders();
     headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-    headers.setBearerAuth(properties.getChatgpt().getBearer());
-    headers.add(ORGANIZATION, properties.getChatgpt().getOrganization());
+    headers.setBearerAuth(sessao.getConfiguracao().getChatgpt().getBearer());
+    headers.add(ORGANIZATION, sessao.getConfiguracao().getChatgpt().getOrganization());
     headers.add(ASSISTENT, ASSISTENT_VALOR);
 
-    final HttpEntity<MessageChatGPTDTO> httpEntity = new HttpEntity<>(new MessageChatGPTDTO(properties.getChatgpt().getRoleUser(), pergunta), headers);
+    final HttpEntity<Void> httpEntity = new HttpEntity<>(headers);
 
-    final ResponseEntity<MensagemPostedResponseDTO> resposta = restTemplate.exchange(properties.getChatgpt().getUrlPostarMensagem().formatted(threadId),
-        HttpMethod.POST, httpEntity,
-        MensagemPostedResponseDTO.class);
+    final ResponseEntity<DeleteThreadDTO> resposta = restTemplate.exchange(properties.getChatgpt().getUrlApagarThrend().formatted(sessao.getThreadId()),
+        HttpMethod.DELETE, httpEntity, DeleteThreadDTO.class);
 
     return resposta.getBody();
   }
 
-  public RunnerResponseDTO iniciarChat(final String threadId) {
+  public RunnerResponseDTO iniciarChat(final SessaoChatGPTDTO sessao) {
     final HttpHeaders headers = new HttpHeaders();
     headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-    headers.setBearerAuth(properties.getChatgpt().getBearer());
-    headers.add(ORGANIZATION, properties.getChatgpt().getOrganization());
+    headers.setBearerAuth(sessao.getConfiguracao().getChatgpt().getBearer());
+    headers.add(ORGANIZATION, sessao.getConfiguracao().getChatgpt().getOrganization());
     headers.add(ASSISTENT, ASSISTENT_VALOR);
 
-    final HttpEntity<RunnerRequestDTO> httpEntity = new HttpEntity<>(new RunnerRequestDTO(properties.getChatgpt().getAssistente()), headers);
+    final HttpEntity<RunnerRequestDTO> httpEntity = new HttpEntity<>(new RunnerRequestDTO(sessao.getConfiguracao().getChatgpt().getAssistente()), headers);
 
-    final ResponseEntity<RunnerResponseDTO> resposta = restTemplate.exchange(properties.getChatgpt().getUrlIniciarRun().formatted(threadId),
+    final ResponseEntity<RunnerResponseDTO> resposta = restTemplate.exchange(properties.getChatgpt().getUrlIniciarRun().formatted(sessao.getThreadId()),
         HttpMethod.POST, httpEntity, RunnerResponseDTO.class);
 
     return resposta.getBody();
   }
 
-  public RunnerResponseDTO lerRunner(final String threadId, final String runnerId) {
+  public MensagemPostedResponseDTO lerMensagem(final String mensagemId, final SessaoChatGPTDTO sessao) {
     final HttpHeaders headers = new HttpHeaders();
     headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-    headers.setBearerAuth(properties.getChatgpt().getBearer());
-    headers.add(ORGANIZATION, properties.getChatgpt().getOrganization());
+    headers.setBearerAuth(sessao.getConfiguracao().getChatgpt().getBearer());
+    headers.add(ORGANIZATION, sessao.getConfiguracao().getChatgpt().getOrganization());
     headers.add(ASSISTENT, ASSISTENT_VALOR);
 
     final HttpEntity<Void> httpEntity = new HttpEntity<>(headers);
 
-    final ResponseEntity<RunnerResponseDTO> resposta = restTemplate.exchange(properties.getChatgpt().getUrlLerRunner().formatted(threadId, runnerId),
-        HttpMethod.GET, httpEntity, RunnerResponseDTO.class);
+    final ResponseEntity<MensagemPostedResponseDTO> resposta = restTemplate.exchange(
+        properties.getChatgpt().getUrlLerMensagem().formatted(sessao.getThreadId(), mensagemId), HttpMethod.GET, httpEntity, MensagemPostedResponseDTO.class);
 
     return resposta.getBody();
   }
 
-  public NextStepResponseDTO proximoPasso(final String threadId, final String runnerId, final RunnerStatuEnum status) {
+  public RunnerResponseDTO lerRunner(final String runnerId, final SessaoChatGPTDTO sessao) {
     final HttpHeaders headers = new HttpHeaders();
     headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-    headers.setBearerAuth(properties.getChatgpt().getBearer());
-    headers.add(ORGANIZATION, properties.getChatgpt().getOrganization());
+    headers.setBearerAuth(sessao.getConfiguracao().getChatgpt().getBearer());
+    headers.add(ORGANIZATION, sessao.getConfiguracao().getChatgpt().getOrganization());
     headers.add(ASSISTENT, ASSISTENT_VALOR);
 
     final HttpEntity<Void> httpEntity = new HttpEntity<>(headers);
 
-    final ResponseEntity<NextStepResponseDTO> resposta = restTemplate.exchange(properties.getChatgpt().getUrlAvancarMessage().formatted(threadId, runnerId),
-        HttpMethod.GET, httpEntity, NextStepResponseDTO.class);
+    final ResponseEntity<RunnerResponseDTO> resposta = restTemplate
+        .exchange(properties.getChatgpt().getUrlLerRunner().formatted(sessao.getThreadId(), runnerId), HttpMethod.GET, httpEntity, RunnerResponseDTO.class);
 
-    NextStepResponseDTO retorno = resposta.getBody();
+    return resposta.getBody();
+  }
+
+  public NextStepResponseDTO proximoPasso(final String runnerId, final RunnerStatuEnum status, final SessaoChatGPTDTO sessao) {
+    final HttpHeaders headers = new HttpHeaders();
+    headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+    headers.setBearerAuth(sessao.getConfiguracao().getChatgpt().getBearer());
+    headers.add(ORGANIZATION, sessao.getConfiguracao().getChatgpt().getOrganization());
+    headers.add(ASSISTENT, ASSISTENT_VALOR);
+
+    final HttpEntity<Void> httpEntity = new HttpEntity<>(headers);
+
+    final ResponseEntity<NextStepResponseDTO> resposta = restTemplate.exchange(
+        properties.getChatgpt().getUrlAvancarMessage().formatted(sessao.getThreadId(), runnerId), HttpMethod.GET, httpEntity, NextStepResponseDTO.class);
+
+    final NextStepResponseDTO retorno = resposta.getBody();
     retorno.setStatus(status);
     return retorno;
-  }
-
-  public MensagemPostedResponseDTO lerMensagem(final String threadId, final String mensagemId) {
-    final HttpHeaders headers = new HttpHeaders();
-    headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-    headers.setBearerAuth(properties.getChatgpt().getBearer());
-    headers.add(ORGANIZATION, properties.getChatgpt().getOrganization());
-    headers.add(ASSISTENT, ASSISTENT_VALOR);
-
-    final HttpEntity<Void> httpEntity = new HttpEntity<>(headers);
-
-    final ResponseEntity<MensagemPostedResponseDTO> resposta = restTemplate
-        .exchange(properties.getChatgpt().getUrlLerMensagem().formatted(threadId, mensagemId), HttpMethod.GET, httpEntity, MensagemPostedResponseDTO.class);
-
-    return resposta.getBody();
-  }
-
-  public DeleteThreadDTO finalizarThread(final String threadId) {
-    final HttpHeaders headers = new HttpHeaders();
-    headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-    headers.setBearerAuth(properties.getChatgpt().getBearer());
-    headers.add(ORGANIZATION, properties.getChatgpt().getOrganization());
-    headers.add(ASSISTENT, ASSISTENT_VALOR);
-
-    final HttpEntity<Void> httpEntity = new HttpEntity<>(headers);
-
-    final ResponseEntity<DeleteThreadDTO> resposta = restTemplate.exchange(properties.getChatgpt().getUrlApagarThrend().formatted(threadId), HttpMethod.DELETE,
-        httpEntity, DeleteThreadDTO.class);
-
-    return resposta.getBody();
   }
 
 }

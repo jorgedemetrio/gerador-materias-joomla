@@ -5,11 +5,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.br.sobieskiproducoes</groupId>
-		<artifactId>gerador-materias-joomla</artifactId>
+		<artifactId>gerador-materias</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../</relativePath> <!-- lookup parent from repository -->
 	</parent>
-	<artifactId>gerador-materias-joomla-batch</artifactId>
+	<artifactId>gerador-materias-batch</artifactId>
 
 
 	<name>gerador-materias-joomla-batch</name>

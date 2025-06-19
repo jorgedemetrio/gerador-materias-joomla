@@ -27,9 +27,11 @@ import com.br.sobieskiproducoes.geradormaterias.chatgpt.consumer.response.NextSt
 import com.br.sobieskiproducoes.geradormaterias.chatgpt.consumer.response.NextStepResponseDTO;
 import com.br.sobieskiproducoes.geradormaterias.chatgpt.consumer.response.RepostaResponseDTO;
 import com.br.sobieskiproducoes.geradormaterias.chatgpt.consumer.response.RunnerResponseDTO;
+import com.br.sobieskiproducoes.geradormaterias.chatgpt.dto.SessaoChatGPTDTO;
 import com.br.sobieskiproducoes.geradormaterias.chatgpt.repository.LogDialogoChatGPTRepository;
 import com.br.sobieskiproducoes.geradormaterias.chatgpt.service.convert.ChatGPTConvert;
 import com.br.sobieskiproducoes.geradormaterias.config.properties.ConfiguracoesProperties;
+import com.br.sobieskiproducoes.geradormaterias.empresa.model.ConfiguracoesEntity;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -44,31 +46,72 @@ import lombok.extern.java.Log;
 @Service
 public class ChatGPTService {
 
+  private static final int AGUARDAR = 2000;
   private final ChatGPTConsumerClient client;
   private final ConfiguracoesProperties properties;
   private final LogDialogoChatGPTRepository logDialogoChatGPTRepository;
+
   private final ChatGPTConvert convert;
 
-  private static final int AGUARDAR = 2000;
+  /**
+   * @param runnerResponseDTO
+   * @param chatgptRunnerId
+   * @return
+   * @throws InterruptedException
+   */
+  @SuppressWarnings("static-access")
+  private NextStepResponseDTO existeResposta(RunnerResponseDTO runnerResponseDTO, final String chatgptRunnerId, final SessaoChatGPTDTO sessao)
+      throws InterruptedException {
+    while (!COMPLETED.equals(runnerResponseDTO.getStatus()) && !INCOMPLETO.equals(runnerResponseDTO.getStatus())) {
+      Thread.currentThread().sleep(AGUARDAR);
+      runnerResponseDTO = client.lerRunner(chatgptRunnerId, sessao);
+      if (FAILED.equals(runnerResponseDTO.getStatus())) {
+        log.log(Level.SEVERE, "ERROR [" + runnerResponseDTO.getLastError().getCode() + "]: " + runnerResponseDTO.getLastError().getMessage());
+        return null;
+      }
+    }
 
-  private void gravarLog(final RepostaResponseDTO itensDaMateriaRetornoGPT, final String uuid,
-      final LocalDateTime inicio, final String pergunta) {
+    return client.proximoPasso(chatgptRunnerId, runnerResponseDTO.getStatus(), sessao);
+  }
+
+  public DeleteThreadDTO finalizarThread(final SessaoChatGPTDTO sessao) {
+    return client.finalizarThread(sessao);
+  }
+
+  @SuppressWarnings({ "static-access" })
+  private ArrayList<String> getText(final NextStepResponseDTO nextStepResponseDTO, final SessaoChatGPTDTO sessao) throws Exception {
+    Thread.currentThread().sleep(AGUARDAR);
+    final var respostas = new ArrayList<String>();
+    MensagemPostedResponseDTO mensagemPostedResponseDTO;
+    for (final NextStepDataResponseDTO item : nextStepResponseDTO.getData()) {
+      mensagemPostedResponseDTO = client.lerMensagem(item.getStepDetails().getMessageCreation().getMessageId(), sessao);
+      mensagemPostedResponseDTO.getContent().forEach(n -> respostas.add(n.getText().getValue()));
+    }
+    return respostas;
+
+  }
+
+  private void gravarLog(final RepostaResponseDTO itensDaMateriaRetornoGPT, final String uuid, final LocalDateTime inicio, final String pergunta) {
     try { // Grava o log da consulta.
-      final var logs = itensDaMateriaRetornoGPT.getChoices().stream()
-          .map(choice -> convert.convert(itensDaMateriaRetornoGPT, choice, inicio, pergunta, uuid)).toList();
+      final var logs = itensDaMateriaRetornoGPT.getChoices().stream().map(choice -> convert.convert(itensDaMateriaRetornoGPT, choice, inicio, pergunta, uuid))
+          .toList();
       logs.forEach(logDialogoChatGPTRepository::save);
     } catch (final Exception ex) {
-      log.log(Level.SEVERE, "Falha ao logar mensagens do ChatGPT no banco, mensagem:".concat(pergunta)
-          .concat(". Erro: ").concat(ex.getMessage()), ex);
+      log.log(Level.SEVERE, "Falha ao logar mensagens do ChatGPT no banco, mensagem:".concat(pergunta).concat(". Erro: ").concat(ex.getMessage()), ex);
     }
 
   }
 
-  public RepostaResponseDTO pergunta(final String pergunta, final String uuid, final LocalDateTime inicio) {
+  public String inciarConversa(final ConfiguracoesEntity configuracao) {
+    final var id = client.criarThrend(configuracao).getId();
+    properties.getChatgpt().setThread(id);
+    return id;
+  }
+
+  public RepostaResponseDTO pergunta(final String pergunta, final String uuid, final LocalDateTime inicio, final SessaoChatGPTDTO sessao) {
     log.info("Pergunta feita ao chatGPT: ".concat(pergunta));
     final var resposta = client.conversar(new PromptRequestDTO(properties.getChatgpt().getModel(),
-        Arrays.asList(new MessageChatGPTDTO(properties.getChatgpt().getRoleUser(), pergunta)),
-        properties.getChatgpt().getTemperature()));
+        Arrays.asList(new MessageChatGPTDTO(properties.getChatgpt().getRoleUser(), pergunta)), properties.getChatgpt().getTemperature()), sessao);
 
     log.info("Tokens usados ".concat(" tokens usados ").concat(resposta.getUsage().getTotalTokens().toString()));
 
@@ -78,29 +121,19 @@ public class ChatGPTService {
 
   }
 
-  public String inciarConversa() {
-    final var id = client.criarThrend().getId();
-    properties.getChatgpt().setThread(id);
-    return id;
-  }
-
-  public DeleteThreadDTO finalizarThread() {
-    return client.finalizarThread(properties.getChatgpt().getThread());
-  }
-
   @SuppressWarnings("static-access")
-  public List<String> perguntarAssistente(final String pergunta, final String uuid, final LocalDateTime inicio)
+  public List<String> perguntarAssistente(final String pergunta, final String uuid, final LocalDateTime inicio, final SessaoChatGPTDTO sessao)
       throws Exception {
     final var inicioProcesso = Instant.now();
     final var respostas = new ArrayList<String>();
-    client.conversar(pergunta, properties.getChatgpt().getThread());
+    client.conversar(pergunta, sessao);
 
     log.info("Pergunta feita ao chatGPT: ".concat(pergunta));
 
-    final var runnerResponseDTO = client.iniciarChat(properties.getChatgpt().getThread());
+    final var runnerResponseDTO = client.iniciarChat(sessao);
     final var chatgptRunnerId = runnerResponseDTO.getId();
 
-    var nextStepResponseDTO = existeResposta(runnerResponseDTO, chatgptRunnerId);
+    var nextStepResponseDTO = existeResposta(runnerResponseDTO, chatgptRunnerId, sessao);
     if (isNull(nextStepResponseDTO)) {
       log.info("Voltou vazio");
       return null;
@@ -109,16 +142,15 @@ public class ChatGPTService {
     while (!COMPLETED.equals(nextStepResponseDTO.getData().get(0).getStatus())) {
       Thread.currentThread().sleep(AGUARDAR);
       if (INCOMPLETO.equals(nextStepResponseDTO.getStatus())) {
-        respostas.addAll(getText(nextStepResponseDTO));
-        client.conversar("continue", properties.getChatgpt().getThread());
-        nextStepResponseDTO = existeResposta(runnerResponseDTO, chatgptRunnerId);
+        respostas.addAll(getText(nextStepResponseDTO, sessao));
+        client.conversar("continue", sessao);
+        nextStepResponseDTO = existeResposta(runnerResponseDTO, chatgptRunnerId, sessao);
         if (isNull(nextStepResponseDTO)) {
           log.info("Voltou vazio 2");
           return null;
         }
       }
-      nextStepResponseDTO = client.proximoPasso(properties.getChatgpt().getThread(), chatgptRunnerId,
-          nextStepResponseDTO.getStatus());
+      nextStepResponseDTO = client.proximoPasso(chatgptRunnerId, nextStepResponseDTO.getStatus(), sessao);
       if (isNull(nextStepResponseDTO)) {
         log.info("Voltou vazio 3");
         return null;
@@ -127,44 +159,8 @@ public class ChatGPTService {
     }
 
     log.info("Demora para responder: " + Duration.between(inicioProcesso, Instant.now()).toSeconds());
-    respostas.addAll(getText(nextStepResponseDTO));
+    respostas.addAll(getText(nextStepResponseDTO, sessao));
     return respostas;
-  }
-
-  /**
-   * @param runnerResponseDTO
-   * @param chatgptRunnerId
-   * @return
-   * @throws InterruptedException
-   */
-  @SuppressWarnings("static-access")
-  private NextStepResponseDTO existeResposta(RunnerResponseDTO runnerResponseDTO, final String chatgptRunnerId)
-      throws InterruptedException {
-    while (!COMPLETED.equals(runnerResponseDTO.getStatus()) && !INCOMPLETO.equals(runnerResponseDTO.getStatus())) {
-      Thread.currentThread().sleep(AGUARDAR);
-      runnerResponseDTO = client.lerRunner(properties.getChatgpt().getThread(), chatgptRunnerId);
-      if (FAILED.equals(runnerResponseDTO.getStatus())) {
-        log.log(Level.SEVERE, "ERROR [" + runnerResponseDTO.getLastError().getCode() + "]: "
-            + runnerResponseDTO.getLastError().getMessage());
-        return null;
-      }
-    }
-
-    return client.proximoPasso(properties.getChatgpt().getThread(), chatgptRunnerId, runnerResponseDTO.getStatus());
-  }
-
-  @SuppressWarnings({ "static-access" })
-  private ArrayList<String> getText(final NextStepResponseDTO nextStepResponseDTO) throws Exception {
-    Thread.currentThread().sleep(AGUARDAR);
-    final var respostas = new ArrayList<String>();
-    MensagemPostedResponseDTO mensagemPostedResponseDTO;
-    for (final NextStepDataResponseDTO item : nextStepResponseDTO.getData()) {
-      mensagemPostedResponseDTO = client.lerMensagem(properties.getChatgpt().getThread(),
-          item.getStepDetails().getMessageCreation().getMessageId());
-      mensagemPostedResponseDTO.getContent().forEach(n -> respostas.add(n.getText().getValue()));
-    }
-    return respostas;
-
   }
 
 }

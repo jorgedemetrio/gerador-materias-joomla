@@ -26,7 +26,7 @@ import lombok.ToString;
 @ConfigurationProperties("configuracao")
 public class ConfiguracoesProperties {
   private CargaDadosImagensProperties cargaDadosImagens;
-//  private ChatGPTConfigurationProperties chatgpt;
+  private ChatGPTConfigurationProperties chatgpt;
 //  private JoomlaConfigurationProperties joomla;
 //  private YoutubeConfigurationProperties youtube;
   private SerperProperties serper;

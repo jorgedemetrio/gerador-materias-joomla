@@ -113,8 +113,9 @@ spring:
 
 
 configuracao:
-	serper:
-		key: XXXXXXXXXXXXX
+  serper:
+    bearer: XXXXXXXXXXXXX
+		search: https://google.serper.dev/search
   batch:
     gerar-materia: 
       delay: 3000000

@@ -5,11 +5,15 @@ package com.br.sobieskiproducoes.geradormaterias.empresa.model;
 
 import java.util.List;
 
+import com.br.sobieskiproducoes.geradormaterias.usuario.model.UsuarioEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -30,7 +34,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "tbl_configuracao_joomla")
+@Table(name = "tbl_empresa")
 public class EmpresaEntity {
 
   @Id
@@ -49,5 +53,9 @@ public class EmpresaEntity {
 
   @OneToMany(mappedBy = "empresa")
   private List<ConfiguracoesEntity> configuracoes;
+
+  @ManyToOne
+  @JoinColumn(name = "id_usuario", nullable = true, insertable = true, updatable = true, unique = false)
+  private UsuarioEntity usuario;
 
 }

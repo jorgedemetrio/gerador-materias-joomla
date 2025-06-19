@@ -11,15 +11,15 @@
 	</parent>
 	
 	<groupId>com.br.sobieskiproducoes</groupId>
-	<artifactId>gerador-materias-joomla</artifactId>
+	<artifactId>gerador-materias</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>gerador-materias-joomla</name>
-	<description>Gerador de matérias com ChatGPT / Joomla</description>
+	<name>gerador-materias</name>
+	<description>Gerador de matérias com ChatGPT </description>
 	<packaging>pom</packaging>
 	
 	<modules>
-		<module>gerador-materias-joomla-api</module>
-		<module>gerador-materias-joomla-batch</module>
+		<module>gerador-materias-api</module>
+		<module>gerador-materias-batch</module>
 	</modules>
 	<properties>
 		<java.version>17</java.version>
@@ -36,7 +36,7 @@
 		<dependencies>
 			<dependency>	
 				<groupId>${project.groupId}</groupId>
-				<artifactId>gerador-materias-joomla-api</artifactId>
+				<artifactId>gerador-materias-api</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>

@@ -118,7 +118,7 @@ public class MateriaEntity {
   private CategoriaEntity categoria;
 
   @ManyToMany(cascade = CascadeType.ALL)
-  @JoinTable(joinColumns = { @JoinColumn(name = "id_categoria", table = "tbl_materia_tag") })
+  @JoinTable(joinColumns = { @JoinColumn(name = "id_tag", table = "tbl_materia_tag") })
   private List<TagEntity> tags;
 
   @OneToMany(cascade = CascadeType.ALL)
