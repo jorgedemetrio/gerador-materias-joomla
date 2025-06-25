@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.br.sobieskiproducoes.geradormaterias.cargaemmassa.controller.dto.RequisicaoCaragMassaDTO;
 import com.br.sobieskiproducoes.geradormaterias.cargaemmassa.model.CargaMassaEntity;
 import com.br.sobieskiproducoes.geradormaterias.cargaemmassa.repository.CargaMassaRepository;
+import com.br.sobieskiproducoes.geradormaterias.chatgpt.dto.SessaoChatGPTDTO;
 import com.br.sobieskiproducoes.geradormaterias.dto.StatusProcessamentoEnum;
 import com.br.sobieskiproducoes.geradormaterias.mapaperguntas.controller.dto.MapaPerguntaDTO;
 import com.br.sobieskiproducoes.geradormaterias.mapaperguntas.service.GerarMapaPerguntasService;
@@ -36,11 +37,11 @@ public class CargaMateriaEmMassaService {
   private final CargaMassaRepository repository;
   private final ObjectMapper objectMapper;
 
-  public List<MapaPerguntaDTO> processar(final RequisicaoCaragMassaDTO request) throws Exception {
+  public List<MapaPerguntaDTO> processar(final RequisicaoCaragMassaDTO request, final SessaoChatGPTDTO sessao) throws Exception {
 
     log.info("Inicio processamento ".concat(LocalDateTime.now().toString()));
     final String uuid = UUID.randomUUID().toString();
-    final List<MapaPerguntaDTO> itens = gerarMapaPerguntasService.gerarMapa(request.getIdeias(), uuid);
+    final List<MapaPerguntaDTO> itens = gerarMapaPerguntasService.gerarMapa(request.getIdeias(), uuid, sessao);
 
     try {
       repository.save(new CargaMassaEntity(null, uuid, StatusProcessamentoEnum.PROCESSAR,

@@ -3,6 +3,10 @@
  */
 package com.br.sobieskiproducoes.geradormaterias.empresa.model;
 
+import java.util.List;
+
+import com.br.sobieskiproducoes.geradormaterias.materia.model.MateriaEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -52,4 +56,7 @@ public class ConfiguracoesEntity {
   @ManyToOne
   @JoinColumn(name = "id_empresa", insertable = true, updatable = true, nullable = false, unique = false)
   private EmpresaEntity empresa;
+
+  @OneToMany(mappedBy = "configuracao")
+  private List<MateriaEntity> materias;
 }

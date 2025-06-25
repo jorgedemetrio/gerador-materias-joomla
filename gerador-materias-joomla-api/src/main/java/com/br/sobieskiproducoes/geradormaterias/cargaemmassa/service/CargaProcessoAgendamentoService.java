@@ -56,7 +56,7 @@ public class CargaProcessoAgendamentoService {
             }
           } else {
             cargaMassaEntity.setStatus(StatusProcessamentoEnum.ERRO);
-            cargaMassaEntity.setNota("Errop em um processamento interno. ");
+            cargaMassaEntity.setNota("Erro em um processamento interno. ");
           }
         } catch (final Exception e) {
           cargaMassaEntity.setStatus(StatusProcessamentoEnum.ERRO);
@@ -75,7 +75,7 @@ public class CargaProcessoAgendamentoService {
   public void processarPublicacaoMateria() {
     try {
 
-      processamentoPublicarMateriasService.processar();
+      processamentoPublicarMateriasService.processarPublicacaoMateria();
     } catch (final Throwable e) {
       log.log(Level.SEVERE, e.getLocalizedMessage(), e.getCause());
     }

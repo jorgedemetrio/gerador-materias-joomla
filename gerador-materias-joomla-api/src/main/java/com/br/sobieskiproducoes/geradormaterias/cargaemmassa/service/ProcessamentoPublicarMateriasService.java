@@ -10,9 +10,13 @@ import java.util.List;
 import java.util.logging.Level;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.br.sobieskiproducoes.geradormaterias.config.properties.ConfiguracoesProperties;
 import com.br.sobieskiproducoes.geradormaterias.dto.StatusProcessamentoEnum;
+import com.br.sobieskiproducoes.geradormaterias.empresa.model.ConfiguracoesEntity;
+import com.br.sobieskiproducoes.geradormaterias.empresa.model.JoomlaConfigurationEntity;
+import com.br.sobieskiproducoes.geradormaterias.empresa.repository.ConfiguracoesRepository;
 import com.br.sobieskiproducoes.geradormaterias.materia.exception.BusinessException;
 import com.br.sobieskiproducoes.geradormaterias.materia.model.MateriaEntity;
 import com.br.sobieskiproducoes.geradormaterias.materia.repository.MateriaRepository;
@@ -21,7 +25,6 @@ import com.br.sobieskiproducoes.geradormaterias.materia.service.MateriaJoomlaSer
 import com.br.sobieskiproducoes.geradormaterias.materia.service.TagService;
 import com.br.sobieskiproducoes.geradormaterias.utils.MateriaUtils;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
@@ -39,20 +42,7 @@ public class ProcessamentoPublicarMateriasService {
   private final MateriaRepository materiaRepository;
   private final CategoriaService categoriaService;
   private final TagService tagService;
-
-  @Transactional
-  public void processar() throws BusinessException {
-    log.info("Atualizando banco com informações do Joomla");
-    final List<MateriaEntity> materias = materiaRepository.buscarMateriasPublicar();
-    if (nonNull(materias) && !materias.isEmpty()) {
-      categoriaService.atualizarBancoCategoria();
-      tagService.atualizarBancoTag();
-    }
-    for (final MateriaEntity materiaEntity : materias) {
-      processarMateriaNoJoomla(materiaEntity);
-    }
-
-  }
+  private final ConfiguracoesRepository configurationRepository;
 
   /**
    * @param data
@@ -60,26 +50,39 @@ public class ProcessamentoPublicarMateriasService {
    * @param materia
    * @throws BusinessException
    */
-  private void processarMateriaNoJoomla(final MateriaEntity materiaEntity)
-      throws BusinessException {
+  private void processarMateriaNoJoomla(final MateriaEntity materiaEntity, final JoomlaConfigurationEntity config) throws BusinessException {
     if (StatusProcessamentoEnum.PROCESSADO.equals(materiaEntity.getStatus())) {
       return;
     }
     try {
-      new File(properties.getCargaDadosImagens().getImagens().getPastaImagemMaterias()
-          .concat(MateriaUtils.pathCategoria(materiaEntity.getCategoria()))).mkdirs();
+      new File(properties.getCargaDadosImagens().getImagens().getPastaImagemMaterias().concat(MateriaUtils.pathCategoria(materiaEntity.getCategoria())))
+          .mkdirs();
     } catch (final Exception ex) {
       log.log(Level.SEVERE, "Erro ao criar a pasta da materia : ".concat(materiaEntity.getId().toString()), ex);
     }
-    if (nonNull(materiaJoomlaService.publicarMateriaJoomla(materiaEntity))) {
+    if (nonNull(materiaJoomlaService.publicarMateriaJoomla(materiaEntity, config))) {
       log.info("Publicado a materia :" + materiaEntity.getIdJoomla());
-//      erroInterno = true;
-//    } else {
-//      final DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-//      def.setPropagationBehavior(DefaultTransactionDefinition.PROPAGATION_REQUIRES_NEW);
-//      transactionManager.commit(transactionManager.getTransaction(def));
     }
 
+  }
+
+  @Transactional
+  public void processarPublicacaoMateria() throws BusinessException {
+    log.info("Atualizando banco com informações do Joomla");
+
+    final List<ConfiguracoesEntity> lista = configurationRepository.buscaConfiguracoesComMateriasAPublicar();
+    for (final ConfiguracoesEntity configuracoesEntity : lista) {
+      if (nonNull(configuracoesEntity.getJoomla())) {
+        final List<MateriaEntity> materias = materiaRepository.buscarMateriasPublicar(configuracoesEntity.getId());
+        if (nonNull(materias) && !materias.isEmpty()) {
+          categoriaService.atualizarBancoCategoria(configuracoesEntity.getJoomla());
+          tagService.atualizarBancoTag(configuracoesEntity.getJoomla());
+        }
+        for (final MateriaEntity materiaEntity : materias) {
+          processarMateriaNoJoomla(materiaEntity, configuracoesEntity.getJoomla());
+        }
+      }
+    }
   }
 
 }

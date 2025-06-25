@@ -30,18 +30,18 @@ public interface MateriaRepository extends JpaRepository<MateriaEntity, Long> {
        AND m.materia IS NOT NULL \
        AND m.idJoomla IS NULL \
        AND (m.publicar >= now() OR m.publicar is null)
+       AND m.configuracao.id = :idConfiguracao
        ORDER BY m.publicar
-       LIMIT 15 """) //
-  List<MateriaEntity> buscarMateriasPublicar();
+       LIMIT 15 """)
+  List<MateriaEntity> buscarMateriasPublicar(@Param("idConfiguracao") Long idConfiguracao);
+
+  @Query(name = "MateriaRepository.buscarMateriaVazias", value = "SELECT m FROM MateriaEntity AS m WHERE m.materia IS NULL ")
+  Page<MateriaEntity> buscarMateriaVazias(Pageable page);
 
   @Query(name = "MateriaRepository.buscarPorPergunta", value = "SELECT m FROM MateriaEntity AS m JOIN m.peguntaPrincipal AS p WHERE p.id = :id")
   Optional<MateriaEntity> buscarPorPergunta(@Param("id") Long id);
 
-
   Optional<MateriaEntity> findByIdJoomla(@Param("idJoomla") Long idJoomla);
-
-  @Query(name = "MateriaRepository.buscarMateriaVazias", value = "SELECT m FROM MateriaEntity AS m WHERE m.materia IS NULL ")
-  Page<MateriaEntity> buscarMateriaVazias(Pageable page);
 
   @Query(name = "MapaPerguntaRepository.totalAProcessar", value = "SELECT max(data_publicar) FROM tbl_materia AS m "
       + " WHERE uuid_requisicao =:uuid AND TIME_FORMAT(data_publicar, '%H:%i') = :hora", nativeQuery = true)

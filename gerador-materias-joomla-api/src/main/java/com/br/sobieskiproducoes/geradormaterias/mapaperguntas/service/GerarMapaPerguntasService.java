@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.br.sobieskiproducoes.geradormaterias.chatgpt.dto.SessaoChatGPTDTO;
 import com.br.sobieskiproducoes.geradormaterias.chatgpt.service.ChatGPTService;
 import com.br.sobieskiproducoes.geradormaterias.config.properties.ChatGPTProperties;
 import com.br.sobieskiproducoes.geradormaterias.mapaperguntas.controller.dto.MapaPerguntaDTO;
@@ -98,10 +99,10 @@ public class GerarMapaPerguntasService {
       List<MapaPerguntaRetornoChatGPTDTO> itens = null;
 
       if (content.contains("\"questions\":")) {
-        List<QuestionsDTO> itensTMP = objectMapper.readValue(content, new TypeReference<List<QuestionsDTO>>() {
+        final List<QuestionsDTO> itensTMP = objectMapper.readValue(content, new TypeReference<List<QuestionsDTO>>() {
         });
         itens = new ArrayList<>();
-        for (QuestionsDTO questionsDTO : itensTMP) {
+        for (final QuestionsDTO questionsDTO : itensTMP) {
           itens.addAll(questionsDTO.getQuestions());
         }
       } else {
@@ -137,12 +138,12 @@ public class GerarMapaPerguntasService {
   }
 
   @Transactional
-  public List<MapaPerguntaDTO> gerarMapa(final RequisitaPerguntasDTO request) throws Exception {
-    return gerarMapa(request, UUID.randomUUID().toString());
+  public List<MapaPerguntaDTO> gerarMapa(final RequisitaPerguntasDTO request, final SessaoChatGPTDTO sessao) throws Exception {
+    return gerarMapa(request, UUID.randomUUID().toString(), sessao);
   }
 
   @Transactional
-  public List<MapaPerguntaDTO> gerarMapa(final RequisitaPerguntasDTO request, final String uuid) throws Exception {
+  public List<MapaPerguntaDTO> gerarMapa(final RequisitaPerguntasDTO request, final String uuid, final SessaoChatGPTDTO sessao) throws Exception {
 
     int processar = 0;
 
@@ -158,19 +159,19 @@ public class GerarMapaPerguntasService {
     final List<MapaPerguntaEntity> itens = new ArrayList<>();
 //    final List<MessageChatGPTDTO> perguntasChatGPTDTOs = new ArrayList<>();
 
-    String mes = nonNull(request.getMes()) ? request.getMes().toString()
+    final String mes = nonNull(request.getMes()) ? request.getMes().toString()
         : LocalDateTime.now().getMonth().getDisplayName(TextStyle.FULL, Locale.forLanguageTag("pt-BR"));
 
-    String conhecimento = String.join(", ", chatGPTProperties.getEspecialista()).trim();
-    String termos = String.join(", ", request.getTermos()).trim().toLowerCase();
+    final String conhecimento = String.join(", ", chatGPTProperties.getEspecialista()).trim();
+    final String termos = String.join(", ", request.getTermos()).trim().toLowerCase();
 
-    List<CategoriaEntity> categorias = nonNull(request.getCategorias()) && !request.getCategorias().isEmpty()
+    final List<CategoriaEntity> categorias = nonNull(request.getCategorias()) && !request.getCategorias().isEmpty()
         ? categoriaRepository.findAllById(request.getCategorias())
         : categoriaRepository.categoriasParaPrompt();
 
-    String categoriasJson = "[" + categorias.stream().filter(Objects::nonNull).map(this::converterCategoria).collect(Collectors.joining(", ")) + "]";
+    final String categoriasJson = "[" + categorias.stream().filter(Objects::nonNull).map(this::converterCategoria).collect(Collectors.joining(", ")) + "]";
 
-    String audiencias = nonNull(request.getAudiencias()) && !request.getAudiencias().isEmpty()
+    final String audiencias = nonNull(request.getAudiencias()) && !request.getAudiencias().isEmpty()
         ? request.getAudiencias().stream().map(n -> n.trim().toLowerCase()).collect(Collectors.joining(", "))
         : chatGPTProperties.getAudiencias().stream().map(n -> n.trim().toLowerCase()).collect(Collectors.joining(", "));
 
@@ -190,7 +191,7 @@ public class GerarMapaPerguntasService {
       perguntaParaGerarPerguntas = chatGPTProperties.getPrompts().getPedirPerguntas().formatted(chatGPTProperties.getSite(), categoriasJson, conhecimento,
           audiencias, Integer.valueOf(processar), mes, contador == 0 ? "" : chatGPTProperties.getPrompts().getPedirDadosMateriaSeguinte(), termos);
 
-      repostaMapaPerguntas = chatgpt.perguntarAssistente(perguntaParaGerarPerguntas, uuid, inicio);
+      repostaMapaPerguntas = chatgpt.perguntarAssistente(perguntaParaGerarPerguntas, uuid, inicio, sessao);
 
       if (nonNull(repostaMapaPerguntas)) {
 

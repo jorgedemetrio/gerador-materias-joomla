@@ -26,6 +26,7 @@ import org.springframework.validation.annotation.Validated;
 
 import com.aspose.html.converters.Converter;
 import com.br.sobieskiproducoes.geradormaterias.cargaemmassa.repository.CargaMassaRepository;
+import com.br.sobieskiproducoes.geradormaterias.chatgpt.dto.SessaoChatGPTDTO;
 import com.br.sobieskiproducoes.geradormaterias.chatgpt.service.ChatGPTService;
 import com.br.sobieskiproducoes.geradormaterias.config.properties.ChatGPTProperties;
 import com.br.sobieskiproducoes.geradormaterias.dto.StatusProcessamentoEnum;
@@ -106,8 +107,8 @@ public class GerarMateriaPorMataService {
   }
 
   @Transactional
-  public List<PropostaMateriaDTO> gerarSugestaoMateria(@Validated final SugerirMateriaDTO request) throws Exception {
-    return gerarSugestaoMateria(request, UUID.randomUUID().toString(), null);
+  public List<PropostaMateriaDTO> gerarSugestaoMateria(@Validated final SugerirMateriaDTO request, final SessaoChatGPTDTO sessao) throws Exception {
+    return gerarSugestaoMateria(request, UUID.randomUUID().toString(), null, sessao);
   }
 
   /**
@@ -118,8 +119,8 @@ public class GerarMateriaPorMataService {
    * @throws Exception
    */
   @Transactional
-  public List<PropostaMateriaDTO> gerarSugestaoMateria(@Validated final SugerirMateriaDTO request, final String uuid, final Long idMapaProcessamento)
-      throws Exception {
+  public List<PropostaMateriaDTO> gerarSugestaoMateria(@Validated final SugerirMateriaDTO request, final String uuid, final Long idMapaProcessamento,
+      final SessaoChatGPTDTO sessao) throws Exception {
     /**************************************
      **************************************
      *
@@ -160,7 +161,7 @@ public class GerarMateriaPorMataService {
      **************************************
      */
 
-    final var itensDaMateriaRetornoGPT = chatgptService.perguntarAssistente(perguntaDadosMateria, uuid, inicio);
+    final var itensDaMateriaRetornoGPT = chatgptService.perguntarAssistente(perguntaDadosMateria, uuid, inicio, sessao);
     if (isNull(itensDaMateriaRetornoGPT)) {
       return null;
     }
@@ -196,7 +197,7 @@ public class GerarMateriaPorMataService {
     String materia = null;
     final List<PropostaMateriaDTO> propostasRetorno = new ArrayList<>();
     try {
-      materia = gerarTextoMateria(perguntaMateria, uuid, inicio, 0);
+      materia = gerarTextoMateria(perguntaMateria, uuid, inicio, 0, sessao);
       var itemSalvar = propostaMateriaDTO;
       itemSalvar = convert.copy(itemSalvar, uuid, materia);
       if (nonNull(itemSalvar)) {
@@ -219,10 +220,11 @@ public class GerarMateriaPorMataService {
    * @return
    * @throws IOException
    */
-  private String gerarTextoMateria(final String perguntaMateria, final String uuid, final LocalDateTime inicio, int tentativas) throws Exception {
+  private String gerarTextoMateria(final String perguntaMateria, final String uuid, final LocalDateTime inicio, int tentativas, final SessaoChatGPTDTO sessao)
+      throws Exception {
     String materia = null;
     log.info("Gerando texto materia tentativa: " + tentativas);
-    final var materiaRetornoGPT = chatgptService.perguntarAssistente(perguntaMateria, uuid, inicio);
+    final var materiaRetornoGPT = chatgptService.perguntarAssistente(perguntaMateria, uuid, inicio, sessao);
 
     if (nonNull(materiaRetornoGPT) && !materiaRetornoGPT.isEmpty()) {
       // Pega o ultimo registro da array.
@@ -233,8 +235,8 @@ public class GerarMateriaPorMataService {
       materia = convertMarkdownToHtml(materia);
     }
     if (tentativas >= 3) {
-      log.info(
-          "Motivo de não gerar a matéria: " + chatgptService.perguntarAssistente("Porque não pode gerar o texto que pedi?", uuid, inicio).get(0) + "\n\n\n");
+      log.info("Motivo de não gerar a matéria: " + chatgptService.perguntarAssistente("Porque não pode gerar o texto que pedi?", uuid, inicio, sessao).get(0)
+          + "\n\n\n");
     }
     // Se materia for null ele tenta 3 vezes
 
@@ -243,7 +245,7 @@ public class GerarMateriaPorMataService {
     }
     if (tentativas < 3) {
       tentativas++;
-      return gerarTextoMateria(perguntaMateria, uuid, inicio, tentativas);
+      return gerarTextoMateria(perguntaMateria, uuid, inicio, tentativas, sessao);
     }
 
     return null;
