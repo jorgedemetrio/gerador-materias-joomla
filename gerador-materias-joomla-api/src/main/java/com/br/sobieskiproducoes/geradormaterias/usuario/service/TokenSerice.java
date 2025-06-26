@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.br.sobieskiproducoes.geradormaterias.config.properties.ConfiguracoesProperties;
+import com.br.sobieskiproducoes.geradormaterias.usuario.dto.TokenSessionDTO;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
@@ -26,11 +27,14 @@ public class TokenSerice {
     @Value("${app.name}")
     private String APP_NAME;
 
-    public String gerarToken(@NotEmpty final String usuario) {
+    public TokenSessionDTO gerarToken(@NotEmpty final String usuario) {
         try {
 //            final Algorithm algorithm = Algorithm.HMAC256(properties.getChaveToken());
 
-            return JWT.create().withIssuer(APP_NAME).withSubject(usuario).withExpiresAt(getInstant()).sign(algorithm);
+            Instant instante = getInstant();
+
+            return new TokenSessionDTO(JWT.create().withIssuer(APP_NAME).withSubject(usuario).withExpiresAt(instante).sign(algorithm), instante,
+                    properties.getTimeOutToken());
 
         } catch (final Exception ex) {
             log.log(Level.SEVERE, "[ERROR] TokenSerice#gerarToken " + ex.getLocalizedMessage(), ex.getCause());

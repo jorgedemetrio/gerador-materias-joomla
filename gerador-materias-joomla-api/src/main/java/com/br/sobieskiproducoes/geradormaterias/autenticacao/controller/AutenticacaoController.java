@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.br.sobieskiproducoes.geradormaterias.autenticacao.dto.LoginDTO;
+import com.br.sobieskiproducoes.geradormaterias.usuario.dto.TokenSessionDTO;
 import com.br.sobieskiproducoes.geradormaterias.usuario.service.UsuarioService;
 
 import jakarta.validation.Valid;
@@ -31,7 +32,7 @@ public class AutenticacaoController {
     private final UsuarioService service;
 
     @PostMapping("/login")
-    public ResponseEntity<org.springframework.security.core.Authentication> login(@RequestBody @Valid final LoginDTO login) {
+    public ResponseEntity<TokenSessionDTO> login(@RequestBody @Valid final LoginDTO login) {
 
         return ResponseEntity.ok(service.login(login.username(), login.password()));
     }
