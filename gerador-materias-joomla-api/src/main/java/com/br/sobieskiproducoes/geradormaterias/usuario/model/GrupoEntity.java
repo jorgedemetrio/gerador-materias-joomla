@@ -34,17 +34,17 @@ import lombok.ToString;
 @Table(name = "tbl_grupo_usuario")
 public class GrupoEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.UUID)
-  @Column(name = "id")
-  private String id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id")
+    private String id;
 
-  @Column(name = "nome", nullable = false, insertable = true, updatable = false, unique = true, length = 255)
-  private String nome;
+    @Column(name = "nome", nullable = false, insertable = true, updatable = false, unique = true, length = 255)
+    private String nome;
 
-  @ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "grupos")
-  private List<UsuarioEntity> usuarios;
+    @ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "grupos")
+    private List<UsuarioEntity> usuarios;
 
-  @ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "grupos")
-  private List<PermissaoEntity> permissoes;
+    @ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "grupos")
+    private List<PermissaoEntity> permissoes;
 }

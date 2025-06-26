@@ -11,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,35 +28,36 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(of = "username")
 public class UsuarioSistemaDTO implements UserDetails {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 7246234048956347098L;
-  private String name;
-  private String username;
-  private String password;
-  private Boolean enabled;
-  private LocalDateTime expira;
-  private Collection<GrantedAuthority> authorities;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 7246234048956347098L;
+    private String name;
+    private String username;
+    private String password;
+    private Boolean enabled;
+    private LocalDateTime expira;
+    private Collection<? extends GrantedAuthority> authorities;
 
-  @Override
-  public boolean isAccountNonExpired() {
-    return Objects.nonNull(expira) || expira.isBefore(LocalDateTime.now());
-  }
+    @Override
+    public boolean isAccountNonExpired() {
+        return Objects.nonNull(expira) || expira.isBefore(LocalDateTime.now());
+    }
 
-  @Override
-  public boolean isAccountNonLocked() {
-    return false;
-  }
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
 
-  @Override
-  public boolean isCredentialsNonExpired() {
-    return false;
-  }
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
 
-  @Override
-  public boolean isEnabled() {
-    return Objects.nonNull(enabled) && enabled.booleanValue();
-  }
+    @Override
+    public boolean isEnabled() {
+        return Objects.nonNull(enabled) && enabled.booleanValue();
+    }
 }

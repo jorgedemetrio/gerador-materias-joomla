@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.br.sobieskiproducoes.geradormaterias.materia.controller;
 
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.br.sobieskiproducoes.geradormaterias.materia.service.MateriaService;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
@@ -25,19 +24,17 @@ import lombok.extern.java.Log;
 @Log
 @RequiredArgsConstructor
 @Controller
-@Tag(name = "Matéiras", description = "Realiza todo processo de controle")
 @RequestMapping("/materia")
 public class MateriaController {
 
-  MateriaService service;
+    MateriaService service;
 
-  @GetMapping(params = { "", "/" })
-  public String get(Model model, @RequestAttribute(name = "p") final Integer pagina, final String order) {
-    
-    model.addAttribute("itens", service.buscarMateria(isNull(pagina) ? 0 : pagina, order));
-    
+    @GetMapping(params = { "", "/" })
+    public String get(final Model model, @RequestAttribute(name = "p") final Integer pagina, final String order) {
 
-    return "/index";
-  }
+        model.addAttribute("itens", service.buscarMateria(isNull(pagina) ? 0 : pagina, order));
+
+        return "/index";
+    }
 
 }

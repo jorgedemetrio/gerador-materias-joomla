@@ -48,16 +48,17 @@ public class CargaProcessoAgendamentoService {
           log.info("Inicio de processamento de carga de materia.");
           cargaMassaEntity.setExecutadoInicio(LocalDateTime.now());
           item = objectMapper.readValue(cargaMassaEntity.getRequisicao(), RequisicaoCaragMassaDTO.class);
-          if (processoCriacaoMaterias.iniciarProcesso(item, cargaMassaEntity.getUuid())) {
-            cargaMassaEntity.setStatus(StatusProcessamentoEnum.PROCESSAR);
-            if (mapaPerguntaRepository.totalAProcessar(cargaMassaEntity.getUuid()) <= 0) {
-              cargaMassaEntity.setStatus(StatusProcessamentoEnum.PROCESSADO);
-              cargaMassaEntity.setExecutadoFim(LocalDateTime.now());
-            }
-          } else {
-            cargaMassaEntity.setStatus(StatusProcessamentoEnum.ERRO);
-            cargaMassaEntity.setNota("Erro em um processamento interno. ");
-          }
+//          if (processoCriacaoMaterias.iniciarProcesso(item, cargaMassaEntity.getUuid())) {
+//            cargaMassaEntity.setStatus(StatusProcessamentoEnum.PROCESSAR);
+//            if (mapaPerguntaRepository.totalAProcessar(cargaMassaEntity.getUuid()) <= 0) {
+//              cargaMassaEntity.setStatus(StatusProcessamentoEnum.PROCESSADO);
+//              cargaMassaEntity.setExecutadoFim(LocalDateTime.now());
+//            }
+//          } else {
+//            cargaMassaEntity.setStatus(StatusProcessamentoEnum.ERRO);
+//            cargaMassaEntity.setNota("Erro em um processamento interno. ");
+//          } 
+          //TODO: ARRUMAR AQUI
         } catch (final Exception e) {
           cargaMassaEntity.setStatus(StatusProcessamentoEnum.ERRO);
           cargaMassaEntity.setNota(e.getLocalizedMessage());

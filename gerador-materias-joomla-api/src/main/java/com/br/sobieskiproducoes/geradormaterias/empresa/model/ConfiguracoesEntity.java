@@ -15,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,27 +37,27 @@ import lombok.ToString;
 @Table(name = "tbl_configuracao")
 public class ConfiguracoesEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-  @OneToMany(mappedBy = "configuracao")
-  private ChatGPTPromptsEntity chatgptPrompts;
+    @OneToOne(mappedBy = "configuracao")
+    private ChatGPTPromptsEntity chatgptPrompts;
 
-  @OneToMany(mappedBy = "configuracao")
-  private ChatGPTConfigurationEntity chatgpt;
+    @OneToOne(mappedBy = "configuracao")
+    private ChatGPTConfigurationEntity chatgpt;
 
-  @OneToMany(mappedBy = "configuracao")
-  private JoomlaConfigurationEntity joomla;
+    @OneToOne(mappedBy = "configuracao")
+    private JoomlaConfigurationEntity joomla;
 
-  @OneToMany(mappedBy = "configuracao")
-  private WordPressConfigurationEntity wordpress;
+    @OneToOne(mappedBy = "configuracao")
+    private WordPressConfigurationEntity wordpress;
 
-  @ManyToOne
-  @JoinColumn(name = "id_empresa", insertable = true, updatable = true, nullable = false, unique = false)
-  private EmpresaEntity empresa;
+    @ManyToOne
+    @JoinColumn(name = "id_empresa", insertable = true, updatable = true, nullable = false, unique = false)
+    private EmpresaEntity empresa;
 
-  @OneToMany(mappedBy = "configuracao")
-  private List<MateriaEntity> materias;
+    @OneToMany(mappedBy = "configuracao")
+    private List<MateriaEntity> materias;
 }

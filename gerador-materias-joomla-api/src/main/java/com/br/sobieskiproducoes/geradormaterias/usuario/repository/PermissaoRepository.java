@@ -6,6 +6,7 @@ package com.br.sobieskiproducoes.geradormaterias.usuario.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -19,5 +20,7 @@ import com.br.sobieskiproducoes.geradormaterias.usuario.model.PermissaoEntity;
  */
 @Repository
 public interface PermissaoRepository extends JpaRepository<PermissaoEntity, Long> {
-  List<PermissaoEntity> findByGruposIn(@Param("grupos") String grupos);
+
+    @Query(name = "PermissaoRepository.findByGruposIn", value = "SELECT g FROM PermissaoEntity AS g JOIN g.grupos AS gru WHERE gru.id = :grupo ")
+    List<PermissaoEntity> findByGruposIn(@Param("grupo") String grupo);
 }

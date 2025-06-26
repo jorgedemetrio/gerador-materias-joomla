@@ -37,36 +37,36 @@ import lombok.ToString;
 @Table(name = "tbl_chatgpt_treinamento")
 public class ChatGPTPromptsEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-  @ManyToOne
-  @JoinColumn(name = "id_configuracao", insertable = true, updatable = true, nullable = false, unique = false)
-  private ConfiguracoesEntity configuracao;
+    @ManyToOne
+    @JoinColumn(name = "id_configuracao", insertable = true, updatable = true, nullable = false, unique = false)
+    private ConfiguracoesEntity configuracao;
 
-  @NotNull
-  @Valid
-  @OneToMany(mappedBy = "configuracao")
-  private ChatGPTPerguntasEntity prompts;
+    @NotNull
+    @Valid
+    @OneToMany(mappedBy = "configuracao")
+    private List<ChatGPTPerguntasEntity> prompts;
 
-  @NotEmpty
-  private List<String> audiencias;
+    @NotEmpty
+    private List<String> audiencias;
 
-  @NotNull
-  @NotBlank
-  @Column(name = "site", nullable = false, insertable = true, updatable = true, unique = false, length = 2000)
-  private String site;
+    @NotNull
+    @NotBlank
+    @Column(name = "site", nullable = false, insertable = true, updatable = true, unique = false, length = 2000)
+    private String site;
 
-  @NotNull
-  @NotEmpty
-  private List<String> redesSociais;
+    @NotNull
+    @NotEmpty
+    private List<String> redesSociais;
 
-  @NotNull
-  @NotEmpty
-  private List<String> especialista;
+    @NotNull
+    @NotEmpty
+    private List<String> especialista;
 
-  private List<String> falhas;
+    private List<String> falhas;
 
 }

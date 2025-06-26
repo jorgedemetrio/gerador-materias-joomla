@@ -18,5 +18,5 @@ import com.br.sobieskiproducoes.geradormaterias.usuario.model.UsuarioEntity;
 @Repository
 public interface UsuarioRepository extends JpaRepository<UsuarioEntity, String> {
 
-  UsuarioEntity findByUsuarioIgnoreCase(@Param("usuario") String usuario);
+    UsuarioEntity findByUsuarioIgnoreCase(@Param("usuario") String usuario);
 }

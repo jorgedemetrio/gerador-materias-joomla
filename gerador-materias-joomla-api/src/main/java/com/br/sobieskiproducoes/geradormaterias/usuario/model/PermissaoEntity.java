@@ -36,17 +36,17 @@ import lombok.ToString;
 @Table(name = "tbl_permissao")
 public class PermissaoEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-  @Column(name = "nome", nullable = false, insertable = true, updatable = false, unique = true, length = 255)
-  private String nome;
+    @Column(name = "nome", nullable = false, insertable = true, updatable = false, unique = true, length = 255)
+    private String nome;
 
-  @ManyToMany(cascade = CascadeType.ALL)
-  @JoinTable(name = "tbl_usuario_grupo", inverseJoinColumns = { @JoinColumn(name = "id_permissao", table = "tbl_grupo_permissao") }, joinColumns = {
-      @JoinColumn(name = "id_grupo", table = "tbl_grupo_permissao") })
-  private List<GrupoEntity> grupos;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "tbl_grupo_permissao", inverseJoinColumns = { @JoinColumn(name = "id_grupo", table = "tbl_grupo_permissao") }, joinColumns = {
+            @JoinColumn(name = "id_permissao", table = "tbl_grupo_permissao") })
+    private List<GrupoEntity> grupos;
 
 }

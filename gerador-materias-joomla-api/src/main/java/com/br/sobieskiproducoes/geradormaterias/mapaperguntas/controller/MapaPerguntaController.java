@@ -18,13 +18,6 @@ import com.br.sobieskiproducoes.geradormaterias.mapaperguntas.controller.dto.Map
 import com.br.sobieskiproducoes.geradormaterias.mapaperguntas.controller.dto.RequisitaPerguntasDTO;
 import com.br.sobieskiproducoes.geradormaterias.mapaperguntas.service.GerarMapaPerguntasService;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -37,20 +30,15 @@ import lombok.extern.java.Log;
 @Log
 @RequiredArgsConstructor
 @RestController
-@Tag(name = "Mapa mental de perguntas", description = "Controller Gerenciador de mapas de perguntas  para sugerir matérias")
 @RequestMapping("/mapaperguntas")
 public class MapaPerguntaController {
 
-  private final GerarMapaPerguntasService gerarService;
+    private final GerarMapaPerguntasService gerarService;
 
-  @Operation(summary = "Gerar um mapa de pergunta para poder criar maerias de forma mais tranguila")
-  @ApiResponses({
-      @ApiResponse(responseCode = "200", description = "Lista de Mapas mentas de possiveis perguntas", content = @Content(array = @ArraySchema(schema = @Schema(implementation = MapaPerguntaDTO.class)), mediaType = MediaType.APPLICATION_JSON_VALUE)) })
-  @PostMapping(path = "gerar", produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = {
-      MediaType.APPLICATION_JSON_VALUE })
-  @ResponseBody
-  public ResponseEntity<List<MapaPerguntaDTO>> gerar(@NotNull @Validated @RequestBody final RequisitaPerguntasDTO request) throws Exception {
-    log.info("Gerando perguntas para o site.");
-    return ResponseEntity.ok(gerarService.gerarMapa(request));
-  }
+    @PostMapping(path = "gerar", produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    public ResponseEntity<List<MapaPerguntaDTO>> gerar(@NotNull @Validated @RequestBody final RequisitaPerguntasDTO request) throws Exception {
+        log.info("Gerando perguntas para o site.");
+        return null;// TODO: ARRUMAR AQUI ResponseEntity.ok(gerarService.gerarMapa(request));
+    }
 }

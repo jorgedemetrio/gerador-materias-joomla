@@ -9,6 +9,7 @@ springdoc:
     path: /swagger-ui.html
     operationsSorter: method
 
+
 management:
   health:
     consul:
@@ -52,14 +53,6 @@ management:
         include: openapi, swagger-ui, health
 
 
-
-feign:
-  client:
-    config:
-      default:
-        loggerLevel: FULL
-
-
 http:
   client:
     max-body-size: 20MB
@@ -79,12 +72,8 @@ spring:
       client:
         composite-indicator:
           enabled: false
-    openfeign:
-      client:
-        config:
-          default:
-            loggerLevel: FULL
   flyway:
+    enable: true
     locations: classpath:db/migration
   jpa:
     properties:
@@ -113,9 +102,11 @@ spring:
 
 
 configuracao:
+  chave-token: ${JWT_SECRET:ENC(zX2ip7FVuTTuw194/4UJqoiwnpFZa87JnF5kJJvkHsc/5258mk/ppdsLEbVugK4OUFZkcLybt4vo4R56tuHTAgnl+QoET/RhVVoGEpXiYWtof7x9mOx5jZwaT2zpFrlaN56Z/CFp4htV8CLZz9oIsQuHYVbw9ew2bVCfawkz+YLirsTgbrby39WShzzvEjGMJz5Ef7akOPXxbbBi7NBFBE6Shn0mFgZ9i3yhj0n7+mM=)}
+  timeout-token: 10 #em minutos 
   serper:
     bearer: XXXXXXXXXXXXX
-		search: https://google.serper.dev/search
+    search: https://google.serper.dev/search
   batch:
     gerar-materia: 
       delay: 3000000
@@ -171,6 +162,8 @@ configuracao:
       tamanho-horizontal: 100
       qualidade: 0.9 
 
+app:
+  name: Gerador de Conteudo
 
     
 chatgpt:

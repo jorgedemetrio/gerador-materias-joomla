@@ -37,25 +37,25 @@ import lombok.ToString;
 @Table(name = "tbl_empresa")
 public class EmpresaEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.UUID)
-  @Column(name = "id")
-  private String id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id")
+    private String id;
 
-  @Column(name = "nome", insertable = true, updatable = true, nullable = true, unique = false, length = 250)
-  private String nome;
+    @Column(name = "nome", insertable = true, updatable = true, nullable = true, unique = false, length = 250)
+    private String nome;
 
-  @Column(name = "site", insertable = true, updatable = true, nullable = true, unique = false, length = 250)
-  private String site;
+    @Column(name = "site", insertable = true, updatable = true, nullable = true, unique = false, length = 250)
+    private String site;
 
-  @Column(name = "instagram", insertable = true, updatable = true, nullable = true, unique = false, length = 250)
-  private String istagram;
+    @Column(name = "instagram", insertable = true, updatable = true, nullable = true, unique = false, length = 250)
+    private String istagram;
 
-  @OneToMany(mappedBy = "empresa")
-  private List<ConfiguracoesEntity> configuracoes;
+    @OneToMany(mappedBy = "empresa")
+    private List<ConfiguracoesEntity> configuracoes;
 
-  @ManyToOne
-  @JoinColumn(name = "id_usuario", nullable = true, insertable = true, updatable = true, unique = false)
-  private UsuarioEntity usuario;
+    @ManyToOne
+    @JoinColumn(name = "id_usuario", nullable = true, insertable = true, updatable = true, unique = false)
+    private UsuarioEntity usuario;
 
 }

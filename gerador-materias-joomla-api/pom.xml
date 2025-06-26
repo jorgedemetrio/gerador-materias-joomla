@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>com.br.sobieskiproducoes</groupId>
-		<artifactId>gerador-materias</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../</relativePath> <!-- lookup parent from repository -->
-	</parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.5.3</version>
+    <relativePath/>
+  </parent>
+	
+	
+
+	<groupId>com.br.sobieskiproducoes</groupId>
 	<artifactId>gerador-materias-api</artifactId>
-
-
 	<name>gerador-materias-api</name>
 	<description>Gerador de matérias com ChatGPT</description>
 	<packaging>jar</packaging>
@@ -20,6 +22,13 @@
 		<downloadSources>true</downloadSources>
 		<downloadJavadocs>true</downloadJavadocs>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<spring-cloud.version>2023.0.0</spring-cloud.version>
+		<org.mapstruct.version>1.5.0.Beta2</org.mapstruct.version>
+		<lombok.version>1.18.30</lombok.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<sonar.organization>jorgedemetrio</sonar.organization>
+  		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+	    <spring-ai.version>1.0.0</spring-ai.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -30,22 +39,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-hateoas</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jersey</artifactId>
-		</dependency>
-		<!-- 		<dependency> -->
-		<!-- 			<groupId>org.springframework.boot</groupId> -->
-		<!-- 			<artifactId>spring-boot-starter-security</artifactId> -->
-		<!-- 		</dependency> -->
-    	<dependency>
-      		<groupId>org.springframework.boot</groupId>
-      		<artifactId>spring-boot-starter-security</artifactId>
-    	</dependency>
+ 		<dependency> 
+ 			<groupId>org.springframework.boot</groupId> 
+ 			<artifactId>spring-boot-starter-security</artifactId> 
+ 		</dependency> 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -58,6 +55,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+	    <dependency>
+	        <groupId>com.github.ulisesbocchio</groupId>
+	        <artifactId>jasypt-spring-boot-starter</artifactId>
+	        <version>3.0.5</version> 
+	    </dependency>
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
@@ -65,15 +67,12 @@
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-mysql</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-openfeign</artifactId>
-		</dependency>
-		<!-- 		<dependency> -->
-		<!-- 			<groupId>org.thymeleaf.extras</groupId> -->
-		<!-- 			<artifactId>thymeleaf-extras-springsecurity6</artifactId> -->
-		<!-- 		</dependency> -->
+		</dependency> 
+
+ 		<dependency> 
+ 			<groupId>org.thymeleaf.extras</groupId> 
+ 			<artifactId>thymeleaf-extras-springsecurity6</artifactId> 
+ 		</dependency> 
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -87,45 +86,15 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
+			<groupId>com.aspose</groupId>
+			<artifactId>aspose-html</artifactId>
+			<version>24.1</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.springdoc</groupId>
-			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springdoc</groupId>
-			<artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<!-- 		<dependency> -->
-		<!-- 			<groupId>org.springframework.security</groupId> -->
-		<!-- 			<artifactId>spring-security-test</artifactId> -->
-		<!-- 			<scope>test</scope> -->
-		<!-- 		</dependency> -->
-		<dependency>
-			<groupId>org.awaitility</groupId>
-			<artifactId>awaitility</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mapstruct</groupId>
-			<artifactId>mapstruct</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-cache</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
@@ -137,76 +106,55 @@
 			<artifactId>mockito-junit-jupiter</artifactId>
 			<scope>test</scope>
 		</dependency>
-
-		<!--
-		https://mvnrepository.com/artifact/com.google.api-client/google-api-client -->
+		<dependency>
+		  <groupId>com.auth0</groupId>
+		  <artifactId>java-jwt</artifactId>
+		  <version>4.5.0</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
 		<!--		<dependency>-->
-		<!--			<groupId>com.google.api-client</groupId>-->
-		<!--			<artifactId>google-api-client</artifactId>-->
-		<!--			<version>2.3.0</version>-->
+		<!--			<groupId>org.awaitility</groupId>-->
+		<!--			<artifactId>awaitility</artifactId>-->
+		<!--			<scope>test</scope>-->
 		<!--		</dependency>-->
+	    <dependency>
+	      <groupId>org.springframework.security</groupId>
+	      <artifactId>spring-security-test</artifactId>
+	      <scope>test</scope>
+	    </dependency>
+		
+		
+		
+		
 		<dependency>
-			<groupId>com.google.api-client</groupId>
-			<artifactId>google-api-client</artifactId>
-			<version>1.32.1</version>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+			<version>${org.mapstruct.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.google.oauth-client</groupId>
-			<artifactId>google-oauth-client</artifactId>
-			<version>1.32.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.http-client</groupId>
-			<artifactId>google-http-client</artifactId>
-			<version>1.39.2</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.http-client</groupId>
-			<artifactId>google-http-client-jackson2</artifactId>
-			<version>1.39.2</version>
-		</dependency>
-
-
 		<!--		<dependency>-->
-		<!--			<groupId>com.google.api-client</groupId>-->
-		<!--			<artifactId>google-api-client</artifactId>-->
-		<!--			<version>1.25.0</version>-->
+		<!--			<groupId>org.junit.jupiter</groupId>-->
+		<!--			<artifactId>junit-jupiter-engine</artifactId>-->
+		<!--			<scope>test</scope>-->
 		<!--		</dependency>-->
-		<!-- Google OAuth Client -->
-		<!--		<dependency>-->
-		<!--			<groupId>com.google.oauth-client</groupId>-->
-		<!--			<artifactId>google-oauth-client-jetty</artifactId>-->
-		<!--			<version>1.39.2</version>-->
-		<!--		</dependency>-->
-		<dependency>
-			<groupId>com.google.oauth-client</groupId>
-			<artifactId>google-oauth-client-jetty</artifactId>
-			<version>1.25.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.apis</groupId>
-			<artifactId>google-api-services-youtube</artifactId>
-			<!--			<version>v3-rev232-1.33.0</version>-->
-			<version>v3-rev222-1.25.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.aspose</groupId>
-			<artifactId>aspose-html</artifactId>
-			<version>24.1</version>
-		</dependency>
+
 
 	</dependencies>
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>${spring-cloud.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+	  <dependencyManagement>
+	    <dependencies>
+	      <dependency>
+	        <groupId>org.springframework.ai</groupId>
+	        <artifactId>spring-ai-bom</artifactId>
+	        <version>${spring-ai.version}</version>
+	        <type>pom</type>
+	        <scope>import</scope>
+	      </dependency>
+	    </dependencies>
+	  </dependencyManagement>
 	<repositories>
 		<repository>
 			<id>AsposeJavaAPI</id>
@@ -221,6 +169,11 @@
 	</repositories>
 	<build>
 		<plugins>
+		    <plugin>
+		      <groupId>com.github.ulisesbocchio</groupId>
+		      <artifactId>jasypt-maven-plugin</artifactId>
+		      <version>3.0.5</version>
+		    </plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>

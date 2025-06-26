@@ -19,13 +19,6 @@ import com.br.sobieskiproducoes.geradormaterias.cargaemmassa.controller.dto.Requ
 import com.br.sobieskiproducoes.geradormaterias.cargaemmassa.service.CargaMateriaEmMassaService;
 import com.br.sobieskiproducoes.geradormaterias.mapaperguntas.controller.dto.MapaPerguntaDTO;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -38,30 +31,24 @@ import lombok.extern.java.Log;
 @Log
 @RequiredArgsConstructor
 @RestController
-@Tag(name = "Carga em Massa de Matérias", description = "Esses serviços disponiveis servem para fazer carga de matérias automáticas sobre o Joomla")
 @RequestMapping("/carga-materia-massa")
 public class CargaMateriaEmMassaController {
 
-  private final CargaMateriaEmMassaService service;
+    private final CargaMateriaEmMassaService service;
 
-  @Operation(summary = "Subir matérias novas no Joomla.")
-  @ApiResponses({
-      @ApiResponse(responseCode = "200", description = "Processado com sucesso", content = @Content(array = @ArraySchema(schema = @Schema(implementation = String.class)), mediaType = MediaType.APPLICATION_JSON_VALUE)) })
-  @PostMapping(path = "processar", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
-      MediaType.APPLICATION_JSON_VALUE })
-  @ResponseBody
-  public ResponseEntity<List<MapaPerguntaDTO>> processar(
-      @NotNull @Validated @RequestBody final RequisicaoCaragMassaDTO request) {
+    @PostMapping(path = "processar", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    public ResponseEntity<List<MapaPerguntaDTO>> processar(@NotNull @Validated @RequestBody final RequisicaoCaragMassaDTO request) {
 
-    log.info("Inicio de processamento de em massa com dados: ".concat(request.toString()));
+        log.info("Inicio de processamento de em massa com dados: ".concat(request.toString()));
 
-    try {
-      return ResponseEntity.ok(service.processar(request));
-    } catch (final Exception ex) {
-      log.log(Level.SEVERE, ex.getMessage(), ex);
-      return ResponseEntity.internalServerError().build();
+        try {
+            return null;// TODO: ARRUMAR AQUI ResponseEntity.ok(service.processar(request));
+        } catch (final Exception ex) {
+            log.log(Level.SEVERE, ex.getMessage(), ex);
+            return ResponseEntity.internalServerError().build();
+        }
+
     }
-
-  }
 
 }

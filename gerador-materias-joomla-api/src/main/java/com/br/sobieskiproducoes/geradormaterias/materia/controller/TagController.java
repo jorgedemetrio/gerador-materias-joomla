@@ -26,13 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.br.sobieskiproducoes.geradormaterias.materia.controller.dto.TagDTO;
 import com.br.sobieskiproducoes.geradormaterias.materia.service.TagService;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -45,90 +38,65 @@ import lombok.extern.java.Log;
 @Log
 @RequiredArgsConstructor
 @RestController()
-@Tag(name = "Tag da matéria", description = "Controller Gerenciador das Tags das Matérias ")
 @RequestMapping("/tag")
 public class TagController {
 
-  private final TagService service;
+    private final TagService service;
 
-  @Operation(summary = "Recarrega as categorias no banco de dados tirando do Joomla")
-  @ApiResponses({
-      @ApiResponse(responseCode = "200", description = "Processado com sucesso") })
-  @RequestMapping(method = RequestMethod.PATCH, path = "recarregar", produces = { MediaType.APPLICATION_JSON_VALUE })
-  @ResponseBody
-  public ResponseEntity<Map<String, Integer>> atualizar() {
-    log.info("Inicio de processamento de recarga de Categoriaso Joomla");
-    return ResponseEntity.ok(service.atualizarBancoTag());
-  }
-
-  @Operation(summary = "Busca lisda de Tag filtrando por titulo.")
-  @ApiResponses({ @ApiResponse(responseCode = "202", description = "Apagado com sucesso."),
-      @ApiResponse(responseCode = "202", description = "Gravado com sucesso."),
-      @ApiResponse(responseCode = "404", description = "Registro não encontrado.") })
-  @PutMapping(path = "/{id}/update", consumes =
-      { MediaType.APPLICATION_JSON_VALUE })
-  @ResponseBody
-  private ResponseEntity<?> atualizar(@NotNull @PathVariable(name = "id", required = false) final Long id,
-      @NotNull @Validated @RequestBody final TagDTO tag) {
-    final TagDTO tagBusca = service.buscarPorId(id);
-    if (isNull(tagBusca)) {
-      log.info("A atualizar não achou a TAG com o id:".concat(id.toString()));
-      return ResponseEntity.notFound().build();
+    @RequestMapping(method = RequestMethod.PATCH, path = "recarregar", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    public ResponseEntity<Map<String, Integer>> atualizar() {
+        log.info("Inicio de processamento de recarga de Categoriaso Joomla");
+        return null;// TODO: ARRUMAR AQUI ResponseEntity.ok(service.atualizarBancoTag());
     }
-    tag.setId(id);
-    service.gravar(tag);
-    return ResponseEntity.accepted().build();
-  }
 
-  @Operation(summary = "Busca lista de Tag filtrando por titulo.")
-  @ApiResponses({
-      @ApiResponse(responseCode = "200", description = "Retorna lista de itens", content = @Content(array = @ArraySchema(schema = @Schema(implementation = TagDTO.class)))) })
-  @GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
-  @ResponseBody
-  private ResponseEntity<List<TagDTO>> buscar(@RequestParam(name = "titulo", required = false) final String titulo,
-      @NotNull @RequestParam(name = "p", required = false, defaultValue = "0") final Integer pagina) {
-    return ResponseEntity.ok(service.buscarPorTitulo(titulo, pagina));
-  }
-
-
-  @Operation(summary = "Busca TAG por id.")
-  @ApiResponses({
-      @ApiResponse(responseCode = "200", description = "Retorna um item ", content = @Content(schema = @Schema(implementation = TagDTO.class))),
-      @ApiResponse(responseCode = "404", description = "Registro não encontrado.") })
-  @GetMapping(path = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
-  @ResponseBody ResponseEntity<TagDTO> buscarItem(@NotNull @PathVariable(name = "id", required = true) final Long id) {
-    final TagDTO tag = service.buscarPorId(id);
-    if (isNull(tag)) {
-      log.info("A busca não achou a TAG com o id:".concat(id.toString()));
-      return ResponseEntity.notFound().build();
+    @PutMapping(path = "/{id}/update", consumes = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    private ResponseEntity<?> atualizar(@NotNull @PathVariable(name = "id", required = false) final Long id,
+            @NotNull @Validated @RequestBody final TagDTO tag) {
+        final TagDTO tagBusca = service.buscarPorId(id);
+        if (isNull(tagBusca)) {
+            log.info("A atualizar não achou a TAG com o id:".concat(id.toString()));
+            return ResponseEntity.notFound().build();
+        }
+        tag.setId(id);
+        service.gravar(tag);
+        return ResponseEntity.accepted().build();
     }
-    return ResponseEntity.ok(tag);
-  }
 
-
-
-
-
-  @Operation(summary = "Apaga a Tag .")
-  @ApiResponses({ @ApiResponse(responseCode = "202", description = "Apagado com sucesso."),
-      @ApiResponse(responseCode = "404", description = "Registro não encontrado.") })
-  @DeleteMapping("/{id}/delete")
-  @ResponseBody
-  private ResponseEntity<?> delete(@NotNull @PathVariable(name = "id", required = false) final Long id) {
-    if (service.apagar(id)) {
-      log.info("O delete não achou a TAG com o id:".concat(id.toString()));
-      return ResponseEntity.accepted().build();
+    @GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    private ResponseEntity<List<TagDTO>> buscar(@RequestParam(name = "titulo", required = false) final String titulo,
+            @NotNull @RequestParam(name = "p", required = false, defaultValue = "0") final Integer pagina) {
+        return ResponseEntity.ok(service.buscarPorTitulo(titulo, pagina));
     }
-    return ResponseEntity.notFound().build();
-  }
 
-  @Operation(summary = "Grava a Tag nova.")
-  @ApiResponses({
-      @ApiResponse(responseCode = "200", description = "Gravado com sucesso.", content = @Content(schema = @Schema(implementation = TagDTO.class))) })
-  @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
-  @ResponseBody ResponseEntity<TagDTO> salvar(@NotNull @Validated @RequestBody final TagDTO tag) {
+    @GetMapping(path = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    ResponseEntity<TagDTO> buscarItem(@NotNull @PathVariable(name = "id", required = true) final Long id) {
+        final TagDTO tag = service.buscarPorId(id);
+        if (isNull(tag)) {
+            log.info("A busca não achou a TAG com o id:".concat(id.toString()));
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(tag);
+    }
 
-    return ResponseEntity.ok(service.gravar(tag));
-  }
+    @DeleteMapping("/{id}/delete")
+    @ResponseBody
+    private ResponseEntity<?> delete(@NotNull @PathVariable(name = "id", required = false) final Long id) {
+        if (service.apagar(id)) {
+            log.info("O delete não achou a TAG com o id:".concat(id.toString()));
+            return ResponseEntity.accepted().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    ResponseEntity<TagDTO> salvar(@NotNull @Validated @RequestBody final TagDTO tag) {
+
+        return ResponseEntity.ok(service.gravar(tag));
+    }
 
 }

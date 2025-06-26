@@ -6,6 +6,8 @@ package com.br.sobieskiproducoes.geradormaterias.config.properties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,9 +27,16 @@ import lombok.ToString;
 @NoArgsConstructor
 @ConfigurationProperties("configuracao")
 public class ConfiguracoesProperties {
-  private CargaDadosImagensProperties cargaDadosImagens;
-  private ChatGPTConfigurationProperties chatgpt;
+    private CargaDadosImagensProperties cargaDadosImagens;
+    private ChatGPTConfigurationProperties chatgpt;
 //  private JoomlaConfigurationProperties joomla;
 //  private YoutubeConfigurationProperties youtube;
-  private SerperProperties serper;
+    private SerperProperties serper;
+
+    @JsonProperty("chave-token")
+    private String chaveToken;
+
+    @JsonProperty("timeout-token")
+    private Long timeOutToken;
+
 }

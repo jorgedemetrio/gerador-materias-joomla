@@ -6,6 +6,7 @@ package com.br.sobieskiproducoes.geradormaterias.usuario.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -20,5 +21,6 @@ import com.br.sobieskiproducoes.geradormaterias.usuario.model.GrupoEntity;
 @Repository
 public interface GrupoRepository extends JpaRepository<GrupoEntity, String> {
 
-  List<GrupoEntity> findByUsuariosIn(@Param("usuarios") String usuarios);
+    @Query(name = "GrupoRepository.findByUsuariosIdIn", value = "SELECT g FROM GrupoEntity AS g JOIN g.usuarios AS usu WHERE usu.id = :usuario ")
+    List<GrupoEntity> findByUsuariosIdIn(@Param("usuario") String usuario);
 }
