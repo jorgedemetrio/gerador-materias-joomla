@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.logging.Level;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;
@@ -27,13 +28,13 @@ public class TokenSerice {
     @Value("${app.name}")
     private String APP_NAME;
 
-    public TokenSessionDTO gerarToken(@NotEmpty final String usuario) {
+    public TokenSessionDTO gerarToken(@NotEmpty final UserDetails usuario) {
         try {
 //            final Algorithm algorithm = Algorithm.HMAC256(properties.getChaveToken());
 
-            Instant instante = getInstant();
+            final Instant instante = getInstant();
 
-            return new TokenSessionDTO(JWT.create().withIssuer(APP_NAME).withSubject(usuario).withExpiresAt(instante).sign(algorithm), instante,
+            return new TokenSessionDTO(JWT.create().withIssuer(APP_NAME).withSubject(usuario.getUsername()).withExpiresAt(instante).sign(algorithm), instante,
                     properties.getTimeOutToken());
 
         } catch (final Exception ex) {

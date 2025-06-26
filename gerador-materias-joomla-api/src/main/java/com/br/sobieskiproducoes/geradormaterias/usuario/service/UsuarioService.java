@@ -2,6 +2,7 @@ package com.br.sobieskiproducoes.geradormaterias.usuario.service;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.br.sobieskiproducoes.geradormaterias.usuario.dto.TokenSessionDTO;
@@ -24,9 +25,7 @@ public class UsuarioService {
     public TokenSessionDTO login(final String login, final String senha) {
         final UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(login, senha);
 
-        authenticationManager.authenticate(authenticationToken);
-
-        return tokenSerice.gerarToken(login);
+        return tokenSerice.gerarToken((UserDetails) authenticationManager.authenticate(authenticationToken).getPrincipal());
 
     }
 
