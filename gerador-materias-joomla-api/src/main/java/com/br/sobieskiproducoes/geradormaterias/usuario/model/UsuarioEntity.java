@@ -6,6 +6,8 @@ package com.br.sobieskiproducoes.geradormaterias.usuario.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.hibernate.validator.constraints.br.CPF;
+
 import com.br.sobieskiproducoes.geradormaterias.empresa.model.EmpresaEntity;
 
 import jakarta.persistence.CascadeType;
@@ -22,6 +24,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -56,11 +59,16 @@ public class UsuarioEntity {
     @Column(name = "usuario", nullable = false, insertable = true, updatable = false, unique = true, length = 255)
     private String usuario;
 
+    @NotBlank
+    @CPF
+    @Column(name = "cpf", nullable = false, insertable = true, updatable = false, unique = false, length = 14)
+    private String cpf;
+
     @Column(name = "senha", nullable = false, insertable = true, updatable = false, unique = false, length = 255)
     private String senha;
 
     @Email
-    @Column(name = "email", nullable = true, insertable = true, updatable = true, unique = false, length = 255)
+    @Column(name = "email", nullable = true, insertable = true, updatable = true, unique = true, length = 255)
     private String email;
 
     @Column(name = "habilitado", nullable = false, insertable = true, updatable = true, unique = false)

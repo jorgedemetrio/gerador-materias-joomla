@@ -3,6 +3,7 @@
  */
 package com.br.sobieskiproducoes.geradormaterias.empresa.model;
 
+import com.br.sobieskiproducoes.geradormaterias.utils.AbstractObservabilidadeEntity;
 import com.br.sobieskiproducoes.geradormaterias.utils.AttributeEncryptor;
 
 import jakarta.persistence.Column;
@@ -30,12 +31,12 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(exclude = { "bearer", "usuario", "senha" })
-@EqualsAndHashCode(of = { "id" })
+@EqualsAndHashCode(of = { "id" }, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "tbl_configuracao_joomla")
-public class WordPressConfigurationEntity {
+public class WordPressConfigurationEntity extends AbstractObservabilidadeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

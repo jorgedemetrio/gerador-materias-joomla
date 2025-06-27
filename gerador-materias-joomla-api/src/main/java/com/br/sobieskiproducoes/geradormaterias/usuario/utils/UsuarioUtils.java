@@ -22,7 +22,7 @@ import lombok.extern.java.Log;
  * @version 1.0.27 de jun. de 2025
  */
 @Log
-public class UsuarioUtils {
+public final class UsuarioUtils {
     public static String empresaPrincipalId(final UsuarioEntity usuario) {
         try {
             if (isNull(usuario) || isNull(usuario.getEmpresas()) || usuario.getEmpresas().isEmpty()) {

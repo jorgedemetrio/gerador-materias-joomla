@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.springframework.validation.annotation.Validated;
 
+import com.br.sobieskiproducoes.geradormaterias.utils.AbstractObservabilidadeEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,12 +34,12 @@ import lombok.ToString;
 @Setter
 @Validated
 @ToString
-@EqualsAndHashCode(of = { "id" })
+@EqualsAndHashCode(of = { "id" }, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "tbl_chatgpt_perguntas")
-public class ChatGPTPerguntasEntity {
+public class ChatGPTPerguntasEntity extends AbstractObservabilidadeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,4 +67,5 @@ public class ChatGPTPerguntasEntity {
     private String complementoFormatoPedirMateria;
 
     private List<String> falhas;
+
 }

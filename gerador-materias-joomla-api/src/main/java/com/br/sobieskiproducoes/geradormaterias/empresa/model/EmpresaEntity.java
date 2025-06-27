@@ -6,6 +6,7 @@ package com.br.sobieskiproducoes.geradormaterias.empresa.model;
 import java.util.List;
 
 import com.br.sobieskiproducoes.geradormaterias.usuario.model.UsuarioEntity;
+import com.br.sobieskiproducoes.geradormaterias.utils.AbstractObservabilidadeEntity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -17,8 +18,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -35,12 +38,12 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode(of = { "id" })
+@EqualsAndHashCode(of = { "id" }, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "tbl_empresa")
-public class EmpresaEntity {
+public class EmpresaEntity extends AbstractObservabilidadeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -50,11 +53,18 @@ public class EmpresaEntity {
     @Column(name = "nome", insertable = true, updatable = true, nullable = true, unique = false, length = 250)
     private String nome;
 
+    @Size(min = 5, max = 200)
+    @Column(name = "cnpj", insertable = true, updatable = true, nullable = true, unique = true, length = 20)
+    private String cnpj;
+
     @Column(name = "principal", insertable = true, updatable = true, nullable = true, unique = false, columnDefinition = "TINYINT(1) DEFAULT 1")
     private Boolean principal;
 
     @OneToOne(mappedBy = "empresa", fetch = FetchType.LAZY)
     private ConfiguracoesEntity configuracao;
+
+    @OneToMany(mappedBy = "empresa", fetch = FetchType.LAZY)
+    private TermosEmpresaEntity termos;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "tbl_usuario_empresa", inverseJoinColumns = { @JoinColumn(name = "id_usuario", table = "tbl_usuario_empresa") }, joinColumns = {

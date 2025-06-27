@@ -4,6 +4,8 @@
 package com.br.sobieskiproducoes.geradormaterias.empresa.convert;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import com.br.sobieskiproducoes.geradormaterias.empresa.dto.ConfiguracoesDTO;
 import com.br.sobieskiproducoes.geradormaterias.empresa.dto.EmpresaDTO;
@@ -20,6 +22,12 @@ import com.br.sobieskiproducoes.geradormaterias.empresa.model.EmpresaEntity;
 public interface EmpresaConvert {
 
     EmpresaDTO to(EmpresaEntity source);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "configuracao", ignore = true)
+    @Mapping(target = "termos", ignore = true)
+    @Mapping(target = "usuarios", ignore = true)
+    void to(EmpresaDTO source, @MappingTarget EmpresaEntity target);
 
     ConfiguracoesDTO to(ConfiguracoesEntity source);
 

@@ -8,6 +8,7 @@ import java.util.List;
 import com.br.sobieskiproducoes.geradormaterias.materia.model.CategoriaEntity;
 import com.br.sobieskiproducoes.geradormaterias.materia.model.MateriaEntity;
 import com.br.sobieskiproducoes.geradormaterias.materia.model.TagEntity;
+import com.br.sobieskiproducoes.geradormaterias.utils.AbstractObservabilidadeEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,12 +34,12 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode(of = { "id" })
+@EqualsAndHashCode(of = { "id" }, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "tbl_configuracao")
-public class ConfiguracoesEntity {
+public class ConfiguracoesEntity extends AbstractObservabilidadeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -78,4 +79,5 @@ public class ConfiguracoesEntity {
 
     @OneToMany(mappedBy = "configuracao")
     private List<CategoriaEntity> categorias;
+
 }

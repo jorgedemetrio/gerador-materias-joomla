@@ -1,21 +1,13 @@
 /**
  *
  */
-package com.br.sobieskiproducoes.geradormaterias.empresa.model;
+package com.br.sobieskiproducoes.geradormaterias.empresa.dto;
 
 import java.util.List;
 
-import com.br.sobieskiproducoes.geradormaterias.utils.AbstractObservabilidadeEntity;
+import com.br.sobieskiproducoes.geradormaterias.utils.AbstractObservabilidadeDTO;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -37,23 +29,15 @@ import lombok.ToString;
 @EqualsAndHashCode(of = { "id" }, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "tbl_chatgpt_treinamento")
-public class ChatGPTPromptsEntity extends AbstractObservabilidadeEntity {
+public class ChatGPTPromptsDTO extends AbstractObservabilidadeDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "id_configuracao", insertable = true, updatable = true, nullable = false, unique = false)
-    private ConfiguracoesEntity configuracao;
+    private ConfiguracoesDTO configuracao;
 
     @NotNull
     @Valid
-    @OneToMany(mappedBy = "configuracao")
-    private List<ChatGPTPerguntasEntity> prompts;
+    private List<ChatGPTPerguntasDTO> prompts;
 
     @NotEmpty
     private List<String> audiencias;

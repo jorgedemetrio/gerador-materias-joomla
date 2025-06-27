@@ -7,11 +7,10 @@ import java.util.List;
 
 import org.springframework.validation.annotation.Validated;
 
-import com.br.sobieskiproducoes.geradormaterias.usuario.dto.UsuarioSistemaDTO;
 import com.br.sobieskiproducoes.geradormaterias.utils.AbstractObservabilidadeDTO;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -20,31 +19,36 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- *
  * @author Jorge Demetrio
- * @version 1.0
- * @since 13 de jun. de 2025 19:43:13
+ *
  */
 @Getter
 @Setter
+@Validated
 @ToString
 @EqualsAndHashCode(of = { "id" }, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
-@Validated
-public class EmpresaDTO extends AbstractObservabilidadeDTO {
+public class ChatGPTPerguntasDTO extends AbstractObservabilidadeDTO {
 
-    private String id;
+    private Long id;
 
+    private ChatGPTPromptsDTO configuracao;
+
+    @NotNull
     @NotBlank
-    @Size(min = 5, max = 200)
-    private String nome;
+    private String pedirMateria;
 
-    @Size(min = 5, max = 200)
-    private String cnpj;
+    @NotNull
+    @NotBlank
+    private String pedirDadosMateria;
+    private String pedirDadosMateriaSeguinte;
 
-    private ConfiguracoesDTO configuracao;
+    @NotNull
+    @NotBlank
+    private String pedirPerguntas;
 
-    private List<UsuarioSistemaDTO> usuarios;
+    private String complementoFormatoPedirMateria;
 
+    private List<String> falhas;
 }

@@ -3,7 +3,10 @@
  */
 package com.br.sobieskiproducoes.geradormaterias.empresa.dto;
 
+import com.br.sobieskiproducoes.geradormaterias.utils.AbstractObservabilidadeDTO;
+
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,9 +20,10 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode(of = { "id" }, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
-public class ConfiguracoesDTO {
+public class ConfiguracoesDTO extends AbstractObservabilidadeDTO {
 
     private Long id;
 

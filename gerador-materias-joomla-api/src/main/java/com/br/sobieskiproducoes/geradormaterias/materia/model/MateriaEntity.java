@@ -106,13 +106,13 @@ public class MateriaEntity {
     @Column(name = "roteiro", nullable = true, insertable = true, updatable = true, unique = false, length = 2000)
     private String roteiro;
 
-    @Column(name = "cricao_na_plataforma", nullable = true, insertable = true, updatable = true, unique = false, length = 2000)
+    @Column(name = "cricao_na_plataforma", nullable = true, insertable = true, updatable = true, unique = false)
     private LocalDateTime criadoJoomla;
 
-    @Column(name = "cricao_banco", nullable = true, insertable = true, updatable = true, unique = false, length = 2000)
+    @Column(name = "cricao_banco", nullable = true, insertable = true, updatable = true, unique = false)
     private LocalDateTime criado = LocalDateTime.now();
 
-    @Column(name = "exportado_para_plataforma", nullable = true, insertable = true, updatable = true, unique = false, length = 2000)
+    @Column(name = "exportado_para_plataforma", nullable = true, insertable = true, updatable = true, unique = false)
     private LocalDateTime exportado;
 
     @ManyToOne(cascade = CascadeType.ALL)

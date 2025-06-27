@@ -3,6 +3,7 @@
  */
 package com.br.sobieskiproducoes.geradormaterias.empresa.model;
 
+import com.br.sobieskiproducoes.geradormaterias.utils.AbstractObservabilidadeEntity;
 import com.br.sobieskiproducoes.geradormaterias.utils.AttributeEncryptor;
 
 import jakarta.persistence.Column;
@@ -36,8 +37,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @Entity
 @Table(name = "tbl_chtgpt_configuracao")
-@EqualsAndHashCode(of = { "id" })
-public class ChatGPTConfigurationEntity {
+@EqualsAndHashCode(of = { "id" }, callSuper = false)
+public class ChatGPTConfigurationEntity extends AbstractObservabilidadeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,8 +49,8 @@ public class ChatGPTConfigurationEntity {
     @JoinColumn(name = "id_configuracao", insertable = true, updatable = true, nullable = false, unique = false)
     private ConfiguracoesEntity configuracao;
 
-//  @Column(name = "id_thrend", nullable = true, insertable = true, updatable = true, unique = false, length = 2000)
-//  private String thread;
+    @Column(name = "id_thrend", nullable = true, insertable = true, updatable = true, unique = false, length = 2000)
+    private String thread;
 
     @NotNull
     @NotBlank

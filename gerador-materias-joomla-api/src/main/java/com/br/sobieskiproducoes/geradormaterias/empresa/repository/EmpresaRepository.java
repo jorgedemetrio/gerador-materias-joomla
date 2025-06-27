@@ -1,0 +1,32 @@
+/**
+ *
+ */
+package com.br.sobieskiproducoes.geradormaterias.empresa.repository;
+
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import com.br.sobieskiproducoes.geradormaterias.empresa.model.EmpresaEntity;
+
+/**
+ *
+ * @author JorgeDemetrioPC
+ * @since 27 de jun. de 2025 02:11:58
+ * @version 1.0.27 de jun. de 2025
+ */
+@Repository
+public interface EmpresaRepository extends JpaRepository<EmpresaEntity, String> {
+
+    @Query(name = "EmpresaRepository.buscarMateria", value = """
+             SELECT e FROM EmpresaRepository AS e \
+                 JOIN e.usuarios AS u \
+             WHERE \
+                 u.usuario = :username  AND \
+                 e.principal = true
+            """)
+    Optional<EmpresaEntity> buscarPrincipalPorUsuario(@Param("username") String username);
+}

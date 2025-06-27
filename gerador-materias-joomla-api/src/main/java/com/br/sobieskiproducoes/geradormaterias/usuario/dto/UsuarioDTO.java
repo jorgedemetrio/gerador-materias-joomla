@@ -6,6 +6,8 @@ package com.br.sobieskiproducoes.geradormaterias.usuario.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.hibernate.validator.constraints.br.CPF;
+
 import com.br.sobieskiproducoes.geradormaterias.empresa.dto.EmpresaDTO;
 import com.br.sobieskiproducoes.geradormaterias.usuario.model.NivelUsuarioEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -63,6 +65,11 @@ public class UsuarioDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @FutureOrPresent
     private LocalDateTime expira;
+
+    @NotBlank
+    @CPF
+    @Size(min = 1)
+    private String cpf;
 
     private List<EmpresaDTO> empresas;
 
