@@ -3,8 +3,6 @@
  */
 package com.br.sobieskiproducoes.geradormaterias.materia.controller;
 
-import static java.util.Objects.isNull;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,12 +25,13 @@ import lombok.extern.java.Log;
 @RequestMapping("/materia")
 public class MateriaController {
 
-    MateriaService service;
+    private final MateriaService service;
 
     @GetMapping(params = { "", "/" })
     public String get(final Model model, @RequestAttribute(name = "p") final Integer pagina, final String order) {
 
-        model.addAttribute("itens", service.buscarMateria(isNull(pagina) ? 0 : pagina, order));
+        // model.addAttribute("itens", service.buscarMateria(isNull(pagina) ? 0 :
+        // pagina, order));
 
         return "/index";
     }

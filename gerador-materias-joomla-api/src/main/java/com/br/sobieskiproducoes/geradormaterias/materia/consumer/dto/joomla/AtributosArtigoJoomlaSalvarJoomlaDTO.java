@@ -4,7 +4,7 @@
 package com.br.sobieskiproducoes.geradormaterias.materia.consumer.dto.joomla;
 
 import java.time.LocalDateTime;
-import java.util.Map;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,10 +31,11 @@ import lombok.ToString;
 @Setter
 @ToString
 @EqualsAndHashCode(of = { "id" })
+@AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AtributosArtigoJoomlaDTO {
+public class AtributosArtigoJoomlaSalvarJoomlaDTO {
 
     private Long id;
 
@@ -56,7 +58,7 @@ public class AtributosArtigoJoomlaDTO {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime created;
+    private LocalDateTime created;// ": "2023-02-06 00:27:13",
 
     @JsonProperty("created_by")
     private DadosJoomlaDTO createdBy;
@@ -92,7 +94,7 @@ public class AtributosArtigoJoomlaDTO {
     private Integer featured;
 
     private String note;
-    private Map<String, String> tags;
+    private List<String> tags;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -106,7 +108,7 @@ public class AtributosArtigoJoomlaDTO {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime featuredDown;
 
-    private String text;
+    private String fulltext;
 
     private RelationshipJoomlaDTO relationships;
 

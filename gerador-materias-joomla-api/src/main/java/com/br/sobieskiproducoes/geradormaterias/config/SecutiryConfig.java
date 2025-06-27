@@ -36,19 +36,22 @@ public class SecutiryConfig {
     public SecurityFilterChain SecurityFilterChain(final HttpSecurity httpSecurity) throws Exception {
 
         return httpSecurity.csrf(CsrfConfigurer::disable).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorize -> authorize.
-
-                /**
-                 * Login
-                 */
-                        requestMatchers("/autenticacao/*").permitAll()
+                .authorizeHttpRequests(authorize -> authorize
+                        /**
+                         * Login
+                         */
+                        .requestMatchers("/api/autenticacao", "/api/autenticacao/", "/api/autenticacao/*", "/api/autenticacao/login").permitAll()
+                        .requestMatchers("/login", "/login/*").permitAll()
 
                         /**
                          * Usuário
                          */
                         .requestMatchers(HttpMethod.POST, "/usuario").hasRole("CRIAR_USUARIO").requestMatchers(HttpMethod.PUT, "/usuario")
                         .hasRole("ALTERAR_USUARIO").requestMatchers(HttpMethod.DELETE, "/usuario/*").hasRole("REMOVER_USUARIO")
-                        .requestMatchers(HttpMethod.GET, "/usuario").hasRole("VER_USUARIO")
+                        .requestMatchers(HttpMethod.GET, "/usuario").hasRole("VER_USUARIO").requestMatchers(HttpMethod.POST, "/api/usuario")
+                        .hasRole("CRIAR_USUARIO").requestMatchers(HttpMethod.PUT, "/api/usuario").hasRole("ALTERAR_USUARIO")
+                        .requestMatchers(HttpMethod.DELETE, "/api/usuario/*").hasRole("REMOVER_USUARIO").requestMatchers(HttpMethod.GET, "/api/usuario")
+                        .hasRole("VER_USUARIO").requestMatchers("/api/usuario", "/usuario").permitAll()
 
                         /**
                          * Matéria
@@ -58,25 +61,38 @@ public class SecutiryConfig {
                         .requestMatchers(HttpMethod.GET, "/materia").hasRole("VER_MATERIA").requestMatchers(HttpMethod.GET, "/materia/publicar/*")
                         .hasRole("PUBLICAR_MATERIA").requestMatchers(HttpMethod.GET, "/lote/materia").hasRole("CRIAR_MATERIA_EM_LOTE")
                         .requestMatchers(HttpMethod.GET, "/lote/titulo").hasRole("CRIAR_SUGESTAO_TITULO_EM_LOTE")
+                        .requestMatchers(HttpMethod.POST, "/api/materia").hasRole("CRIAR_MATERIA").requestMatchers(HttpMethod.PUT, "/api/materia")
+                        .hasRole("ALTERAR_MATERIA").requestMatchers(HttpMethod.DELETE, "/api/materia/*").hasRole("REMOVER_MATERIA")
+                        .requestMatchers(HttpMethod.GET, "/api/materia").hasRole("VER_MATERIA").requestMatchers(HttpMethod.GET, "/api/materia/publicar/*")
+                        .hasRole("PUBLICAR_MATERIA").requestMatchers(HttpMethod.GET, "/api/lote/materia").hasRole("CRIAR_MATERIA_EM_LOTE")
+                        .requestMatchers(HttpMethod.GET, "/api/lote/titulo").hasRole("CRIAR_SUGESTAO_TITULO_EM_LOTE")
 
                         /**
                          * TAG
                          */
                         .requestMatchers(HttpMethod.POST, "/tag").hasRole("CRIAR_TAG").requestMatchers(HttpMethod.PUT, "/tag").hasRole("ALTERAR_TAG")
                         .requestMatchers(HttpMethod.DELETE, "/tag/*").hasRole("REMOVER_TAG").requestMatchers(HttpMethod.GET, "/tag").hasRole("VER_TAG")
+                        .requestMatchers(HttpMethod.POST, "/api/tag").hasRole("CRIAR_TAG").requestMatchers(HttpMethod.PUT, "/api/tag").hasRole("ALTERAR_TAG")
+                        .requestMatchers(HttpMethod.DELETE, "/api/tag/*").hasRole("REMOVER_TAG").requestMatchers(HttpMethod.GET, "/api/tag").hasRole("VER_TAG")
 
                         /**
                          * Categoria
                          */
                         .requestMatchers(HttpMethod.POST, "/categoria").hasRole("CRIAR_CATEGORIA").requestMatchers(HttpMethod.PUT, "/categoria")
                         .hasRole("ALTERAR_CATEGORIA").requestMatchers(HttpMethod.DELETE, "/categoria/*").hasRole("REMOVER_CATEGORIA")
-                        .requestMatchers(HttpMethod.GET, "/categoria").hasRole("VER_CATEGORIA")
+                        .requestMatchers(HttpMethod.GET, "/categoria").hasRole("VER_CATEGORIA").requestMatchers(HttpMethod.POST, "/api/categoria")
+                        .hasRole("CRIAR_CATEGORIA").requestMatchers(HttpMethod.PUT, "/api/categoria").hasRole("ALTERAR_CATEGORIA")
+                        .requestMatchers(HttpMethod.DELETE, "/api/categoria/*").hasRole("REMOVER_CATEGORIA").requestMatchers(HttpMethod.GET, "/api/categoria")
+                        .hasRole("VER_CATEGORIA")
 
                         /**
                          * site
                          */
                         .requestMatchers(HttpMethod.POST, "/site").hasRole("CRIAR_SITE").requestMatchers(HttpMethod.PUT, "/site").hasRole("ALTERAR_SITE")
                         .requestMatchers(HttpMethod.DELETE, "/site/*").hasRole("REMOVER_SITE").requestMatchers(HttpMethod.GET, "/site").hasRole("VER_SITE")
+                        .requestMatchers(HttpMethod.POST, "/api/site").hasRole("CRIAR_SITE").requestMatchers(HttpMethod.PUT, "/api/site")
+                        .hasRole("ALTERAR_SITE").requestMatchers(HttpMethod.DELETE, "/api/site/*").hasRole("REMOVER_SITE")
+                        .requestMatchers(HttpMethod.GET, "/api/site").hasRole("VER_SITE")
 
                         /**
                          * Keywords
@@ -87,11 +103,20 @@ public class SecutiryConfig {
                         .requestMatchers(HttpMethod.GET, "/site/*/palavrachave").hasRole("VER_PALAVRACHAVE")
 
                         .requestMatchers(HttpMethod.GET, "/lote/palavrachave").hasRole("CARREGAR_PALAVRASCHAVES_LOTE")
+                        .requestMatchers(HttpMethod.POST, "/api/site/*/palavrachave").hasRole("CRIAR_PALAVRACHAVE")
+                        .requestMatchers(HttpMethod.PUT, "/api/site/*/palavrachave").hasRole("ALTERAR_PALAVRACHAVE")
+                        .requestMatchers(HttpMethod.DELETE, "/api/site/*/palavrachave/*").hasRole("REMOVER_PALAVRACHAVE")
+                        .requestMatchers(HttpMethod.GET, "/api/site/*/palavrachave").hasRole("VER_PALAVRACHAVE")
+
+                        .requestMatchers(HttpMethod.GET, "/api/lote/palavrachave").hasRole("CARREGAR_PALAVRASCHAVES_LOTE")
 
                         /**
                          * Empresa
                          */
-                        .requestMatchers(HttpMethod.GET, "/empresa").hasRole("ALTERAR_EMPRESA").anyRequest().authenticated()
+                        .requestMatchers(HttpMethod.GET, "/empresa").hasRole("ALTERAR_EMPRESA").requestMatchers(HttpMethod.GET, "/api/empresa")
+                        .hasRole("ALTERAR_EMPRESA")
+
+                        .anyRequest().authenticated()
 
                 ).addFilterBefore(securityFilterComponent, UsernamePasswordAuthenticationFilter.class)
 

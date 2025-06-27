@@ -5,7 +5,9 @@ package com.br.sobieskiproducoes.geradormaterias.empresa.model;
 
 import java.util.List;
 
+import com.br.sobieskiproducoes.geradormaterias.materia.model.CategoriaEntity;
 import com.br.sobieskiproducoes.geradormaterias.materia.model.MateriaEntity;
+import com.br.sobieskiproducoes.geradormaterias.materia.model.TagEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,11 +15,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,6 +33,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode(of = { "id" })
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -41,6 +44,15 @@ public class ConfiguracoesEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
+    @Column(name = "site", insertable = true, updatable = true, nullable = true, unique = false, length = 250)
+    private String site;
+
+    @Column(name = "instagram", insertable = true, updatable = true, nullable = true, unique = false, length = 250)
+    private String istagram;
+
+    @Column(name = "youtube", insertable = true, updatable = true, nullable = true, unique = false, length = 250)
+    private String youtube;
 
     @OneToOne(mappedBy = "configuracao")
     private ChatGPTPromptsEntity chatgptPrompts;
@@ -54,10 +66,16 @@ public class ConfiguracoesEntity {
     @OneToOne(mappedBy = "configuracao")
     private WordPressConfigurationEntity wordpress;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "id_empresa", insertable = true, updatable = true, nullable = false, unique = false)
     private EmpresaEntity empresa;
 
     @OneToMany(mappedBy = "configuracao")
     private List<MateriaEntity> materias;
+
+    @OneToMany(mappedBy = "configuracao")
+    private List<TagEntity> tags;
+
+    @OneToMany(mappedBy = "configuracao")
+    private List<CategoriaEntity> categorias;
 }

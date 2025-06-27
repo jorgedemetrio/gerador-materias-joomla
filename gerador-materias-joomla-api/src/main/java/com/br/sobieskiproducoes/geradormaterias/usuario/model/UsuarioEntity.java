@@ -13,13 +13,13 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
@@ -37,7 +37,7 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString
+@ToString(exclude = { "usuario" })
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -69,14 +69,14 @@ public class UsuarioEntity {
     @Column(name = "expira", nullable = true, insertable = true, updatable = true, unique = false)
     private LocalDateTime expira;
 
-    @OneToMany(mappedBy = "usuario")
+    @ManyToMany(mappedBy = "usuarios", fetch = FetchType.LAZY)
     private List<EmpresaEntity> empresas;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo", nullable = true, insertable = true, updatable = true, unique = false, length = 1)
     private NivelUsuarioEnum nivel;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "tbl_usuario_grupo", inverseJoinColumns = { @JoinColumn(name = "id_grupo", table = "tbl_usuario_grupo") }, joinColumns = {
             @JoinColumn(name = "id_usuario", table = "tbl_usuario_grupo") })
     private List<GrupoEntity> grupos;

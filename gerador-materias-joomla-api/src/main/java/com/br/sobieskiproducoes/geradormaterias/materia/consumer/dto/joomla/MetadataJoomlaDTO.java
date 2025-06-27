@@ -14,9 +14,10 @@ import lombok.ToString;
 
 /**
  * @author Jorge Demetrio
- * @since 22 de fev. de 2024 15:31:32
+ * @since 22 de fev. de 2024 15:18:58
  * @version 1.0.0
  */
+
 @Getter
 @Setter
 @ToString
@@ -24,7 +25,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DadosDTO {
-  private String type;
-  private String id;
+public class MetadataJoomlaDTO {
+    private String robots;
+    private String author;
+    private String rights;
 }

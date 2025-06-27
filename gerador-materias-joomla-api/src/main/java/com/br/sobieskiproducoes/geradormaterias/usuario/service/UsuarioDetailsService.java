@@ -3,9 +3,12 @@
  */
 package com.br.sobieskiproducoes.geradormaterias.usuario.service;
 
+import static java.util.Objects.isNull;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,6 +24,7 @@ import com.br.sobieskiproducoes.geradormaterias.usuario.model.UsuarioEntity;
 import com.br.sobieskiproducoes.geradormaterias.usuario.repository.GrupoRepository;
 import com.br.sobieskiproducoes.geradormaterias.usuario.repository.PermissaoRepository;
 import com.br.sobieskiproducoes.geradormaterias.usuario.repository.UsuarioRepository;
+import com.br.sobieskiproducoes.geradormaterias.usuario.utils.UsuarioUtils;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -62,14 +66,16 @@ public class UsuarioDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-        final UsuarioEntity usuario = usuarios.findByUsuarioIgnoreCase(username.trim());
+        final Optional<UsuarioEntity> usuarioOptional = usuarios.findByUsuarioIgnoreCase(username.trim());
 
-        if (usuario == null) {
+        if (isNull(usuarioOptional) || !usuarioOptional.isPresent()) {
             throw new UsernameNotFoundException("Usuário não encontrado!");
         }
 
-        return new UsuarioSistemaDTO(usuario.getNome(), usuario.getUsuario(), usuario.getSenha(), usuario.getHabilitado(), usuario.getExpira(),
-                authorities(usuario));
+        final UsuarioEntity usuario = usuarioOptional.get();
+
+        return new UsuarioSistemaDTO(usuario.getId(), UsuarioUtils.empresaPrincipalId(usuario), usuario.getNome(), usuario.getUsuario(), usuario.getSenha(),
+                usuario.getHabilitado(), usuario.getExpira(), authorities(usuario));
     }
 
 }

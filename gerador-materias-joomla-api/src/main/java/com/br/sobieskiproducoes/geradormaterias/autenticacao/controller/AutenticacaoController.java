@@ -26,7 +26,7 @@ import lombok.extern.java.Log;
 @Log
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("autenticacao")
+@RequestMapping("/api/autenticacao")
 public class AutenticacaoController {
 
     private final UsuarioService service;

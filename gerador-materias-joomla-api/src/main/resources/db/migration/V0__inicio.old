@@ -47,6 +47,10 @@ INSERT INTO `tbl_grupo_permissao` (`id_grupo`,`id_permissao`)
 (SELECT  g.id as id_grupo, p.id as id_permissao FROM `tbl_permissao` AS p, `tbl_grupo_usuario` AS g WHERE g.nome = 'ADMIN' );
 
 
+INSERT INTO `tbl_grupo_permissao` (`id_grupo`,`id_permissao`)
+(SELECT  g.id as id_grupo, p.id as id_permissao FROM `tbl_permissao` AS p, `tbl_grupo_usuario` AS g WHERE p.nome like '%_VER_%' AND g.nome = 'USUARIO' );
+
+
 INSERT INTO `tbl_usuario` (id,`email`,`expira`,`habilitado`,`tipo`,`nome`,`senha`,`usuario`) VALUES
 (UUID(),'email@gmail.com',null,1,'ADMONISTRADOR','Administrador','$2a$10$j6iKY9lDkA/lWrSvLWCOZOCFoAWg4tU4H3TNXJq98Cov/HO1axXFi','admin');
 

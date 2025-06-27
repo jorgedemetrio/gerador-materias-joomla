@@ -14,10 +14,9 @@ import lombok.ToString;
 
 /**
  * @author Jorge Demetrio
- * @since 22 de fev. de 2024 15:18:58
+ * @since 22 de fev. de 2024 15:32:32
  * @version 1.0.0
  */
-
 @Getter
 @Setter
 @ToString
@@ -25,8 +24,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class MetadataDTO {
-  private String robots;
-  private String author;
-  private String rights;
+public class RelationshipJoomlaDTO {
+
+    private CategoryJoomlaDTO category;
 }

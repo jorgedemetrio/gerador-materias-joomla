@@ -65,7 +65,7 @@ public class SecurityFilterComponent extends OncePerRequestFilter {
             return null;
         }
 
-        return auth.replace("Beader ", "");
+        return auth.replace("Bearer ", "");
     }
 
 }

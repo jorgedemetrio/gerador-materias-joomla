@@ -24,27 +24,42 @@ import com.br.sobieskiproducoes.geradormaterias.materia.model.MateriaEntity;
 @Repository
 public interface MateriaRepository extends JpaRepository<MateriaEntity, Long> {
 
-  @Query(name = "MateriaRepository.buscarMateriasPublicar", value = """
-      SELECT m FROM MateriaEntity AS m WHERE m.uuid is not null AND m.peguntaPrincipal is not null \
-       AND m.status = StatusProcessamentoEnum.PROCESSAR \
-       AND m.materia IS NOT NULL \
-       AND m.idJoomla IS NULL \
-       AND (m.publicar >= now() OR m.publicar is null)
-       AND m.configuracao.id = :idConfiguracao
-       ORDER BY m.publicar
-       LIMIT 15 """)
-  List<MateriaEntity> buscarMateriasPublicar(@Param("idConfiguracao") Long idConfiguracao);
+    @Query(name = "MateriaRepository.buscarMateriasPublicar", value = """
+            SELECT m FROM MateriaEntity AS m WHERE m.uuid is not null AND m.peguntaPrincipal is not null \
+             AND m.status = StatusProcessamentoEnum.PROCESSAR \
+             AND m.materia IS NOT NULL \
+             AND m.idJoomla IS NULL \
+             AND (m.publicar >= now() OR m.publicar is null)
+             AND m.configuracao.id = :idConfiguracao
+             ORDER BY m.publicar
+             LIMIT 15 """)
+    List<MateriaEntity> buscarMateriasPublicar(@Param("idConfiguracao") Long idConfiguracao);
 
-  @Query(name = "MateriaRepository.buscarMateriaVazias", value = "SELECT m FROM MateriaEntity AS m WHERE m.materia IS NULL ")
-  Page<MateriaEntity> buscarMateriaVazias(Pageable page);
+    @Query(name = "MateriaRepository.buscarMateriaVazias", value = "SELECT m FROM MateriaEntity AS m WHERE m.materia IS NULL ")
+    Page<MateriaEntity> buscarMateriaVazias(Pageable page);
 
-  @Query(name = "MateriaRepository.buscarPorPergunta", value = "SELECT m FROM MateriaEntity AS m JOIN m.peguntaPrincipal AS p WHERE p.id = :id")
-  Optional<MateriaEntity> buscarPorPergunta(@Param("id") Long id);
+    @Query(name = "MateriaRepository.buscarMateria", value = """
+             SELECT m FROM MateriaEntity AS m \
+                 JOIN m.configuracao AS c \
+                 JOIN c.empresa AS e \
+                 JOIN e.usuarios AS u \
+             WHERE \
+                 ((:titulo is null OR trim(:titulo) = '') OR (           upper(m.tema) like concat('%', trim(upper(:titulo)), '%')  \
+                                                                     OR  upper(m.titulo1) like concat('%', trim(upper(:titulo)), '%')  \
+                                                                     OR  upper(m.titulo2) like concat('%', trim(upper(:titulo)), '%')  \
+                                                                     OR  upper(m.titulo3) like concat('%', trim(upper(:titulo)), '%'))  \
+                 ) AND  \
+                 u.usuario = :username  \
+            """)
+    Page<MateriaEntity> buscarMateria(@Param("titulo") String titulo, @Param("username") String idUsuario, Pageable page);
 
-  Optional<MateriaEntity> findByIdJoomla(@Param("idJoomla") Long idJoomla);
+    @Query(name = "MateriaRepository.buscarPorPergunta", value = "SELECT m FROM MateriaEntity AS m JOIN m.peguntaPrincipal AS p WHERE p.id = :id")
+    Optional<MateriaEntity> buscarPorPergunta(@Param("id") Long id);
 
-  @Query(name = "MapaPerguntaRepository.totalAProcessar", value = "SELECT max(data_publicar) FROM tbl_materia AS m "
-      + " WHERE uuid_requisicao =:uuid AND TIME_FORMAT(data_publicar, '%H:%i') = :hora", nativeQuery = true)
-  LocalDateTime ultimaData(@Param("uuid") String uuid, @Param("hora") String hora);
+    Optional<MateriaEntity> findByIdJoomla(@Param("idJoomla") Long idJoomla);
+
+    @Query(name = "MapaPerguntaRepository.totalAProcessar", value = "SELECT max(data_publicar) FROM tbl_materia AS m "
+            + " WHERE uuid_requisicao =:uuid AND TIME_FORMAT(data_publicar, '%H:%i') = :hora", nativeQuery = true)
+    LocalDateTime ultimaData(@Param("uuid") String uuid, @Param("hora") String hora);
 
 }

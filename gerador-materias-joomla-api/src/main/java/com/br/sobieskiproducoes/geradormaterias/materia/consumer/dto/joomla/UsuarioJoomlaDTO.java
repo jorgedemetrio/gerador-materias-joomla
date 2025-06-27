@@ -24,6 +24,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UsuarioDTO {
-  private DadosDTO data;
+public class UsuarioJoomlaDTO {
+    private DadosJoomlaDTO data;
 }

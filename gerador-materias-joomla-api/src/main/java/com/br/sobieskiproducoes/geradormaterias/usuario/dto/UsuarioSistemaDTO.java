@@ -34,6 +34,8 @@ public class UsuarioSistemaDTO implements UserDetails {
      *
      */
     private static final long serialVersionUID = 7246234048956347098L;
+    private String id;
+    private String idEmpresaPricipal;
     private String name;
     private String username;
     private String password;
@@ -43,17 +45,17 @@ public class UsuarioSistemaDTO implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return Objects.nonNull(expira) || expira.isBefore(LocalDateTime.now());
+        return Objects.isNull(expira) || LocalDateTime.now().isBefore(expira);
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return Objects.isNull(expira) || LocalDateTime.now().isBefore(expira);
     }
 
     @Override

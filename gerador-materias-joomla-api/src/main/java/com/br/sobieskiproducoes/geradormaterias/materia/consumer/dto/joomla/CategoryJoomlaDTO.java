@@ -24,7 +24,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CategoryDTO {
+public class CategoryJoomlaDTO {
 
-  private DadosDTO data;
+    private DadosJoomlaDTO data;
 }

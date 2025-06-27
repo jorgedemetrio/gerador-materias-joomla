@@ -7,16 +7,20 @@ import java.util.List;
 
 import com.br.sobieskiproducoes.geradormaterias.usuario.model.UsuarioEntity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,6 +35,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode(of = { "id" })
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -45,17 +50,15 @@ public class EmpresaEntity {
     @Column(name = "nome", insertable = true, updatable = true, nullable = true, unique = false, length = 250)
     private String nome;
 
-    @Column(name = "site", insertable = true, updatable = true, nullable = true, unique = false, length = 250)
-    private String site;
+    @Column(name = "principal", insertable = true, updatable = true, nullable = true, unique = false, columnDefinition = "TINYINT(1) DEFAULT 1")
+    private Boolean principal;
 
-    @Column(name = "instagram", insertable = true, updatable = true, nullable = true, unique = false, length = 250)
-    private String istagram;
+    @OneToOne(mappedBy = "empresa", fetch = FetchType.LAZY)
+    private ConfiguracoesEntity configuracao;
 
-    @OneToMany(mappedBy = "empresa")
-    private List<ConfiguracoesEntity> configuracoes;
-
-    @ManyToOne
-    @JoinColumn(name = "id_usuario", nullable = true, insertable = true, updatable = true, unique = false)
-    private UsuarioEntity usuario;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "tbl_usuario_empresa", inverseJoinColumns = { @JoinColumn(name = "id_usuario", table = "tbl_usuario_empresa") }, joinColumns = {
+            @JoinColumn(name = "id_empresa", table = "tbl_usuario_empresa") })
+    private List<UsuarioEntity> usuarios;
 
 }
