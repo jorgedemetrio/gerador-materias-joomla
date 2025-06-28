@@ -60,7 +60,7 @@ public class EmpresaApiController {
         try {
             return ResponseEntity.ok(service.salvar(empresa, (UsuarioSistemaDTO) authentication.getPrincipal()));
         } catch (final UsuarioNaoEncontradoException e) {
-            return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, "Dados da empresa não encontrado")).build();
+            return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, "Dados da usuario não encontrado")).build();
         } catch (final DadosInvalidosException e) {
             return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage())).build();
         }

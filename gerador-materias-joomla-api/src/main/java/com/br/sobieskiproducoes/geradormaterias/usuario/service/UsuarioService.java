@@ -1,10 +1,15 @@
 package com.br.sobieskiproducoes.geradormaterias.usuario.service;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import com.br.sobieskiproducoes.geradormaterias.empresa.model.EmpresaEntity;
+import com.br.sobieskiproducoes.geradormaterias.empresa.repository.EmpresaRepository;
 import com.br.sobieskiproducoes.geradormaterias.usuario.convert.UsuarioConvert;
 import com.br.sobieskiproducoes.geradormaterias.usuario.convert.UsuarioSenhaConvert;
 import com.br.sobieskiproducoes.geradormaterias.usuario.dto.TokenSessionDTO;
@@ -29,16 +34,22 @@ public class UsuarioService {
 
     private final TokenSerice tokenSerice;
 
+    private final EmpresaRepository empresaRepository;
     private final UsuarioConvert convert;
     private final UsuarioSenhaConvert usuarioSenhaConvert;
 
-    public UsuarioDTO salvar(@Valid final UsuarioDTO usuario) throws Exception {
+    public UsuarioDTO salvar(@Valid final UsuarioDTO usuario, final UsuarioSistemaDTO sistemaDTO) throws Exception {
 
         if (repository.findByEmailIgnoreCaseOrUsuarioIgnoreCase(usuario.getEmail(), usuario.getUsuario()).isPresent()) {
             throw new UsuarioExistenteException("Usuário e/ou e-mail já cadastrado!");
         }
 
-        final UsuarioEntity entity = usuarioSenhaConvert.to(usuario);
+        final UsuarioEntity entity = usuarioSenhaConvert.novo(usuario);
+
+        final Optional<EmpresaEntity> empresa = empresaRepository.buscarPrincipalPorUsuario(sistemaDTO.getUsername());
+        if (empresa.isPresent()) {
+            entity.setEmpresas(Arrays.asList(empresa.get()));
+        }
 
         return usuarioSenhaConvert.to(repository.save(entity));
 

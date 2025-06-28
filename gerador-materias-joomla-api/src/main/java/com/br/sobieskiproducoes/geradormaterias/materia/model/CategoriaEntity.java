@@ -50,10 +50,10 @@ public class CategoriaEntity {
     @Column(name = "id_wordpress", nullable = false, insertable = true, updatable = true, unique = true)
     private Long idWordPress;
 
-    @Column(name = "titulo", nullable = false, insertable = true, updatable = true, unique = false, length = 1000)
+    @Column(name = "titulo", nullable = false, insertable = true, updatable = true, unique = false, length = 100)
     private String titulo;
 
-    @Column(name = "alias", nullable = false, insertable = true, updatable = true, unique = false, length = 1000)
+    @Column(name = "alias", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
     private String apelido;
 
     @Column(name = "usar_prompts", nullable = true, insertable = true, updatable = true, unique = false, columnDefinition = " tinyint(1) DEFAULT 1 ")

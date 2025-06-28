@@ -4,9 +4,9 @@
 package com.br.sobieskiproducoes.geradormaterias.empresa.dto;
 
 import com.br.sobieskiproducoes.geradormaterias.utils.AbstractObservabilidadeDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -26,8 +26,7 @@ import lombok.ToString;
 @EqualsAndHashCode(of = { "id" }, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "tbl_configuracao_joomla")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class WordPressConfigurationDTO extends AbstractObservabilidadeDTO {
 
     private Long id;
@@ -38,10 +37,13 @@ public class WordPressConfigurationDTO extends AbstractObservabilidadeDTO {
     @NotBlank
     private String url;
 
+    @JsonIgnore
     private String bearer;
 
+    @JsonIgnore
     private String usuario;
 
+    @JsonIgnore
     private String senha;
 
     private String idioma;

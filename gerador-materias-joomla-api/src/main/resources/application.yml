@@ -200,7 +200,7 @@ Agora gere esses dados para uma matéria sobre : \n%s \n"
     pedir-materia: "Escreva agora o texto da matéria. \n
 Com especialidade técnica em : %s .\n 
 Entendendo que uma matéria deve seguir os requisitos: \n
- - A mtéria deve ter no mínimo 1000 palavras e no máximo 4000 palavras. \n
+ - A matéria deve ter no mínimo 1000 palavras e no máximo 4000 palavras. \n
  - A matéria é para o site: %s .\n
  - Que tem as redes sociais: %s .\n
  - O perfil da audiência é : %s .\n

@@ -5,10 +5,13 @@ package com.br.sobieskiproducoes.geradormaterias.usuario.dto;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -29,6 +32,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "username")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UsuarioSistemaDTO implements UserDetails {
     /**
      *
@@ -36,6 +40,7 @@ public class UsuarioSistemaDTO implements UserDetails {
     private static final long serialVersionUID = 7246234048956347098L;
     private String id;
     private String idEmpresaPricipal;
+    private List<String> empresasIds;
     private String name;
     private String username;
     private String password;

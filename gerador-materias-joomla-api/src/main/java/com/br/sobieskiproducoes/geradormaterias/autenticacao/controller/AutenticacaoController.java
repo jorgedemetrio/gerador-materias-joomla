@@ -3,7 +3,10 @@
  */
 package com.br.sobieskiproducoes.geradormaterias.autenticacao.controller;
 
+import java.util.logging.Level;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,9 +35,17 @@ public class AutenticacaoController {
     private final UsuarioService service;
 
     @PostMapping("/login")
-    public ResponseEntity<TokenSessionDTO> login(@RequestBody @Valid final LoginDTO login) {
-
-        return ResponseEntity.ok(service.login(login.username(), login.password()));
+    public ResponseEntity<TokenSessionDTO> login(@RequestBody @Valid @Validated final LoginDTO login) {
+        try {
+            return ResponseEntity.ok(service.login(login.username(), login.password()));
+        } catch (final Exception ex) {
+            log.log(Level.SEVERE, String.format("[ERROR] AutenticacaoController#login (mensagem: %s, usuario %s )", ex.getLocalizedMessage(), login.username()),
+                    ex.getCause());
+            // return
+            // ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR,
+            // ex.getLocalizedMessage())).build();
+            throw ex;
+        }
     }
 
 }

@@ -64,7 +64,7 @@ public class EmpresaEntity extends AbstractObservabilidadeEntity {
     private ConfiguracoesEntity configuracao;
 
     @OneToMany(mappedBy = "empresa", fetch = FetchType.LAZY)
-    private TermosEmpresaEntity termos;
+    private List<TermosEmpresaEntity> termos;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "tbl_usuario_empresa", inverseJoinColumns = { @JoinColumn(name = "id_usuario", table = "tbl_usuario_empresa") }, joinColumns = {

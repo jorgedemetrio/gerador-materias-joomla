@@ -7,6 +7,7 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
@@ -37,11 +38,34 @@ public final class UsuarioUtils {
             }
             return usuario.getEmpresas().get(0).getId();
         } catch (final org.hibernate.LazyInitializationException tr) {
-            log.log(Level.SEVERE, String.format("[ERRO] UsuarioUtils#getEmpresaId (LazyInitializationException) error: %s (usuario: %s ) ",
+            log.log(Level.SEVERE, String.format("[ERRO] UsuarioUtils#empresaPrincipalId (LazyInitializationException) error: %s (usuario: %s ) ",
                     tr.getLocalizedMessage(), usuario.getId()), tr.getCause());
         } catch (final Exception tr) {
-            log.log(Level.SEVERE, String.format("[ERRO] UsuarioUtils#getEmpresaId error: %s (usuario: %s ) ", tr.getLocalizedMessage(), usuario.getId()),
+            log.log(Level.SEVERE, String.format("[ERRO] UsuarioUtils#empresaPrincipalId error: %s (usuario: %s ) ", tr.getLocalizedMessage(), usuario.getId()),
                     tr.getCause());
+            throw tr;
+        }
+        return null;
+    }
+
+    public static String empresaPrincipalId(final List<EmpresaEntity> empresas) {
+        try {
+            if (isNull(empresas) || empresas.isEmpty()) {
+                return null;
+            }
+
+            final Optional<String> retorno = empresas.stream().filter(n -> nonNull(n.getPrincipal()) && n.getPrincipal().booleanValue())
+                    .map(EmpresaEntity::getId).findFirst();
+
+            if (retorno.isPresent()) {
+                return retorno.get();
+            }
+
+        } catch (final org.hibernate.LazyInitializationException tr) {
+            log.log(Level.SEVERE, String.format("[ERRO] UsuarioUtils#empresaPrincipalId (LazyInitializationException) error: %s  ", tr.getLocalizedMessage()),
+                    tr.getCause());
+        } catch (final Exception tr) {
+            log.log(Level.SEVERE, String.format("[ERRO] UsuarioUtils#empresaPrincipalId error: %s  ", tr.getLocalizedMessage()), tr.getCause());
             throw tr;
         }
         return null;

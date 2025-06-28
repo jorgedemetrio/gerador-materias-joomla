@@ -39,42 +39,42 @@ import lombok.ToString;
 @Table(name = "tbl_mapa_perguntas")
 public class MapaPerguntaEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-  @Column(name = "uuid_requisicao", nullable = true, insertable = true, updatable = true, unique = false, length = 1000)
-  private String uuid;
+    @Column(name = "uuid_requisicao", nullable = true, insertable = true, updatable = true, unique = false, length = 100)
+    private String uuid;
 
-  @Column(name = "pergunta", nullable = false, insertable = true, updatable = true, unique = false, length = 3000)
-  private String pergunta;
+    @Column(name = "pergunta", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
+    private String pergunta;
 
-  @OneToMany(mappedBy = "peguntaPrincipal", cascade = CascadeType.ALL)
-  private List<TermosMapaPerguntaEntity> termos;
+    @OneToMany(mappedBy = "peguntaPrincipal", cascade = CascadeType.ALL)
+    private List<TermosMapaPerguntaEntity> termos;
 
-  @OneToMany(mappedBy = "peguntaPrincipal", cascade = CascadeType.ALL)
-  private List<SubMapaPerguntasEntity> perguntasAlternativas;
+    @OneToMany(mappedBy = "peguntaPrincipal", cascade = CascadeType.ALL)
+    private List<SubMapaPerguntasEntity> perguntasAlternativas;
 
-  @Column(name = "ordem_relevancia", nullable = true, insertable = true, updatable = true, unique = false)
-  private Integer ordemRelevancia;
+    @Column(name = "ordem_relevancia", nullable = true, insertable = true, updatable = true, unique = false)
+    private Integer ordemRelevancia;
 
-  @Column(name = "motivo_sugestao", nullable = true, insertable = true, updatable = true, unique = false, length = 3000)
-  private String motivoSugestao;
+    @Column(name = "motivo_sugestao", nullable = true, insertable = true, updatable = true, unique = false, length = 3000)
+    private String motivoSugestao;
 
-  @Column(name = "perfil_enquadra", nullable = true, insertable = true, updatable = true, unique = false, length = 3000)
-  private String perfilEnquadra;
+    @Column(name = "perfil_enquadra", nullable = true, insertable = true, updatable = true, unique = false, length = 3000)
+    private String perfilEnquadra;
 
-  @Column(name = "stream", nullable = true, insertable = true, updatable = true, unique = false, columnDefinition = "TEXT")
-  private String stream;
+    @Column(name = "stream", nullable = true, insertable = true, updatable = true, unique = false, columnDefinition = "TEXT")
+    private String stream;
 
-  @ManyToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "id_categoria", nullable = false, insertable = true, updatable = true, unique = false)
-  private CategoriaEntity categoria;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_categoria", nullable = false, insertable = true, updatable = true, unique = false)
+    private CategoriaEntity categoria;
 
-  @OneToMany(mappedBy = "peguntaPrincipal", cascade = CascadeType.ALL)
-  private List<MateriaEntity> materias;
+    @OneToMany(mappedBy = "peguntaPrincipal", cascade = CascadeType.ALL)
+    private List<MateriaEntity> materias;
 
-  @Column(name = "data_sugestao_publicacao", nullable = true, insertable = true, updatable = true, unique = false)
-  private LocalDate dataSugestaoPublicacao;
+    @Column(name = "data_sugestao_publicacao", nullable = true, insertable = true, updatable = true, unique = false)
+    private LocalDate dataSugestaoPublicacao;
 }

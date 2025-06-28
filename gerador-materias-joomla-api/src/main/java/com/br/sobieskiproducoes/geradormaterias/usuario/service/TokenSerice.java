@@ -36,9 +36,10 @@ public class TokenSerice {
 
             final Instant instante = getInstant();
 
-            return new TokenSessionDTO(JWT.create().withIssuer(APP_NAME).withSubject(usuario.getUsername())
-                    .withClaim(EMPRESA_ID, usuario.getIdEmpresaPricipal()).withClaim(USUARIO_ID, usuario.getId()).withExpiresAt(instante).sign(algorithm),
-                    instante, properties.getTimeOutToken());
+            return new TokenSessionDTO(
+                    JWT.create().withIssuer(APP_NAME).withSubject(usuario.getUsername()).withClaim(EMPRESA_ID, usuario.getIdEmpresaPricipal())
+                            .withClaim(USUARIO_ID, usuario.getId()).withExpiresAt(instante).sign(algorithm),
+                    instante, properties.getTimeOutToken(), usuario.getEmpresasIds(), usuario.getIdEmpresaPricipal());
         } catch (final Exception ex) {
             log.log(Level.SEVERE, "[ERROR] TokenSerice#gerarToken " + ex.getLocalizedMessage(), ex.getCause());
             throw new RuntimeException("Erro ao gerar a chave.", ex);

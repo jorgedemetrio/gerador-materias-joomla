@@ -49,21 +49,21 @@ public class WordPressConfigurationEntity extends AbstractObservabilidadeEntity 
 
     @NotNull
     @NotBlank
-    @Column(name = "url", nullable = false, insertable = true, updatable = true, unique = false, length = 2000)
+    @Column(name = "url", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
     private String url;
 
-    @Column(name = "bearer", nullable = true, insertable = true, updatable = true, unique = false, length = 2000)
+    @Column(name = "bearer", nullable = true, insertable = true, updatable = true, unique = false, length = 250)
     private String bearer;
 
     @Convert(converter = AttributeEncryptor.class)
-    @Column(name = "usuario", nullable = true, insertable = true, updatable = true, unique = false, length = 2000)
+    @Column(name = "usuario", nullable = true, insertable = true, updatable = true, unique = false, length = 100)
     private String usuario;
 
     @Convert(converter = AttributeEncryptor.class)
-    @Column(name = "senha", nullable = true, insertable = true, updatable = true, unique = false, length = 2000)
+    @Column(name = "senha", nullable = true, insertable = true, updatable = true, unique = false, length = 100)
     private String senha;
 
-    @Column(name = "idioma", nullable = true, insertable = true, updatable = true, unique = false, length = 2000)
+    @Column(name = "idioma", nullable = true, insertable = true, updatable = true, unique = false, length = 100)
     private String idioma;
 
 }

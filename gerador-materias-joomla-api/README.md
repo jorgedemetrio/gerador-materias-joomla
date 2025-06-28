@@ -16,13 +16,13 @@
 PARAMETROS
 
 ```text
--Dspring.profiles.active=dev -Djasypt.encryptor.password="SENHA"`
+-Dspring.profiles.active=dev -Djasypt.encryptor.password="SENHA"
 ```
 
 ENCRIPTAR
 
 ```bash
-mvn jasypt:encrypt -Djasypt.plugin.path="file:src/main/resources/application-dev.yml" -Djasypt.encryptor.password="SENHA"
+mvn jasypt:encrypt -Djasypt.plugin.path="file:src/main/resources/application.yml" -Djasypt.encryptor.password="SENHA"
 ```
 
 

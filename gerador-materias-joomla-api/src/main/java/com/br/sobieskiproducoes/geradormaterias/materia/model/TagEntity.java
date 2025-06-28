@@ -37,34 +37,34 @@ import lombok.ToString;
 @Table(name = "tbl_tag")
 public class TagEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-  @Column(name = "uuid_requisicao", nullable = true, insertable = true, updatable = true, unique = false, length = 1000)
-  private String uuid;
+    @Column(name = "uuid_requisicao", nullable = true, insertable = true, updatable = true, unique = false, length = 100)
+    private String uuid;
 
-  @ManyToOne
-  @JoinColumn(name = "id_configuracao", insertable = true, updatable = true, nullable = false, unique = false)
-  private ConfiguracoesEntity configuracao;
+    @ManyToOne
+    @JoinColumn(name = "id_configuracao", insertable = true, updatable = true, nullable = false, unique = false)
+    private ConfiguracoesEntity configuracao;
 
-  @Column(name = "id_wordpress", nullable = true, insertable = true, updatable = true)
-  private Long idWprdPress;
+    @Column(name = "id_wordpress", nullable = true, insertable = true, updatable = true)
+    private Long idWprdPress;
 
-  @Column(name = "id_joomla", nullable = true, insertable = true, updatable = true, unique = false)
-  private Long idJoomla;
+    @Column(name = "id_joomla", nullable = true, insertable = true, updatable = true, unique = false)
+    private Long idJoomla;
 
-  @Column(name = "titulo", nullable = false, insertable = true, updatable = true, unique = false, length = 1000)
-  private String titulo;
+    @Column(name = "titulo", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
+    private String titulo;
 
-  @Column(name = "alias", nullable = true, insertable = true, updatable = true, unique = false, length = 500)
-  private String apelido;
+    @Column(name = "alias", nullable = true, insertable = true, updatable = true, unique = false, length = 250)
+    private String apelido;
 
-  @Column(name = "idioma", nullable = true, insertable = true, updatable = true, unique = false, length = 500)
-  private String language;
+    @Column(name = "idioma", nullable = true, insertable = true, updatable = true, unique = false, length = 250)
+    private String language;
 
-  @ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "tags")
-  private List<MateriaEntity> materias;
+    @ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "tags")
+    private List<MateriaEntity> materias;
 
 }

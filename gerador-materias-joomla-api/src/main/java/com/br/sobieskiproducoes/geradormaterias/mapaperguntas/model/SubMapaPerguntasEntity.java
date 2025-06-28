@@ -31,18 +31,18 @@ import lombok.ToString;
 @Entity
 @Table(name = "tbl_mapa_subperguntas")
 public class SubMapaPerguntasEntity {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-  @Column(name = "uuid_requisicao", nullable = true, insertable = true, updatable = true, unique = false, length = 1000)
-  private String uuid;
+    @Column(name = "uuid_requisicao", nullable = true, insertable = true, updatable = true, unique = false, length = 100)
+    private String uuid;
 
-  @Column(name = "pergunta", nullable = false, insertable = true, updatable = true, unique = false, length = 3000)
-  private String pergunta;
+    @Column(name = "pergunta", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
+    private String pergunta;
 
-  @ManyToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "id_mapa_pergunta", nullable = false, insertable = true, updatable = true, unique = false)
-  private MapaPerguntaEntity peguntaPrincipal;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_mapa_pergunta", nullable = false, insertable = true, updatable = true, unique = false)
+    private MapaPerguntaEntity peguntaPrincipal;
 }

@@ -22,9 +22,8 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-//@Scope("session")
 public class SessaoChatGPTDTO {
-  private ConfiguracoesEntity configuracao;
-  private String threadId;
-  private String runnerId;
+    private ConfiguracoesEntity configuracao;
+    private String threadId;
+    private String runnerId;
 }

@@ -49,28 +49,28 @@ public class ChatGPTConfigurationEntity extends AbstractObservabilidadeEntity {
     @JoinColumn(name = "id_configuracao", insertable = true, updatable = true, nullable = false, unique = false)
     private ConfiguracoesEntity configuracao;
 
-    @Column(name = "id_thrend", nullable = true, insertable = true, updatable = true, unique = false, length = 2000)
+    @Column(name = "id_thrend", nullable = true, insertable = true, updatable = true, unique = false, length = 200)
     private String thread;
 
     @NotNull
     @NotBlank
     @Convert(converter = AttributeEncryptor.class)
-    @Column(name = "bearer", nullable = false, insertable = true, updatable = true, unique = false, length = 2000)
+    @Column(name = "bearer", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
     private String bearer;
 
     @Convert(converter = AttributeEncryptor.class)
-    @Column(name = "id_assistente", nullable = true, insertable = true, updatable = true, unique = false, length = 2000)
+    @Column(name = "id_assistente", nullable = true, insertable = true, updatable = true, unique = false, length = 250)
     private String assistente;
 
     @NotNull
     @NotBlank
     @Convert(converter = AttributeEncryptor.class)
-    @Column(name = "id_organization", nullable = false, insertable = true, updatable = true, unique = false, length = 2000)
+    @Column(name = "id_organization", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
     private String organization;
 
     @NotNull
     @NotBlank
-    @Column(name = "model", nullable = false, insertable = true, updatable = true, unique = false, length = 2000)
+    @Column(name = "model", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
     private String model;
 
     @NotNull
@@ -81,22 +81,22 @@ public class ChatGPTConfigurationEntity extends AbstractObservabilidadeEntity {
 
     @NotNull
     @NotBlank
-    @Column(name = "role_user", nullable = false, insertable = true, updatable = true, unique = false, length = 2000)
+    @Column(name = "role_user", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
     private String roleUser;
 
     @NotNull
     @NotBlank
-    @Column(name = "role_system", nullable = false, insertable = true, updatable = true, unique = false, length = 2000)
+    @Column(name = "role_system", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
     private String roleSystem;
 
     @NotNull
     @NotBlank
-    @Column(name = "role_assistant", nullable = false, insertable = true, updatable = true, unique = false, length = 2000)
+    @Column(name = "role_assistant", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
     private String roleAssistant;
 
     @NotNull
     @NotBlank
-    @Column(name = "max_tokens", nullable = false, insertable = true, updatable = true, unique = false, length = 2000)
+    @Column(name = "max_tokens", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
     private String maxTokens;
 
 }

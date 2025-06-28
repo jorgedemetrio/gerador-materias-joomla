@@ -61,10 +61,10 @@ public class MateriaEntity {
     @Column(name = "id_wordpress", nullable = true, insertable = true, updatable = true)
     private Long idWprdPress;
 
-    @Column(name = "tema_proposto", nullable = true, insertable = true, updatable = true, unique = false, length = 1000)
+    @Column(name = "tema_proposto", nullable = true, insertable = true, updatable = true, unique = false, length = 250)
     private String tema;
 
-    @Column(name = "uuid_requisicao", nullable = true, insertable = true, updatable = true, unique = false, length = 1000)
+    @Column(name = "uuid_requisicao", nullable = true, insertable = true, updatable = true, unique = false, length = 100)
     private String uuid;
 
     @Column(name = "titulo_selecionado", nullable = true, insertable = true, updatable = true, unique = false)
@@ -82,10 +82,10 @@ public class MateriaEntity {
     @Column(name = "meta_descircao", nullable = true, insertable = true, updatable = true, unique = false, length = 250)
     private String metaDescricao;
 
-    @Column(name = "keywords", nullable = true, insertable = true, updatable = true, unique = false, length = 1000)
+    @Column(name = "keywords", nullable = true, insertable = true, updatable = true, unique = false, length = 250)
     private String keywords;
 
-    @Column(name = "introducao", nullable = true, insertable = true, updatable = true, unique = false, length = 2000)
+    @Column(name = "introducao", nullable = true, insertable = true, updatable = true, unique = false, length = 250)
     private String primeiroParagrafo;
 
     @Column(name = "materia", nullable = true, insertable = true, updatable = true, unique = false, columnDefinition = "TEXT")
@@ -97,14 +97,8 @@ public class MateriaEntity {
     @Column(name = "alias", nullable = true, insertable = true, updatable = true, unique = false, length = 500)
     private String apelido;
 
-    @Column(name = "post_instagram", nullable = true, insertable = true, updatable = true, unique = false, length = 2000)
-    private String postInstagram;
-
     @Column(name = "data_publicar", nullable = true, insertable = true, updatable = true, unique = false)
     private LocalDateTime publicar;
-
-    @Column(name = "roteiro", nullable = true, insertable = true, updatable = true, unique = false, length = 2000)
-    private String roteiro;
 
     @Column(name = "cricao_na_plataforma", nullable = true, insertable = true, updatable = true, unique = false)
     private LocalDateTime criadoJoomla;

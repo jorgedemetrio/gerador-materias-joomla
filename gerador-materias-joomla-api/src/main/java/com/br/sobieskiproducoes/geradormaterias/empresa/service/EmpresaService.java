@@ -10,9 +10,11 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.br.sobieskiproducoes.geradormaterias.empresa.convert.ConfiguracoesConvert;
 import com.br.sobieskiproducoes.geradormaterias.empresa.convert.EmpresaConvert;
 import com.br.sobieskiproducoes.geradormaterias.empresa.dto.EmpresaDTO;
 import com.br.sobieskiproducoes.geradormaterias.empresa.model.EmpresaEntity;
+import com.br.sobieskiproducoes.geradormaterias.empresa.repository.ConfiguracoesRepository;
 import com.br.sobieskiproducoes.geradormaterias.empresa.repository.EmpresaRepository;
 import com.br.sobieskiproducoes.geradormaterias.exception.DadosInvalidosException;
 import com.br.sobieskiproducoes.geradormaterias.exception.NaoEncontradoException;
@@ -37,8 +39,9 @@ import lombok.extern.java.Log;
 public class EmpresaService {
     private final EmpresaRepository repository;
     private final UsuarioRepository usuarioRepository;
-
+    private final ConfiguracoesRepository configuracoesRepository;
     private final EmpresaConvert convert;
+    private final ConfiguracoesConvert configuracoesConvert;
 
     public EmpresaDTO getEmpresa(final UsuarioSistemaDTO usuarioLogado) throws Exception {
 
@@ -55,32 +58,42 @@ public class EmpresaService {
         final Optional<EmpresaEntity> empresaEntityOpt = repository.buscarPrincipalPorUsuario(usuarioLogado.getUsername());
         EmpresaEntity empresaEntity;
 
-        final Optional<UsuarioEntity> usuario = usuarioRepository.findByUsuarioIgnoreCase(usuarioLogado.getUsername());
+        final Optional<UsuarioEntity> usuarioOpt = usuarioRepository.findByUsuarioIgnoreCase(usuarioLogado.getUsername());
 
-        if (usuario.isPresent()) {
+        if (!usuarioOpt.isPresent()) {
             throw new UsuarioNaoEncontradoException("Usuário não encontrado.");
         }
+
+        final UsuarioEntity usuario = usuarioOpt.get();
 
         if (isNull(empresa) || isNull(empresa.getNome()) || empresa.getNome().isBlank() || empresa.getNome().length() < 5) {
             throw new DadosInvalidosException("Nome da empresa é obrigatório deve ter no minimo 5 caracteres.");
         }
 
+        // Alteração
         if (empresaEntityOpt.isPresent()) {
             empresaEntity = empresaEntityOpt.get();
             convert.to(empresa, empresaEntity);
-            empresaEntity.setAlterador(usuario.get());
+            empresaEntity.setAlterador(usuario);
             empresaEntity.setAlterado(LocalDateTime.now());
 
-        } else {
-            empresaEntity = convert.to(empresa);
-            empresaEntity.setCriador(usuario.get());
-            empresaEntity.setCriado(LocalDateTime.now());
+            if (!empresaEntity.getUsuarios().stream().filter(n -> usuario.getId().equals(n.getUsuario())).findFirst().isPresent()) {
+                empresaEntity.getUsuarios().add(usuario);
+            }
+
+        } else {// Nova empresa
+
+            empresaEntity = convert.novo(empresa, usuario);
+
         }
 
-        // TODO: por enquanto só permitirá uma empresa por usuário.
-        empresaEntity.setPrincipal(true);
+        empresaEntity = repository.save(empresaEntity);
 
-        return convert.to(repository.save(empresaEntity));
+        if (isNull(empresaEntity.getConfiguracao())) {
+            empresaEntity.setConfiguracao(configuracoesRepository.save(configuracoesConvert.novoConfiguracaoEntity(empresaEntity, usuario)));
+        }
+
+        return convert.to(empresaEntity);
 
     }
 }

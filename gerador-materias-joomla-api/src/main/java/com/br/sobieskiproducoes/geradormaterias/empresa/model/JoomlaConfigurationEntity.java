@@ -49,16 +49,16 @@ public class JoomlaConfigurationEntity extends AbstractObservabilidadeEntity {
 
     @NotNull
     @NotBlank
-    @Column(name = "rul", nullable = false, insertable = true, updatable = true, unique = false, length = 2000)
+    @Column(name = "rul", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
     private String url;
 
     @NotNull
     @NotBlank
-    @Column(name = "bearer", nullable = false, insertable = true, updatable = true, unique = false, length = 2000)
+    @Column(name = "bearer", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
     @Convert(converter = AttributeEncryptor.class)
     private String bearer;
 
-    @Column(name = "idioma", nullable = true, insertable = true, updatable = true, unique = false, length = 2000)
+    @Column(name = "idioma", nullable = true, insertable = true, updatable = true, unique = false, length = 100)
     private String idioma;
 
 }

@@ -6,6 +6,7 @@ package com.br.sobieskiproducoes.geradormaterias.empresa.dto;
 import java.util.List;
 
 import com.br.sobieskiproducoes.geradormaterias.utils.AbstractObservabilidadeDTO;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import jakarta.persistence.Column;
 import jakarta.validation.Valid;
@@ -29,6 +30,7 @@ import lombok.ToString;
 @EqualsAndHashCode(of = { "id" }, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ChatGPTPromptsDTO extends AbstractObservabilidadeDTO {
 
     private Long id;
@@ -44,7 +46,7 @@ public class ChatGPTPromptsDTO extends AbstractObservabilidadeDTO {
 
     @NotNull
     @NotBlank
-    @Column(name = "site", nullable = false, insertable = true, updatable = true, unique = false, length = 2000)
+    @Column(name = "site", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
     private String site;
 
     @NotNull

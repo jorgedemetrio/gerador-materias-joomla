@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 
 import com.br.sobieskiproducoes.geradormaterias.usuario.dto.UsuarioSistemaDTO;
 import com.br.sobieskiproducoes.geradormaterias.utils.AbstractObservabilidadeDTO;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -32,6 +33,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Validated
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class EmpresaDTO extends AbstractObservabilidadeDTO {
 
     private String id;
@@ -46,5 +48,7 @@ public class EmpresaDTO extends AbstractObservabilidadeDTO {
     private ConfiguracoesDTO configuracao;
 
     private List<UsuarioSistemaDTO> usuarios;
+
+    private List<TermosEmpresaDTO> termos;
 
 }

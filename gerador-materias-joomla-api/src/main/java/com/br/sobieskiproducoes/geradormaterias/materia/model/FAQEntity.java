@@ -33,26 +33,26 @@ import lombok.ToString;
 @Table(name = "tbl_faq")
 public class FAQEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-  @ManyToOne
-  @JoinColumn(name = "id_configuracao", insertable = true, updatable = true, nullable = false, unique = false)
-  private ConfiguracoesEntity configuracao;
+    @ManyToOne
+    @JoinColumn(name = "id_configuracao", insertable = true, updatable = true, nullable = false, unique = false)
+    private ConfiguracoesEntity configuracao;
 
-  @Column(name = "uuid_requisicao", nullable = true, insertable = true, updatable = true, unique = false, length = 1000)
-  private String uuid;
+    @Column(name = "uuid_requisicao", nullable = true, insertable = true, updatable = true, unique = false, length = 250)
+    private String uuid;
 
-  @Column(name = "pergunta", nullable = false, insertable = true, updatable = true, unique = false, length = 1000)
-  private String pergunta;
+    @Column(name = "pergunta", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
+    private String pergunta;
 
-  @Column(name = "resposta", nullable = false, insertable = true, updatable = true, unique = false, length = 1000)
-  private String resposta;
+    @Column(name = "resposta", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
+    private String resposta;
 
-  @ManyToOne
-  @JoinColumn(name = "id_materia")
-  private MateriaEntity materia;
+    @ManyToOne
+    @JoinColumn(name = "id_materia")
+    private MateriaEntity materia;
 
 }

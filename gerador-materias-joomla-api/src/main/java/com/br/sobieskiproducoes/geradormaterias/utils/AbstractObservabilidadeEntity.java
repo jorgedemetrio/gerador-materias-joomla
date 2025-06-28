@@ -12,6 +12,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,6 +29,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@MappedSuperclass
 public abstract class AbstractObservabilidadeEntity {
     @ManyToOne
     @JoinColumn(name = "id_usuario_criador", nullable = false, insertable = true, updatable = false, unique = false)
@@ -50,13 +52,14 @@ public abstract class AbstractObservabilidadeEntity {
     @Column(name = "ip_proxy_criador", nullable = true, insertable = true, updatable = true, unique = false, length = 100)
     private String ipProxyCriador;
 
-    @Column(name = "ip_criador", nullable = true, insertable = true, updatable = true, unique = false, length = 100)
+    @Column(name = "ip_alterador", nullable = true, insertable = true, updatable = true, unique = false, length = 100)
     private String ipAlterador;
 
-    @Column(name = "ip_proxy_criador", nullable = true, insertable = true, updatable = true, unique = false, length = 100)
+    @Column(name = "ip_proxy_alterador", nullable = true, insertable = true, updatable = true, unique = false, length = 100)
     private String ipProxyAlterador;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "ip_proxy_criador", nullable = true, insertable = true, updatable = true, unique = false)
-    private StatusEnum status = StatusEnum.NOVO;
+    @Column(name = "status_dado", nullable = true, insertable = true, updatable = true, unique = false)
+    private StatusEnum statusDado = StatusEnum.NOVO;
+
 }

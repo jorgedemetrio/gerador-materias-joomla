@@ -21,10 +21,12 @@ import com.br.sobieskiproducoes.geradormaterias.usuario.model.UsuarioEntity;
 @Mapper(componentModel = "spring")
 public interface UsuarioConvert {
 
+    @Mappings({ @Mapping(target = "senha", ignore = true) })
     UsuarioDTO to(UsuarioEntity source);
 
     GrupoDTO to(GrupoEntity source);
 
     @Mappings({ @Mapping(target = "usuarios", ignore = true), @Mapping(target = "permissoes", ignore = true) })
     GrupoEntity to(GrupoDTO source);
+
 }

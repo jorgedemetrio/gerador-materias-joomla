@@ -35,33 +35,33 @@ import lombok.ToString;
 @Table(name = "tbl_carga_promover")
 public class CargaMassaEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-  @Column(name = "uuid_requisicao", nullable = true, insertable = true, updatable = true, unique = false, length = 1000)
-  private String uuid;
+    @Column(name = "uuid_requisicao", nullable = true, insertable = true, updatable = true, unique = false, length = 150)
+    private String uuid;
 
-  @Enumerated(EnumType.STRING)
-  @Column(name = "status", nullable = true, insertable = true, updatable = true, unique = false)
-  private StatusProcessamentoEnum status;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = true, insertable = true, updatable = true, unique = false)
+    private StatusProcessamentoEnum status;
 
-  @Column(name = "data_inicio_processo", nullable = true, insertable = true, updatable = true, unique = false)
-  private LocalDateTime dataInicioProcesso;
+    @Column(name = "data_inicio_processo", nullable = true, insertable = true, updatable = true, unique = false)
+    private LocalDateTime dataInicioProcesso;
 
-  @Column(name = "data_fim_processo", nullable = true, insertable = true, updatable = true, unique = false)
-  private LocalDateTime dataFimProcesso;
+    @Column(name = "data_fim_processo", nullable = true, insertable = true, updatable = true, unique = false)
+    private LocalDateTime dataFimProcesso;
 
-  @Column(name = "data_inicio_carga", nullable = true, insertable = true, updatable = true, unique = false)
-  private LocalDateTime executadoInicio;
+    @Column(name = "data_inicio_carga", nullable = true, insertable = true, updatable = true, unique = false)
+    private LocalDateTime executadoInicio;
 
-  @Column(name = "data_fim_carga", nullable = true, insertable = true, updatable = true, unique = false)
-  private LocalDateTime executadoFim;
+    @Column(name = "data_fim_carga", nullable = true, insertable = true, updatable = true, unique = false)
+    private LocalDateTime executadoFim;
 
-  @Column(name = "nota", nullable = true, insertable = true, updatable = true, unique = false, length = 3000)
-  private String nota;
+    @Column(name = "nota", nullable = true, insertable = true, updatable = true, unique = false, columnDefinition = "TEXT")
+    private String nota;
 
-  @Column(name = "requisicao", nullable = true, insertable = true, updatable = true, unique = false, columnDefinition = "text")
-  private String requisicao;
+    @Column(name = "requisicao", nullable = true, insertable = true, updatable = true, unique = false, columnDefinition = "TEXT")
+    private String requisicao;
 }

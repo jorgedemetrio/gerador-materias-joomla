@@ -52,7 +52,7 @@ public class ChatGPTPerguntasEntity extends AbstractObservabilidadeEntity {
 
     @NotNull
     @NotBlank
-    @Column(name = "id_organization", nullable = false, insertable = true, updatable = true, unique = false, length = 2000)
+    @Column(name = "id_organization", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
     private String pedirMateria;
 
     @NotNull

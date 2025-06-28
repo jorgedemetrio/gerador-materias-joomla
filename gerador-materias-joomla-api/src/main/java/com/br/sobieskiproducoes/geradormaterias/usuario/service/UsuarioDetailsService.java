@@ -7,8 +7,11 @@ import static java.util.Objects.isNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,6 +20,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.br.sobieskiproducoes.geradormaterias.empresa.model.EmpresaEntity;
+import com.br.sobieskiproducoes.geradormaterias.empresa.repository.EmpresaRepository;
 import com.br.sobieskiproducoes.geradormaterias.usuario.dto.UsuarioSistemaDTO;
 import com.br.sobieskiproducoes.geradormaterias.usuario.model.GrupoEntity;
 import com.br.sobieskiproducoes.geradormaterias.usuario.model.PermissaoEntity;
@@ -40,7 +45,8 @@ import lombok.extern.java.Log;
 @RequiredArgsConstructor
 public class UsuarioDetailsService implements UserDetailsService {
 
-    private final UsuarioRepository usuarios;
+    private final UsuarioRepository usuariosRepository;
+    private final EmpresaRepository empresaRepository;
 
     private final GrupoRepository grupos;
 
@@ -66,7 +72,7 @@ public class UsuarioDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-        final Optional<UsuarioEntity> usuarioOptional = usuarios.findByUsuarioIgnoreCase(username.trim());
+        final Optional<UsuarioEntity> usuarioOptional = usuariosRepository.findByUsuarioIgnoreCase(username.trim());
 
         if (isNull(usuarioOptional) || !usuarioOptional.isPresent()) {
             throw new UsernameNotFoundException("Usuário não encontrado!");
@@ -74,8 +80,17 @@ public class UsuarioDetailsService implements UserDetailsService {
 
         final UsuarioEntity usuario = usuarioOptional.get();
 
-        return new UsuarioSistemaDTO(usuario.getId(), UsuarioUtils.empresaPrincipalId(usuario), usuario.getNome(), usuario.getUsuario(), usuario.getSenha(),
-                usuario.getHabilitado(), usuario.getExpira(), authorities(usuario));
+        List<String> empresasIds = Collections.emptyList();
+        List<EmpresaEntity> empresas = Collections.emptyList();
+
+        try {
+            empresas = empresaRepository.buscarPorUsuario(username);
+            empresasIds = empresas.stream().map(EmpresaEntity::getId).collect(Collectors.toList());
+        } catch (final Exception ex) {
+            log.log(Level.SEVERE, String.format("[ERROR] UsuarioDetailsService#loadUserByUsername (mensagem: %s)", ex.getLocalizedMessage()), ex.getCause());
+        }
+        return new UsuarioSistemaDTO(usuario.getId(), UsuarioUtils.empresaPrincipalId(empresas), empresasIds, usuario.getNome(), usuario.getUsuario(),
+                usuario.getSenha(), usuario.getHabilitado(), usuario.getExpira(), authorities(usuario));
     }
 
 }

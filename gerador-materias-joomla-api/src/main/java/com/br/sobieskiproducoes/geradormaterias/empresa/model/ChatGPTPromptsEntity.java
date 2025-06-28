@@ -60,7 +60,7 @@ public class ChatGPTPromptsEntity extends AbstractObservabilidadeEntity {
 
     @NotNull
     @NotBlank
-    @Column(name = "site", nullable = false, insertable = true, updatable = true, unique = false, length = 2000)
+    @Column(name = "site", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
     private String site;
 
     @NotNull

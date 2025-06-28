@@ -29,8 +29,9 @@ public abstract class UsuarioSenhaConvert {
     @Autowired
     protected PasswordEncoder passwordEncoder;
 
-    @Mappings({ @Mapping(target = "senha", expression = "java(passwordEncoder.encode(source.getSenha()))") })
-    public abstract UsuarioEntity to(UsuarioDTO source);
+    @Mapping(target = "senha", expression = "java(passwordEncoder.encode(source.getSenha()))")
+    @Mapping(target = "id", ignore = true)
+    public abstract UsuarioEntity novo(UsuarioDTO source);
 
     @Mappings({ @Mapping(target = "senha", ignore = true) })
     public abstract UsuarioDTO to(UsuarioEntity source);

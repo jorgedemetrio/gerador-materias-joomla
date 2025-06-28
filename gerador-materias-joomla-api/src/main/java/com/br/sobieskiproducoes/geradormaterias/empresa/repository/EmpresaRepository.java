@@ -3,6 +3,7 @@
  */
 package com.br.sobieskiproducoes.geradormaterias.empresa.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,11 +23,21 @@ import com.br.sobieskiproducoes.geradormaterias.empresa.model.EmpresaEntity;
 public interface EmpresaRepository extends JpaRepository<EmpresaEntity, String> {
 
     @Query(name = "EmpresaRepository.buscarMateria", value = """
-             SELECT e FROM EmpresaRepository AS e \
+             SELECT e FROM EmpresaEntity AS e \
                  JOIN e.usuarios AS u \
              WHERE \
                  u.usuario = :username  AND \
+                 e.statusDado not in (StatusEnum.REMOVIDO) AND
                  e.principal = true
             """)
     Optional<EmpresaEntity> buscarPrincipalPorUsuario(@Param("username") String username);
+
+    @Query(name = "EmpresaRepository.buscarMateria", value = """
+             SELECT e FROM EmpresaEntity AS e \
+                 JOIN e.usuarios AS u \
+             WHERE \
+                 u.usuario = :username  AND \
+                 e.statusDado not in (StatusEnum.REMOVIDO)
+            """)
+    List<EmpresaEntity> buscarPorUsuario(@Param("username") String username);
 }
