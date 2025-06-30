@@ -3,6 +3,8 @@
  */
 package com.br.sobieskiproducoes.geradormaterias.exception;
 
+import java.util.logging.Level;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -62,7 +64,19 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = { Exception.class })
     public ResponseEntity<Object> handletGenericoException(final Exception ex) {
+        log.log(Level.SEVERE, ex.getLocalizedMessage(), ex.getCause());
         return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex.getLocalizedMessage())).build();
+    }
+
+    @ExceptionHandler(value = { NaoEncontradoException.class })
+    public ResponseEntity<Object> handletNaoEncontradoException(final NaoEncontradoException ex) {
+        log.log(Level.SEVERE, ex.getLocalizedMessage(), ex.getCause());
+        return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getLocalizedMessage())).build();
+    }
+
+    @ExceptionHandler(value = { DadosInvalidosException.class })
+    public ResponseEntity<Object> handletDadosInvalidosException(final DadosInvalidosException ex) {
+        return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage())).build();
     }
 
 }

@@ -6,9 +6,8 @@ package com.br.sobieskiproducoes.geradormaterias.usuario.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.hibernate.validator.constraints.br.CPF;
-
 import com.br.sobieskiproducoes.geradormaterias.empresa.model.EmpresaEntity;
+import com.br.sobieskiproducoes.geradormaterias.validation.CPF;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

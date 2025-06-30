@@ -5,10 +5,10 @@ package com.br.sobieskiproducoes.geradormaterias.empresa.service;
 
 import static java.util.Objects.isNull;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import com.br.sobieskiproducoes.geradormaterias.empresa.convert.ConfiguracoesConvert;
 import com.br.sobieskiproducoes.geradormaterias.empresa.convert.EmpresaConvert;
@@ -23,7 +23,6 @@ import com.br.sobieskiproducoes.geradormaterias.usuario.dto.UsuarioSistemaDTO;
 import com.br.sobieskiproducoes.geradormaterias.usuario.model.UsuarioEntity;
 import com.br.sobieskiproducoes.geradormaterias.usuario.repository.UsuarioRepository;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
@@ -54,7 +53,7 @@ public class EmpresaService {
         return convert.to(empresa.get());
     }
 
-    public EmpresaDTO salvar(@Valid final EmpresaDTO empresa, final UsuarioSistemaDTO usuarioLogado) throws Exception {
+    public EmpresaDTO salvar(@Validated final EmpresaDTO empresa, final UsuarioSistemaDTO usuarioLogado) throws Exception {
         final Optional<EmpresaEntity> empresaEntityOpt = repository.buscarPrincipalPorUsuario(usuarioLogado.getUsername());
         EmpresaEntity empresaEntity;
 
@@ -73,9 +72,7 @@ public class EmpresaService {
         // Alteração
         if (empresaEntityOpt.isPresent()) {
             empresaEntity = empresaEntityOpt.get();
-            convert.to(empresa, empresaEntity);
-            empresaEntity.setAlterador(usuario);
-            empresaEntity.setAlterado(LocalDateTime.now());
+            convert.alteracao(empresa, usuario, empresaEntity);
 
             if (!empresaEntity.getUsuarios().stream().filter(n -> usuario.getId().equals(n.getUsuario())).findFirst().isPresent()) {
                 empresaEntity.getUsuarios().add(usuario);

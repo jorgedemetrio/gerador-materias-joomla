@@ -3,7 +3,7 @@
  */
 package com.br.sobieskiproducoes.geradormaterias.empresa.dto;
 
-import com.br.sobieskiproducoes.geradormaterias.utils.AbstractObservabilidadeEntity;
+import com.br.sobieskiproducoes.geradormaterias.utils.AbstractObservabilidadeDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import jakarta.validation.constraints.NotBlank;
@@ -28,7 +28,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class TermosEmpresaDTO extends AbstractObservabilidadeEntity {
+public class TermosEmpresaDTO extends AbstractObservabilidadeDTO {
 
     private String id;
 

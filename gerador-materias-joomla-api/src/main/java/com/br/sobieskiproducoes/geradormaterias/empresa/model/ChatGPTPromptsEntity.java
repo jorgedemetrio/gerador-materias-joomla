@@ -17,8 +17,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -54,23 +52,5 @@ public class ChatGPTPromptsEntity extends AbstractObservabilidadeEntity {
     @Valid
     @OneToMany(mappedBy = "configuracao")
     private List<ChatGPTPerguntasEntity> prompts;
-
-    @NotEmpty
-    private List<String> audiencias;
-
-    @NotNull
-    @NotBlank
-    @Column(name = "site", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
-    private String site;
-
-    @NotNull
-    @NotEmpty
-    private List<String> redesSociais;
-
-    @NotNull
-    @NotEmpty
-    private List<String> especialista;
-
-    private List<String> falhas;
 
 }

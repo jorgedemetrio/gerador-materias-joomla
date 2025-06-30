@@ -6,10 +6,9 @@ package com.br.sobieskiproducoes.geradormaterias.usuario.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.hibernate.validator.constraints.br.CPF;
-
 import com.br.sobieskiproducoes.geradormaterias.empresa.dto.EmpresaDTO;
 import com.br.sobieskiproducoes.geradormaterias.usuario.model.NivelUsuarioEnum;
+import com.br.sobieskiproducoes.geradormaterias.validation.CPF;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -74,7 +73,6 @@ public class UsuarioDTO {
 
     @NotBlank
     @CPF
-    @Size(min = 1)
     private String cpf;
 
     private List<EmpresaDTO> empresas;

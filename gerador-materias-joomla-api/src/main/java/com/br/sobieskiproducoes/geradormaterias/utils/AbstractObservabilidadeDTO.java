@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 
 import com.br.sobieskiproducoes.geradormaterias.usuario.dto.UsuarioDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -38,9 +39,11 @@ public abstract class AbstractObservabilidadeDTO {
 
     @Valid
     @NotNull
+    @JsonIgnore
     private UsuarioDTO criador;
 
     @Valid
+    @JsonIgnore
     private UsuarioDTO alterador;
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -66,4 +69,6 @@ public abstract class AbstractObservabilidadeDTO {
 
     @NotBlank
     private String ipProxyAlterador;
+
+    private StatusEnum statusDado;
 }

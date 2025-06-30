@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.br.sobieskiproducoes.geradormaterias.usuario.model.UsuarioEntity;
 import com.br.sobieskiproducoes.geradormaterias.utils.AbstractObservabilidadeEntity;
+import com.br.sobieskiproducoes.geradormaterias.validation.CNPJ;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -21,7 +22,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -53,8 +54,9 @@ public class EmpresaEntity extends AbstractObservabilidadeEntity {
     @Column(name = "nome", insertable = true, updatable = true, nullable = true, unique = false, length = 250)
     private String nome;
 
-    @Size(min = 5, max = 200)
-    @Column(name = "cnpj", insertable = true, updatable = true, nullable = true, unique = true, length = 20)
+    @NotBlank
+    @CNPJ
+    @Column(name = "cnpj", insertable = true, updatable = true, nullable = true, unique = true, length = 18)
     private String cnpj;
 
     @Column(name = "principal", insertable = true, updatable = true, nullable = true, unique = false, columnDefinition = "TINYINT(1) DEFAULT 1")

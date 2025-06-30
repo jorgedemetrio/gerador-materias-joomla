@@ -5,6 +5,7 @@ package com.br.sobieskiproducoes.geradormaterias.empresa.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -37,5 +38,5 @@ public interface ConfiguracoesRepository extends JpaRepository<ConfiguracoesEnti
                c.statusDado not in (StatusEnum.REMOVIDO) AND
                u.usuario = :username \
                """)
-    List<ConfiguracoesEntity> buscaConfiguracoes(@Param("username") String username);
+    List<ConfiguracoesEntity> buscaConfiguracoes(@Param("username") String username, Pageable page);
 }

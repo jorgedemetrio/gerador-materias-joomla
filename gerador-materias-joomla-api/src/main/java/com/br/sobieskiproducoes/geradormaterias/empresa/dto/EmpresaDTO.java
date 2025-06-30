@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 
 import com.br.sobieskiproducoes.geradormaterias.usuario.dto.UsuarioSistemaDTO;
 import com.br.sobieskiproducoes.geradormaterias.utils.AbstractObservabilidadeDTO;
+import com.br.sobieskiproducoes.geradormaterias.validation.CNPJ;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import jakarta.validation.constraints.NotBlank;
@@ -42,7 +43,8 @@ public class EmpresaDTO extends AbstractObservabilidadeDTO {
     @Size(min = 5, max = 200)
     private String nome;
 
-    @Size(min = 5, max = 200)
+    @NotBlank
+    @CNPJ
     private String cnpj;
 
     private ConfiguracoesDTO configuracao;
