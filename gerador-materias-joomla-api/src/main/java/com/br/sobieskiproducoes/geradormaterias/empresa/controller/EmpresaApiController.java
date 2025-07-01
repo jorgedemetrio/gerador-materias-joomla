@@ -34,7 +34,7 @@ import lombok.extern.java.Log;
 @Log
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/empresa")
+@RequestMapping("/api/v1/empresa")
 public class EmpresaApiController {
 
     private final EmpresaService service;

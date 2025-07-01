@@ -22,7 +22,7 @@ import lombok.extern.java.Log;
 @Log
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/materia")
+@RequestMapping("/api/v1/materia")
 public class MateriaApiController {
 
     private final MateriaService service;

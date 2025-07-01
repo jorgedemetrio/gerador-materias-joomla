@@ -5,6 +5,7 @@ package com.br.sobieskiproducoes.geradormaterias.empresa.convert;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -30,13 +31,16 @@ import com.br.sobieskiproducoes.geradormaterias.utils.StatusEnum;
  * @since 28 de jun. de 2025 01:13:23
  * @version 1.0.28 de jun. de 2025
  */
-@Mapper(componentModel = "spring", imports = { LocalDateTime.class, StatusEnum.class })
+@Mapper(componentModel = "spring", imports = { LocalDateTime.class, StatusEnum.class, Objects.class })
 public interface ConfiguracoesConvert {
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "tags", ignore = true)
     @Mapping(target = "categorias", ignore = true)
     @Mapping(target = "materias", ignore = true)
     @Mapping(target = "empresa", ignore = true)
+    @Mapping(target = "alterador", ignore = true)
+    @Mapping(target = "criador", ignore = true)
     ConfiguracoesDTO to(ConfiguracoesEntity sources);
 
     @Mapping(target = "id", source = "source.id")
@@ -91,6 +95,32 @@ public interface ConfiguracoesConvert {
     @Mapping(target = "entity.ipCriador", source = "source.ipAlterador")
     @Mapping(target = "entity.ipProxyCriador", source = "source.ipProxyAlterador")
     @Mapping(target = "entity.statusDado", expression = "java(StatusEnum.NOVO)")
+
+    @Mapping(target = "entity.joomla.url", source = "source.joomla.url")
+    @Mapping(target = "entity.joomla.bearer", source = "source.joomla.bearer")
+    @Mapping(target = "entity.joomla.idioma", source = "source.joomla.idioma")
+    @Mapping(target = "entity.joomla.alterador", source = "usuario")
+    @Mapping(target = "entity.joomla.alterado", expression = "java(LocalDateTime.now())")
+    @Mapping(target = "entity.joomla.ipCriador", source = "source.ipAlterador")
+    @Mapping(target = "entity.joomla.ipProxyCriador", source = "source.ipProxyAlterador")
+    @Mapping(target = "entity.joomla.statusDado", expression = "java(StatusEnum.NOVO)")
+
+    @Mapping(target = "entity.wordpress.url", source = "source.wordpress.url")
+    @Mapping(target = "entity.wordpress.idioma", source = "source.wordpress.idioma")
+    @Mapping(target = "entity.wordpress.bearer", source = "source.wordpress.bearer")
+    @Mapping(target = "entity.wordpress.senha", source = "source.wordpress.senha")
+    @Mapping(target = "entity.wordpress.usuario", source = "source.wordpress.usuario")
+    @Mapping(target = "entity.wordpress.alterador", source = "usuario")
+    @Mapping(target = "entity.wordpress.alterado", expression = "java(LocalDateTime.now())")
+    @Mapping(target = "entity.wordpress.ipCriador", source = "source.ipAlterador")
+    @Mapping(target = "entity.wordpress.ipProxyCriador", source = "source.ipProxyAlterador")
+    @Mapping(target = "entity.wordpress.statusDado", expression = "java(StatusEnum.NOVO)")
+
+    @Mapping(target = "entity.chatgpt.alterador", source = "usuario")
+    @Mapping(target = "entity.chatgpt.alterado", expression = "java(LocalDateTime.now())")
+    @Mapping(target = "entity.chatgpt.ipCriador", source = "source.ipAlterador")
+    @Mapping(target = "entity.chatgpt.ipProxyCriador", source = "source.ipProxyAlterador")
+    @Mapping(target = "entity.chatgpt.statusDado", expression = "java(StatusEnum.NOVO)")
     void atualizar(ConfiguracoesDTO source, UsuarioEntity usuario, @MappingTarget ConfiguracoesEntity entity);
 
     @Mapping(target = "tags", ignore = true)

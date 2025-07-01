@@ -31,7 +31,7 @@ import lombok.extern.java.Log;
 @Log
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/usuario")
+@RequestMapping("/api/v1/usuario")
 public class UsuarioAPIController {
 
     private final UsuarioService service;

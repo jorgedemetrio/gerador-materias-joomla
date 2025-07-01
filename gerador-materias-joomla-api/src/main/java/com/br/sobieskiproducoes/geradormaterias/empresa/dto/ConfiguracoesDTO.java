@@ -9,7 +9,6 @@ import com.br.sobieskiproducoes.geradormaterias.materia.controller.dto.Categoria
 import com.br.sobieskiproducoes.geradormaterias.materia.controller.dto.MateriaDTO;
 import com.br.sobieskiproducoes.geradormaterias.materia.controller.dto.TagDTO;
 import com.br.sobieskiproducoes.geradormaterias.utils.AbstractObservabilidadeDTO;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import jakarta.validation.Valid;
@@ -57,7 +56,6 @@ public class ConfiguracoesDTO extends AbstractObservabilidadeDTO {
     private WordPressConfigurationDTO wordpress;
 
     @Valid
-    @JsonIgnore
     private EmpresaDTO empresa;
 
     @Valid

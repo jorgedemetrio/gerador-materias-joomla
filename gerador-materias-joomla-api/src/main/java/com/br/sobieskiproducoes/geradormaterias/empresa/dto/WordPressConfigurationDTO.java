@@ -4,7 +4,6 @@
 package com.br.sobieskiproducoes.geradormaterias.empresa.dto;
 
 import com.br.sobieskiproducoes.geradormaterias.utils.AbstractObservabilidadeDTO;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import jakarta.validation.constraints.NotBlank;
@@ -37,13 +36,10 @@ public class WordPressConfigurationDTO extends AbstractObservabilidadeDTO {
     @NotBlank
     private String url;
 
-    @JsonIgnore
     private String bearer;
 
-    @JsonIgnore
     private String usuario;
 
-    @JsonIgnore
     private String senha;
 
     private String idioma;

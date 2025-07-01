@@ -25,7 +25,7 @@ public class TokenSerice {
 
     private final Algorithm algorithm;
 
-    @Value("${app.name}")
+    @Value("${application.name}")
     private String APP_NAME;
 
     public final String EMPRESA_ID = "EMPRESA_ID";

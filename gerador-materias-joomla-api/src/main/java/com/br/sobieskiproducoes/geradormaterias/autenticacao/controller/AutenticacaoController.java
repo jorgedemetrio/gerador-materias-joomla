@@ -16,6 +16,7 @@ import com.br.sobieskiproducoes.geradormaterias.autenticacao.dto.LoginDTO;
 import com.br.sobieskiproducoes.geradormaterias.usuario.dto.TokenSessionDTO;
 import com.br.sobieskiproducoes.geradormaterias.usuario.service.UsuarioService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -29,11 +30,12 @@ import lombok.extern.java.Log;
 @Log
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/autenticacao")
+@RequestMapping("/api/v1/autenticacao")
 public class AutenticacaoController {
 
     private final UsuarioService service;
 
+    @Operation(summary = "Realiza o login", description = "Retorna o token de autenticação.")
     @PostMapping("/login")
     public ResponseEntity<TokenSessionDTO> login(@RequestBody @Valid @Validated final LoginDTO login) {
         try {

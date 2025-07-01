@@ -66,8 +66,17 @@ public class ConfiguracaoService {
         final List<ConfiguracoesEntity> configuracaos = repository.buscaConfiguracoes(usuarioLogado.getUsername(), PageRequest.of(0, 1));
 
         if (isNull(configuracaos) || configuracaos.isEmpty()) {
+            configuracoaEntity = convert.novo(configuracao, usuario);
+        } else {
+            configuracoaEntity = configuracaos.get(0);
+            convert.atualizar(configuracao, usuario, configuracoaEntity);
+            if (isNull(configuracao.getJoomla().getBearer()) || configuracao.getJoomla().getBearer().isBlank()) {
+                configuracoaEntity.setJoomla(null);
+            } else {
+                configuracoaEntity.setWordpress(null);
+            }
         }
-        configuracoaEntity = convert.novo(configuracao, usuario);
+
         configuracoaEntity.setEmpresa(empresa.get());
 
         return convert.to(repository.save(configuracoaEntity));

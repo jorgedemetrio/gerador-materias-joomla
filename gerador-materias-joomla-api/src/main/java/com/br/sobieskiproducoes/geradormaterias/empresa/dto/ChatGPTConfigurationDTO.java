@@ -4,7 +4,6 @@
 package com.br.sobieskiproducoes.geradormaterias.empresa.dto;
 
 import com.br.sobieskiproducoes.geradormaterias.utils.AbstractObservabilidadeDTO;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import jakarta.validation.constraints.Max;
@@ -37,15 +36,12 @@ public class ChatGPTConfigurationDTO extends AbstractObservabilidadeDTO {
 
     @NotNull
     @NotBlank
-    @JsonIgnore
     private String bearer;
 
-    @JsonIgnore
     private String assistente;
 
     @NotNull
     @NotBlank
-    @JsonIgnore
     private String organization;
 
     @NotNull
