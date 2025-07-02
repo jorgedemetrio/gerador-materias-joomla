@@ -14,9 +14,10 @@
 
 	<groupId>com.br.sobieskiproducoes</groupId>
 	<artifactId>gerador-materias-api</artifactId>
-	<name>gerador-materias-api</name>
-	<description>Gerador de matérias com ChatGPT</description>
+	<name>Api de geração de máterias</name>
+	<description>Gerador de matérias com ChatGPT para Joomla e WordPress</description>
 	<packaging>jar</packaging>
+	<version>1.0.0-SNAPSHOT</version>
 	<properties>
 		<java.version>17</java.version>
 		<downloadSources>true</downloadSources>
@@ -55,6 +56,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+	    <dependency>
+	      <groupId>org.springframework.session</groupId>
+	      <artifactId>spring-session-core</artifactId>
+	    </dependency>
 	    <dependency>
 	        <groupId>com.github.ulisesbocchio</groupId>
 	        <artifactId>jasypt-spring-boot-starter</artifactId>

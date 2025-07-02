@@ -19,10 +19,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.br.sobieskiproducoes.geradormaterias.config.MateriaConstants;
-import com.br.sobieskiproducoes.geradormaterias.consumer.response.GenericoItemJoomlaResponse;
-import com.br.sobieskiproducoes.geradormaterias.consumer.response.GenericoJoomlaDataDTO;
-import com.br.sobieskiproducoes.geradormaterias.empresa.model.JoomlaConfigurationEntity;
+import com.br.sobieskiproducoes.geradormaterias.empresa.domain.JoomlaConfigurationEntity;
 import com.br.sobieskiproducoes.geradormaterias.materia.consumer.dto.joomla.AtributosTagJoomlaDTO;
+import com.br.sobieskiproducoes.geradormaterias.materia.consumer.joomla.GenericoItemJoomlaResponse;
+import com.br.sobieskiproducoes.geradormaterias.materia.consumer.joomla.GenericoJoomlaDataDTO;
 import com.br.sobieskiproducoes.geradormaterias.materia.consumer.joomla.TagJoomlaClient;
 import com.br.sobieskiproducoes.geradormaterias.materia.controller.dto.TagDTO;
 import com.br.sobieskiproducoes.geradormaterias.materia.model.TagEntity;

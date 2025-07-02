@@ -3,7 +3,8 @@
  */
 package com.br.sobieskiproducoes.geradormaterias.materia.model;
 
-import com.br.sobieskiproducoes.geradormaterias.empresa.model.ConfiguracoesEntity;
+import com.br.sobieskiproducoes.geradormaterias.domain.AbstractObservabilidadeEntity;
+import com.br.sobieskiproducoes.geradormaterias.empresa.domain.ConfiguracoesEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,7 +32,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Entity
 @Table(name = "tbl_faq")
-public class FAQEntity {
+public class FAQEntity extends AbstractObservabilidadeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -5,7 +5,7 @@ package com.br.sobieskiproducoes.geradormaterias.materia.model;
 
 import java.time.LocalDateTime;
 
-import com.br.sobieskiproducoes.geradormaterias.empresa.model.ConfiguracoesEntity;
+import com.br.sobieskiproducoes.geradormaterias.empresa.domain.ConfiguracoesEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

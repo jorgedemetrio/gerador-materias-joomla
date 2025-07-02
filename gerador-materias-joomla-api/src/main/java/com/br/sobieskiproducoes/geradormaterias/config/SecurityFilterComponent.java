@@ -8,6 +8,7 @@ import static java.util.Objects.nonNull;
 
 import java.io.IOException;
 
+import org.slf4j.MDC;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -50,7 +51,7 @@ public class SecurityFilterComponent extends OncePerRequestFilter {
             final String username = service.validToken(auth);
             if (nonNull(username)) {
                 final UserDetails usuario = usuarioService.loadUserByUsername(username);
-
+                MDC.put("usuarioId", username);
                 SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities()));
 
             }

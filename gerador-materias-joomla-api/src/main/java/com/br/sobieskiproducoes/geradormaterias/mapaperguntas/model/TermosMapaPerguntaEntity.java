@@ -3,6 +3,8 @@
  */
 package com.br.sobieskiproducoes.geradormaterias.mapaperguntas.model;
 
+import com.br.sobieskiproducoes.geradormaterias.domain.AbstractObservabilidadeEntity;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,7 +32,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Entity
 @Table(name = "tbl_mapaperguntas_termo")
-public class TermosMapaPerguntaEntity {
+public class TermosMapaPerguntaEntity extends AbstractObservabilidadeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

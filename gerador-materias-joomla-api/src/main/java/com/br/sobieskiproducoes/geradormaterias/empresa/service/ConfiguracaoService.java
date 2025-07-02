@@ -10,19 +10,18 @@ import java.util.Optional;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.br.sobieskiproducoes.geradormaterias.empresa.convert.ConfiguracoesConvert;
+import com.br.sobieskiproducoes.geradormaterias.empresa.domain.ConfiguracoesEntity;
+import com.br.sobieskiproducoes.geradormaterias.empresa.domain.EmpresaEntity;
 import com.br.sobieskiproducoes.geradormaterias.empresa.dto.ConfiguracoesDTO;
-import com.br.sobieskiproducoes.geradormaterias.empresa.model.ConfiguracoesEntity;
-import com.br.sobieskiproducoes.geradormaterias.empresa.model.EmpresaEntity;
 import com.br.sobieskiproducoes.geradormaterias.empresa.repository.ConfiguracoesRepository;
 import com.br.sobieskiproducoes.geradormaterias.empresa.repository.EmpresaRepository;
 import com.br.sobieskiproducoes.geradormaterias.exception.DadosInvalidosException;
 import com.br.sobieskiproducoes.geradormaterias.exception.NaoEncontradoException;
-import com.br.sobieskiproducoes.geradormaterias.exception.UsuarioNaoEncontradoException;
-import com.br.sobieskiproducoes.geradormaterias.usuario.dto.UsuarioSistemaDTO;
 import com.br.sobieskiproducoes.geradormaterias.usuario.model.UsuarioEntity;
-import com.br.sobieskiproducoes.geradormaterias.usuario.repository.UsuarioRepository;
+import com.br.sobieskiproducoes.geradormaterias.utils.SpringSecurityAuditorAwareComponent;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -40,12 +39,16 @@ public class ConfiguracaoService {
 
     private final ConfiguracoesRepository repository;
     private final ConfiguracoesConvert convert;
-    private final UsuarioRepository usuarioRepository;
     private final EmpresaRepository empresaRepository;
 
-    public ConfiguracoesDTO salvar(final ConfiguracoesDTO configuracao, final UsuarioSistemaDTO usuarioLogado) {
+    private final SpringSecurityAuditorAwareComponent usuarioLogadoAwareComponent;
 
-        final Optional<EmpresaEntity> empresa = empresaRepository.buscarPrincipalPorUsuario(usuarioLogado.getUsername());
+    @Transactional
+    public ConfiguracoesDTO salvar(final ConfiguracoesDTO configuracao) {
+
+        final UsuarioEntity usuario = usuarioLogadoAwareComponent.getUsuarioLogado();
+
+        final Optional<EmpresaEntity> empresa = empresaRepository.buscarPrincipalPorUsuario(usuario.getUsuario());
         if (!empresa.isPresent()) {
             throw new DadosInvalidosException("Empresa não encotrada, favorgravar uma dados de empresa primeiro.");
         }
@@ -53,23 +56,15 @@ public class ConfiguracaoService {
             throw new DadosInvalidosException("Entre com a configuração do site, seja WordPress ou Joomla.");
         }
 
-        final Optional<UsuarioEntity> usuarioOpt = usuarioRepository.findByUsuarioIgnoreCase(usuarioLogado.getUsername());
-
-        if (!usuarioOpt.isPresent()) {
-            throw new UsuarioNaoEncontradoException("Usuário não encontrado.");
-        }
-
-        final UsuarioEntity usuario = usuarioOpt.get();
-
         ConfiguracoesEntity configuracoaEntity = null;
 
-        final List<ConfiguracoesEntity> configuracaos = repository.buscaConfiguracoes(usuarioLogado.getUsername(), PageRequest.of(0, 1));
+        final List<ConfiguracoesEntity> configuracaos = repository.buscaConfiguracoes(usuario.getUsuario(), PageRequest.of(0, 1));
 
         if (isNull(configuracaos) || configuracaos.isEmpty()) {
-            configuracoaEntity = convert.novo(configuracao, usuario);
+            configuracoaEntity = convert.novo(configuracao);
         } else {
             configuracoaEntity = configuracaos.get(0);
-            convert.atualizar(configuracao, usuario, configuracoaEntity);
+            convert.atualizar(configuracao, configuracoaEntity);
             if (isNull(configuracao.getJoomla().getBearer()) || configuracao.getJoomla().getBearer().isBlank()) {
                 configuracoaEntity.setJoomla(null);
             } else {
@@ -79,11 +74,15 @@ public class ConfiguracaoService {
 
         configuracoaEntity.setEmpresa(empresa.get());
 
-        return convert.to(repository.save(configuracoaEntity));
+        configuracoaEntity = repository.save(configuracoaEntity);
+
+        return null;
+        // convert.to(configuracoaEntity);
     }
 
-    public ConfiguracoesDTO configuracaoDaEmpresaPrincipal(final UsuarioSistemaDTO usuarioLogado) {
-        final List<ConfiguracoesEntity> configuracao = repository.buscaConfiguracoes(usuarioLogado.getUsername(), PageRequest.of(0, 1));
+    public ConfiguracoesDTO configuracaoDaEmpresaPrincipal() {
+        final List<ConfiguracoesEntity> configuracao = repository.buscaConfiguracoes(usuarioLogadoAwareComponent.getUsuarioLogado().getUsuario(),
+                PageRequest.of(0, 1));
 
         if (isNull(configuracao) || configuracao.isEmpty()) {
             throw new NaoEncontradoException("Configuração não encontrada.");

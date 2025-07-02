@@ -6,7 +6,7 @@ package com.br.sobieskiproducoes.geradormaterias.usuario.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.br.sobieskiproducoes.geradormaterias.empresa.model.EmpresaEntity;
+import com.br.sobieskiproducoes.geradormaterias.empresa.domain.EmpresaEntity;
 import com.br.sobieskiproducoes.geradormaterias.validation.CPF;
 
 import jakarta.persistence.CascadeType;

@@ -20,12 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.br.sobieskiproducoes.geradormaterias.config.MateriaConstants;
 import com.br.sobieskiproducoes.geradormaterias.config.properties.ConfiguracoesProperties;
-import com.br.sobieskiproducoes.geradormaterias.consumer.response.GenericoItemJoomlaResponse;
-import com.br.sobieskiproducoes.geradormaterias.consumer.response.GenericoJoomlaDataDTO;
 import com.br.sobieskiproducoes.geradormaterias.dto.RetornoBusinessDTO;
-import com.br.sobieskiproducoes.geradormaterias.empresa.model.JoomlaConfigurationEntity;
+import com.br.sobieskiproducoes.geradormaterias.empresa.domain.JoomlaConfigurationEntity;
 import com.br.sobieskiproducoes.geradormaterias.materia.consumer.dto.joomla.AtributosCategoriaJoomlaDTO;
 import com.br.sobieskiproducoes.geradormaterias.materia.consumer.joomla.CategoriaJoomlaClient;
+import com.br.sobieskiproducoes.geradormaterias.materia.consumer.joomla.GenericoItemJoomlaResponse;
+import com.br.sobieskiproducoes.geradormaterias.materia.consumer.joomla.GenericoJoomlaDataDTO;
 import com.br.sobieskiproducoes.geradormaterias.materia.controller.dto.CategoriaDTO;
 import com.br.sobieskiproducoes.geradormaterias.materia.model.CategoriaEntity;
 import com.br.sobieskiproducoes.geradormaterias.materia.repository.CategoriaRepository;

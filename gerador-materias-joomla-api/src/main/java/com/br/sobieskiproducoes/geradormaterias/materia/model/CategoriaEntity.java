@@ -3,8 +3,10 @@
  */
 package com.br.sobieskiproducoes.geradormaterias.materia.model;
 
-import com.br.sobieskiproducoes.geradormaterias.empresa.model.ConfiguracoesEntity;
+import com.br.sobieskiproducoes.geradormaterias.domain.AbstractObservabilidadeEntity;
+import com.br.sobieskiproducoes.geradormaterias.empresa.domain.ConfiguracoesEntity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,14 +35,14 @@ import lombok.ToString;
 @NoArgsConstructor
 @Entity
 @Table(name = "tbl_categoria")
-public class CategoriaEntity {
+public class CategoriaEntity extends AbstractObservabilidadeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_configuracao", insertable = true, updatable = true, nullable = false, unique = false)
     private ConfiguracoesEntity configuracao;
 

@@ -6,8 +6,9 @@ package com.br.sobieskiproducoes.geradormaterias.materia.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.br.sobieskiproducoes.geradormaterias.domain.AbstractObservabilidadeEntity;
 import com.br.sobieskiproducoes.geradormaterias.dto.StatusProcessamentoEnum;
-import com.br.sobieskiproducoes.geradormaterias.empresa.model.ConfiguracoesEntity;
+import com.br.sobieskiproducoes.geradormaterias.empresa.domain.ConfiguracoesEntity;
 import com.br.sobieskiproducoes.geradormaterias.mapaperguntas.model.MapaPerguntaEntity;
 
 import jakarta.persistence.CascadeType;
@@ -42,16 +43,16 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "tbl_materia", indexes = { @Index(columnList = "titulo_1,titulo_2,titulo_3,cricao_banco"), @Index(columnList = "titulo_1,titulo_2,titulo_3"),
-        @Index(columnList = "cricao_banco"), })
-public class MateriaEntity {
+@Table(name = "tbl_materia", indexes = { @Index(columnList = "titulo_1,titulo_2,titulo_3,criado"), @Index(columnList = "titulo_1,titulo_2,titulo_3"),
+        @Index(columnList = "criado"), })
+public class MateriaEntity extends AbstractObservabilidadeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_configuracao", insertable = true, updatable = true, nullable = false, unique = false)
     private ConfiguracoesEntity configuracao;
 
@@ -102,9 +103,6 @@ public class MateriaEntity {
 
     @Column(name = "cricao_na_plataforma", nullable = true, insertable = true, updatable = true, unique = false)
     private LocalDateTime criadoJoomla;
-
-    @Column(name = "cricao_banco", nullable = true, insertable = true, updatable = true, unique = false)
-    private LocalDateTime criado = LocalDateTime.now();
 
     @Column(name = "exportado_para_plataforma", nullable = true, insertable = true, updatable = true, unique = false)
     private LocalDateTime exportado;

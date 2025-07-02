@@ -5,7 +5,7 @@ package com.br.sobieskiproducoes.geradormaterias.empresa.dto;
 
 import java.util.List;
 
-import com.br.sobieskiproducoes.geradormaterias.utils.AbstractObservabilidadeDTO;
+import com.br.sobieskiproducoes.geradormaterias.dto.AbstractObservabilidadeDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import jakarta.validation.constraints.NotBlank;

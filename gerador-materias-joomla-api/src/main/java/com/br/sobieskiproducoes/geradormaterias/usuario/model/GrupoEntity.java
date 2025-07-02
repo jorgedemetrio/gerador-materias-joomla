@@ -5,6 +5,8 @@ package com.br.sobieskiproducoes.geradormaterias.usuario.model;
 
 import java.util.List;
 
+import com.br.sobieskiproducoes.geradormaterias.domain.AbstractObservabilidadeEntity;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,7 +35,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Entity
 @Table(name = "tbl_grupo_usuario")
-public class GrupoEntity {
+public class GrupoEntity extends AbstractObservabilidadeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

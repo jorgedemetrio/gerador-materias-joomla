@@ -1,0 +1,258 @@
+{
+	"info": {
+		"_postman_id": "172c6628-77dd-4ea9-9653-12fb2e6cb83e",
+		"name": "Gerador Materia",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12162560",
+		"_collection_link": "https://alldreams.postman.co/workspace/Loja-Integrada~029d493b-8ac4-4182-aaf6-5f35f7186ad3/collection/12162560-172c6628-77dd-4ea9-9653-12fb2e6cb83e?action=share&source=collection_link&creator=12162560"
+	},
+	"item": [
+		{
+			"name": "Usuario",
+			"item": [
+				{
+					"name": "Salvar",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Jorge Demetiro\",\r\n    \"usuario\": \"admin1\",\r\n    \"senha\": \"admin1\",\r\n    \"email\": \"\",\r\n    \"habilitado\": true,\r\n    \"expira\": \"2026-10-01T22:00:00\",\r\n    \"nivel\": \"ADMINISTRADOR\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/usuario",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"usuario"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Empresa",
+			"item": [
+				{
+					"name": "Empresa",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/empresa",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"empresa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Empresa",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\":\"Empresa\",\r\n    \"cnpj\":\"28.896.746/0001-44\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/empresa",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"empresa"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Configuracao",
+			"item": [
+				{
+					"name": "Configuração",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/configuracao",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"configuracao"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Configuração",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"site\": \"https://www.nossasvidas.com.br\",\r\n    \"istagram\": \"https://instagram.com/nossasvidas.com.br\",\r\n    \"youtube\": \"https://www.youtube.com/@nossasvidas\",\r\n    \"chatgpt\": {\r\n        \"bearer\": \"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\",\r\n        \"assistente\": \"asst_hCksTDdpXamV4opdn5SF3p63\",\r\n        \"organization\": \"org-A1HPSp1qu71NkPzZuo1GWwVG\",\r\n        \"model\": \"4o\"\r\n    },\r\n    \"joomla\": {\r\n        \"url\": \"https://www.nossasvidas.com.br\",\r\n        \"bearer\": \"c2hhMjU2OjE3OjFjYmQzMDgyMWU2ZGVjMDY5NjEyNzIwOWFiNjE2NDJlMmUyZGIxYjk5NGM0ZGEyZDAwODYwN2QxMjE4NjM1NjQ=\",\r\n        \"idioma\": \"\\\"*\\\"\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/configuracao",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"configuracao"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var reposta = pm.response.json();\r",
+							"\r",
+							"\r",
+							"pm.collectionVariables.set(\"token\", reposta.token);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n      \"username\": \"admin\",\r\n      \"password\": \"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/autenticacao/login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"autenticacao",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://127.0.0.1:8080",
+			"type": "string"
+		},
+		{
+			"key": "usuario",
+			"value": "admin",
+			"type": "string"
+		},
+		{
+			"key": "senha",
+			"value": "admin",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

@@ -9,8 +9,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-import com.br.sobieskiproducoes.geradormaterias.consumer.response.GenericoJoomlaDataDTO;
 import com.br.sobieskiproducoes.geradormaterias.materia.consumer.dto.joomla.AtributosCategoriaJoomlaDTO;
+import com.br.sobieskiproducoes.geradormaterias.materia.consumer.joomla.GenericoJoomlaDataDTO;
 import com.br.sobieskiproducoes.geradormaterias.materia.controller.dto.CategoriaDTO;
 import com.br.sobieskiproducoes.geradormaterias.materia.model.CategoriaEntity;
 

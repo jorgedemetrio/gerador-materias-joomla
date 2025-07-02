@@ -16,14 +16,14 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 
 import com.br.sobieskiproducoes.geradormaterias.config.properties.ConfiguracoesProperties;
-import com.br.sobieskiproducoes.geradormaterias.consumer.response.GenericoItemJoomlaResponse;
-import com.br.sobieskiproducoes.geradormaterias.consumer.response.GenericoJoomlaDataDTO;
 import com.br.sobieskiproducoes.geradormaterias.dto.StatusProcessamentoEnum;
-import com.br.sobieskiproducoes.geradormaterias.empresa.model.JoomlaConfigurationEntity;
+import com.br.sobieskiproducoes.geradormaterias.empresa.domain.JoomlaConfigurationEntity;
 import com.br.sobieskiproducoes.geradormaterias.materia.consumer.dto.joomla.AtributosArtigoJoomlaSalvarJoomlaDTO;
 import com.br.sobieskiproducoes.geradormaterias.materia.consumer.dto.joomla.AtributosArtigoSalvoJoomlaDTO;
 import com.br.sobieskiproducoes.geradormaterias.materia.consumer.dto.joomla.AtributosTagJoomlaDTO;
 import com.br.sobieskiproducoes.geradormaterias.materia.consumer.dto.joomla.ImagesMateriaJoomlaDTO;
+import com.br.sobieskiproducoes.geradormaterias.materia.consumer.joomla.GenericoItemJoomlaResponse;
+import com.br.sobieskiproducoes.geradormaterias.materia.consumer.joomla.GenericoJoomlaDataDTO;
 import com.br.sobieskiproducoes.geradormaterias.materia.consumer.joomla.GravarEntityesConsumerService;
 import com.br.sobieskiproducoes.geradormaterias.materia.exception.BusinessException;
 import com.br.sobieskiproducoes.geradormaterias.materia.exception.ObjectoJaExiteNoBancoBusinessException;

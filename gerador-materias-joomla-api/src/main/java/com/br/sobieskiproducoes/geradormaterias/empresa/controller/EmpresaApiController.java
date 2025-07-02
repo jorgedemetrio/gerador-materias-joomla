@@ -18,9 +18,12 @@ import com.br.sobieskiproducoes.geradormaterias.empresa.service.EmpresaService;
 import com.br.sobieskiproducoes.geradormaterias.exception.DadosInvalidosException;
 import com.br.sobieskiproducoes.geradormaterias.exception.NaoEncontradoException;
 import com.br.sobieskiproducoes.geradormaterias.exception.UsuarioNaoEncontradoException;
-import com.br.sobieskiproducoes.geradormaterias.usuario.dto.UsuarioSistemaDTO;
 import com.br.sobieskiproducoes.geradormaterias.utils.ControllerUtils;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -39,15 +42,21 @@ public class EmpresaApiController {
 
     private final EmpresaService service;
 
+    @Operation(summary = "Consulta os dados da empresa do usuário autenticado.", description = "Consulta os dados da empresa do usuário autenticado.", responses = {
+            @ApiResponse(description = "", responseCode = "200", content = { @Content(schema = @Schema(implementation = EmpresaDTO.class)) }),
+            @ApiResponse(description = "", responseCode = "404", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }) })
     @GetMapping({ "/", "" })
     public ResponseEntity<EmpresaDTO> get(final Authentication authentication) throws Exception {
         try {
-            return ResponseEntity.ok(service.getEmpresa((UsuarioSistemaDTO) authentication.getPrincipal()));
+            return ResponseEntity.ok(service.getEmpresa());
         } catch (final NaoEncontradoException e) {
             return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, "Dados da empresa não encontrado")).build();
         }
     }
 
+    @Operation(summary = "Alterar os dados da empresa do usuário autenticado.", description = "Alterar os dados da empresa do usuário autenticado.", responses = {
+            @ApiResponse(description = "", responseCode = "200", content = { @Content(schema = @Schema(implementation = EmpresaDTO.class)) }),
+            @ApiResponse(description = "", responseCode = "404", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }) })
     @PostMapping({ "/", "" })
     public ResponseEntity<EmpresaDTO> save(@RequestBody final EmpresaDTO empresa, final Authentication authentication, final HttpServletRequest request)
             throws Exception {
@@ -56,7 +65,7 @@ public class EmpresaApiController {
         empresa.setIpProxyAlterador(ControllerUtils.getClientIpProxyAddress(request));
 
         try {
-            return ResponseEntity.ok(service.salvar(empresa, (UsuarioSistemaDTO) authentication.getPrincipal()));
+            return ResponseEntity.ok(service.salvar(empresa));
         } catch (final UsuarioNaoEncontradoException e) {
             return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, "Dados da usuario não encontrado")).build();
         } catch (final DadosInvalidosException e) {

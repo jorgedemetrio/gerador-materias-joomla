@@ -3,6 +3,7 @@
  */
 package com.br.sobieskiproducoes.geradormaterias.usuario.dto;
 
+import com.br.sobieskiproducoes.geradormaterias.dto.AbstractObservabilidadeDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import jakarta.validation.constraints.NotBlank;
@@ -26,7 +27,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @EqualsAndHashCode(of = { "id" })
-public class GrupoDTO {
+public class GrupoDTO extends AbstractObservabilidadeDTO {
 
     private String id;
 

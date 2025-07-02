@@ -14,6 +14,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -39,6 +40,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = JWTDecodeException.class)
     public ResponseEntity<Object> handleJWTDecodeException(final JWTDecodeException ex) {
+        return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, ex.getLocalizedMessage())).build();
+    }
+
+    @ExceptionHandler(value = SemPermissaoException.class)
+    public ResponseEntity<Object> handleSemPermissaoException(final SemPermissaoException ex) {
         return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, ex.getLocalizedMessage())).build();
     }
 
@@ -68,9 +74,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex.getLocalizedMessage())).build();
     }
 
+    @ExceptionHandler(value = { MethodArgumentNotValidException.class })
+    public ResponseEntity<Object> handletGenericoException(final MethodArgumentNotValidException ex) {
+        return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage())).build();
+    }
+
     @ExceptionHandler(value = { NaoEncontradoException.class })
     public ResponseEntity<Object> handletNaoEncontradoException(final NaoEncontradoException ex) {
-        log.log(Level.SEVERE, ex.getLocalizedMessage(), ex.getCause());
         return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getLocalizedMessage())).build();
     }
 

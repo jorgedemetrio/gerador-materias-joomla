@@ -1,15 +1,16 @@
 /**
  *
  */
-package com.br.sobieskiproducoes.geradormaterias.empresa.model;
+package com.br.sobieskiproducoes.geradormaterias.empresa.domain;
 
 import java.util.List;
 
+import com.br.sobieskiproducoes.geradormaterias.domain.AbstractObservabilidadeEntity;
 import com.br.sobieskiproducoes.geradormaterias.materia.model.CategoriaEntity;
 import com.br.sobieskiproducoes.geradormaterias.materia.model.MateriaEntity;
 import com.br.sobieskiproducoes.geradormaterias.materia.model.TagEntity;
-import com.br.sobieskiproducoes.geradormaterias.utils.AbstractObservabilidadeEntity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -55,29 +56,29 @@ public class ConfiguracoesEntity extends AbstractObservabilidadeEntity {
     @Column(name = "youtube", insertable = true, updatable = true, nullable = true, unique = false, length = 250)
     private String youtube;
 
-    @OneToOne(mappedBy = "configuracao")
+    @OneToOne(mappedBy = "configuracao", cascade = CascadeType.ALL)
     private ChatGPTPromptsEntity chatgptPrompts;
 
-    @OneToOne(mappedBy = "configuracao")
+    @OneToOne(mappedBy = "configuracao", cascade = CascadeType.ALL)
     private ChatGPTConfigurationEntity chatgpt;
 
-    @OneToOne(mappedBy = "configuracao")
+    @OneToOne(mappedBy = "configuracao", cascade = CascadeType.ALL)
     private JoomlaConfigurationEntity joomla;
 
-    @OneToOne(mappedBy = "configuracao")
+    @OneToOne(mappedBy = "configuracao", cascade = CascadeType.ALL)
     private WordPressConfigurationEntity wordpress;
 
     @OneToOne
     @JoinColumn(name = "id_empresa", insertable = true, updatable = true, nullable = false, unique = false)
     private EmpresaEntity empresa;
 
-    @OneToMany(mappedBy = "configuracao")
+    @OneToMany(mappedBy = "configuracao", cascade = CascadeType.ALL)
     private List<MateriaEntity> materias;
 
-    @OneToMany(mappedBy = "configuracao")
+    @OneToMany(mappedBy = "configuracao", cascade = CascadeType.ALL)
     private List<TagEntity> tags;
 
-    @OneToMany(mappedBy = "configuracao")
+    @OneToMany(mappedBy = "configuracao", cascade = CascadeType.ALL)
     private List<CategoriaEntity> categorias;
 
 }

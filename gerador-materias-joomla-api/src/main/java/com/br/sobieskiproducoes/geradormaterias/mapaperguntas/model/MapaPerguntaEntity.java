@@ -6,6 +6,7 @@ package com.br.sobieskiproducoes.geradormaterias.mapaperguntas.model;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.br.sobieskiproducoes.geradormaterias.domain.AbstractObservabilidadeEntity;
 import com.br.sobieskiproducoes.geradormaterias.materia.model.CategoriaEntity;
 import com.br.sobieskiproducoes.geradormaterias.materia.model.MateriaEntity;
 
@@ -37,7 +38,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Entity
 @Table(name = "tbl_mapa_perguntas")
-public class MapaPerguntaEntity {
+public class MapaPerguntaEntity extends AbstractObservabilidadeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

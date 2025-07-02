@@ -2,9 +2,8 @@
 #  port: 8090
 
 application:
-  name: ^project.named^
+  name: ^project.name^
   description: ^project.description^
-build:
   version: ^project.version^
   timestamp: ^timestamp^
 

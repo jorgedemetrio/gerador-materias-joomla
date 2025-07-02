@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.br.sobieskiproducoes.geradormaterias.consumer.response;
+package com.br.sobieskiproducoes.geradormaterias.materia.consumer.joomla;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -14,7 +14,7 @@ import lombok.ToString;
 
 /**
  * @author Jorge Demetrio
- * @since 21 de fev. de 2024 18:57:48
+ * @since 21 de fev. de 2024 18:59:58
  * @version 1.0.0
  */
 @Getter
@@ -24,11 +24,12 @@ import lombok.ToString;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GenericoItemJoomlaResponse<T> {
+public class LinkJoomlaResponseDTO {
 
-  private T data;
+    private String self;
+    private String next;
+    private String last;
+    private String first;
+    private String previous;
 
-  private LinkResponse links;
-
-  private MetaResponse meta;
 }

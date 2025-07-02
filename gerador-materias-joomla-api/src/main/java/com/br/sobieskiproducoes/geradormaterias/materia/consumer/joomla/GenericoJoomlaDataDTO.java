@@ -1,11 +1,10 @@
 /**
  *
  */
-package com.br.sobieskiproducoes.geradormaterias.consumer.response;
+package com.br.sobieskiproducoes.geradormaterias.materia.consumer.joomla;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +14,7 @@ import lombok.ToString;
 
 /**
  * @author Jorge Demetrio
- * @since 21 de fev. de 2024 18:59:07
+ * @since 21 de fev. de 2024 18:37:38
  * @version 1.0.0
  */
 @Getter
@@ -25,8 +24,9 @@ import lombok.ToString;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class MetaResponse {
+public class GenericoJoomlaDataDTO<T> {
 
-  @JsonProperty("total-pages")
-  private Long totalPages;
+  private String type;
+  private String id;
+  private T attributes;
 }

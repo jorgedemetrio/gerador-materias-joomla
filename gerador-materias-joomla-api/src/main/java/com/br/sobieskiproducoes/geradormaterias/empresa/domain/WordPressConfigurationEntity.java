@@ -1,11 +1,12 @@
 /**
  *
  */
-package com.br.sobieskiproducoes.geradormaterias.empresa.model;
+package com.br.sobieskiproducoes.geradormaterias.empresa.domain;
 
-import com.br.sobieskiproducoes.geradormaterias.utils.AbstractObservabilidadeEntity;
-import com.br.sobieskiproducoes.geradormaterias.utils.AttributeEncryptor;
+import com.br.sobieskiproducoes.geradormaterias.config.AttributeEncryptorConfig;
+import com.br.sobieskiproducoes.geradormaterias.domain.AbstractObservabilidadeEntity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -30,33 +31,38 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString(exclude = { "bearer" })
+@ToString(exclude = { "bearer", "usuario", "senha" })
 @EqualsAndHashCode(of = { "id" }, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "tbl_configuracao_joomla")
-public class JoomlaConfigurationEntity extends AbstractObservabilidadeEntity {
+public class WordPressConfigurationEntity extends AbstractObservabilidadeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_configuracao", insertable = true, updatable = true, nullable = false, unique = false)
     private ConfiguracoesEntity configuracao;
 
     @NotNull
     @NotBlank
-    @Column(name = "rul", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
+    @Column(name = "url", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
     private String url;
 
-    @NotNull
-    @NotBlank
-    @Column(name = "bearer", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
-    @Convert(converter = AttributeEncryptor.class)
+    @Column(name = "bearer", nullable = true, insertable = true, updatable = true, unique = false, length = 250)
     private String bearer;
+
+    @Convert(converter = AttributeEncryptorConfig.class)
+    @Column(name = "usuario", nullable = true, insertable = true, updatable = true, unique = false, length = 100)
+    private String usuario;
+
+    @Convert(converter = AttributeEncryptorConfig.class)
+    @Column(name = "senha", nullable = true, insertable = true, updatable = true, unique = false, length = 100)
+    private String senha;
 
     @Column(name = "idioma", nullable = true, insertable = true, updatable = true, unique = false, length = 100)
     private String idioma;

@@ -12,16 +12,14 @@ import org.springframework.validation.annotation.Validated;
 
 import com.br.sobieskiproducoes.geradormaterias.empresa.convert.ConfiguracoesConvert;
 import com.br.sobieskiproducoes.geradormaterias.empresa.convert.EmpresaConvert;
+import com.br.sobieskiproducoes.geradormaterias.empresa.domain.EmpresaEntity;
 import com.br.sobieskiproducoes.geradormaterias.empresa.dto.EmpresaDTO;
-import com.br.sobieskiproducoes.geradormaterias.empresa.model.EmpresaEntity;
 import com.br.sobieskiproducoes.geradormaterias.empresa.repository.ConfiguracoesRepository;
 import com.br.sobieskiproducoes.geradormaterias.empresa.repository.EmpresaRepository;
 import com.br.sobieskiproducoes.geradormaterias.exception.DadosInvalidosException;
 import com.br.sobieskiproducoes.geradormaterias.exception.NaoEncontradoException;
-import com.br.sobieskiproducoes.geradormaterias.exception.UsuarioNaoEncontradoException;
-import com.br.sobieskiproducoes.geradormaterias.usuario.dto.UsuarioSistemaDTO;
 import com.br.sobieskiproducoes.geradormaterias.usuario.model.UsuarioEntity;
-import com.br.sobieskiproducoes.geradormaterias.usuario.repository.UsuarioRepository;
+import com.br.sobieskiproducoes.geradormaterias.utils.SpringSecurityAuditorAwareComponent;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -37,14 +35,14 @@ import lombok.extern.java.Log;
 @Service
 public class EmpresaService {
     private final EmpresaRepository repository;
-    private final UsuarioRepository usuarioRepository;
     private final ConfiguracoesRepository configuracoesRepository;
     private final EmpresaConvert convert;
     private final ConfiguracoesConvert configuracoesConvert;
+    private final SpringSecurityAuditorAwareComponent usuarioLogadoAwareComponent;
 
-    public EmpresaDTO getEmpresa(final UsuarioSistemaDTO usuarioLogado) throws Exception {
+    public EmpresaDTO getEmpresa() throws Exception {
 
-        final Optional<EmpresaEntity> empresa = repository.buscarPrincipalPorUsuario(usuarioLogado.getUsername());
+        final Optional<EmpresaEntity> empresa = repository.buscarPrincipalPorUsuario(usuarioLogadoAwareComponent.getUsuarioLogado().getUsuario());
 
         if (!empresa.isPresent()) {
             throw new NaoEncontradoException("Não encontrado!");
@@ -53,17 +51,12 @@ public class EmpresaService {
         return convert.to(empresa.get());
     }
 
-    public EmpresaDTO salvar(@Validated final EmpresaDTO empresa, final UsuarioSistemaDTO usuarioLogado) throws Exception {
-        final Optional<EmpresaEntity> empresaEntityOpt = repository.buscarPrincipalPorUsuario(usuarioLogado.getUsername());
+    public EmpresaDTO salvar(@Validated final EmpresaDTO empresa) throws Exception {
+
+        final UsuarioEntity usuario = usuarioLogadoAwareComponent.getUsuarioLogado();
+
+        final Optional<EmpresaEntity> empresaEntityOpt = repository.buscarPrincipalPorUsuario(usuario.getUsuario());
         EmpresaEntity empresaEntity;
-
-        final Optional<UsuarioEntity> usuarioOpt = usuarioRepository.findByUsuarioIgnoreCase(usuarioLogado.getUsername());
-
-        if (!usuarioOpt.isPresent()) {
-            throw new UsuarioNaoEncontradoException("Usuário não encontrado.");
-        }
-
-        final UsuarioEntity usuario = usuarioOpt.get();
 
         if (isNull(empresa) || isNull(empresa.getNome()) || empresa.getNome().isBlank() || empresa.getNome().length() < 5) {
             throw new DadosInvalidosException("Nome da empresa é obrigatório deve ter no minimo 5 caracteres.");
@@ -72,7 +65,7 @@ public class EmpresaService {
         // Alteração
         if (empresaEntityOpt.isPresent()) {
             empresaEntity = empresaEntityOpt.get();
-            convert.alteracao(empresa, usuario, empresaEntity);
+            convert.alteracao(empresa, empresaEntity);
 
             if (!empresaEntity.getUsuarios().stream().filter(n -> usuario.getId().equals(n.getUsuario())).findFirst().isPresent()) {
                 empresaEntity.getUsuarios().add(usuario);
@@ -87,10 +80,11 @@ public class EmpresaService {
         empresaEntity = repository.save(empresaEntity);
 
         if (isNull(empresaEntity.getConfiguracao())) {
-            empresaEntity.setConfiguracao(configuracoesRepository.save(configuracoesConvert.novoConfiguracaoEntity(empresaEntity, usuario)));
+            empresaEntity.setConfiguracao(configuracoesRepository.save(configuracoesConvert.novoConfiguracaoEntity(empresaEntity)));
         }
 
         return convert.to(empresaEntity);
 
     }
+
 }

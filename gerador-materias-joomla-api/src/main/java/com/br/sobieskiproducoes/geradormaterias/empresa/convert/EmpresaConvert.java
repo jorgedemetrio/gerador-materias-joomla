@@ -11,10 +11,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
+import com.br.sobieskiproducoes.geradormaterias.empresa.domain.ConfiguracoesEntity;
+import com.br.sobieskiproducoes.geradormaterias.empresa.domain.EmpresaEntity;
 import com.br.sobieskiproducoes.geradormaterias.empresa.dto.ConfiguracoesDTO;
 import com.br.sobieskiproducoes.geradormaterias.empresa.dto.EmpresaDTO;
-import com.br.sobieskiproducoes.geradormaterias.empresa.model.ConfiguracoesEntity;
-import com.br.sobieskiproducoes.geradormaterias.empresa.model.EmpresaEntity;
 import com.br.sobieskiproducoes.geradormaterias.usuario.model.UsuarioEntity;
 import com.br.sobieskiproducoes.geradormaterias.utils.StatusEnum;
 
@@ -70,9 +70,8 @@ public interface EmpresaConvert {
     @Mapping(target = "ipCriador", ignore = true)
     @Mapping(target = "ipProxyCriador", ignore = true)
     @Mapping(target = "nome", source = "source.nome")
-    @Mapping(target = "alterador", source = "usuario")
     @Mapping(target = "alterado", expression = "java(LocalDateTime.now())")
-    void alteracao(EmpresaDTO source, UsuarioEntity usuario, @MappingTarget EmpresaEntity target);
+    void alteracao(EmpresaDTO source, @MappingTarget EmpresaEntity target);
 
     ConfiguracoesDTO to(ConfiguracoesEntity source);
 
@@ -82,7 +81,6 @@ public interface EmpresaConvert {
     @Mapping(target = "id", source = "source.id")
     @Mapping(target = "principal", constant = "true")
     @Mapping(target = "nome", source = "source.nome")
-    @Mapping(target = "criador", source = "usuario")
     @Mapping(target = "criado", expression = "java(LocalDateTime.now())")
     @Mapping(target = "ipCriador", source = "source.ipAlterador")
     @Mapping(target = "ipProxyCriador", source = "source.ipProxyAlterador")

@@ -31,7 +31,7 @@ import com.br.sobieskiproducoes.geradormaterias.chatgpt.dto.SessaoChatGPTDTO;
 import com.br.sobieskiproducoes.geradormaterias.chatgpt.repository.LogDialogoChatGPTRepository;
 import com.br.sobieskiproducoes.geradormaterias.chatgpt.service.convert.ChatGPTConvert;
 import com.br.sobieskiproducoes.geradormaterias.config.properties.ConfiguracoesProperties;
-import com.br.sobieskiproducoes.geradormaterias.empresa.model.ConfiguracoesEntity;
+import com.br.sobieskiproducoes.geradormaterias.empresa.domain.ConfiguracoesEntity;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;

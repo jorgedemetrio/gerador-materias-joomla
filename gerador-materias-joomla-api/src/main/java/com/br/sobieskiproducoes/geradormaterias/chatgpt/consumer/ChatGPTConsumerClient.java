@@ -25,7 +25,7 @@ import com.br.sobieskiproducoes.geradormaterias.chatgpt.consumer.response.Runner
 import com.br.sobieskiproducoes.geradormaterias.chatgpt.consumer.response.RunnerStatuEnum;
 import com.br.sobieskiproducoes.geradormaterias.chatgpt.dto.SessaoChatGPTDTO;
 import com.br.sobieskiproducoes.geradormaterias.config.properties.ConfiguracoesProperties;
-import com.br.sobieskiproducoes.geradormaterias.empresa.model.ConfiguracoesEntity;
+import com.br.sobieskiproducoes.geradormaterias.empresa.domain.ConfiguracoesEntity;
 
 import lombok.RequiredArgsConstructor;
 

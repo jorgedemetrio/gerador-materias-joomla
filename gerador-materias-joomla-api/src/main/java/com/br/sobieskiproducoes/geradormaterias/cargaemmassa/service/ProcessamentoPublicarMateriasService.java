@@ -14,8 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.br.sobieskiproducoes.geradormaterias.config.properties.ConfiguracoesProperties;
 import com.br.sobieskiproducoes.geradormaterias.dto.StatusProcessamentoEnum;
-import com.br.sobieskiproducoes.geradormaterias.empresa.model.ConfiguracoesEntity;
-import com.br.sobieskiproducoes.geradormaterias.empresa.model.JoomlaConfigurationEntity;
+import com.br.sobieskiproducoes.geradormaterias.empresa.domain.ConfiguracoesEntity;
+import com.br.sobieskiproducoes.geradormaterias.empresa.domain.JoomlaConfigurationEntity;
 import com.br.sobieskiproducoes.geradormaterias.empresa.repository.ConfiguracoesRepository;
 import com.br.sobieskiproducoes.geradormaterias.materia.exception.BusinessException;
 import com.br.sobieskiproducoes.geradormaterias.materia.model.MateriaEntity;

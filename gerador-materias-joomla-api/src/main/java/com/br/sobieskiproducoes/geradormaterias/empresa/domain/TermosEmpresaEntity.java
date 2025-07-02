@@ -1,9 +1,9 @@
 /**
  *
  */
-package com.br.sobieskiproducoes.geradormaterias.empresa.model;
+package com.br.sobieskiproducoes.geradormaterias.empresa.domain;
 
-import com.br.sobieskiproducoes.geradormaterias.utils.AbstractObservabilidadeEntity;
+import com.br.sobieskiproducoes.geradormaterias.domain.AbstractObservabilidadeEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

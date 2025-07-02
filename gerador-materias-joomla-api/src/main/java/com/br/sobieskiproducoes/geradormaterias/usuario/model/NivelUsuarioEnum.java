@@ -10,6 +10,6 @@ package com.br.sobieskiproducoes.geradormaterias.usuario.model;
  * @since 14 de jun. de 2025 02:01:48
  */
 public enum NivelUsuarioEnum {
-    ADMONISTRADOR, NORMAL;
+    ADMINISTRADOR, NORMAL;
 
 }

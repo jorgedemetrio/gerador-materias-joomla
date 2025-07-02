@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<include resource="org/springframework/boot/logging/logback/defaults.xml" />
+	<timestamp key="bySecond" datePattern="yyyyMMddHH" />
+	
+	
+	
+<!--	<property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-./logs}/}gerador-materia-app-${bySecond}.log}"/>-->
+	<include
+		resource="org/springframework/boot/logging/logback/file-appender.xml" />
+    
+    
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+	  <encoder>
+	    <pattern>%d{mm:ss} [%thread] %highlight(%-5level) - %boldCyan(%msg) %n</pattern>
+	  </encoder>
+	</appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+    	<file>./logs/gerador-materia-${bySecond}.log}</file>
+	    <encoder>
+	        <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - [usuario=%X{usuarioId}]  [url=%X{pathUrl}]  [traking=%X{trackingId}]  [session=%X{sessionId}] - %msg%n</pattern>
+	    </encoder>
+	</appender>
+
+
+	<logger name="chapters.configuration" level="TRACE" />
+	
+  <root level="INFO">
+		<appender-ref ref="FILE" />
+		<appender-ref ref="CONSOLE" />
+  </root>
+	<!--  <root level="ALL">-->
+	<!--		<appender-ref ref="FILE" />-->
+	<!--  </root>-->
+
+</configuration>

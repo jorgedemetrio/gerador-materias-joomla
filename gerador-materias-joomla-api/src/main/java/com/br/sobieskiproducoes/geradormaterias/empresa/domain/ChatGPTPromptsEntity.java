@@ -1,12 +1,13 @@
 /**
  *
  */
-package com.br.sobieskiproducoes.geradormaterias.empresa.model;
+package com.br.sobieskiproducoes.geradormaterias.empresa.domain;
 
 import java.util.List;
 
-import com.br.sobieskiproducoes.geradormaterias.utils.AbstractObservabilidadeEntity;
+import com.br.sobieskiproducoes.geradormaterias.domain.AbstractObservabilidadeEntity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -44,13 +45,13 @@ public class ChatGPTPromptsEntity extends AbstractObservabilidadeEntity {
     @Column(name = "id")
     private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_configuracao", insertable = true, updatable = true, nullable = false, unique = false)
     private ConfiguracoesEntity configuracao;
 
     @NotNull
     @Valid
-    @OneToMany(mappedBy = "configuracao")
+    @OneToMany(mappedBy = "configuracao", cascade = CascadeType.ALL)
     private List<ChatGPTPerguntasEntity> prompts;
 
 }

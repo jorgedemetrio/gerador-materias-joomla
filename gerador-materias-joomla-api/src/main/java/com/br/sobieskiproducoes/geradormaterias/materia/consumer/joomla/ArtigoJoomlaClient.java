@@ -16,9 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import com.br.sobieskiproducoes.geradormaterias.consumer.response.GenericoItemJoomlaResponse;
-import com.br.sobieskiproducoes.geradormaterias.consumer.response.GenericoJoomlaDataDTO;
-import com.br.sobieskiproducoes.geradormaterias.empresa.model.JoomlaConfigurationEntity;
+import com.br.sobieskiproducoes.geradormaterias.empresa.domain.JoomlaConfigurationEntity;
 import com.br.sobieskiproducoes.geradormaterias.materia.consumer.dto.joomla.AtributosArtigoJoomlaDTO;
 
 import lombok.RequiredArgsConstructor;

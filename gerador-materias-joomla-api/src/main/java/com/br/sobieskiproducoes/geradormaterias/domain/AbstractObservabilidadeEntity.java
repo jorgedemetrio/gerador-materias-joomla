@@ -1,11 +1,17 @@
 /**
  *
  */
-package com.br.sobieskiproducoes.geradormaterias.utils;
+package com.br.sobieskiproducoes.geradormaterias.domain;
 
 import java.time.LocalDateTime;
 
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import com.br.sobieskiproducoes.geradormaterias.usuario.model.UsuarioEntity;
+import com.br.sobieskiproducoes.geradormaterias.utils.StatusEnum;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
@@ -14,6 +20,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,17 +38,23 @@ import lombok.Setter;
 @NoArgsConstructor
 @MappedSuperclass
 public abstract class AbstractObservabilidadeEntity {
+
+    @CreatedBy
     @ManyToOne
     @JoinColumn(name = "id_usuario_criador", nullable = false, insertable = true, updatable = false, unique = false)
     private UsuarioEntity criador;
 
+    @LastModifiedBy
     @ManyToOne
     @JoinColumn(name = "id_usuario_alterado", nullable = true, insertable = true, updatable = true, unique = false)
     private UsuarioEntity alterador;
 
+    @NotNull
+    @CreatedDate
     @Column(name = "criado", nullable = false, insertable = true, updatable = false, unique = false)
-    private LocalDateTime criado = LocalDateTime.now();
+    private LocalDateTime criado;
 
+    @LastModifiedDate
     @Column(name = "alterado", nullable = true, insertable = true, updatable = true, unique = false)
     private LocalDateTime alterado;
 

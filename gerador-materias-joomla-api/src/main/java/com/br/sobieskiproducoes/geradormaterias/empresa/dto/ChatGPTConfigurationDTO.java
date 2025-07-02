@@ -3,7 +3,7 @@
  */
 package com.br.sobieskiproducoes.geradormaterias.empresa.dto;
 
-import com.br.sobieskiproducoes.geradormaterias.utils.AbstractObservabilidadeDTO;
+import com.br.sobieskiproducoes.geradormaterias.dto.AbstractObservabilidadeDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import jakarta.validation.constraints.Max;
@@ -40,6 +40,8 @@ public class ChatGPTConfigurationDTO extends AbstractObservabilidadeDTO {
 
     private String assistente;
 
+    private String thread;
+
     @NotNull
     @NotBlank
     private String organization;
@@ -48,25 +50,16 @@ public class ChatGPTConfigurationDTO extends AbstractObservabilidadeDTO {
     @NotBlank
     private String model;
 
-    @NotNull
     @Min(0)
     @Max(1)
     private Double temperature;
 
-    @NotNull
-    @NotBlank
     private String roleUser;
 
-    @NotNull
-    @NotBlank
     private String roleSystem;
 
-    @NotNull
-    @NotBlank
     private String roleAssistant;
 
-    @NotNull
-    @NotBlank
     private String maxTokens;
 
 }

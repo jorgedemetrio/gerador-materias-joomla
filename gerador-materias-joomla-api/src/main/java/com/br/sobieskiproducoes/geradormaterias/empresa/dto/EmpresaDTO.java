@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.springframework.validation.annotation.Validated;
 
+import com.br.sobieskiproducoes.geradormaterias.dto.AbstractObservabilidadeDTO;
 import com.br.sobieskiproducoes.geradormaterias.usuario.dto.UsuarioSistemaDTO;
-import com.br.sobieskiproducoes.geradormaterias.utils.AbstractObservabilidadeDTO;
 import com.br.sobieskiproducoes.geradormaterias.validation.CNPJ;
 import com.fasterxml.jackson.annotation.JsonInclude;
 

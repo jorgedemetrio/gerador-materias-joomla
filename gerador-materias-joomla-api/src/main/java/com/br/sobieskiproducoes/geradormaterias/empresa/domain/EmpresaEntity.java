@@ -1,12 +1,12 @@
 /**
  *
  */
-package com.br.sobieskiproducoes.geradormaterias.empresa.model;
+package com.br.sobieskiproducoes.geradormaterias.empresa.domain;
 
 import java.util.List;
 
+import com.br.sobieskiproducoes.geradormaterias.domain.AbstractObservabilidadeEntity;
 import com.br.sobieskiproducoes.geradormaterias.usuario.model.UsuarioEntity;
-import com.br.sobieskiproducoes.geradormaterias.utils.AbstractObservabilidadeEntity;
 import com.br.sobieskiproducoes.geradormaterias.validation.CNPJ;
 
 import jakarta.persistence.CascadeType;
@@ -62,10 +62,10 @@ public class EmpresaEntity extends AbstractObservabilidadeEntity {
     @Column(name = "principal", insertable = true, updatable = true, nullable = true, unique = false, columnDefinition = "TINYINT(1) DEFAULT 1")
     private Boolean principal;
 
-    @OneToOne(mappedBy = "empresa", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "empresa", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private ConfiguracoesEntity configuracao;
 
-    @OneToMany(mappedBy = "empresa", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "empresa", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<TermosEmpresaEntity> termos;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

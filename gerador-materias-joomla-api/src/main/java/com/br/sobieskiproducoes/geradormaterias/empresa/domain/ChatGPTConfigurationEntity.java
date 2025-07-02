@@ -1,11 +1,12 @@
 /**
  *
  */
-package com.br.sobieskiproducoes.geradormaterias.empresa.model;
+package com.br.sobieskiproducoes.geradormaterias.empresa.domain;
 
-import com.br.sobieskiproducoes.geradormaterias.utils.AbstractObservabilidadeEntity;
-import com.br.sobieskiproducoes.geradormaterias.utils.AttributeEncryptor;
+import com.br.sobieskiproducoes.geradormaterias.config.AttributeEncryptorConfig;
+import com.br.sobieskiproducoes.geradormaterias.domain.AbstractObservabilidadeEntity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -45,7 +46,7 @@ public class ChatGPTConfigurationEntity extends AbstractObservabilidadeEntity {
     @Column(name = "id")
     private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_configuracao", insertable = true, updatable = true, nullable = false, unique = false)
     private ConfiguracoesEntity configuracao;
 
@@ -54,17 +55,17 @@ public class ChatGPTConfigurationEntity extends AbstractObservabilidadeEntity {
 
     @NotNull
     @NotBlank
-    @Convert(converter = AttributeEncryptor.class)
+    @Convert(converter = AttributeEncryptorConfig.class)
     @Column(name = "bearer", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
     private String bearer;
 
-    @Convert(converter = AttributeEncryptor.class)
+    @Convert(converter = AttributeEncryptorConfig.class)
     @Column(name = "id_assistente", nullable = true, insertable = true, updatable = true, unique = false, length = 250)
     private String assistente;
 
     @NotNull
     @NotBlank
-    @Convert(converter = AttributeEncryptor.class)
+    @Convert(converter = AttributeEncryptorConfig.class)
     @Column(name = "id_organization", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
     private String organization;
 
@@ -73,30 +74,21 @@ public class ChatGPTConfigurationEntity extends AbstractObservabilidadeEntity {
     @Column(name = "model", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
     private String model;
 
-    @NotNull
     @Min(0)
     @Max(1)
-    @Column(name = "temperature", nullable = false, insertable = true, updatable = true, unique = false)
+    @Column(name = "temperature", nullable = true, insertable = true, updatable = true, unique = false)
     private Double temperature;
 
-    @NotNull
-    @NotBlank
-    @Column(name = "role_user", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
+    @Column(name = "role_user", nullable = true, insertable = true, updatable = true, unique = false, length = 250)
     private String roleUser;
 
-    @NotNull
-    @NotBlank
-    @Column(name = "role_system", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
+    @Column(name = "role_system", nullable = true, insertable = true, updatable = true, unique = false, length = 250)
     private String roleSystem;
 
-    @NotNull
-    @NotBlank
-    @Column(name = "role_assistant", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
+    @Column(name = "role_assistant", nullable = true, insertable = true, updatable = true, unique = false, length = 250)
     private String roleAssistant;
 
-    @NotNull
-    @NotBlank
-    @Column(name = "max_tokens", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
+    @Column(name = "max_tokens", nullable = true, insertable = true, updatable = true, unique = false, length = 250)
     private String maxTokens;
 
 }

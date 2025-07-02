@@ -24,7 +24,9 @@ hs_err_pid*
 replay_pid*
 
 
-
+logs
+logs/**
+LOG_FILE_IS_UNDEFINED
 
 HELP.md
 target/

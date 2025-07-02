@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.br.sobieskiproducoes.geradormaterias.utils;
+package com.br.sobieskiproducoes.geradormaterias.config;
 
 import java.util.Base64;
 
@@ -20,7 +20,7 @@ import jakarta.persistence.Converter;
  * @version 1.0.26 de jun. de 2025
  */
 @Converter
-public class AttributeEncryptor implements AttributeConverter<String, String> {
+public class AttributeEncryptorConfig implements AttributeConverter<String, String> {
 
     private static final String ALGORITHM = "AES";
 

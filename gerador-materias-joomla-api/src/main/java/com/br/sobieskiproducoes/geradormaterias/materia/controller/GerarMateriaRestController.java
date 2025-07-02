@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.br.sobieskiproducoes.geradormaterias.consumer.response.GenericoItemJoomlaResponse;
-import com.br.sobieskiproducoes.geradormaterias.consumer.response.GenericoJoomlaDataDTO;
 import com.br.sobieskiproducoes.geradormaterias.materia.consumer.dto.joomla.AtributosArtigoSalvoJoomlaDTO;
+import com.br.sobieskiproducoes.geradormaterias.materia.consumer.joomla.GenericoItemJoomlaResponse;
+import com.br.sobieskiproducoes.geradormaterias.materia.consumer.joomla.GenericoJoomlaDataDTO;
 import com.br.sobieskiproducoes.geradormaterias.materia.controller.dto.PropostaMateriaDTO;
 import com.br.sobieskiproducoes.geradormaterias.materia.controller.dto.PublicarDTO;
 import com.br.sobieskiproducoes.geradormaterias.materia.controller.dto.SugerirMateriaDTO;

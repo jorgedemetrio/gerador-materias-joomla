@@ -3,7 +3,7 @@
  */
 package com.br.sobieskiproducoes.geradormaterias.chatgpt.dto;
 
-import com.br.sobieskiproducoes.geradormaterias.empresa.model.ConfiguracoesEntity;
+import com.br.sobieskiproducoes.geradormaterias.empresa.domain.ConfiguracoesEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
