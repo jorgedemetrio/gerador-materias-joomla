@@ -10,6 +10,7 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,6 +18,7 @@ import com.br.sobieskiproducoes.geradormaterias.usuario.dto.UsuarioDTO;
 import com.br.sobieskiproducoes.geradormaterias.usuario.exception.UsuarioExistenteException;
 import com.br.sobieskiproducoes.geradormaterias.usuario.service.UsuarioService;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
@@ -34,8 +36,10 @@ public class UsuarioAPIController {
 
     private final UsuarioService service;
 
-    @PostMapping({ "/", "" })
-    public ResponseEntity<UsuarioDTO> get(@RequestBody final UsuarioDTO usuario) throws Exception {
+    @PostMapping({ "" })
+    public ResponseEntity<UsuarioDTO> salvar(@RequestBody final UsuarioDTO usuario,
+            @NotBlank @RequestHeader(name = "X-Tracking-ID", required = true) final String trakingId,
+            @NotBlank @RequestHeader(name = "X-Session-ID", required = true) final String sessionId) throws Exception {
         try {
             return ResponseEntity.ok(service.salvar(usuario));
         } catch (final UsuarioExistenteException ex) {

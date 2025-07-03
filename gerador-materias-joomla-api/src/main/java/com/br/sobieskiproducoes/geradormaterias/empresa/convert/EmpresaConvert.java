@@ -35,8 +35,6 @@ public interface EmpresaConvert {
     @Mapping(target = "configuracao.categorias", ignore = true)
     @Mapping(target = "configuracao.criador", ignore = true)
     @Mapping(target = "configuracao.alterador", ignore = true)
-    @Mapping(target = "termos.criador", ignore = true)
-    @Mapping(target = "termos.alterador", ignore = true)
     @Mapping(target = "configuracao.empresa", ignore = true)
     @Mapping(target = "configuracao.joomla.criador", ignore = true)
     @Mapping(target = "configuracao.joomla.alterador", ignore = true)
@@ -47,14 +45,20 @@ public interface EmpresaConvert {
     @Mapping(target = "configuracao.wordpress.criador", ignore = true)
     @Mapping(target = "configuracao.wordpress.alterador", ignore = true)
     @Mapping(target = "configuracao.wordpress.configuracao", ignore = true)
+
+    @Mapping(target = "termos.criador", ignore = true)
+    @Mapping(target = "termos.alterador", ignore = true)
     @Mapping(target = "termos.empresa", ignore = true)
-    @Mapping(target = "source.termos.criador", ignore = true)
-    @Mapping(target = "source.termos.alterador", ignore = true)
+
+    @Mapping(target = "audiencias.criador", ignore = true)
+    @Mapping(target = "audiencias.alterador", ignore = true)
+    @Mapping(target = "audiencias.empresa", ignore = true)
     EmpresaDTO to(EmpresaEntity source);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "configuracao", ignore = true)
     @Mapping(target = "termos", ignore = true)
+    @Mapping(target = "audiencias", ignore = true)
     @Mapping(target = "usuarios", ignore = true)
     @Mapping(target = "target.configuracao", ignore = true)
     void to(EmpresaDTO source, @MappingTarget EmpresaEntity target);
@@ -62,6 +66,7 @@ public interface EmpresaConvert {
     @Mapping(target = "id", ignore = true)
 //    @Mapping(target = "configuracao", ignore = true)
     @Mapping(target = "termos", ignore = true)
+    @Mapping(target = "audiencias", ignore = true)
     @Mapping(target = "usuarios", ignore = true)
     @Mapping(target = "configuracao", ignore = true)
     @Mapping(target = "statusDado", ignore = true)

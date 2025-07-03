@@ -6,10 +6,10 @@ package com.br.sobieskiproducoes.geradormaterias.empresa.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,6 +25,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
@@ -46,7 +47,8 @@ public class EmpresaApiController {
             @ApiResponse(description = "", responseCode = "200", content = { @Content(schema = @Schema(implementation = EmpresaDTO.class)) }),
             @ApiResponse(description = "", responseCode = "404", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }) })
     @GetMapping({ "/", "" })
-    public ResponseEntity<EmpresaDTO> get(final Authentication authentication) throws Exception {
+    public ResponseEntity<EmpresaDTO> get(@NotBlank @RequestHeader(name = "X-Tracking-ID", required = true) final String trakingId,
+            @NotBlank @RequestHeader(name = "X-Session-ID", required = true) final String sessionId) throws Exception {
         try {
             return ResponseEntity.ok(service.getEmpresa());
         } catch (final NaoEncontradoException e) {
@@ -58,8 +60,12 @@ public class EmpresaApiController {
             @ApiResponse(description = "", responseCode = "200", content = { @Content(schema = @Schema(implementation = EmpresaDTO.class)) }),
             @ApiResponse(description = "", responseCode = "404", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }) })
     @PostMapping({ "/", "" })
-    public ResponseEntity<EmpresaDTO> save(@RequestBody final EmpresaDTO empresa, final Authentication authentication, final HttpServletRequest request)
-            throws Exception {
+    public ResponseEntity<EmpresaDTO> save(@RequestBody final EmpresaDTO empresa,
+
+            @NotBlank @RequestHeader(name = "X-Tracking-ID", required = true) final String trakingId,
+            @NotBlank @RequestHeader(name = "X-Session-ID", required = true) final String sessionId,
+
+            final HttpServletRequest request) throws Exception {
 
         empresa.setIpAlterador(ControllerUtils.getClientIpAddress(request));
         empresa.setIpProxyAlterador(ControllerUtils.getClientIpProxyAddress(request));

@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.br.sobieskiproducoes.geradormaterias.interceptor.TrackingInterceptor;
+import com.br.sobieskiproducoes.geradormaterias.config.intercepter.TrackingInterceptor;
 
 /**
  * @author Jorge Demetrio

@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.br.sobieskiproducoes.geradormaterias.interceptor;
+package com.br.sobieskiproducoes.geradormaterias.config.intercepter;
 
 import org.slf4j.MDC;
 import org.springframework.web.servlet.HandlerInterceptor;

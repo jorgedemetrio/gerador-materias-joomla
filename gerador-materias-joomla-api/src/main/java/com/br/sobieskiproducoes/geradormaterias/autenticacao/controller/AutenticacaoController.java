@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,8 +22,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
@@ -45,9 +48,12 @@ public class AutenticacaoController {
             @ApiResponse(description = "Autenticação com sucesso", responseCode = "200", content = {
                     @Content(schema = @Schema(implementation = TokenSessionDTO.class)) }),
             @ApiResponse(description = "Usuário ou senha inválidos", responseCode = "401", content = {
-                    @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }) })
+                    @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }) }, security = {
+                            @SecurityRequirement(name = "Não seránecessároio.") })
     @PostMapping("/login")
-    public ResponseEntity<TokenSessionDTO> login(@RequestBody @Valid @Validated final LoginDTO login) {
+    public ResponseEntity<TokenSessionDTO> login(@RequestBody @Valid @Validated final LoginDTO login,
+            @NotBlank @RequestHeader(name = "X-Tracking-ID", required = true) final String trakingId,
+            @NotBlank @RequestHeader(name = "X-Session-ID", required = true) final String sessionId) {
         log.info(String.format("Inicio de autenticação (%s)", login.username()));
         try {
             return ResponseEntity.ok(service.login(login.username(), login.password()));
