@@ -34,7 +34,7 @@ import lombok.ToString;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ConfiguracoesDTO extends AbstractObservabilidadeDTO {
 
-    private Long id;
+    private String id;
 
     @NotNull
     private String site;

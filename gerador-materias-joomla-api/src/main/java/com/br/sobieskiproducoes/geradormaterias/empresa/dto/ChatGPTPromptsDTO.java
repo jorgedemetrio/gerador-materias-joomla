@@ -31,7 +31,7 @@ import lombok.ToString;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ChatGPTPromptsDTO extends AbstractObservabilidadeDTO {
 
-    private Long id;
+    private String id;
 
     private ConfiguracoesDTO configuracao;
 
