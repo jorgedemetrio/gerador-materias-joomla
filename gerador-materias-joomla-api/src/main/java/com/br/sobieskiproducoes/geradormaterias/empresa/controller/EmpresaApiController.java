@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -39,14 +40,18 @@ import lombok.extern.java.Log;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/empresa")
+@Tag(name = "Controle de Empresas.", description = "Controla os dados da empresa.")
 public class EmpresaApiController {
 
     private final EmpresaService service;
 
     @Operation(summary = "Consulta os dados da empresa do usuário autenticado.", description = "Consulta os dados da empresa do usuário autenticado.", responses = {
             @ApiResponse(description = "", responseCode = "200", content = { @Content(schema = @Schema(implementation = EmpresaDTO.class)) }),
-            @ApiResponse(description = "", responseCode = "404", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }) })
-    @GetMapping({ "/", "" })
+            @ApiResponse(description = "", responseCode = "400", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }),
+            @ApiResponse(description = "", responseCode = "401", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }),
+            @ApiResponse(description = "", responseCode = "403", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }),
+            @ApiResponse(description = "", responseCode = "500", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }) })
+    @GetMapping({ "" })
     public ResponseEntity<EmpresaDTO> get(@NotBlank @RequestHeader(name = "X-Tracking-ID", required = true) final String trakingId,
             @NotBlank @RequestHeader(name = "X-Session-ID", required = true) final String sessionId) throws Exception {
         try {
@@ -58,8 +63,11 @@ public class EmpresaApiController {
 
     @Operation(summary = "Alterar os dados da empresa do usuário autenticado.", description = "Alterar os dados da empresa do usuário autenticado.", responses = {
             @ApiResponse(description = "", responseCode = "200", content = { @Content(schema = @Schema(implementation = EmpresaDTO.class)) }),
-            @ApiResponse(description = "", responseCode = "404", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }) })
-    @PostMapping({ "/", "" })
+            @ApiResponse(description = "", responseCode = "400", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }),
+            @ApiResponse(description = "", responseCode = "401", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }),
+            @ApiResponse(description = "", responseCode = "403", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }),
+            @ApiResponse(description = "", responseCode = "500", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }) })
+    @PostMapping({ "" })
     public ResponseEntity<EmpresaDTO> save(@RequestBody final EmpresaDTO empresa,
 
             @NotBlank @RequestHeader(name = "X-Tracking-ID", required = true) final String trakingId,

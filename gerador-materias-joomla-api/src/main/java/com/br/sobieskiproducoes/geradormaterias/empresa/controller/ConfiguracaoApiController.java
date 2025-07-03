@@ -50,8 +50,11 @@ public class ConfiguracaoApiController {
 
     @Operation(summary = "Configuração", description = "Retorna a a configuração ativa para o usuário loago.", responses = {
             @ApiResponse(description = "", responseCode = "200", content = { @Content(schema = @Schema(implementation = ConfiguracoesDTO.class)) }),
-            @ApiResponse(description = "", responseCode = "404", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)), }) })
-    @GetMapping({ "/", "" })
+            @ApiResponse(description = "", responseCode = "400", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }),
+            @ApiResponse(description = "", responseCode = "401", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }),
+            @ApiResponse(description = "", responseCode = "403", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }),
+            @ApiResponse(description = "", responseCode = "500", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }) })
+    @GetMapping({ "" })
     public ResponseEntity<ConfiguracoesDTO> get(@NotBlank @RequestHeader(name = "X-Tracking-ID", required = true) final String trakingId,
             @NotBlank @RequestHeader(name = "X-Session-ID", required = true) final String sessionId) throws Exception {
 
@@ -64,8 +67,11 @@ public class ConfiguracaoApiController {
 
     @Operation(summary = "Salvar Configuração", description = "Salva as configurações do usuário logado.", responses = {
             @ApiResponse(description = "", responseCode = "200", content = { @Content(schema = @Schema(implementation = ConfiguracoesDTO.class)) }),
-            @ApiResponse(description = "", responseCode = "404", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }) })
-    @PostMapping({ "/", "" })
+            @ApiResponse(description = "", responseCode = "400", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }),
+            @ApiResponse(description = "", responseCode = "401", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }),
+            @ApiResponse(description = "", responseCode = "403", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }),
+            @ApiResponse(description = "", responseCode = "500", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }) })
+    @PostMapping({ "" })
     public ResponseEntity<ConfiguracoesDTO> save(@RequestBody @Validated @Valid final ConfiguracoesDTO configuracao,
 
             @NotBlank @RequestHeader(name = "X-Tracking-ID", required = true) final String trakingId,

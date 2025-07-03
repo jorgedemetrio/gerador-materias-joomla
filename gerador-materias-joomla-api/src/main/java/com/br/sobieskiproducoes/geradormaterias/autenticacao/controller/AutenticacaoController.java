@@ -45,11 +45,13 @@ public class AutenticacaoController {
     private final UsuarioService service;
 
     @Operation(summary = "Realiza o login", description = "Retorna o token de autenticação.", responses = {
-            @ApiResponse(description = "Autenticação com sucesso", responseCode = "200", content = {
-                    @Content(schema = @Schema(implementation = TokenSessionDTO.class)) }),
-            @ApiResponse(description = "Usuário ou senha inválidos", responseCode = "401", content = {
-                    @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }) }, security = {
-                            @SecurityRequirement(name = "Não seránecessároio.") })
+            @ApiResponse(description = "Autenticação com sucesso", responseCode = "200", content = {@Content(schema = @Schema(implementation = TokenSessionDTO.class)) }),
+            @ApiResponse(description = "Dados inválidos", responseCode = "400", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }),
+            @ApiResponse(description = "Não autorizado", responseCode = "401", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }),
+            @ApiResponse(description = "Não permitido.", responseCode = "403", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }),
+            @ApiResponse(description = "Erro Interno", responseCode = "500", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) })
+            
+    }, security = { @SecurityRequirement(name = "Não seránecessároio.") })
     @PostMapping("/login")
     public ResponseEntity<TokenSessionDTO> login(@RequestBody @Valid @Validated final LoginDTO login,
             @NotBlank @RequestHeader(name = "X-Tracking-ID", required = true) final String trakingId,
