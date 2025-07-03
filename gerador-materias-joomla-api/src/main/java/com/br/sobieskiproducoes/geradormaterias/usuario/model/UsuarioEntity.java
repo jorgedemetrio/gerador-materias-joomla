@@ -49,7 +49,7 @@ public class UsuarioEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
+    @Column(name = "id", length = 40)
     private String id;
 
     @Column(name = "nome", nullable = false, insertable = true, updatable = false, unique = false, length = 255)

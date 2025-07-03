@@ -43,9 +43,9 @@ import lombok.ToString;
 public class ConfiguracoesEntity extends AbstractObservabilidadeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", length = 40)
+    private String id;
 
     @Column(name = "site", insertable = true, updatable = true, nullable = true, unique = false, length = 250)
     private String site;

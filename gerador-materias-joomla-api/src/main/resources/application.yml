@@ -111,8 +111,8 @@ spring:
 
 
 configuracao:
-  chave-campo-banco: ${BANCO_SECRET:ENC(9weS4P8gUDmc0sXZ36OGSBksiz9BuMc/F8mf8uYWBYeymvvPndNy3yWa0ldi0eLy6Z/3+jXN545zMCqpZbEa3BHa5HtIx1AMejNi7ZikAfWEJfiEcwXrkKf85dLp7DUy)}
-  chave-token: ${JWT_SECRET:ENC(zX2ip7FVuTTuw194/4UJqoiwnpFZa87JnF5kJJvkHsc/5258mk/ppdsLEbVugK4OUFZkcLybt4vo4R56tuHTAgnl+QoET/RhVVoGEpXiYWtof7x9mOx5jZwaT2zpFrlaN56Z/CFp4htV8CLZz9oIsQuHYVbw9ew2bVCfawkz+YLirsTgbrby39WShzzvEjGMJz5Ef7akOPXxbbBi7NBFBE6Shn0mFgZ9i3yhj0n7+mM=)}
+  chave-campo-banco: ${BANCO_SECRET:ENC(H/Cc/OS17wHyI7zn+em86s9JuI356cwSssA/ud5MfoPwrpgegVA8GJd0qcPbWz5Q689IUMw8mUFdXM7EvbvqDdHRgX5vM3AU57jkp184tEg=)}
+  chave-token: ${JWT_SECRET:ENC(oCUh9cp9xyTsUwM0AeMrHZV7cojksqWfxLzOxaQs4V+4p1eMn5xahshePhzmZlFQf+3C6rawN38VEmMz7lcoExOIFvuxDXUOLdLYCZ6F6gY=)}
   timeout-token: 10 #em minutos 
   serper:
     bearer: XXXXXXXXXXXXX

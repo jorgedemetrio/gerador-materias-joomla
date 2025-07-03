@@ -41,7 +41,7 @@ public class TermosEmpresaEntity extends AbstractObservabilidadeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
+    @Column(name = "id", length = 40)
     private String id;
 
     @NotBlank

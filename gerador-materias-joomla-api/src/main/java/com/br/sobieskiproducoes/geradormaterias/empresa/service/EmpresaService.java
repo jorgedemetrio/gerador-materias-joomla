@@ -10,6 +10,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import com.br.sobieskiproducoes.geradormaterias.autenticacao.componente.UsuarioAutenticadoComponente;
 import com.br.sobieskiproducoes.geradormaterias.empresa.convert.ConfiguracoesConvert;
 import com.br.sobieskiproducoes.geradormaterias.empresa.convert.EmpresaConvert;
 import com.br.sobieskiproducoes.geradormaterias.empresa.domain.EmpresaEntity;
@@ -19,7 +20,6 @@ import com.br.sobieskiproducoes.geradormaterias.empresa.repository.EmpresaReposi
 import com.br.sobieskiproducoes.geradormaterias.exception.DadosInvalidosException;
 import com.br.sobieskiproducoes.geradormaterias.exception.NaoEncontradoException;
 import com.br.sobieskiproducoes.geradormaterias.usuario.model.UsuarioEntity;
-import com.br.sobieskiproducoes.geradormaterias.utils.SpringSecurityAuditorAwareComponent;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -38,7 +38,7 @@ public class EmpresaService {
     private final ConfiguracoesRepository configuracoesRepository;
     private final EmpresaConvert convert;
     private final ConfiguracoesConvert configuracoesConvert;
-    private final SpringSecurityAuditorAwareComponent usuarioLogadoAwareComponent;
+    private final UsuarioAutenticadoComponente usuarioLogadoAwareComponent;
 
     public EmpresaDTO getEmpresa() throws Exception {
 

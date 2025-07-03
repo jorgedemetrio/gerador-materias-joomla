@@ -36,13 +36,13 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "tbl_configuracao_joomla")
+@Table(name = "tbl_joomla_configuracao")
 public class JoomlaConfigurationEntity extends AbstractObservabilidadeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", length = 40)
+    private String id;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_configuracao", insertable = true, updatable = true, nullable = false, unique = false)
@@ -50,7 +50,7 @@ public class JoomlaConfigurationEntity extends AbstractObservabilidadeEntity {
 
     @NotNull
     @NotBlank
-    @Column(name = "rul", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
+    @Column(name = "url", nullable = false, insertable = true, updatable = true, unique = false, length = 250)
     private String url;
 
     @NotNull

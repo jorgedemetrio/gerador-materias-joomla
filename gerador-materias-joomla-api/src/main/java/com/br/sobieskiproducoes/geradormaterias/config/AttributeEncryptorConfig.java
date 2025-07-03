@@ -59,13 +59,7 @@ public class AttributeEncryptorConfig implements AttributeConverter<String, Stri
     }
 
     private SecretKey getKey() throws Exception {
-        // Gerar chave secreta (melhor usar um KeyGenerator para chaves aleatórias)
-        // KeyGenerator keyGenerator = KeyGenerator.getInstance(ALGORITHM);
-        // keyGenerator.init(128); // Tamanho da chave
-        // SecretKey secretKey = keyGenerator.generateKey();
-        // return secretKey;
 
-        // Substitua por geração segura de chave
-        return new javax.crypto.spec.SecretKeySpec(ENCRYPTION_KEY.getBytes(), ALGORITHM);
+        return new javax.crypto.spec.SecretKeySpec(Base64.getDecoder().decode(ENCRYPTION_KEY), ALGORITHM);
     }
 }

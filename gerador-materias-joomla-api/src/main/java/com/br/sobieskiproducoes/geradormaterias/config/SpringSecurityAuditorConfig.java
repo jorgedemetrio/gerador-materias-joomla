@@ -7,8 +7,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 
+import com.br.sobieskiproducoes.geradormaterias.autenticacao.componente.UsuarioAutenticadoComponente;
+import com.br.sobieskiproducoes.geradormaterias.config.intercepter.SpringSecurityAuditorAwareInterceptor;
 import com.br.sobieskiproducoes.geradormaterias.usuario.model.UsuarioEntity;
-import com.br.sobieskiproducoes.geradormaterias.utils.SpringSecurityAuditorAwareComponent;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,10 +23,8 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 public class SpringSecurityAuditorConfig {
 
-    private final SpringSecurityAuditorAwareComponent config;
-
     @Bean
-    public AuditorAware<UsuarioEntity> auditorProvider() {
-        return config;
+    public AuditorAware<UsuarioEntity> auditorProvider(final UsuarioAutenticadoComponente autenticadoComponente) {
+        return new SpringSecurityAuditorAwareInterceptor(autenticadoComponente);
     }
 }

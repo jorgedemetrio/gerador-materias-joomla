@@ -71,7 +71,9 @@ public class ConfiguracaoApiController {
         configuracao.setIpProxyAlterador(ControllerUtils.getClientIpProxyAddress(request));
 
         try {
-            return ResponseEntity.ok(service.salvar(configuracao));
+            final ConfiguracoesDTO retorno = service.salvar(configuracao);
+
+            return ResponseEntity.ok(retorno);
         } catch (final UsuarioNaoEncontradoException e) {
             return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, "Dados da usuario não encontrado")).build();
         } catch (final DadosInvalidosException e) {

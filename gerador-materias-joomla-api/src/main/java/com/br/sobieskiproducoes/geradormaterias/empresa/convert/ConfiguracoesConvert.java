@@ -97,11 +97,17 @@ public interface ConfiguracoesConvert {
     @Mapping(target = "entity.tags", ignore = true)
     @Mapping(target = "entity.categorias", ignore = true)
     @Mapping(target = "entity.materias", ignore = true)
+    @Mapping(target = "entity.criado", ignore = true)
+    @Mapping(target = "entity.criador", ignore = true)
     @Mapping(target = "entity.empresa", ignore = true)
     @Mapping(target = "entity.alterado", expression = "java(LocalDateTime.now())")
     @Mapping(target = "entity.ipCriador", source = "ipAlterador")
     @Mapping(target = "entity.ipProxyCriador", source = "ipProxyAlterador")
     @Mapping(target = "entity.statusDado", expression = "java(StatusEnum.NOVO)")
+
+    @Mapping(target = "entity.joomla.id", ignore = true)
+    @Mapping(target = "entity.joomla.criado", ignore = true)
+    @Mapping(target = "entity.joomla.criador", ignore = true)
     @Mapping(target = "entity.joomla.url", source = "source.joomla.url")
     @Mapping(target = "entity.joomla.bearer", source = "source.joomla.bearer")
     @Mapping(target = "entity.joomla.idioma", source = "source.joomla.idioma")
@@ -109,6 +115,11 @@ public interface ConfiguracoesConvert {
     @Mapping(target = "entity.joomla.ipCriador", source = "source.ipAlterador")
     @Mapping(target = "entity.joomla.ipProxyCriador", source = "source.ipProxyAlterador")
     @Mapping(target = "entity.joomla.statusDado", expression = "java(StatusEnum.NOVO)")
+    // @Mapping(target = "entity.joomla.configuracao", expression = "java(entity)")
+
+    @Mapping(target = "entity.wordpress.id", ignore = true)
+    @Mapping(target = "entity.wordpress.criado", ignore = true)
+    @Mapping(target = "entity.wordpress.criador", ignore = true)
     @Mapping(target = "entity.wordpress.url", source = "source.wordpress.url")
     @Mapping(target = "entity.wordpress.idioma", source = "source.wordpress.idioma")
     @Mapping(target = "entity.wordpress.bearer", source = "source.wordpress.bearer")
@@ -117,10 +128,23 @@ public interface ConfiguracoesConvert {
     @Mapping(target = "entity.wordpress.ipCriador", source = "source.ipAlterador")
     @Mapping(target = "entity.wordpress.ipProxyCriador", source = "source.ipProxyAlterador")
     @Mapping(target = "entity.wordpress.statusDado", expression = "java(StatusEnum.NOVO)")
+    @Mapping(target = "entity.wordpress.usuario", source = "source.wordpress.usuario")
+    // @Mapping(target = "entity.wordpress.configuracao", expression =
+    // "java(entity)")
+
+    @Mapping(target = "entity.chatgpt.id", ignore = true)
+    @Mapping(target = "entity.chatgpt.criado", ignore = true)
+    @Mapping(target = "entity.chatgpt.criador", ignore = true)
     @Mapping(target = "entity.chatgpt.alterado", expression = "java(LocalDateTime.now())")
     @Mapping(target = "entity.chatgpt.ipCriador", source = "source.ipAlterador")
     @Mapping(target = "entity.chatgpt.ipProxyCriador", source = "source.ipProxyAlterador")
     @Mapping(target = "entity.chatgpt.statusDado", expression = "java(StatusEnum.NOVO)")
+    @Mapping(target = "entity.chatgpt.bearer", source = "source.chatgpt.bearer")
+    @Mapping(target = "entity.chatgpt.assistente", source = "source.chatgpt.assistente")
+    @Mapping(target = "entity.chatgpt.organization", source = "source.chatgpt.organization")
+    @Mapping(target = "entity.chatgpt.model", source = "source.chatgpt.model")
+
+    // @Mapping(target = "entity.chatgpt.configuracao", expression = "java(entity)")
     void atualizar(ConfiguracoesDTO source, @MappingTarget ConfiguracoesEntity entity);
 
     List<ConfiguracoesDTO> toConfiguracoesDTO(List<ConfiguracoesEntity> sources);

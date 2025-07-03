@@ -20,7 +20,7 @@ import com.br.sobieskiproducoes.geradormaterias.empresa.domain.ConfiguracoesEnti
  * @since 24 de jun. de 2025 23:54:20
  */
 @Repository
-public interface ConfiguracoesRepository extends JpaRepository<ConfiguracoesEntity, Long> {
+public interface ConfiguracoesRepository extends JpaRepository<ConfiguracoesEntity, String> {
 
     @Query(name = "ConfiguracoesRepository.buscaConfiguracoesComMateriasAPublicar", value = """
              SELECT c FROM ConfiguracoesEntity AS c  JOIN c.materias AS m WHERE m.uuid is not null AND m.peguntaPrincipal is not null \

@@ -33,7 +33,7 @@ public interface MateriaRepository extends JpaRepository<MateriaEntity, Long> {
              AND m.configuracao.id = :idConfiguracao
              ORDER BY m.publicar
              LIMIT 15 """)
-    List<MateriaEntity> buscarMateriasPublicar(@Param("idConfiguracao") Long idConfiguracao);
+    List<MateriaEntity> buscarMateriasPublicar(@Param("idConfiguracao") String idConfiguracao);
 
     @Query(name = "MateriaRepository.buscarMateriaVazias", value = "SELECT m FROM MateriaEntity AS m WHERE m.materia IS NULL ")
     Page<MateriaEntity> buscarMateriaVazias(Pageable page);

@@ -12,16 +12,19 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.br.sobieskiproducoes.geradormaterias.autenticacao.componente.UsuarioAutenticadoComponente;
 import com.br.sobieskiproducoes.geradormaterias.empresa.convert.ConfiguracoesConvert;
 import com.br.sobieskiproducoes.geradormaterias.empresa.domain.ConfiguracoesEntity;
 import com.br.sobieskiproducoes.geradormaterias.empresa.domain.EmpresaEntity;
 import com.br.sobieskiproducoes.geradormaterias.empresa.dto.ConfiguracoesDTO;
+import com.br.sobieskiproducoes.geradormaterias.empresa.repository.ChatGPTConfigurationRepository;
 import com.br.sobieskiproducoes.geradormaterias.empresa.repository.ConfiguracoesRepository;
 import com.br.sobieskiproducoes.geradormaterias.empresa.repository.EmpresaRepository;
+import com.br.sobieskiproducoes.geradormaterias.empresa.repository.JoomlaConfigurationRepository;
+import com.br.sobieskiproducoes.geradormaterias.empresa.repository.WordPressConfigurationRepository;
 import com.br.sobieskiproducoes.geradormaterias.exception.DadosInvalidosException;
 import com.br.sobieskiproducoes.geradormaterias.exception.NaoEncontradoException;
 import com.br.sobieskiproducoes.geradormaterias.usuario.model.UsuarioEntity;
-import com.br.sobieskiproducoes.geradormaterias.utils.SpringSecurityAuditorAwareComponent;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -41,7 +44,11 @@ public class ConfiguracaoService {
     private final ConfiguracoesConvert convert;
     private final EmpresaRepository empresaRepository;
 
-    private final SpringSecurityAuditorAwareComponent usuarioLogadoAwareComponent;
+    private final ChatGPTConfigurationRepository chatGPTConfigurationRepository;
+    private final JoomlaConfigurationRepository joomlaConfigurationRepository;
+    private final WordPressConfigurationRepository wordPressConfigurationRepository;
+
+    private final UsuarioAutenticadoComponente usuarioLogadoAwareComponent;
 
     @Transactional
     public ConfiguracoesDTO salvar(final ConfiguracoesDTO configuracao) {
@@ -67,17 +74,30 @@ public class ConfiguracaoService {
             convert.atualizar(configuracao, configuracoaEntity);
             if (isNull(configuracao.getJoomla().getBearer()) || configuracao.getJoomla().getBearer().isBlank()) {
                 configuracoaEntity.setJoomla(null);
+                configuracoaEntity.getWordpress().setConfiguracao(configuracoaEntity);
             } else {
                 configuracoaEntity.setWordpress(null);
+                configuracoaEntity.getJoomla().setConfiguracao(configuracoaEntity);
             }
+            configuracoaEntity.getChatgpt().setConfiguracao(configuracoaEntity);
         }
 
         configuracoaEntity.setEmpresa(empresa.get());
 
         configuracoaEntity = repository.save(configuracoaEntity);
 
-        return null;
-        // convert.to(configuracoaEntity);
+        configuracoaEntity.setChatgpt(chatGPTConfigurationRepository.save(configuracoaEntity.getChatgpt()));
+        if (isNull(configuracao.getJoomla().getBearer()) || configuracao.getJoomla().getBearer().isBlank()) {
+            configuracoaEntity.setWordpress(wordPressConfigurationRepository.save(configuracoaEntity.getWordpress()));
+        } else {
+            configuracoaEntity.setJoomla(joomlaConfigurationRepository.save(configuracoaEntity.getJoomla()));
+        }
+
+        configuracoaEntity = repository.save(configuracoaEntity);
+
+        repository.flush();
+
+        return convert.to(configuracoaEntity);
     }
 
     public ConfiguracoesDTO configuracaoDaEmpresaPrincipal() {

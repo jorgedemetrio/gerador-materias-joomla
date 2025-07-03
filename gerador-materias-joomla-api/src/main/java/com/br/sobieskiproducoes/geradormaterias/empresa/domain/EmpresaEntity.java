@@ -48,7 +48,7 @@ public class EmpresaEntity extends AbstractObservabilidadeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
+    @Column(name = "id", length = 40)
     private String id;
 
     @Column(name = "nome", insertable = true, updatable = true, nullable = true, unique = false, length = 250)

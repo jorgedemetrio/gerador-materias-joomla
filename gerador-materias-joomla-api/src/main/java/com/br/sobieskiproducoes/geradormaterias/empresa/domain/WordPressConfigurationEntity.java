@@ -36,13 +36,13 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "tbl_configuracao_joomla")
+@Table(name = "tbl_wordpress_configuracao")
 public class WordPressConfigurationEntity extends AbstractObservabilidadeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", length = 40)
+    private String id;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_configuracao", insertable = true, updatable = true, nullable = false, unique = false)

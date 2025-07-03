@@ -37,14 +37,14 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "tbl_chtgpt_configuracao")
+@Table(name = "tbl_chatgpt_configuracao")
 @EqualsAndHashCode(of = { "id" }, callSuper = false)
 public class ChatGPTConfigurationEntity extends AbstractObservabilidadeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", length = 40)
+    private String id;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_configuracao", insertable = true, updatable = true, nullable = false, unique = false)

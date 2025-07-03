@@ -1,12 +1,11 @@
 /**
  *
  */
-package com.br.sobieskiproducoes.geradormaterias.utils;
+package com.br.sobieskiproducoes.geradormaterias.autenticacao.componente;
 
 import java.util.Optional;
 
-import org.springframework.context.annotation.Primary;
-import org.springframework.data.domain.AuditorAware;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -17,25 +16,26 @@ import com.br.sobieskiproducoes.geradormaterias.usuario.model.UsuarioEntity;
 import com.br.sobieskiproducoes.geradormaterias.usuario.repository.UsuarioRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 
 /**
  *
  * @author JorgeDemetrioPC
- * @since 2 de jul. de 2025 00:10:24
+ * @since 2 de jul. de 2025 22:46:18
  * @version 1.0.2 de jul. de 2025
  */
 @RequiredArgsConstructor
-@Primary
+@Log
 @Component
-public class SpringSecurityAuditorAwareComponent implements AuditorAware<UsuarioEntity> {
+public class UsuarioAutenticadoComponente {
 
     private final UsuarioRepository usuarioRepository;
 
-    @Override
     public Optional<UsuarioEntity> getCurrentAuditor() {
 
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
+        if (authentication == null || authentication instanceof AnonymousAuthenticationToken || !authentication.isAuthenticated()
+                || !(authentication.getPrincipal() instanceof UsuarioSistemaDTO)) {
             return Optional.empty();
         }
 
