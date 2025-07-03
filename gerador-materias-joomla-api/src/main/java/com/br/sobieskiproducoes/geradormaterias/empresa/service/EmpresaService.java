@@ -8,6 +8,7 @@ import static java.util.Objects.isNull;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import com.br.sobieskiproducoes.geradormaterias.autenticacao.componente.UsuarioAutenticadoComponente;
@@ -51,6 +52,7 @@ public class EmpresaService {
         return convert.to(empresa.get());
     }
 
+    @Transactional
     public EmpresaDTO salvar(@Validated final EmpresaDTO empresa) throws Exception {
 
         final UsuarioEntity usuario = usuarioLogadoAwareComponent.getUsuarioLogado();
