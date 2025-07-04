@@ -46,10 +46,10 @@ public class AutenticacaoController {
 
     @Operation(summary = "Realiza o login", description = "Retorna o token de autenticação.", responses = {
             @ApiResponse(description = "Autenticação com sucesso", responseCode = "200", content = {@Content(schema = @Schema(implementation = TokenSessionDTO.class)) }),
-            @ApiResponse(description = "Dados inválidos", responseCode = "400", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }),
-            @ApiResponse(description = "Não autorizado", responseCode = "401", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }),
-            @ApiResponse(description = "Não permitido.", responseCode = "403", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }),
-            @ApiResponse(description = "Erro Interno", responseCode = "500", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) })
+            @ApiResponse(description = "Dados inválidos", responseCode = "400", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }),
+            @ApiResponse(description = "Não autorizado", responseCode = "401", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }),
+            @ApiResponse(description = "Não permitido.", responseCode = "403", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }),
+            @ApiResponse(description = "Erro Interno", responseCode = "500", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) })
             
     }, security = { @SecurityRequirement(name = "Não seránecessároio.") })
     @PostMapping("/login")

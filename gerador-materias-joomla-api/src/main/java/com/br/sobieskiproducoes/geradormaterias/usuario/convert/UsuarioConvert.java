@@ -9,6 +9,7 @@ import org.mapstruct.Mappings;
 
 import com.br.sobieskiproducoes.geradormaterias.usuario.dto.GrupoDTO;
 import com.br.sobieskiproducoes.geradormaterias.usuario.dto.UsuarioDTO;
+import com.br.sobieskiproducoes.geradormaterias.usuario.dto.UsuarioSimplificadoDTO;
 import com.br.sobieskiproducoes.geradormaterias.usuario.model.GrupoEntity;
 import com.br.sobieskiproducoes.geradormaterias.usuario.model.UsuarioEntity;
 
@@ -29,6 +30,8 @@ public interface UsuarioConvert {
     @Mapping(target = "empresas.configuracao.criador", ignore = true)
     @Mapping(target = "empresas.configuracao.alterador", ignore = true)
     UsuarioDTO to(UsuarioEntity source);
+
+    UsuarioSimplificadoDTO toUsuarioSimplificadoDTO(UsuarioEntity source);
 
     GrupoDTO to(GrupoEntity source);
 

@@ -7,10 +7,9 @@ import java.time.LocalDateTime;
 
 import org.springframework.validation.annotation.Validated;
 
-import com.br.sobieskiproducoes.geradormaterias.usuario.dto.UsuarioDTO;
+import com.br.sobieskiproducoes.geradormaterias.usuario.dto.UsuarioSimplificadoDTO;
 import com.br.sobieskiproducoes.geradormaterias.utils.StatusEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -34,11 +33,9 @@ import lombok.Setter;
 @Validated
 public abstract class AbstractObservabilidadeDTO {
 
-    @JsonIgnore
-    private UsuarioDTO criador;
+    private UsuarioSimplificadoDTO criador;
 
-    @JsonIgnore
-    private UsuarioDTO alterador;
+    private UsuarioSimplificadoDTO alterador;
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)

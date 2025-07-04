@@ -21,8 +21,8 @@ import com.br.sobieskiproducoes.geradormaterias.cargaemmassa.model.CargaMassaEnt
 @Repository
 public interface CargaMassaRepository extends JpaRepository<CargaMassaEntity, Long> {
 
-  @Query(name = "CargaMassaRepository.pegarCarga", value = "SELECT c FROM CargaMassaEntity AS c WHERE c.status != StatusProcessamentoEnum.PROCESSADO ")
-  List<CargaMassaEntity> pegarCarga();
+    @Query("SELECT c FROM CargaMassaEntity AS c WHERE c.status != StatusProcessamentoEnum.PROCESSADO ")
+    List<CargaMassaEntity> pegarCarga();
 
-  Optional<CargaMassaEntity> findByUuid(@Param("uuid") String uuid);
+    Optional<CargaMassaEntity> findByUuid(@Param("uuid") String uuid);
 }

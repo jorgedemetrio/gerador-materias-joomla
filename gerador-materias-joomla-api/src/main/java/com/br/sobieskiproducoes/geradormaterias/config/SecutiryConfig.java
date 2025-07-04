@@ -7,10 +7,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
+import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import lombok.RequiredArgsConstructor;
@@ -43,7 +45,7 @@ public class SecutiryConfig {
                         .requestMatchers("/api/v1/autenticacao", "/api/v1/autenticacao/", "/api/v1/autenticacao/*", "/api/v1/autenticacao/login").permitAll()
                         .requestMatchers("/login", "/login/*").permitAll()
                         .requestMatchers("/v3/api-docs", "/v3/api-docs/*", "/swagger-ui", "/swagger-ui/*", "/swagger-ui.html").permitAll()
-                        .requestMatchers("/actuator", "/actuator/*").permitAll()
+                        .requestMatchers("/actuator", "/actuator/*").permitAll().requestMatchers("/", "/home", "/register").permitAll()
 
                         /**
                          * Usuário
@@ -74,8 +76,34 @@ public class SecutiryConfig {
                          */
                         .requestMatchers(HttpMethod.POST, "/tag").hasRole("CRIAR_TAG").requestMatchers(HttpMethod.PUT, "/tag").hasRole("ALTERAR_TAG")
                         .requestMatchers(HttpMethod.DELETE, "/tag/*").hasRole("REMOVER_TAG").requestMatchers(HttpMethod.GET, "/tag").hasRole("VER_TAG")
-                        .requestMatchers(HttpMethod.POST, "/api/v1/tag").hasRole("CRIAR_TAG").requestMatchers(HttpMethod.PUT, "/api/v1/tag").hasRole("ALTERAR_TAG")
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/tag/*").hasRole("REMOVER_TAG").requestMatchers(HttpMethod.GET, "/api/v1/tag").hasRole("VER_TAG")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/tag").hasRole("CRIAR_TAG").requestMatchers(HttpMethod.PUT, "/api/v1/tag")
+                        .hasRole("ALTERAR_TAG").requestMatchers(HttpMethod.DELETE, "/api/v1/tag/*").hasRole("REMOVER_TAG")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/tag").hasRole("VER_TAG")
+
+                        /**
+                         * Termos da empresa
+                         */
+
+                        .requestMatchers(HttpMethod.POST, "/termo-empresa").hasRole("CRIAR_TERMO_EMPRESA").requestMatchers(HttpMethod.PUT, "/termo-empresa")
+                        .hasRole("ALTERAR_TERMO_EMPRESA").requestMatchers(HttpMethod.DELETE, "/termo-empresa/*").hasRole("REMOVER_TERMO_EMPRESA")
+                        .requestMatchers(HttpMethod.GET, "/termo-empresa").hasRole("VER_TERMO_EMPRESA")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/termo-empresa").hasRole("CRIAR_TERMO_EMPRESA")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/termo-empresa").hasRole("ALTERAR_TERMO_EMPRESA")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/termo-empresa/*").hasRole("REMOVER_TERMO_EMPRESA")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/termo-empresa").hasRole("VER_TERMO_EMPRESA")
+
+                        /**
+                         * Audiencia da empresa
+                         */
+
+                        .requestMatchers(HttpMethod.POST, "/audiencia-empresa").hasRole("CRIAR_AUDIENCIA_EMPRESA")
+                        .requestMatchers(HttpMethod.PUT, "/audiencia-empresa").hasRole("ALTERAR_AUDIENCIA_EMPRESA")
+                        .requestMatchers(HttpMethod.DELETE, "/audiencia-empresa/*").hasRole("REMOVER_AUDIENCIA_EMPRESA")
+                        .requestMatchers(HttpMethod.GET, "/audiencia-empresa").hasRole("VER_AUDIENCIA_EMPRESA")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/audiencia-empresa").hasRole("CRIAR_AUDIENCIA_EMPRESA")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/audiencia-empresa").hasRole("ALTERAR_AUDIENCIA_EMPRESA")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/audiencia-empresa/*").hasRole("REMOVER_AUDIENCIA_EMPRESA")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/audiencia-empresa").hasRole("VER_AUDIENCIA_EMPRESA")
 
                         /**
                          * Categoria
@@ -84,8 +112,8 @@ public class SecutiryConfig {
                         .hasRole("ALTERAR_CATEGORIA").requestMatchers(HttpMethod.DELETE, "/categoria/*").hasRole("REMOVER_CATEGORIA")
                         .requestMatchers(HttpMethod.GET, "/categoria").hasRole("VER_CATEGORIA").requestMatchers(HttpMethod.POST, "/api/v1/categoria")
                         .hasRole("CRIAR_CATEGORIA").requestMatchers(HttpMethod.PUT, "/api/v1/categoria").hasRole("ALTERAR_CATEGORIA")
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/categoria/*").hasRole("REMOVER_CATEGORIA").requestMatchers(HttpMethod.GET, "/api/v1/categoria")
-                        .hasRole("VER_CATEGORIA")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/categoria/*").hasRole("REMOVER_CATEGORIA")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/categoria").hasRole("VER_CATEGORIA")
 
                         /**
                          * site
@@ -120,7 +148,12 @@ public class SecutiryConfig {
 
                         .anyRequest().authenticated()
 
-                ).addFilterBefore(securityFilterComponent, UsernamePasswordAuthenticationFilter.class)
+                )
+//                .formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/dashboard").permitAll())
+                .formLogin(form -> form.loginPage("/login").usernameParameter("username").failureUrl("/login?loginError=true"))
+                .logout(logout -> logout.logoutSuccessUrl("/login?logoutSuccess=true").deleteCookies("JSESSIONID"))
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login?loginRequired=true")))
+                .logout(LogoutConfigurer::permitAll).addFilterBefore(securityFilterComponent, UsernamePasswordAuthenticationFilter.class)
 
                 .build();
     }

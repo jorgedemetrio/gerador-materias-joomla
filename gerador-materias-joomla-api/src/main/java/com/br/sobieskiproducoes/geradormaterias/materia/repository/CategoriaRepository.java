@@ -24,13 +24,13 @@ import com.br.sobieskiproducoes.geradormaterias.materia.model.CategoriaEntity;
 @Repository
 public interface CategoriaRepository extends JpaRepository<CategoriaEntity, Long> {
 
-  @Query(name = "CategoriaRepository.buscaPorTitulo", value = " SELECT c FROM CategoriaEntity AS c WHERE UPPER(c.titulo) like concat('%', :titulo, '%') ")
-  Page<CategoriaEntity> buscaPorTitulo(@Param("titulo") String titulo, Pageable page);
+    @Query(" SELECT c FROM CategoriaEntity AS c WHERE UPPER(c.titulo) like concat('%', :titulo, '%') ")
+    Page<CategoriaEntity> buscaPorTitulo(@Param("titulo") String titulo, Pageable page);
 
-  @Cacheable("categoriasParaPrompt")
-  @Query(name = "CategoriaRepository.categoriasParaPrompt", value = " SELECT c FROM CategoriaEntity AS c WHERE c.usarEmPrompts = true ")
-  List<CategoriaEntity> categoriasParaPrompt();
+    @Cacheable("categoriasParaPrompt")
+    @Query(" SELECT c FROM CategoriaEntity AS c WHERE c.usarEmPrompts = true ")
+    List<CategoriaEntity> categoriasParaPrompt();
 
-  Optional<CategoriaEntity> findByIdJoomla(@Param("idJoomla") Long idJoomla);
+    Optional<CategoriaEntity> findByIdJoomla(@Param("idJoomla") Long idJoomla);
 
 }

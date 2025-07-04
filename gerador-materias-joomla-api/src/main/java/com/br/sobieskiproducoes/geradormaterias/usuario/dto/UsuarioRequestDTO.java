@@ -4,13 +4,9 @@
 package com.br.sobieskiproducoes.geradormaterias.usuario.dto;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-import com.br.sobieskiproducoes.geradormaterias.empresa.dto.EmpresaDTO;
-import com.br.sobieskiproducoes.geradormaterias.usuario.model.NivelUsuarioEnum;
 import com.br.sobieskiproducoes.geradormaterias.validation.CPF;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -42,7 +38,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UsuarioDTO {
+public class UsuarioRequestDTO {
     private String id;
 
     @Pattern(regexp = "^[a-zA-Z0-9\\s]{3,250}$")
@@ -54,7 +50,6 @@ public class UsuarioDTO {
     @NotBlank
     private String usuario;
 
-    @JsonIgnore
     @Size(min = 8, max = 20)
     @Pattern(regexp = "^[a-zA-Z\\d\\_\\-\\!\\@\\#\\$\\%\\&\\*\\?]{8,20}$")
     @NotBlank
@@ -77,9 +72,4 @@ public class UsuarioDTO {
     @CPF
     private String cpf;
 
-    private List<EmpresaDTO> empresas;
-
-    private List<GrupoDTO> grupos;
-
-    private NivelUsuarioEnum nivel;
 }

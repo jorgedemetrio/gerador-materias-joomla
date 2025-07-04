@@ -24,7 +24,7 @@ import com.br.sobieskiproducoes.geradormaterias.materia.model.MateriaEntity;
 @Repository
 public interface MateriaRepository extends JpaRepository<MateriaEntity, Long> {
 
-    @Query(name = "MateriaRepository.buscarMateriasPublicar", value = """
+    @Query("""
             SELECT m FROM MateriaEntity AS m WHERE m.uuid is not null AND m.peguntaPrincipal is not null \
              AND m.status = StatusProcessamentoEnum.PROCESSAR \
              AND m.materia IS NOT NULL \
@@ -35,10 +35,10 @@ public interface MateriaRepository extends JpaRepository<MateriaEntity, Long> {
              LIMIT 15 """)
     List<MateriaEntity> buscarMateriasPublicar(@Param("idConfiguracao") String idConfiguracao);
 
-    @Query(name = "MateriaRepository.buscarMateriaVazias", value = "SELECT m FROM MateriaEntity AS m WHERE m.materia IS NULL ")
+    @Query("SELECT m FROM MateriaEntity AS m WHERE m.materia IS NULL ")
     Page<MateriaEntity> buscarMateriaVazias(Pageable page);
 
-    @Query(name = "MateriaRepository.buscarMateria", value = """
+    @Query("""
              SELECT m FROM MateriaEntity AS m \
                  JOIN m.configuracao AS c \
                  JOIN c.empresa AS e \
@@ -53,7 +53,7 @@ public interface MateriaRepository extends JpaRepository<MateriaEntity, Long> {
             """)
     Page<MateriaEntity> buscarMateria(@Param("titulo") String titulo, @Param("username") String idUsuario, Pageable page);
 
-    @Query(name = "MateriaRepository.buscarPorPergunta", value = "SELECT m FROM MateriaEntity AS m JOIN m.peguntaPrincipal AS p WHERE p.id = :id")
+    @Query("SELECT m FROM MateriaEntity AS m JOIN m.peguntaPrincipal AS p WHERE p.id = :id")
     Optional<MateriaEntity> buscarPorPergunta(@Param("id") Long id);
 
     Optional<MateriaEntity> findByIdJoomla(@Param("idJoomla") Long idJoomla);

@@ -11,9 +11,11 @@ import org.springframework.stereotype.Service;
 import com.br.sobieskiproducoes.geradormaterias.autenticacao.componente.UsuarioAutenticadoComponente;
 import com.br.sobieskiproducoes.geradormaterias.empresa.domain.EmpresaEntity;
 import com.br.sobieskiproducoes.geradormaterias.empresa.repository.EmpresaRepository;
+import com.br.sobieskiproducoes.geradormaterias.usuario.convert.UsuarioConvert;
 import com.br.sobieskiproducoes.geradormaterias.usuario.convert.UsuarioSenhaConvert;
 import com.br.sobieskiproducoes.geradormaterias.usuario.dto.TokenSessionDTO;
-import com.br.sobieskiproducoes.geradormaterias.usuario.dto.UsuarioDTO;
+import com.br.sobieskiproducoes.geradormaterias.usuario.dto.UsuarioRequestDTO;
+import com.br.sobieskiproducoes.geradormaterias.usuario.dto.UsuarioSimplificadoDTO;
 import com.br.sobieskiproducoes.geradormaterias.usuario.dto.UsuarioSistemaDTO;
 import com.br.sobieskiproducoes.geradormaterias.usuario.exception.UsuarioExistenteException;
 import com.br.sobieskiproducoes.geradormaterias.usuario.model.UsuarioEntity;
@@ -38,9 +40,11 @@ public class UsuarioService {
 
     private final UsuarioSenhaConvert usuarioSenhaConvert;
 
+    private final UsuarioConvert convert;
+
     private final UsuarioAutenticadoComponente usuarioLogadoAwareComponent;
 
-    public UsuarioDTO salvar(@Valid final UsuarioDTO usuario) throws Exception {
+    public UsuarioSimplificadoDTO salvar(@Valid final UsuarioRequestDTO usuario) throws Exception {
         log.info(String.format("Salvando o usuário %s", usuario));
         if (repository.findByEmailIgnoreCaseOrUsuarioIgnoreCase(usuario.getEmail(), usuario.getUsuario()).isPresent()) {
             throw new UsuarioExistenteException("Usuário e/ou e-mail já cadastrado!");
@@ -53,7 +57,7 @@ public class UsuarioService {
             entity.setEmpresas(Arrays.asList(empresa.get()));
         }
 
-        return usuarioSenhaConvert.to(repository.save(entity));
+        return convert.toUsuarioSimplificadoDTO(repository.save(entity));
 
     }
 

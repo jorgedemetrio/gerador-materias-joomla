@@ -22,22 +22,32 @@ import com.br.sobieskiproducoes.geradormaterias.empresa.domain.EmpresaEntity;
 @Repository
 public interface EmpresaRepository extends JpaRepository<EmpresaEntity, String> {
 
-    @Query(name = "EmpresaRepository.buscarMateria", value = """
+    @Query("""
              SELECT e FROM EmpresaEntity AS e \
                  JOIN e.usuarios AS u \
              WHERE \
                  u.usuario = :username  AND \
-                 e.statusDado not in (StatusEnum.REMOVIDO) AND
+                 e.statusDado not in (StatusEnum.REMOVIDO) AND \
                  e.principal = true
             """)
     Optional<EmpresaEntity> buscarPrincipalPorUsuario(@Param("username") String username);
 
-    @Query(name = "EmpresaRepository.buscarMateria", value = """
+    @Query("""
+             SELECT e FROM EmpresaEntity AS e \
+                 JOIN e.usuarios AS u \
+             WHERE \
+                 u.id = :idUsuario  AND \
+                 e.statusDado not in (StatusEnum.REMOVIDO) AND \
+                 e.principal = true
+            """)
+    Optional<EmpresaEntity> empresaUsuario(@Param("idEmpresa") String idEmpresa, @Param("idUsuario") String idUsuario);
+
+    @Query("""
              SELECT e FROM EmpresaEntity AS e \
                  JOIN e.usuarios AS u \
              WHERE \
                  u.usuario = :username  AND \
-                 e.statusDado not in (StatusEnum.REMOVIDO)
+                 e.statusDado not in (StatusEnum.REMOVIDO) \
             """)
     List<EmpresaEntity> buscarPorUsuario(@Param("username") String username);
 }

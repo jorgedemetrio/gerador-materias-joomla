@@ -22,7 +22,7 @@ import com.br.sobieskiproducoes.geradormaterias.empresa.domain.ConfiguracoesEnti
 @Repository
 public interface ConfiguracoesRepository extends JpaRepository<ConfiguracoesEntity, String> {
 
-    @Query(name = "ConfiguracoesRepository.buscaConfiguracoesComMateriasAPublicar", value = """
+    @Query("""
              SELECT c FROM ConfiguracoesEntity AS c  JOIN c.materias AS m WHERE m.uuid is not null AND m.peguntaPrincipal is not null \
             AND m.status = StatusProcessamentoEnum.PROCESSAR \
             AND m.materia IS NOT NULL \
@@ -30,7 +30,7 @@ public interface ConfiguracoesRepository extends JpaRepository<ConfiguracoesEnti
             AND (m.publicar >= now() OR m.publicar is null) """)
     List<ConfiguracoesEntity> buscaConfiguracoesComMateriasAPublicar();
 
-    @Query(name = "ConfiguracoesRepository.buscaConfiguracoes", value = """
+    @Query("""
             SELECT c FROM ConfiguracoesEntity AS c  \
                     JOIN c.empresa AS e \
                     JOIN e.usuarios AS u \

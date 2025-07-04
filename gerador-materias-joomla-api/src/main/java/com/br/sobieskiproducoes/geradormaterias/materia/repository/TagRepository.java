@@ -23,15 +23,13 @@ import com.br.sobieskiproducoes.geradormaterias.materia.model.TagEntity;
 @Repository
 public interface TagRepository extends JpaRepository<TagEntity, Long> {
 
-  @Query(name = "TagRepository.bucarPorApelidoTitulo", value = "SELECT t FROM TagEntity AS t WHERE UPPER(TRIM(t.titulo)) = UPPER(TRIM(:titulo)) OR "
-      + " UPPER(TRIM(t.apelido)) = UPPER(TRIM(:apelido)) ")
-  Optional<TagEntity> buscarPorApelidoTitulo(@Param("apelido") String apelido,
-      @Param("titulo") String titulo);
+    @Query("SELECT t FROM TagEntity AS t WHERE UPPER(TRIM(t.titulo)) = UPPER(TRIM(:titulo)) OR " + " UPPER(TRIM(t.apelido)) = UPPER(TRIM(:apelido)) ")
+    Optional<TagEntity> buscarPorApelidoTitulo(@Param("apelido") String apelido, @Param("titulo") String titulo);
 
-  TagEntity findByIdJoomla(@Param("idJoomla") Long idJoomla);
+    TagEntity findByIdJoomla(@Param("idJoomla") Long idJoomla);
 
-  List<TagEntity> findByTitulo(@Param("titulo") String titulo);
+    List<TagEntity> findByTitulo(@Param("titulo") String titulo);
 
-  Page<TagEntity> findByTituloContainingIgnoreCase(@Param("titulo") String titulo, Pageable pageable);
+    Page<TagEntity> findByTituloContainingIgnoreCase(@Param("titulo") String titulo, Pageable pageable);
 
 }

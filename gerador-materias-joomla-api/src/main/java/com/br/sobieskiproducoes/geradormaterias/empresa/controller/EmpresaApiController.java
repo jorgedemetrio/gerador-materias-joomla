@@ -47,10 +47,10 @@ public class EmpresaApiController {
 
     @Operation(summary = "Consulta os dados da empresa do usuário autenticado.", description = "Consulta os dados da empresa do usuário autenticado.", responses = {
             @ApiResponse(description = "", responseCode = "200", content = { @Content(schema = @Schema(implementation = EmpresaDTO.class)) }),
-            @ApiResponse(description = "", responseCode = "400", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }),
-            @ApiResponse(description = "", responseCode = "401", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }),
-            @ApiResponse(description = "", responseCode = "403", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }),
-            @ApiResponse(description = "", responseCode = "500", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }) })
+            @ApiResponse(description = "", responseCode = "400", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }),
+            @ApiResponse(description = "", responseCode = "401", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }),
+            @ApiResponse(description = "", responseCode = "403", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }),
+            @ApiResponse(description = "", responseCode = "500", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }) })
     @GetMapping({ "" })
     public ResponseEntity<EmpresaDTO> get(@NotBlank @RequestHeader(name = "X-Tracking-ID", required = true) final String trakingId,
             @NotBlank @RequestHeader(name = "X-Session-ID", required = true) final String sessionId) throws Exception {
@@ -63,10 +63,10 @@ public class EmpresaApiController {
 
     @Operation(summary = "Alterar os dados da empresa do usuário autenticado.", description = "Alterar os dados da empresa do usuário autenticado.", responses = {
             @ApiResponse(description = "", responseCode = "200", content = { @Content(schema = @Schema(implementation = EmpresaDTO.class)) }),
-            @ApiResponse(description = "", responseCode = "400", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }),
-            @ApiResponse(description = "", responseCode = "401", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }),
-            @ApiResponse(description = "", responseCode = "403", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }),
-            @ApiResponse(description = "", responseCode = "500", content = { @Content(contentSchema = @Schema(implementation = ProblemDetail.class)) }) })
+            @ApiResponse(description = "", responseCode = "400", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }),
+            @ApiResponse(description = "", responseCode = "401", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }),
+            @ApiResponse(description = "", responseCode = "403", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }),
+            @ApiResponse(description = "", responseCode = "500", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }) })
     @PostMapping({ "" })
     public ResponseEntity<EmpresaDTO> save(@RequestBody final EmpresaDTO empresa,
 

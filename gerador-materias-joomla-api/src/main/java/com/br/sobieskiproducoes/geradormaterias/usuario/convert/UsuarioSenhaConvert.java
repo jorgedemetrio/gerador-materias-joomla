@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.br.sobieskiproducoes.geradormaterias.usuario.dto.UsuarioDTO;
+import com.br.sobieskiproducoes.geradormaterias.usuario.dto.UsuarioRequestDTO;
 import com.br.sobieskiproducoes.geradormaterias.usuario.model.UsuarioEntity;
 
 import lombok.Getter;
@@ -31,7 +32,7 @@ public abstract class UsuarioSenhaConvert {
 
     @Mapping(target = "senha", expression = "java(passwordEncoder.encode(source.getSenha()))")
     @Mapping(target = "id", ignore = true)
-    public abstract UsuarioEntity novo(UsuarioDTO source);
+    public abstract UsuarioEntity novo(UsuarioRequestDTO source);
 
     @Mappings({ @Mapping(target = "senha", ignore = true) })
     public abstract UsuarioDTO to(UsuarioEntity source);

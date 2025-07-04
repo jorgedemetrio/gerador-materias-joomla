@@ -21,6 +21,6 @@ import com.br.sobieskiproducoes.geradormaterias.usuario.model.PermissaoEntity;
 @Repository
 public interface PermissaoRepository extends JpaRepository<PermissaoEntity, Long> {
 
-    @Query(name = "PermissaoRepository.findByGruposIn", value = "SELECT g FROM PermissaoEntity AS g JOIN g.grupos AS gru WHERE gru.id = :grupo ")
+    @Query("SELECT g FROM PermissaoEntity AS g JOIN g.grupos AS gru WHERE gru.id = :grupo ")
     List<PermissaoEntity> findByGruposIn(@Param("grupo") String grupo);
 }

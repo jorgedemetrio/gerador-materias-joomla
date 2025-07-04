@@ -21,6 +21,6 @@ import com.br.sobieskiproducoes.geradormaterias.usuario.model.GrupoEntity;
 @Repository
 public interface GrupoRepository extends JpaRepository<GrupoEntity, String> {
 
-    @Query(name = "GrupoRepository.findByUsuariosIdIn", value = "SELECT g FROM GrupoEntity AS g JOIN g.usuarios AS usu WHERE usu.id = :usuario ")
+    @Query("SELECT g FROM GrupoEntity AS g JOIN g.usuarios AS usu WHERE usu.id = :usuario ")
     List<GrupoEntity> findByUsuariosIdIn(@Param("usuario") String usuario);
 }

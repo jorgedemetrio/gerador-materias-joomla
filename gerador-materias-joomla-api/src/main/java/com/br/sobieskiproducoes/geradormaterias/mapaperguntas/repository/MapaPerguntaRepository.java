@@ -18,7 +18,6 @@ import com.br.sobieskiproducoes.geradormaterias.mapaperguntas.model.MapaPergunta
  */
 public interface MapaPerguntaRepository extends JpaRepository<MapaPerguntaEntity, Long> {
 
-
 //  @Query(name = "MapaPerguntaRepository.buscaPorUiidParaCargaLimitado5",
 //      value = "SELECT m FROM MapaPerguntaEntity AS m WHERE m.uuid = :uuid AND (m.materias IS NULL OR m.materias IS EMPTY) ORDER BY m.id LIMIT 5")
 

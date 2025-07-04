@@ -54,8 +54,8 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `tbl_empresa` (
   `id` VARCHAR(40) NOT NULL,
-  `alterado` DATETIME NULL,
-  `criado` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  `alterado` DATETIME(6) NULL,
+  `criado` DATETIME(6) NOT NULL ,
   `ip_alterador` VARCHAR(100) NULL,
   `ip_criador` VARCHAR(100) NOT NULL,
   `ip_proxy_alterador` VARCHAR(100) NULL,
@@ -86,8 +86,8 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `tbl_configuracao` (
   `id` VARCHAR(40) NOT NULL,
-  `alterado` DATETIME NULL,
-  `criado` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  `alterado` DATETIME(6) NULL,
+  `criado` DATETIME(6) NOT NULL ,
   `ip_alterador` VARCHAR(100) NULL,
   `ip_criador` VARCHAR(100) NOT NULL,
   `ip_proxy_alterador` VARCHAR(100) NULL,
@@ -122,8 +122,8 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `tbl_categoria` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `alterado` DATETIME NULL,
-  `criado` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  `alterado` DATETIME(6) NULL,
+  `criado` DATETIME(6) NOT NULL ,
   `ip_alterador` VARCHAR(100) NULL,
   `ip_criador` VARCHAR(100) NOT NULL,
   `ip_proxy_alterador` VARCHAR(100) NULL,
@@ -167,8 +167,8 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `tbl_chatgpt_configuracao` (
   `id` VARCHAR(40) NOT NULL,
-  `alterado` DATETIME NULL,
-  `criado` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  `alterado` DATETIME(6) NULL,
+  `criado` DATETIME(6) NOT NULL ,
   `ip_alterador` VARCHAR(100) NULL,
   `ip_criador` VARCHAR(100) NOT NULL,
   `ip_proxy_alterador` VARCHAR(100) NULL,
@@ -210,8 +210,8 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `tbl_chatgpt_treinamento` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `alterado` DATETIME NULL,
-  `criado` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  `alterado` DATETIME(6) NULL,
+  `criado` DATETIME(6) NOT NULL ,
   `ip_alterador` VARCHAR(100) NULL,
   `ip_criador` VARCHAR(100) NOT NULL,
   `ip_proxy_alterador` VARCHAR(100) NULL,
@@ -243,8 +243,8 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `tbl_chatgpt_perguntas` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `alterado` DATETIME NULL,
-  `criado` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  `alterado` DATETIME(6) NULL,
+  `criado` DATETIME(6) NOT NULL ,
   `ip_alterador` VARCHAR(100) NULL,
   `ip_criador` VARCHAR(100) NOT NULL,
   `ip_proxy_alterador` VARCHAR(100) NULL,
@@ -282,8 +282,8 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `tbl_mapa_perguntas` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `alterado` DATETIME NULL,
-  `criado` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  `alterado` DATETIME(6) NULL,
+  `criado` DATETIME(6) NOT NULL ,
   `ip_alterador` VARCHAR(100) NULL,
   `ip_criador` VARCHAR(100) NOT NULL,
   `ip_proxy_alterador` VARCHAR(100) NULL,
@@ -322,8 +322,8 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `tbl_materia` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `alterado` DATETIME NULL,
-  `criado` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  `alterado` DATETIME(6) NULL,
+  `criado` DATETIME(6) NOT NULL ,
   `ip_alterador` VARCHAR(100) NULL,
   `ip_criador` VARCHAR(100) NOT NULL,
   `ip_proxy_alterador` VARCHAR(100) NULL,
@@ -419,8 +419,8 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `tbl_faq` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `alterado` DATETIME NULL,
-  `criado` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  `alterado` DATETIME(6) NULL,
+  `criado` DATETIME(6) NOT NULL ,
   `ip_alterador` VARCHAR(100) NULL,
   `ip_criador` VARCHAR(100) NOT NULL,
   `ip_proxy_alterador` VARCHAR(100) NULL,
@@ -488,8 +488,8 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `tbl_grupo_usuario` (
   `id` VARCHAR(40) NOT NULL,
-  `alterado` DATETIME NULL,
-  `criado` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  `alterado` DATETIME(6) NULL,
+  `criado` DATETIME(6) NOT NULL ,
   `ip_alterador` VARCHAR(100) NULL,
   `ip_criador` VARCHAR(100) NOT NULL,
   `ip_proxy_alterador` VARCHAR(100) NULL,
@@ -532,6 +532,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 CREATE TABLE IF NOT EXISTS `tbl_grupo_permissao` (
   `id_permissao` BIGINT NOT NULL,
   `id_grupo` VARCHAR(40) NOT NULL,
+  PRIMARY KEY (`id_permissao`, `id_grupo`),
   INDEX `FKbxh4h79wbdg8k452gsmkhx71u` (`id_grupo` ASC) VISIBLE,
   INDEX `FKjcqyyshxoblg8nrhhmtrx71f8` (`id_permissao` ASC) VISIBLE,
   CONSTRAINT `FKbxh4h79wbdg8k452gsmkhx71u`
@@ -550,8 +551,8 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `tbl_joomla_configuracao` (
   `id` VARCHAR(40) NOT NULL,
-  `alterado` DATETIME NULL,
-  `criado` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  `alterado` DATETIME(6) NULL,
+  `criado` DATETIME(6) NOT NULL ,
   `ip_alterador` VARCHAR(100) NULL,
   `ip_criador` VARCHAR(100) NOT NULL,
   `ip_proxy_alterador` VARCHAR(100) NULL,
@@ -586,8 +587,8 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `tbl_mapa_subperguntas` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `alterado` DATETIME NULL,
-  `criado` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  `alterado` DATETIME(6) NULL,
+  `criado` DATETIME(6) NOT NULL ,
   `ip_alterador` VARCHAR(100) NULL,
   `ip_criador` VARCHAR(100) NOT NULL,
   `ip_proxy_alterador` VARCHAR(100) NULL,
@@ -621,8 +622,8 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `tbl_mapaperguntas_termo` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `alterado` DATETIME NULL,
-  `criado` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  `alterado` DATETIME(6) NULL,
+  `criado` DATETIME(6) NOT NULL ,
   `ip_alterador` VARCHAR(100) NULL,
   `ip_criador` VARCHAR(100) NOT NULL,
   `ip_proxy_alterador` VARCHAR(100) NULL,
@@ -701,8 +702,8 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `tbl_tag` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `alterado` DATETIME NULL,
-  `criado` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  `alterado` DATETIME(6) NULL,
+  `criado` DATETIME(6) NOT NULL ,
   `ip_alterador` VARCHAR(100) NULL,
   `ip_criador` VARCHAR(100) NOT NULL,
   `ip_proxy_alterador` VARCHAR(100) NULL,
@@ -759,8 +760,8 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `tbl_termos_empresa` (
   `id` VARCHAR(40) NOT NULL,
-  `alterado` DATETIME NULL,
-  `criado` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  `alterado` DATETIME(6) NULL,
+  `criado` DATETIME(6) NOT NULL ,
   `ip_alterador` VARCHAR(100) NULL,
   `ip_criador` VARCHAR(100) NOT NULL,
   `ip_proxy_alterador` VARCHAR(100) NULL,
@@ -794,6 +795,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 CREATE TABLE IF NOT EXISTS `tbl_usuario_empresa` (
   `id_empresa` VARCHAR(40) NOT NULL,
   `id_usuario` VARCHAR(40) NOT NULL,
+  PRIMARY KEY (`id_usuario`, `id_empresa`),
   INDEX `FKjacf7sqg6wbb1nk88x9nyvcy1` (`id_usuario` ASC) VISIBLE,
   INDEX `FKkfhl5iiqfi7bc72bcx8jgglga` (`id_empresa` ASC) VISIBLE,
   CONSTRAINT `FKjacf7sqg6wbb1nk88x9nyvcy1`
@@ -813,6 +815,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 CREATE TABLE IF NOT EXISTS `tbl_usuario_grupo` (
   `id_usuario` VARCHAR(40) NOT NULL,
   `id_grupo` VARCHAR(40) NOT NULL,
+  PRIMARY KEY (`id_usuario`, `id_grupo`),
   INDEX `FKm2q8clo9utv5lspv3yos3ghs1` (`id_grupo` ASC) VISIBLE,
   INDEX `FKiejsyprpu34t9b1ob3e7juoct` (`id_usuario` ASC) VISIBLE,
   CONSTRAINT `FKiejsyprpu34t9b1ob3e7juoct`
@@ -831,8 +834,8 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `tbl_wordpress_configuracao` (
   `id` VARCHAR(40) NOT NULL,
-  `alterado` DATETIME NULL,
-  `criado` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  `alterado` DATETIME(6) NULL,
+  `criado` DATETIME(6) NOT NULL ,
   `ip_alterador` VARCHAR(100) NULL,
   `ip_criador` VARCHAR(100) NOT NULL,
   `ip_proxy_alterador` VARCHAR(100) NULL,
