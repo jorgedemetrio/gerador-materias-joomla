@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -36,7 +37,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "tbl_audiencias_empresa")
+@Table(name = "tbl_audiencias_empresa", uniqueConstraints = { @UniqueConstraint(columnNames = { "nome", "id_empresa" }) })
 public class AudienciaEmpresaEntity extends AbstractObservabilidadeEntity {
 
     @Id
@@ -45,7 +46,7 @@ public class AudienciaEmpresaEntity extends AbstractObservabilidadeEntity {
     private String id;
 
     @NotBlank
-    @Size(min = 10, max = 250)
+    @Size(min = 3, max = 250)
     @Column(name = "nome", insertable = true, updatable = true, nullable = true, unique = false, length = 250)
     private String nome;
 

@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.br.sobieskiproducoes.geradormaterias.empresa.domain.TermosEmpresaEntity;
+import com.br.sobieskiproducoes.geradormaterias.empresa.domain.DoresAudienciaEmpresaEntity;
 
 /**
  *
@@ -19,11 +19,12 @@ import com.br.sobieskiproducoes.geradormaterias.empresa.domain.TermosEmpresaEnti
  * @since 3 de jul. de 2025 00:32:02
  * @version 1.0.3 de jul. de 2025
  */
-public interface TermosEmpresaRepository extends JpaRepository<TermosEmpresaEntity, String> {
-
+public interface DoresAudienciasEmpresaRepository extends JpaRepository<DoresAudienciaEmpresaEntity, String> {
     @Query("""
-            SELECT t FROM \
-                    TermosEmpresaEntity AS t JOIN \
+            SELECT  \
+                t  \
+            FROM \
+                    DoresAudienciaEmpresaEntity AS t JOIN \
                     t.empresa AS e JOIN \
                     e.usuarios AS u \
             WHERE \
@@ -32,27 +33,28 @@ public interface TermosEmpresaRepository extends JpaRepository<TermosEmpresaEnti
                     u.id = :idUsuario AND \
                     (:nome is null OR  upper(t.nome) like concat('%', upper(trim(:nome)), '%')) \
                 """)
-    List<TermosEmpresaEntity> consulta(@Param("nome") String nome, @Param("idEmpresa") String idEmpresa, @Param("idUsuario") String idusuario,
+    List<DoresAudienciaEmpresaEntity> consulta(@Param("nome") String nome, @Param("idEmpresa") String idEmpresa, @Param("idUsuario") String idusuario,
             Pageable paginacao);
 
     @Query("""
             SELECT t FROM \
-                    TermosEmpresaEntity AS t JOIN \
+                    DoresAudienciaEmpresaEntity AS t JOIN \
                     t.empresa AS e JOIN \
                     e.usuarios AS u \
             WHERE \
                     t.statusDado not in (StatusEnum.REMOVIDO) AND \
                     e.id = :idEmpresa AND \
-                    t.id = :idTermo AND \
+                    t.id = :idAudiencia AND \
                     u.id = :idUsuario \
                 """)
-    Optional<TermosEmpresaEntity> get(@Param("idTermo") String idTermo, @Param("idEmpresa") String idEmpresa, @Param("idUsuario") String idUsuario);
+    Optional<DoresAudienciaEmpresaEntity> get(@Param("idAudiencia") String idAudiencia, @Param("idEmpresa") String idEmpresa,
+            @Param("idUsuario") String idUsuario);
 
     @Query("""
             SELECT  \
                 t  \
             FROM \
-                    TermosEmpresaEntity AS t JOIN \
+                    DoresAudienciaEmpresaEntity AS t JOIN \
                     t.empresa AS e JOIN \
                     e.usuarios AS u \
             WHERE \
@@ -61,6 +63,6 @@ public interface TermosEmpresaRepository extends JpaRepository<TermosEmpresaEnti
                     u.id = :idUsuario AND \
                     upper(t.nome) = upper(trim(:nome)) \
                 """)
-    Optional<TermosEmpresaEntity> consultaPorNomeEmpresaUsuario(@Param("nome") String nome, @Param("idEmpresa") String idEmpresa,
+    Optional<DoresAudienciaEmpresaEntity> consultaPorNomeEmpresaUsuario(@Param("nome") String nome, @Param("idEmpresa") String idEmpresa,
             @Param("idUsuario") String idusuario);
 }

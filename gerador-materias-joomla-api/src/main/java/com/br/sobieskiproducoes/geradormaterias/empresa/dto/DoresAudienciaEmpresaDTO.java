@@ -26,7 +26,7 @@ import lombok.ToString;
 @EqualsAndHashCode(of = { "id" }, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
-public class AudienciaEmpresaDTO extends AbstractObservabilidadeDTO {
+public class DoresAudienciaEmpresaDTO extends AbstractObservabilidadeDTO {
 
     private String id;
 

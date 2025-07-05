@@ -8,9 +8,9 @@ import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import com.br.sobieskiproducoes.geradormaterias.empresa.domain.AudienciaEmpresaEntity;
+import com.br.sobieskiproducoes.geradormaterias.empresa.domain.DoresAudienciaEmpresaEntity;
 import com.br.sobieskiproducoes.geradormaterias.empresa.domain.EmpresaEntity;
-import com.br.sobieskiproducoes.geradormaterias.empresa.dto.AudienciaEmpresaDTO;
+import com.br.sobieskiproducoes.geradormaterias.empresa.dto.DoresAudienciaEmpresaDTO;
 import com.br.sobieskiproducoes.geradormaterias.utils.StatusEnum;
 
 /**
@@ -20,15 +20,15 @@ import com.br.sobieskiproducoes.geradormaterias.utils.StatusEnum;
  * @version 1.0.29 de jun. de 2025
  */
 @Mapper(componentModel = "spring", imports = { StatusEnum.class })
-public interface AudienciaConvert {
+public interface DoresAudienciaConvert {
 
     @Mapping(target = "empresa", ignore = true)
-    AudienciaEmpresaDTO to(AudienciaEmpresaEntity source);
+    DoresAudienciaEmpresaDTO to(DoresAudienciaEmpresaEntity source);
 
     @Mapping(target = "alterador", ignore = true)
     @Mapping(target = "criador", ignore = true)
     @Mapping(target = "empresa", ignore = true)
-    AudienciaEmpresaEntity to(AudienciaEmpresaDTO source);
+    DoresAudienciaEmpresaEntity to(DoresAudienciaEmpresaDTO source);
 
     @Mapping(target = "alterador", ignore = true)
     @Mapping(target = "criador", ignore = true)
@@ -42,8 +42,8 @@ public interface AudienciaConvert {
     @Mapping(target = "ipAlterador", source = "source.ipAlterador")
     @Mapping(target = "ipProxyAlterador", source = "source.ipProxyAlterador")
     @Mapping(target = "statusDado", expression = "java(StatusEnum.NOVO)")
-    AudienciaEmpresaEntity novo(AudienciaEmpresaDTO source, EmpresaEntity empresaSource);
+    DoresAudienciaEmpresaEntity novo(DoresAudienciaEmpresaDTO source, EmpresaEntity empresaSource);
 
-    List<AudienciaEmpresaDTO> to(List<AudienciaEmpresaEntity> source);
+    List<DoresAudienciaEmpresaDTO> to(List<DoresAudienciaEmpresaEntity> source);
 
 }

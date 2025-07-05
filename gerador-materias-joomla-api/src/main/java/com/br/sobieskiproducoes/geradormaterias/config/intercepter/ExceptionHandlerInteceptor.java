@@ -4,6 +4,7 @@
 package com.br.sobieskiproducoes.geradormaterias.config.intercepter;
 
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -17,6 +18,7 @@ import org.springframework.security.authentication.LockedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
@@ -38,64 +40,94 @@ import lombok.extern.java.Log;
 public class ExceptionHandlerInteceptor {
 
     @ExceptionHandler(value = TokenExpiredException.class)
-    public ResponseEntity<Object> handle(final TokenExpiredException ex) {
+    public ResponseEntity<ProblemDetail> handle(final TokenExpiredException ex) {
         return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, "Sessão Expirada.")).build();
     }
 
     @ExceptionHandler(value = JWTDecodeException.class)
-    public ResponseEntity<Object> handle(final JWTDecodeException ex) {
+    public ResponseEntity<ProblemDetail> handle(final JWTDecodeException ex) {
         return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, ex.getLocalizedMessage())).build();
     }
 
     @ExceptionHandler(value = SemPermissaoException.class)
-    public ResponseEntity<Object> handle(final SemPermissaoException ex) {
+    public ResponseEntity<ProblemDetail> handle(final SemPermissaoException ex) {
         return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, ex.getLocalizedMessage())).build();
     }
 
-    @ExceptionHandler(value = { AuthenticationCredentialsNotFoundException.class, BadCredentialsException.class })
-    public ResponseEntity<Object> handle(final AuthenticationCredentialsNotFoundException ex) {
+    @ExceptionHandler(value = BadCredentialsException.class)
+    public ResponseEntity<ProblemDetail> handle(final BadCredentialsException ex) {
         return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, "Usuário ou senha inválidos.")).build();
     }
 
-    @ExceptionHandler(value = { AccountExpiredException.class, CredentialsExpiredException.class })
-    public ResponseEntity<Object> handlet(final AccountExpiredException ex) {
+    @ExceptionHandler(value = AccountExpiredException.class)
+    public ResponseEntity<ProblemDetail> handlet(final AccountExpiredException ex) {
+        return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, "Usuário expirado.")).build();
+    }
+
+    @ExceptionHandler(value = AuthenticationCredentialsNotFoundException.class)
+    public ResponseEntity<ProblemDetail> handle(final AuthenticationCredentialsNotFoundException ex) {
+        return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, "Usuário ou senha inválidos.")).build();
+    }
+
+    @ExceptionHandler(value = CredentialsExpiredException.class)
+    public ResponseEntity<ProblemDetail> handlet(final CredentialsExpiredException ex) {
         return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, "Usuário expirado.")).build();
     }
 
     @ExceptionHandler(value = { DisabledException.class })
-    public ResponseEntity<Object> handlet(final DisabledException ex) {
+    public ResponseEntity<ProblemDetail> handlet(final DisabledException ex) {
         return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, "Usuário desabilitado.")).build();
     }
 
     @ExceptionHandler(value = { LockedException.class })
-    public ResponseEntity<Object> handlet(final LockedException ex) {
+    public ResponseEntity<ProblemDetail> handlet(final LockedException ex) {
         return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, "Usuário bloqueado")).build();
     }
 
     @ExceptionHandler(value = { Exception.class })
-    public ResponseEntity<Object> handlet(final Exception ex) {
+    public ResponseEntity<ProblemDetail> handlet(final Exception ex) {
         log.log(Level.SEVERE, ex.getLocalizedMessage(), ex.getCause());
         return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex.getLocalizedMessage())).build();
     }
 
     @ExceptionHandler(value = { ConstraintViolationException.class })
-    public ResponseEntity<Object> handlet(final ConstraintViolationException ex) {
-        return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage())).build();
+    public ResponseEntity<ProblemDetail> handlet(final ConstraintViolationException ex) {
+//        return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage())).build();
+
+        final String valor = ex.getConstraintViolations().stream().map(n -> n.getPropertyPath() + " : " + n.getMessage() + " " + n.getConstraintDescriptor())
+                .collect(Collectors.joining("\n"));
+
+        return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage() + "\n\n" + valor)).build();
     }
 
     @ExceptionHandler(value = { MethodArgumentNotValidException.class })
-    public ResponseEntity<Object> handlet(final MethodArgumentNotValidException ex) {
-        return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage())).build();
+    public ResponseEntity<ProblemDetail> handlet(final MethodArgumentNotValidException ex) {
+//        return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage())).build();
+        return ResponseEntity
+                .of(ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,
+                        ex.getLocalizedMessage() + "\n\n"
+                                + ex.getAllErrors().stream().map(n -> n.getObjectName() + " : " + n.getDefaultMessage()).collect(Collectors.joining("\n"))))
+                .build();
     }
 
     @ExceptionHandler(value = { NaoEncontradoException.class })
-    public ResponseEntity<Object> handlet(final NaoEncontradoException ex) {
+    public ResponseEntity<ProblemDetail> handlet(final NaoEncontradoException ex) {
         return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getLocalizedMessage())).build();
     }
 
     @ExceptionHandler(value = { DadosInvalidosException.class })
-    public ResponseEntity<Object> handlet(final DadosInvalidosException ex) {
+    public ResponseEntity<ProblemDetail> handlet(final DadosInvalidosException ex) {
         return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage())).build();
+    }
+
+    @ExceptionHandler(value = { HandlerMethodValidationException.class })
+    public ResponseEntity<ProblemDetail> handlet(final HandlerMethodValidationException ex) {
+
+        return ResponseEntity
+                .of(ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,
+                        ex.getLocalizedMessage() + "\n\n" + ex.getBeanResults().stream()
+                                .map(n -> n.getFieldError().getField() + " : " + n.getFieldError().getDefaultMessage()).collect(Collectors.joining("\n"))))
+                .build();
     }
 
 }

@@ -33,7 +33,7 @@ public class TermosEmpresaDTO extends AbstractObservabilidadeDTO {
     private String id;
 
     @NotBlank
-    @Size(min = 10, max = 250)
+    @Size(min = 3, max = 250)
     private String nome;
 
     private EmpresaDTO empresa;

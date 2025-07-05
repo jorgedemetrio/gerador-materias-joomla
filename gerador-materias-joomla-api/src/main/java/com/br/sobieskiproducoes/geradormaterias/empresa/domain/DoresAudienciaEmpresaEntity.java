@@ -37,8 +37,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "tbl_termos_empresa", uniqueConstraints = { @UniqueConstraint(columnNames = { "nome", "id_empresa" }) })
-public class TermosEmpresaEntity extends AbstractObservabilidadeEntity {
+@Table(name = "tbl_dores_audiencias_empresa", uniqueConstraints = { @UniqueConstraint(columnNames = { "nome", "id_empresa" }) })
+public class DoresAudienciaEmpresaEntity extends AbstractObservabilidadeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.br.sobieskiproducoes.geradormaterias.empresa.dto.TermosEmpresaDTO;
-import com.br.sobieskiproducoes.geradormaterias.empresa.service.TermosEmpresaService;
+import com.br.sobieskiproducoes.geradormaterias.empresa.dto.DoresAudienciaEmpresaDTO;
+import com.br.sobieskiproducoes.geradormaterias.empresa.service.DoresAudienciaService;
 import com.br.sobieskiproducoes.geradormaterias.utils.ControllerUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,21 +45,21 @@ import lombok.extern.java.Log;
 @Log
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/termo-empresa")
-@Tag(name = "Controle de Termos da Empresa.", description = "Termos que a empresa quer ser forte no trabalho de SEO.")
-public class TermoEmpresaController {
+@RequestMapping("/api/v1/dores-audiencia-empresa")
+@Tag(name = "Controle de Dores da audiência.", description = "Controle de Dores da Audiência que a empresa quer trabalhar.")
+public class DoresAudienciaEmpresaController {
 
-    private final TermosEmpresaService service;
+    private final DoresAudienciaService service;
 
-    @Operation(summary = "Consulta os termos disponiveis para aquela empresa.", description = "Retorna uma lista termos.", responses = {
+    @Operation(summary = "Consulta os audiência disponiveis para aquela empresa.", description = "Retorna uma lista audiências.", responses = {
             @ApiResponse(description = "", responseCode = "200", content = {
-                    @Content(array = @ArraySchema(schema = @Schema(anyOf = TermosEmpresaDTO.class))) }),
+                    @Content(array = @ArraySchema(schema = @Schema(implementation = DoresAudienciaEmpresaDTO.class))) }),
             @ApiResponse(description = "", responseCode = "400", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }),
             @ApiResponse(description = "", responseCode = "401", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }),
             @ApiResponse(description = "", responseCode = "403", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }),
             @ApiResponse(description = "", responseCode = "500", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }) })
     @GetMapping({ "" })
-    public ResponseEntity<List<TermosEmpresaDTO>> get(@NotBlank @RequestHeader(name = "X-Tracking-ID", required = true) final String trakingId,
+    public ResponseEntity<List<DoresAudienciaEmpresaDTO>> get(@NotBlank @RequestHeader(name = "X-Tracking-ID", required = true) final String trakingId,
             @NotBlank @RequestHeader(name = "X-Session-ID", required = true) final String sessionId,
             @NotBlank @RequestHeader(name = "empresa", required = true) final String empresa,
 
@@ -72,15 +72,15 @@ public class TermoEmpresaController {
 
     }
 
-    @Operation(summary = "Consulta um termo especifico.", description = "Retorna um termos.", responses = {
-            @ApiResponse(description = "", responseCode = "200", content = { @Content(schema = @Schema(implementation = TermosEmpresaDTO.class)) }),
+    @Operation(summary = "Consulta um audiência especifico.", description = "Retorna um audiência.", responses = {
+            @ApiResponse(description = "", responseCode = "200", content = { @Content(schema = @Schema(implementation = DoresAudienciaEmpresaDTO.class)) }),
             @ApiResponse(description = "", responseCode = "404", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }),
             @ApiResponse(description = "", responseCode = "400", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }),
             @ApiResponse(description = "", responseCode = "401", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }),
             @ApiResponse(description = "", responseCode = "403", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }),
             @ApiResponse(description = "", responseCode = "500", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }) })
     @GetMapping({ "/{id}" })
-    public ResponseEntity<TermosEmpresaDTO> getPorId(@NotBlank @RequestHeader(name = "X-Tracking-ID", required = true) final String trakingId,
+    public ResponseEntity<DoresAudienciaEmpresaDTO> getPorId(@NotBlank @RequestHeader(name = "X-Tracking-ID", required = true) final String trakingId,
             @NotBlank @RequestHeader(name = "X-Session-ID", required = true) final String sessionId,
             @NotBlank @RequestHeader(name = "empresa", required = true) final String empresa,
 
@@ -90,7 +90,7 @@ public class TermoEmpresaController {
 
     }
 
-    @Operation(summary = "Apaga o termo de um id.", description = "Não retorna nada.", responses = {
+    @Operation(summary = "Apaga a audiência de um id.", description = "Não retorna nada.", responses = {
             @ApiResponse(description = "", responseCode = "204", content = { @Content(schema = @Schema(hidden = true)) }),
             @ApiResponse(description = "", responseCode = "404", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }),
             @ApiResponse(description = "", responseCode = "400", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }),
@@ -108,21 +108,21 @@ public class TermoEmpresaController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Grava o termo.", description = "Retorna o termo.", responses = {
-            @ApiResponse(description = "", responseCode = "204", content = { @Content(schema = @Schema(implementation = TermosEmpresaDTO.class)) }),
+    @Operation(summary = "Grava a audiência.", description = "A audiência gravada.", responses = {
+            @ApiResponse(description = "", responseCode = "204", content = { @Content(schema = @Schema(implementation = DoresAudienciaEmpresaDTO.class)) }),
             @ApiResponse(description = "", responseCode = "404", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }),
             @ApiResponse(description = "", responseCode = "400", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }),
             @ApiResponse(description = "", responseCode = "401", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }),
             @ApiResponse(description = "", responseCode = "403", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }),
             @ApiResponse(description = "", responseCode = "500", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }) },
 
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(schema = @Schema(implementation = TermosEmpresaDTO.class))))
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(schema = @Schema(implementation = DoresAudienciaEmpresaDTO.class))))
     @PostMapping({ "" })
-    public ResponseEntity<TermosEmpresaDTO> gravar(@NotBlank @RequestHeader(name = "X-Tracking-ID", required = true) final String trakingId,
+    public ResponseEntity<DoresAudienciaEmpresaDTO> gravar(@NotBlank @RequestHeader(name = "X-Tracking-ID", required = true) final String trakingId,
             @NotBlank @RequestHeader(name = "X-Session-ID", required = true) final String sessionId,
             @NotBlank @RequestHeader(name = "empresa", required = true) final String empresa,
 
-            @RequestBody @NotNull @Valid @Validated final TermosEmpresaDTO item, final HttpServletRequest request) throws Exception {
+            @RequestBody @NotNull @Valid @Validated final DoresAudienciaEmpresaDTO item, final HttpServletRequest request) throws Exception {
         item.setIpAlterador(ControllerUtils.getClientIpAddress(request));
         item.setIpProxyAlterador(ControllerUtils.getClientIpProxyAddress(request));
         return ResponseEntity.ok(service.gravar(item, empresa));

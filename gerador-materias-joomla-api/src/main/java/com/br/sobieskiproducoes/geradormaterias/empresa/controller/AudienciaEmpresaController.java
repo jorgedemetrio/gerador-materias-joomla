@@ -5,7 +5,6 @@ package com.br.sobieskiproducoes.geradormaterias.empresa.controller;
 
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.br.sobieskiproducoes.geradormaterias.empresa.dto.AudienciaEmpresaDTO;
 import com.br.sobieskiproducoes.geradormaterias.empresa.service.AudienciaService;
-import com.br.sobieskiproducoes.geradormaterias.exception.NaoEncontradoException;
 import com.br.sobieskiproducoes.geradormaterias.utils.ControllerUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,6 +30,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -47,12 +46,12 @@ import lombok.extern.java.Log;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/audiencia-empresa")
-@Tag(name = "Controle de Perfil de audiência  da Empresa.", description = "Audiência que a empresa quer trabalhar.")
+@Tag(name = "Controle de Perfil de audiência  da Empresa.", description = "Dores da audiência que a empresa quer trabalhar.")
 public class AudienciaEmpresaController {
 
     private final AudienciaService service;
 
-    @Operation(summary = "Consulta os audiência disponiveis para aquela empresa.", description = "Retorna uma lista audiências.", responses = {
+    @Operation(summary = "Consulta de audiências disponiveis para aquela empresa.", description = "Retorna uma lista audiências.", responses = {
             @ApiResponse(description = "", responseCode = "200", content = {
                     @Content(array = @ArraySchema(schema = @Schema(implementation = AudienciaEmpresaDTO.class))) }),
             @ApiResponse(description = "", responseCode = "400", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }),
@@ -66,17 +65,12 @@ public class AudienciaEmpresaController {
 
             @RequestParam(name = "nome", required = false) final String nome,
             @RequestParam(name = "pagina", required = false, defaultValue = "0") final Integer pagina,
-            @RequestParam(name = "pagina", required = false, defaultValue = "20") final Integer itensPorPagina,
+            @RequestParam(name = "pagina", required = false, defaultValue = "20") @Min(2) final Integer itensPorPagina,
             @RequestParam(name = "ordenarPor", required = false, defaultValue = "nome") final String ordenarPor) throws Exception {
-        try {
-
-            return ResponseEntity.ok(service.consultar(nome, empresa, pagina, itensPorPagina, ordenarPor));
-        } catch (final NaoEncontradoException e) {
-            return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, "Dados da empresa não encontrado")).build();
-        }
+        return ResponseEntity.ok(service.consultar(nome, empresa, pagina, itensPorPagina, ordenarPor));
     }
 
-    @Operation(summary = "Consulta um audiência especifico.", description = "Retorna um audiência.", responses = {
+    @Operation(summary = "Consulta uma audiência especifico.", description = "Retorna uma audiência.", responses = {
             @ApiResponse(description = "", responseCode = "200", content = { @Content(schema = @Schema(implementation = AudienciaEmpresaDTO.class)) }),
             @ApiResponse(description = "", responseCode = "404", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }),
             @ApiResponse(description = "", responseCode = "400", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }),
@@ -94,7 +88,7 @@ public class AudienciaEmpresaController {
 
     }
 
-    @Operation(summary = "Apaga a audiência de um id.", description = "Não retorna nada.", responses = {
+    @Operation(summary = "Apaga a audiência por um id.", description = "Não retorna nada.", responses = {
             @ApiResponse(description = "", responseCode = "204", content = { @Content(schema = @Schema(hidden = true)) }),
             @ApiResponse(description = "", responseCode = "404", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }),
             @ApiResponse(description = "", responseCode = "400", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }),
@@ -112,7 +106,7 @@ public class AudienciaEmpresaController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Grava a audiência.", description = "A audiência gravada.", responses = {
+    @Operation(summary = "Grava a audiência.", description = "Retorna a audiência gravada.", responses = {
             @ApiResponse(description = "", responseCode = "204", content = { @Content(schema = @Schema(implementation = AudienciaEmpresaDTO.class)) }),
             @ApiResponse(description = "", responseCode = "404", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }),
             @ApiResponse(description = "", responseCode = "400", content = { @Content(schema = @Schema(implementation = ProblemDetail.class)) }),

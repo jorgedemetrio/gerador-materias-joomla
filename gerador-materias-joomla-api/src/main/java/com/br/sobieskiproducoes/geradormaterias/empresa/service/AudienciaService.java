@@ -17,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import com.br.sobieskiproducoes.geradormaterias.autenticacao.componente.UsuarioAutenticadoComponente;
 import com.br.sobieskiproducoes.geradormaterias.empresa.convert.AudienciaConvert;
 import com.br.sobieskiproducoes.geradormaterias.empresa.domain.AudienciaEmpresaEntity;
+import com.br.sobieskiproducoes.geradormaterias.empresa.domain.EmpresaEntity;
 import com.br.sobieskiproducoes.geradormaterias.empresa.dto.AudienciaEmpresaDTO;
 import com.br.sobieskiproducoes.geradormaterias.empresa.repository.AudienciasEmpresaRepository;
 import com.br.sobieskiproducoes.geradormaterias.empresa.repository.EmpresaRepository;
@@ -43,21 +44,30 @@ public class AudienciaService {
     private final AudienciasEmpresaRepository repository;
     private final UsuarioAutenticadoComponente usuarioLogadoAwareComponent;
     private final AudienciaConvert convert;
-    private EmpresaRepository empresaRepository;
+    private final EmpresaRepository empresaRepository;
 
     public List<AudienciaEmpresaDTO> consultar(final String nome, @NotBlank final String idEmpresa, @NotNull final Integer pagina,
             @NotNull final Integer itensPorPagina, @NotBlank final String campoOrdem) {
-        return convert.to(repository.consulta(nome, idEmpresa, usuarioLogadoAwareComponent.getUsuarioLogado().getId(),
-                PageRequest.of(pagina, itensPorPagina, Sort.by(campoOrdem))));
+        return convert.to(
+
+                repository.consulta(nome, idEmpresa, usuarioLogadoAwareComponent.getUsuarioLogado().getId(),
+                        PageRequest.of(pagina, itensPorPagina, Sort.by(campoOrdem))));
     }
 
     @Transactional
-    public AudienciaEmpresaDTO gravar(@NotNull @Valid @Validated final AudienciaEmpresaDTO empresa, @NotBlank final String idEmpresa) {
+    public AudienciaEmpresaDTO gravar(@NotNull @Valid @Validated final AudienciaEmpresaDTO audiencia, @NotBlank final String idEmpresa) {
 
-        if (!empresaRepository.empresaUsuario(idEmpresa, usuarioLogadoAwareComponent.getUsuarioLogado().getId()).isPresent()) {
+        final Optional<EmpresaEntity> empresa = empresaRepository.empresaUsuario(idEmpresa, usuarioLogadoAwareComponent.getUsuarioLogado().getId());
+
+        if (!empresa.isPresent()) {
             throw new DadosInvalidosException("Sem permisso para gravar nesta empresa.");
         }
-        return convert.to(repository.save(isNull(empresa) ? convert.novo(empresa) : convert.to(empresa)));
+
+        if (repository.consultaPorNomeEmpresaUsuario(audiencia.getNome(), idEmpresa, usuarioLogadoAwareComponent.getUsuarioLogado().getId()).isPresent()) {
+            throw new DadosInvalidosException("Já existe esse item.");
+        }
+
+        return convert.to(repository.save(isNull(audiencia) ? convert.novo(audiencia, empresa.get()) : convert.to(audiencia)));
     }
 
     public AudienciaEmpresaDTO item(@NotBlank final String audienciaId, @NotBlank final String idEmpresa) {

@@ -37,6 +37,22 @@ public interface AudienciasEmpresaRepository extends JpaRepository<AudienciaEmpr
             Pageable paginacao);
 
     @Query("""
+            SELECT  \
+                t  \
+            FROM \
+                    AudienciaEmpresaEntity AS t JOIN \
+                    t.empresa AS e JOIN \
+                    e.usuarios AS u \
+            WHERE \
+                    t.statusDado not in (StatusEnum.REMOVIDO) AND \
+                    e.id = :idEmpresa AND \
+                    u.id = :idUsuario AND \
+                    upper(t.nome) = upper(trim(:nome)) \
+                """)
+    Optional<AudienciaEmpresaEntity> consultaPorNomeEmpresaUsuario(@Param("nome") String nome, @Param("idEmpresa") String idEmpresa,
+            @Param("idUsuario") String idusuario);
+
+    @Query("""
             SELECT t FROM \
                     AudienciaEmpresaEntity AS t JOIN \
                     t.empresa AS e JOIN \

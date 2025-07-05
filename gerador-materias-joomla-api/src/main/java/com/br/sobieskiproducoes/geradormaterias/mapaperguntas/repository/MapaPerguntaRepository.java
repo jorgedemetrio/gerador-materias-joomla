@@ -21,11 +21,11 @@ public interface MapaPerguntaRepository extends JpaRepository<MapaPerguntaEntity
 //  @Query(name = "MapaPerguntaRepository.buscaPorUiidParaCargaLimitado5",
 //      value = "SELECT m FROM MapaPerguntaEntity AS m WHERE m.uuid = :uuid AND (m.materias IS NULL OR m.materias IS EMPTY) ORDER BY m.id LIMIT 5")
 
-  @Query(name = "MapaPerguntaRepository.buscaPorUiidParaCargaLimitado5", value = "SELECT * FROM tbl_mapa_perguntas AS m WHERE m.uuid_requisicao = :uuid "
-      + " AND m.id NOT IN (SELECT id_mapa_pergunta FROM tbl_materia WHERE uuid_requisicao = :uuid) ORDER BY m.id LIMIT 5", nativeQuery = true)
-  Collection<MapaPerguntaEntity> buscaPorUiidParaCargaLimitado5(@Param("uuid") String uuid);
+    @Query(name = "MapaPerguntaRepository.buscaPorUUIDParaCargaLimitado5", value = "SELECT * FROM tbl_mapa_perguntas AS m WHERE m.uuid_requisicao = :uuid "
+            + " AND m.id NOT IN (SELECT id_mapa_pergunta FROM tbl_materia WHERE uuid_requisicao = :uuid) ORDER BY m.id LIMIT 5", nativeQuery = true)
+    Collection<MapaPerguntaEntity> buscaPorUiidParaCargaLimitado5(@Param("uuid") String uuid);
 
-  @Query(name = "MapaPerguntaRepository.totalAProcessar", value = "SELECT count(1) FROM tbl_mapa_perguntas AS m "
-      + " WHERE uuid_requisicao =:uuid AND id NOT IN (SELECT id_mapa_pergunta FROM tbl_materia)", nativeQuery = true)
-  Long totalAProcessar(@Param("uuid") String uuid);
+    @Query(name = "MapaPerguntaRepository.totalAProcessar", value = "SELECT count(1) FROM tbl_mapa_perguntas AS m "
+            + " WHERE uuid_requisicao =:uuid AND id NOT IN (SELECT id_mapa_pergunta FROM tbl_materia)", nativeQuery = true)
+    Long totalAProcessar(@Param("uuid") String uuid);
 }

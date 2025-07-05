@@ -8,6 +8,7 @@ import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import com.br.sobieskiproducoes.geradormaterias.empresa.domain.EmpresaEntity;
 import com.br.sobieskiproducoes.geradormaterias.empresa.domain.TermosEmpresaEntity;
 import com.br.sobieskiproducoes.geradormaterias.empresa.dto.TermosEmpresaDTO;
 import com.br.sobieskiproducoes.geradormaterias.utils.StatusEnum;
@@ -31,13 +32,17 @@ public interface TermosEmpresaConvert {
 
     @Mapping(target = "alterador", ignore = true)
     @Mapping(target = "criador", ignore = true)
-    @Mapping(target = "empresa", ignore = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "nome", source = "nome")
-    @Mapping(target = "ipCriador", source = "ipAlterador")
-    @Mapping(target = "ipProxyCriador", source = "ipProxyAlterador")
+    @Mapping(target = "criado", ignore = true)
+    @Mapping(target = "alterado", ignore = true)
+    @Mapping(target = "empresa", source = "empresaSource")
+    @Mapping(target = "id", source = "source.id")
+    @Mapping(target = "nome", source = "source.nome")
+    @Mapping(target = "ipCriador", source = "source.ipAlterador")
+    @Mapping(target = "ipProxyCriador", source = "source.ipProxyAlterador")
+    @Mapping(target = "ipAlterador", source = "source.ipAlterador")
+    @Mapping(target = "ipProxyAlterador", source = "source.ipProxyAlterador")
     @Mapping(target = "statusDado", expression = "java(StatusEnum.NOVO)")
-    TermosEmpresaEntity novo(TermosEmpresaDTO source);
+    TermosEmpresaEntity novo(TermosEmpresaDTO source, EmpresaEntity empresaSource);
 
     List<TermosEmpresaDTO> to(List<TermosEmpresaEntity> source);
 
